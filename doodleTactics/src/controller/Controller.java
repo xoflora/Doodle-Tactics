@@ -6,8 +6,8 @@ import main.*;
 
 public abstract class Controller implements MouseListener {
 	
-	private DoodleTactics dt;
-	private Screen screen;
+	protected DoodleTactics _dt;
+	protected Screen _screen;
 	
-	abstract void release();
+	public abstract void release();
 }
