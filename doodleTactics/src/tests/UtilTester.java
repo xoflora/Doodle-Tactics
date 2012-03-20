@@ -1,5 +1,7 @@
 package tests;
 
+import java.util.Comparator;
+
 import org.junit.Test;
 
 import util.*;
@@ -39,4 +41,55 @@ public class UtilTester {
 		assert(table.remove(5, "stuff") == null);
 	}
 	
+	@Test
+	/**
+	 * tests the heap data structure
+	 */
+	public void testHeap() {
+		Comparator<Integer> cmp =
+			new Comparator<Integer>() {
+
+				@Override
+				public int compare(Integer o1, Integer o2) {
+					int v1 = o1;
+					int v2 = o2;
+					if (v1 < v2)
+						return -1;
+					else if (v1 == v2)
+						return 0;
+					else
+						return 1;
+				}
+			};
+		assert(cmp.compare(0, 1) == -1);
+		assert(cmp.compare(1, 0) == 1);
+		assert(cmp.compare(0, 0) == 0);
+		
+		Heap<Integer> test = new Heap<Integer>(1, cmp);
+        assert(test.extractMin() == null);
+
+        for (int i = 0; i < 12; i++)
+        	test.insert(i);
+        assert(test.extractMin() == 0);
+        assert(test.extractMin() == 1);
+        assert(test.extractMin() == 2);
+        assert(test.extractMin() == 3);
+        
+        test.insert(13);
+        test.insert(7);
+        
+        assert(test.remove(7));
+        assert(test.remove(7));
+        assert(!test.remove(7));
+        
+        assert(test.remove(10));
+        assert(test.remove(8));
+        assert(test.remove(13));
+        
+        int[] elts = {4, 5, 6, 9, 11};
+        for (int i = 0; !test.isEmpty(); i++)
+        	assert(test.extractMin() == elts[i]);
+        
+        assert(test.isEmpty());
+    }
 }
