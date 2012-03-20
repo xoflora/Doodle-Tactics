@@ -21,12 +21,10 @@ public class DoodleTactics extends JFrame {
 	public DoodleTactics() {
 		super("Doodle Tactics");
 		this.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-		this.setSize(TILE_ROWS*map.Tile.TILE_SIZE,TILE_COLS*map.Tile.TILE_SIZE);
+		this.setSize(TILE_COLS*map.Tile.TILE_SIZE,TILE_ROWS*map.Tile.TILE_SIZE);
 		MainMenu mp = new MainMenu(null);
-
 		this.add(mp);
-
-		this.pack();
+		//this.pack();
 		this.setVisible(true);
 	}
 	
