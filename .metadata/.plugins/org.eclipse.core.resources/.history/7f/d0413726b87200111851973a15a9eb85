@@ -114,15 +114,8 @@ public class Map {
 				if (north.canMove(SOUTH)) {
 					dist = distances.get(north);
 					compare = distances.get(consider) + consider.cost();
-					if (dist == null) {
-						//add to "open list"
+					if (dist == null || dist > compare)
 						distances.put(north, compare);
-						previous.put(north, consider);
-					}
-					else if (dist > compare) {
-						distances.put(north, compare);
-						previous.put(north, consider);
-					}
 				}
 			} catch(ArrayIndexOutOfBoundsException e) { }
 			

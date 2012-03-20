@@ -49,9 +49,6 @@ public class Tile extends graphics.Shape {
 		return _canMove[direction];
 	}
 	
-	/**
-	 * @return the movement cost of moving out of this tile
-	 */
 	public int cost() {
 		return _cost;
 	}

@@ -39,7 +39,7 @@ public class Heap<T> {
     
     // inserts the given element into the heap
     @SuppressWarnings("unchecked")
-	public int insert(T element) {
+	public void insert(T element) {
         if (lastElement_ == heapArray_.length - 1) {
             T[] newArray = (T[]) new Object[heapArray_.length * 2 + 1];
             for (int i = 0; i < heapArray_.length; i++) {
@@ -52,7 +52,7 @@ public class Heap<T> {
         	worstElement_ = element;
         heapArray_[++lastElement_] = element;
 
-        return siftUp(lastElement_);
+        siftUp(lastElement_);
     }
     
     //halves the length of the heapArray to save space

@@ -106,23 +106,13 @@ public class Map {
 		
 		Tile north, east, south, west;
 		Tile consider = source;
-		Integer dist, compare;
 		while (distances.get(dest) == null) {
 
 			try {
 				north = getNorth(consider);
 				if (north.canMove(SOUTH)) {
-					dist = distances.get(north);
-					compare = distances.get(consider) + consider.cost();
-					if (dist == null) {
-						//add to "open list"
-						distances.put(north, compare);
-						previous.put(north, consider);
-					}
-					else if (dist > compare) {
-						distances.put(north, compare);
-						previous.put(north, consider);
-					}
+					int dist = distances.get(north);
+					distances.put(north, distances.get(consider) + north.cost());
 				}
 			} catch(ArrayIndexOutOfBoundsException e) { }
 			
