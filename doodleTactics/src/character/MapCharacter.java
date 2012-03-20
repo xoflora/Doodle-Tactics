@@ -1,5 +1,5 @@
 package character;
-
+import event.Event;
 public class MapCharacter {
 	/**
 	 * @author czchapma
@@ -7,5 +7,4 @@ public class MapCharacter {
 	 */
 	
 	Event _dialogue;
-	CombatController c;
 }
