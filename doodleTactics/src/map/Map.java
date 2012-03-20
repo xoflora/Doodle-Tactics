@@ -34,6 +34,38 @@ public class Map {
 	}
 	
 	/**
+	 * @param source
+	 * @return the tile to the north of the source tile
+	 */
+	public Tile getNorth(Tile source) {
+		return _map[source.x()][source.y() - 1];
+	}
+	
+	/**
+	 * @param source
+	 * @return the tile to the east of the source tile
+	 */
+	public Tile getEast(Tile source) {
+		return _map[source.x() + 1][source.y()];
+	}
+	
+	/**
+	 * @param source
+	 * @return the tile to the south of the source tile
+	 */
+	public Tile getSouth(Tile source) {
+		return _map[source.x()][source.y() + 1];
+	}
+	
+	/**
+	 * @param source
+	 * @return the tile to the west of the source tile
+	 */
+	public Tile getWest(Tile source) {
+		return _map[source.x() - 1][source.y() + 1];
+	}
+	
+	/**
 	 * returns an estimate for the distance between two tiles
 	 * heuristic function used for A* pathfinding
 	 * @param source the start tile
@@ -53,9 +85,10 @@ public class Map {
 	public List<Tile> getPath(Tile source, Tile dest) {
 		final Hashtable<Tile, Integer> distances = new Hashtable<Tile, Integer>();
 		Hashtable<Tile, Tile> previous = new Hashtable<Tile, Tile>();
+		Hashtable<Tile, Integer> heapPositions = new Hashtable<Tile, Integer>();
+		
 		Heap<Tile> heap = new Heap<Tile>(estimateDistance(source, dest),
 				new Comparator<Tile>() {
-
 					@Override
 					public int compare(Tile o1, Tile o2) {
 						int d1 = distances.get(o1);
@@ -67,14 +100,41 @@ public class Map {
 						else
 							return 1;
 					}
-			
 		});
 		
 		distances.put(source, 0);
 		
+		Tile north, east, south, west;
 		Tile consider = source;
 		while (distances.get(dest) == null) {
+
+			try {
+				north = getNorth(consider);
+				if (north.canMove(SOUTH)) {
+					distances.put(north, distances.get(consider) + north.cost());
+				}
+			} catch(ArrayIndexOutOfBoundsException e) { }
 			
+			try {
+				east = getEast(consider);
+				if (east.canMove(WEST)) {
+					distances.put(east, distances.get(consider) + east.cost());
+				}
+			} catch(ArrayIndexOutOfBoundsException e) { }
+			
+			try {
+				south = getSouth(consider);
+				if (south.canMove(NORTH)) {
+					
+				}
+			} catch(ArrayIndexOutOfBoundsException e) { }
+			
+			try {
+				west = getWest(consider);
+				if (west.canMove(EAST)) {
+					
+				}
+			} catch(ArrayIndexOutOfBoundsException e) { }
 		}
 		
 		return null;
