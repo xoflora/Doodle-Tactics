@@ -20,6 +20,7 @@ public class DoodleTactics {
 	 */
 	public void pushController(Controller c) {
 		_control.push(c);
+		_currentScreen.switchController(c);
 	}
 	
 	/**
@@ -27,7 +28,8 @@ public class DoodleTactics {
 	 * @return the controller releasing control
 	 */
 	public Controller releaseControl() {
-		return _control.pop();
+		_control.pop();
+		return _currentScreen.switchController(_control.peek());
 	}
 	
 }

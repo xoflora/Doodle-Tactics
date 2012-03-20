@@ -11,15 +11,40 @@ import event.Event;
  */
 public class Tile {
 
-	boolean[] _canMove;
-	int _cost;
+	private boolean[] _canMove;
+	private int _cost;
+	private int _x;
+	private int _y;
 	
-	BufferedImage _image;
-	int opacity;
+	private BufferedImage _image;
+	private int opacity;
 	
-	Event _event;
+	private Event _event;
 	
-	public Tile() {
-		
+	/**
+	 * generates a tile given a string
+	 * @param tileString the string representing the tile
+	 * @return a new tile given by the string
+	 */
+	public static Tile tile(String tileString) {
+		return null;
+	}
+	
+	/**
+	 * @param direction to check; NORTH, EAST, SOUTH, WEST
+	 * @return whether a character can move from this tile in the given direction
+	 */
+	public boolean canMove(int direction) {
+		return _canMove[direction];
+	}
+	
+	public int cost() {
+		return _cost;
+	}
+	public int x() {
+		return _x;
+	}
+	public int y() {
+		return _y;
 	}
 }

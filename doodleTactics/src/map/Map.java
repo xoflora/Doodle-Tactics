@@ -29,6 +29,17 @@ public class Map {
 	}
 	
 	/**
+	 * returns an estimate for the distance between two tiles
+	 * heuristic function used for A* pathfinding
+	 * @param source the start tile
+	 * @param dest the end tile
+	 * @return an estimate of the distance between the two tiles
+	 */
+	private int estimateDistance(Tile source, Tile dest) {
+		return source.x() - dest.x() + source.y() - dest.y();
+	}
+	
+	/**
 	 * generates a path from the source tile to the destination tile
 	 * @param source the tile to start from
 	 * @param dest the tile to end at
