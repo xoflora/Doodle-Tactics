@@ -20,9 +20,11 @@ public abstract class Character {
 	final static int SPEED = 4;
 	final static int SKILL = 5;
 	final static int LUCK =  6;
+	final static int MAX_HP =  7;
+
 	
 	//stat arrays (indexed by type of stat, see above)
-	final int[] _BASESTATS; //initial
+	final int[] _BASE_STATS; //initial
 	int[] _currentStats; //updated with levelUp()
 	int[] _unitPoints; //gained by character
 	final int[] YIELD; //given out by character
@@ -64,7 +66,7 @@ public abstract class Character {
 		
 		//update stats
 		for(int i=0; i<7; i++)
-			_currentStats[i] = 10 * _BASESTATS[i] + _level*_BASESTATS[i] + _unitPoints[i]/12;
+			_currentStats[i] = 10 * _BASE_STATS[i] + _level*_BASE_STATS[i] + _unitPoints[i]/12;
 	}
 	
 	//TODO update signatures, get from ryan + joe
