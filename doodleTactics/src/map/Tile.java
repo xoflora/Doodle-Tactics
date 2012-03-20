@@ -1,6 +1,9 @@
 package map;
 
+import java.awt.geom.RectangularShape;
 import java.awt.image.BufferedImage;
+
+import javax.swing.JPanel;
 
 import event.Event;
 
@@ -9,8 +12,9 @@ import event.Event;
  * @author rroelke
  * a tile is a square of a map
  */
-public class Tile {
+public class Tile extends graphics.Shape {
 
+	public static final int TILE_SIZE = 48;
 	private boolean[] _canMove;
 	private int _cost;
 	private int _x;
@@ -20,6 +24,11 @@ public class Tile {
 	private int opacity;
 	
 	private Event _event;
+	
+	public Tile(JPanel container, String path) {
+		super(container, new java.awt.geom.Rectangle2D.Double(), path);
+		this.setSize(TILE_SIZE,TILE_SIZE);
+	}
 	
 	/**
 	 * generates a tile given a string
@@ -47,4 +56,5 @@ public class Tile {
 	public int y() {
 		return _y;
 	}
+	
 }

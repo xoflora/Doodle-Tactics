@@ -100,4 +100,17 @@ public class Map {
 	public List<Tile> getAttackRange(Tile source, int movementRange, int attackRange) {
 		return getMovementRange(source, movementRange);
 	}
+	
+	/* 
+	 * 
+	 * 
+	 */
+	
+	public void paint(java.awt.Graphics2D brush) {
+		for(int i = 0; i < _map.length; i++) {
+			for(int j = 0; j < _map[i].length; j++) {
+				_map[i][j].paint(brush);
+			}
+		}
+	}
 }
