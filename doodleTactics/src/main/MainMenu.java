@@ -9,7 +9,7 @@ public class MainMenu extends Screen {
 	public MainMenu(controller.Controller control) {
 		super(control);
 		this.setBackground(java.awt.Color.LIGHT_GRAY);
-		test = new Tile("");
+		test = new Tile("/home/fjin/Doodle Tactics/");
 		render();
 	}
 	

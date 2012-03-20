@@ -24,9 +24,11 @@ public class Tile extends graphics.Shape {
 	private int opacity;
 	
 	private Event _event;
+	private String _path;
 	
 	public Tile(JPanel container, String path) {
-		super(container, new java.awt.geom.Rectangle2D.Double(), path);
+		super(container, new java.awt.geom.Rectangle2D.Double());
+		_path = path;
 		this.setSize(TILE_SIZE,TILE_SIZE);
 	}
 	
@@ -55,6 +57,10 @@ public class Tile extends graphics.Shape {
 	}
 	public int y() {
 		return _y;
+	}
+	
+	public String getPath() {
+		return _path;
 	}
 	
 }

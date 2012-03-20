@@ -1,5 +1,7 @@
 package graphics;
 
+import java.awt.TexturePaint;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -39,10 +41,6 @@ public abstract class Shape {
 			_shape = s;
 			_rotationAngle = 0;
 		}
-		
-		/**
-		 * Constructor for shape that is an image
-		 */
 		
 		/**
 		 * Should return the x location of the top left corner of 
@@ -191,12 +189,20 @@ public abstract class Shape {
 		/** @param a Graphics brush 
 		 *  paints the given shape using an image
 		 */
-		public void paint(java.awt.Graphics brush) {
+		public void paint(java.awt.Graphics2D brush, String path) {
 			if (_isVisible) {
-					
+				try {   
+					_image = ImageIO.read(new File(path));
+					brush.rotate(_rotationAngle, _shape.getCenterX(), _shape.getCenterY());
+					brush.draw(_shape);
+					brush.setPaint(new TexturePaint(_image, (Rectangle2D) _shape));
+					brush.fill(_shape);
+					brush.rotate(-_rotationAngle, _shape.getCenterX(), _shape.getCenterY());
+				} catch (IOException e) {
+					System.out.println("Bad file path!");
+				}
 			}
 		}
-		
 
 		/** 
 		 * Should return true if the point is within the shape.  

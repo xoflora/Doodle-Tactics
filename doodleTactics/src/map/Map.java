@@ -101,15 +101,15 @@ public class Map {
 		return getMovementRange(source, movementRange);
 	}
 	
-	/* 
-	 * 
-	 * 
+	/** 
+	 * @param brush 
+	 * Paints all of the tiles in the map with their respective images
 	 */
 	
 	public void paint(java.awt.Graphics2D brush) {
 		for(int i = 0; i < _map.length; i++) {
 			for(int j = 0; j < _map[i].length; j++) {
-				_map[i][j].paint(brush);
+				_map[i][j].paint(brush,_map[i][j].getPath());
 			}
 		}
 	}
