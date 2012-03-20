@@ -1,5 +1,7 @@
 package items;
 
+import java.awt.image.BufferedImage;
+
 public abstract class Weapon extends Equipment{
 	String _name;
 	int _attackRange;

@@ -1,6 +1,8 @@
 package character;
 
 import java.awt.image.BufferedImage;
+import java.util.List;
+
 import items.*;
 public abstract class Character {
 	/**
@@ -34,9 +36,9 @@ public abstract class Character {
 	
 	//items
 	Weapon _equipped;
-	Curirass _cuirass;
+	Cuirass _cuirass;
 	Shield _shield;
-	ArrayList<Item> _inventory; //items not being worn
+	List<Item> _inventory; //items not being worn
 	int capacity; //max number of items the character can carry
 	
 	//images
@@ -79,16 +81,16 @@ public abstract class Character {
 		//TODO Ryan fills in
 	}
 
-	/** getMovementRange
-	 * @author rroelke
+	/**
+	 * computes the movement range of the Character
+	 * @return
 	 */
-	
-	public void getMovementRange(){
-		//TODO Ryan fills in
+	public int getMovementRange(){
+		
 	}
 	
-	/** getAttackRange
-	 * @author rroelke
+	/** 
+	 * computes the attack range of the Character
 	 */
 	public void getAttackRange(){
 		//TODO Ryan fills in
