@@ -1,8 +1,11 @@
 package character;
 
 import java.awt.image.BufferedImage;
+import java.io.*;
+import java.util.List;
+
 import items.*;
-public abstract class Character {
+public abstract class Character implements Serializable{
 	/**
 	 * @author czchapma
 	 */
@@ -20,9 +23,11 @@ public abstract class Character {
 	final static int SPEED = 4;
 	final static int SKILL = 5;
 	final static int LUCK =  6;
+	final static int MAX_HP =  7;
+
 	
 	//stat arrays (indexed by type of stat, see above)
-	final int[] _BASESTATS; //initial
+	final int[] _BASE_STATS; //initial
 	int[] _currentStats; //updated with levelUp()
 	int[] _unitPoints; //gained by character
 	final int[] YIELD; //given out by character
@@ -32,9 +37,9 @@ public abstract class Character {
 	
 	//items
 	Weapon _equipped;
-	Curirass _cuirass;
+	Cuirass _cuirass;
 	Shield _shield;
-	ArrayList<Item> _inventory; //items not being worn
+	List<Item> _inventory; //items not being worn
 	int capacity; //max number of items the character can carry
 	
 	//images
@@ -64,7 +69,7 @@ public abstract class Character {
 		
 		//update stats
 		for(int i=0; i<7; i++)
-			_currentStats[i] = 10 * _BASESTATS[i] + _level*_BASESTATS[i] + _unitPoints[i]/12;
+			_currentStats[i] = 10 * _BASE_STATS[i] + _level*_BASE_STATS[i] + _unitPoints[i]/12;
 	}
 	
 	//TODO update signatures, get from ryan + joe
@@ -77,16 +82,16 @@ public abstract class Character {
 		//TODO Ryan fills in
 	}
 
-	/** getMovementRange
-	 * @author rroelke
+	/**
+	 * computes the movement range of the Character
+	 * @return
 	 */
-	
-	public void getMovementRange(){
-		//TODO Ryan fills in
+	public int getMovementRange(){
+		
 	}
 	
-	/** getAttackRange
-	 * @author rroelke
+	/** 
+	 * computes the attack range of the Character
 	 */
 	public void getAttackRange(){
 		//TODO Ryan fills in
@@ -138,14 +143,40 @@ public abstract class Character {
 	}
 	
 	/**
-	 * toXML
-	 * converts a Character to an XML format, for saving purposes
+	 * flattens a Character to a file (using serialization), for saving purposes
 	 * @author czchapma
 	 */
-	public String toXML(){
-		//TODO write
-		return null;
+	public void serialize(){
+		String filename = _name + ".ser";
+		FileOutputStream fos = null;
+		ObjectOutputStream out  = null;
+		try{
+			fos = new FileOutputStream(filename);
+			out = new ObjectOutputStream(fos);
+			out.writeObject(this);
+			out.close();
+		} catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 	
+	/**
+	 * unflattens a character
+	 */
+	public static Character restore(String name){
+		Character c = null;
+		FileInputStream fis = null;
+		ObjectInputStream in = null;
+		try{
+			fis = new FileInputStream(name + ".ser");
+			in = new ObjectInputStream(fis);
+			c = (Character)in.readObject();
+			in.close();
+		} catch(IOException e){
+			e.printStackTrace();
+		} catch(ClassNotFoundException e){
+			e.printStackTrace();
+		}
+	}
 
 }
