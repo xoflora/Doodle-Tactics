@@ -93,7 +93,7 @@ public class Map {
 	 * @return the tile to the west of the source tile
 	 */
 	public Tile getWest(Tile source) {
-		return _map[source.x() - 1][source.y() + 1];
+		return _map[source.x() - 1][source.y()];
 	}
 	
 	/**
@@ -103,7 +103,7 @@ public class Map {
 	 * @param dest the end tile
 	 * @return an estimate of the distance between the two tiles
 	 */
-	private int estimateDistance(Tile source, Tile dest) {
+	public int estimateDistance(Tile source, Tile dest) {
 		return Math.abs(source.x() - dest.x()) + Math.abs(source.y() - dest.y());
 	}
 	
@@ -143,22 +143,28 @@ public class Map {
 		//	System.out.println("Stuff");
 			consider = heap.extractMin();
 			heapPositions.put(consider, -1);
+			
+		//	System.out.println("Considering tile " + consider.x() + ", " + consider.y());
+			
+		//	System.out.println(distances.get(check));
 
 			try {
 				check = getNorth(consider);
 				if (check.canMove(SOUTH) && !check.isOccupied()) {
 					dist = distances.get(check);
-					compare = distances.get(consider) + consider.cost();
+					compare = distances.get(consider) + check.cost();
 					
 					if (dist == null) {	//tile hasn't been seen yet
 						distances.put(check, compare);
 						heapPositions.put(check, heap.insert(check));
 						previous.put(check, consider);
+				//		System.out.println(check.x() + ", " + check.y() + ": " + distances.get(check));
 					}
 					else if (dist > compare) {	//more optimal way to get to the tile
 						distances.put(check, compare);
 						heap.siftUp(heapPositions.get(check));
 						previous.put(check, consider);
+				//		System.out.println(check.x() + ", " + check.y() + ": " + distances.get(check));
 					}
 				}
 			} catch(ArrayIndexOutOfBoundsException e) { }
@@ -167,18 +173,18 @@ public class Map {
 				check = getEast(consider);
 				if (check.canMove(WEST) && !check.isOccupied()) {
 					dist = distances.get(check);
-					compare = distances.get(consider) + consider.cost();
+					compare = distances.get(consider) + check.cost();
 					
 					if (dist == null) {	//tile hasn't been seen yet
 						distances.put(check, compare);
 						heapPositions.put(check, heap.insert(check));
 						previous.put(check, consider);
+				//		System.out.println(check.x() + ", " + check.y() + ": " + distances.get(check));
 					}
 					else if (dist > compare) {	//more optimal way to get to the tile
 						distances.put(check, compare);
 						heap.siftUp(heapPositions.get(check));
 						previous.put(check, consider);
-						System.out.println("FIUEW");
 					}
 				}
 			} catch(ArrayIndexOutOfBoundsException e) { }
@@ -187,12 +193,13 @@ public class Map {
 				check = getSouth(consider);
 				if (check.canMove(NORTH) && !check.isOccupied()) {
 					dist = distances.get(check);
-					compare = distances.get(consider) + consider.cost();
+					compare = distances.get(consider) + check.cost();
 					
 					if (dist == null) {	//tile hasn't been seen yet
 						distances.put(check, compare);
 						heapPositions.put(check, heap.insert(check));
 						previous.put(check, consider);
+				//		System.out.println(check.x() + ", " + check.y() + ": " + distances.get(check));
 					}
 					else if (dist > compare) {	//more optimal way to get to the tile
 						distances.put(check, compare);
@@ -206,12 +213,13 @@ public class Map {
 				check = getWest(consider);
 				if (check.canMove(EAST) && !check.isOccupied()) {
 					dist = distances.get(check);
-					compare = distances.get(consider) + consider.cost();
+					compare = distances.get(consider) + check.cost();
 					
 					if (dist == null) {	//tile hasn't been seen yet
 						distances.put(check, compare);
 						heapPositions.put(check, heap.insert(check));
 						previous.put(check, consider);
+				//		System.out.println(check.x() + ", " + check.y() + ": " + distances.get(check));
 					}
 					else if (dist > compare) {	//more optimal way to get to the tile
 						distances.put(check, compare);

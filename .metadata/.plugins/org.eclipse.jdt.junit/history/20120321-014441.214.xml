@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testrun name="MapTester" project="doodleTactics" tests="2" started="2" failures="0" errors="0" ignored="0">
+  <testsuite name="tests.MapTester" time="0.011">
+    <testcase name="testDistanceCalc" classname="tests.MapTester" time="0.0"/>
+    <testcase name="testPathFinding" classname="tests.MapTester" time="0.011"/>
+  </testsuite>
+</testrun>

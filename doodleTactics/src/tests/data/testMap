@@ -36,7 +36,8 @@ Costs:
 
 
 {
-	map:{
-		
+	"map":{
+		"height":23
+		"width":16
 	}
 }
