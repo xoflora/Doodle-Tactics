@@ -24,12 +24,6 @@ public class Map {
 	private Tile[][] _map;
 	String _name;
 	
-	public Map(Tile[][] tiles, String name) {
-		_map = tiles;
-		_overflow = null;
-		_name = "";
-	}
-	
 	/**
 	 * parses a map to generate a map instance
 	 * @param file the file to parse from
