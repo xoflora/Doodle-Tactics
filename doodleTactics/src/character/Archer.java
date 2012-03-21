@@ -1,6 +1,11 @@
 package character;
 
 public class Archer extends Character{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Archer(){
 		_name = "Archer";
 		_BASE_STATS[STRENGTH] = 7;

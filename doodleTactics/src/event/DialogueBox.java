@@ -6,7 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+
+import character.Character;
+
+import main.DoodleTactics;
 
 
 /**
@@ -16,37 +22,45 @@ import java.util.List;
  */
 public class DialogueBox extends Event {
 	
-	List<String> _phrases;
-	List<Character> _characters;
+	private List<String> _phrases;
+	private List<Character> _characters;
 	
-	public DialogueBox(){
-		_phrases = new ArrayList<String>();
-		_characters = new ArrayList<Character>();
-	}
-	public static DialogueBox dialogue(String filename) {
-		return null;
-	}
 	
 	/**
-	 * parses a dialogue csv file in the following format
+	 * Creates a DialogueBox by parsing a dialogue csv file in the following format
 	 * name, phrase 1
 	 * name2, phrase 2
 	 * 
 	 * @param filename - the name of the file in src/character
-	 * @throws FileNotFoundException
-	 * @throws IOException
+	 * @param allChars - a HashMap mapping name to Character
+	 * @throws InvalidFileException --if something goes wrong during csv file parsing
+	 * @throws IOException, FileNotFoundException 
 	 */
-	public void parse(String filename) throws FileNotFoundException, IOException{
-		BufferedReader br;
-		br = new BufferedReader(new FileReader("src/character/" + filename));
+	public DialogueBox(String filename, HashMap<String,Character> allChars) throws InvalidFileException, IOException, FileNotFoundException{
+		BufferedReader br = new BufferedReader(new FileReader(filename));
+		 _phrases = new LinkedList<String>();
+		 _characters = new LinkedList<Character>();
 		String line = br.readLine();
+		String[] split;
 		while(line != null){
-			//TODO fill in
+			split = line.split(",");
+			if(split.length != 2)
+				throw new InvalidFileException(line);
+			_characters.add(allChars.get(split[0].trim()));
+			_phrases.add(split[1].trim());
 			line = br.readLine();
 		}
-		
 	}
-
+	
+	//getters
+	public List<Character> getCharList(){
+		return _characters;
+	}
+	
+	public List<String> getDialogueList(){
+		return _phrases;
+	}
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub

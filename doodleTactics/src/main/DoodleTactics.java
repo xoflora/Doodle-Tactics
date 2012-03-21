@@ -49,6 +49,7 @@ public class DoodleTactics extends JFrame {
 	}
 	
 	/**
+	 * @author czchapma
 	 * @return _allChars, the HashMap mapping String to Character name
 	 */
 	public HashMap<String,Character> getCharacterMap(){
