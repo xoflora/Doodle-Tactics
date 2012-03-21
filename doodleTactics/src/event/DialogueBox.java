@@ -46,7 +46,13 @@ public class DialogueBox extends Event {
 			split = line.split(",");
 			if(split.length != 2)
 				throw new InvalidFileException(line);
-			_characters.add(allChars.get(split[0].trim()));
+			
+			Character c = allChars.get(split[0].trim());
+			//throw error if Character not found
+			if(c == null)
+				throw new InvalidFileException(split[0], line);
+			_characters.add(c);
+			
 			_phrases.add(split[1].trim());
 			line = br.readLine();
 		}

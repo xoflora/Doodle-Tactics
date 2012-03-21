@@ -66,6 +66,30 @@ public abstract class Character implements Serializable{
 	//methods
 	
 	/**
+	 * getters and setters
+	 */
+	public int getHP(){
+		return _currentHP;
+	}
+	
+	public int getExp(){
+		return _exp;
+	}
+	
+	public int getLevel(){
+		return _level;
+	}
+	
+	public int[] getBaseStats(){
+		return _BASE_STATS;
+	}
+	
+	public String getName(){
+		return _name;
+	}
+	
+	
+	/**
 	 * levelUp
 	 * transitions this Character to the next level (if possible) updating stats
 	 * @throws InvalidLevelException if level > levelCap
@@ -155,14 +179,13 @@ public abstract class Character implements Serializable{
 	
 	/**
 	 * flattens a Character to a file (using serialization), for saving purposes
-	 * @author czchapma
+	 * @param filepath - the location of the file to write to
 	 */
-	public void serialize(){
-		String filename = "src/character/" + _name + ".ser";
+	public void serialize(String filepath){
 		FileOutputStream fos = null;
 		ObjectOutputStream out  = null;
 		try{
-			fos = new FileOutputStream(filename);
+			fos = new FileOutputStream(filepath);
 			out = new ObjectOutputStream(fos);
 			out.writeObject(this);
 			out.close();
@@ -172,14 +195,16 @@ public abstract class Character implements Serializable{
 	}
 	
 	/**
-	 * unflattens a character
+	 * unflattens a character, opposite of serialize()
+	 * @param filepath -- location of serialized file
+	 * @return the unflattened Character retrieved from filepath
 	 */
-	public static Character restore(String name){
+	public static Character restore(String filepath){
 		Character c = null;
 		FileInputStream fis = null;
 		ObjectInputStream in = null;
 		try{
-			fis = new FileInputStream("src/character/" + name + ".ser");
+			fis = new FileInputStream(filepath);
 			in = new ObjectInputStream(fis);
 			c = (Character)in.readObject();
 			in.close();
@@ -191,9 +216,14 @@ public abstract class Character implements Serializable{
 		return c;
 	}
 	
+	/**
+	 * Equality test for Characters
+	 * @param other -- the Character to compare to this
+	 * @return true if this and other are 'equal', false otherwise
+	 */
 	public boolean equals(Character other){
 		for(int i=0; i<NUM_STATS; i++)
-			if(_BASE_STATS[i] != other._BASE_STATS[i])
+			if((_BASE_STATS[i] != other._BASE_STATS[i]) || (_currentStats[i] != other._currentStats[i]))
 				return false;
 		if(_exp != other._exp)
 			return false;
@@ -205,33 +235,4 @@ public abstract class Character implements Serializable{
 		return true;
 	}
 	
-	public static void main(String[] args){
-		//serialization test
-		Archer a = new Archer();
-		a._exp = 500;
-		a.serialize();
-		Archer restored = (Archer) restore(a._name);
-		assert(restored.equals(a));
-		
-		Warrior w = new Warrior();
-		w._currentHP = 100;
-		w.serialize();
-		Warrior restoredW = (Warrior) restore(w._name);
-		assert(restoredW.equals(w));
-		
-		Mage m = new Mage();
-		m._level = 5;
-		m.serialize();
-		Mage restoredM = (Mage) restore(m._name);
-		assert(restoredM.equals(m));
-		
-		Thief t = new Thief();
-		t._level = 1;
-		t._currentHP = 50;
-		t._exp = 200;
-		t.serialize();
-		Thief restoredT = (Thief) restore(t._name);
-		assert(restoredT.equals(t));
-	}
-
 }
