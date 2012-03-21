@@ -1,10 +1,16 @@
 package map;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
+
+import javax.swing.JPanel;
 
 import util.Heap;
 
@@ -32,11 +38,30 @@ public class Map {
 	
 	/**
 	 * parses a map to generate a map instance
-	 * @param file the file to parse from
-	 * @return
+	 * @param permissionFile the file to parse tile permissions from
+	 * @return a new map given by the data from the map files
 	 */
-	public static Map map(String file) throws InvalidMapException {
+	public static Map map(JPanel container, String permissionFile)
+			throws InvalidMapException {
+		try {
+		BufferedReader reader = new BufferedReader(new FileReader(new File(permissionFile)));
+		String name = reader.readLine();
+		String[] dimensions = reader.readLine().split("/");
+		Tile[][] _tiles = new Tile[Integer.parseInt(dimensions[0])][Integer.parseInt(dimensions[1])];
+		
+		
+		
+		} catch(IOException e) {
+			throw new InvalidMapException();
+		} catch(NumberFormatException e) {
+			throw new InvalidMapException();
+		}
+		
 		return null;
+	}
+	
+	public Tile getTile(int x, int y) {
+		return _map[x][y];
 	}
 	
 	/**

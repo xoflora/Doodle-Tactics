@@ -15,6 +15,7 @@ import event.Event;
 public class Tile extends graphics.Shape {
 
 	public static final int TILE_SIZE = 48;
+	
 	private boolean[] _canMove;
 	private int _cost;
 	private int _x;
@@ -150,10 +151,15 @@ public class Tile extends graphics.Shape {
 		}
 	}
 	
-	public Tile(JPanel container, String path) {
+	public Tile(JPanel container, String path, int x, int y, int cost) {
 		super(container, new java.awt.geom.Rectangle2D.Double());
 		_path = path;
 		this.setSize(TILE_SIZE,TILE_SIZE);
+		
+		_canMove = new boolean[4];
+		_cost = 0;
+		_x = x;
+		_y = y;
 	}
 	
 	/**
@@ -161,8 +167,11 @@ public class Tile extends graphics.Shape {
 	 * @param tileString the string representing the tile
 	 * @return a new tile given by the string
 	 */
-	public static Tile tile(BufferedImage image, char permissions) {
-		return null;
+	public static Tile tile(JPanel container, String path, char permissions,
+			int x, int y, int cost) throws InvalidTileException {
+		Tile t = new Tile(container, path, x, y, cost);
+		t.setTilePermissions(permissions);
+		return t;
 	}
 	
 	/**
