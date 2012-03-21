@@ -134,10 +134,15 @@ public class Map {
 		});
 		
 		distances.put(source, 0);
+		heapPositions.put(source, heap.insert(source));
 		
-		Tile consider = source, check = null;
+		Tile consider;
+		Tile check = null;
 		Integer dist, compare;
 		while (distances.get(dest) == null && !heap.isEmpty()) {
+		//	System.out.println("Stuff");
+			consider = heap.extractMin();
+			heapPositions.put(consider, -1);
 
 			try {
 				check = getNorth(consider);
@@ -173,6 +178,7 @@ public class Map {
 						distances.put(check, compare);
 						heap.siftUp(heapPositions.get(check));
 						previous.put(check, consider);
+						System.out.println("FIUEW");
 					}
 				}
 			} catch(ArrayIndexOutOfBoundsException e) { }
@@ -216,15 +222,18 @@ public class Map {
 			} catch(ArrayIndexOutOfBoundsException e) { }
 		}
 		
-		if (distances.get(dest) == null)
+		if (distances.get(dest) == null) {
+			System.out.println("lol");
 			return null;
+		}
 		
 		LinkedList<Tile> path = new LinkedList<Tile>();
 		Tile previousTile = dest;
 		while (previousTile != source) {
-			path.addLast(previousTile);
+			path.addFirst(previousTile);
 			previousTile = previous.get(previousTile);
 		}
+		path.addFirst(previousTile);
 		
 		return path;
 	}

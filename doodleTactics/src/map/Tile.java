@@ -183,7 +183,7 @@ public class Tile extends graphics.Shape {
 	}
 	
 	public boolean isOccupied() {
-		return _character == null;
+		return !(_character == null);
 	}
 	
 	/**
