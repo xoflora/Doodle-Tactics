@@ -11,25 +11,27 @@ import java.util.List;
 
 /**
  * 
- * @author rroelke
+ * @author czchapma
  * a dialogue instance controls a dialogue between characters
  */
-public class Dialogue extends Event {
+public class DialogueBox extends Event {
 	
 	List<String> _phrases;
 	List<Character> _characters;
 	
-	public Dialogue(){
+	public DialogueBox(){
 		_phrases = new ArrayList<String>();
 		_characters = new ArrayList<Character>();
 	}
-	public static Dialogue dialogue(String filename) {
+	public static DialogueBox dialogue(String filename) {
 		return null;
 	}
 	
 	/**
-	 * parses a dialogue file based on the following rules
-	 *  
+	 * parses a dialogue csv file in the following format
+	 * name, phrase 1
+	 * name2, phrase 2
+	 * 
 	 * @param filename - the name of the file in src/character
 	 * @throws FileNotFoundException
 	 * @throws IOException

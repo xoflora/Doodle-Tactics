@@ -1,5 +1,6 @@
 package main;
 
+import java.util.HashMap;
 import java.util.Stack;
 
 import javax.swing.JFrame;
@@ -17,6 +18,7 @@ public class DoodleTactics extends JFrame {
 	public static final int TILE_COLS = 21;
 	private Screen _currentScreen;
 	private Stack<Controller> _control;
+	private HashMap<String, Character> _allChars;
 	
 	public DoodleTactics() {
 		super("Doodle Tactics");
@@ -44,6 +46,13 @@ public class DoodleTactics extends JFrame {
 	public Controller releaseControl() {
 		_control.pop();
 		return _currentScreen.switchController(_control.peek());
+	}
+	
+	/**
+	 * @return _allChars, the HashMap mapping String to Character name
+	 */
+	public HashMap<String,Character> getCharacterMap(){
+		return _allChars;
 	}
 	
 	public static void main(String[] args) {

@@ -1,8 +1,11 @@
 package items;
 
+import java.awt.image.BufferedImage;
+
 public abstract class Item {
 
-	public boolean _removable;
+	private boolean _removable;
+	private BufferedImage _image;
 	public void exert(Character c){
 		
 	}
