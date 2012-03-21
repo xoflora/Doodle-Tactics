@@ -1,0 +1,24 @@
+package tests;
+
+import org.junit.Test;
+
+import map.*;
+
+/**
+ * 
+ * @author rroelke
+ * tests the classes and methods of the map package
+ */
+public class MapTester {
+	
+	private Map[] _tests;
+
+	@Test
+	/**
+	 * tests the Map's pathfinding capabilities
+	 */
+	public void testPathFinding() {
+		
+	}
+	
+}

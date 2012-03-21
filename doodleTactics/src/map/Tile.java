@@ -27,6 +27,129 @@ public class Tile extends graphics.Shape {
 	private Character _character;
 	private String _path;
 	
+	/**
+	 * sets the tile's movement permissions
+	 * @param c the value of the tile permission to set
+	 * @throws InvalidTileException if the permission character is invalid
+	 */
+	public void setTilePermissions(char c) throws InvalidTileException {
+		switch (c) {
+			case '0': {
+				_canMove[Map.NORTH] = false;
+				_canMove[Map.EAST] = false;
+				_canMove[Map.SOUTH] = false;
+				_canMove[Map.WEST] = false;
+				break;
+			}
+			case '1': {
+				_canMove[Map.NORTH] = true;
+				_canMove[Map.EAST] = false;
+				_canMove[Map.SOUTH] = false;
+				_canMove[Map.WEST] = false;
+				break;
+			}
+			case '2': {
+				_canMove[Map.NORTH] = false;
+				_canMove[Map.EAST] = true;
+				_canMove[Map.SOUTH] = false;
+				_canMove[Map.WEST] = false;
+				break;
+			}
+			case '3': {
+				_canMove[Map.NORTH] = true;
+				_canMove[Map.EAST] = true;
+				_canMove[Map.SOUTH] = false;
+				_canMove[Map.WEST] = false;
+				break;
+			}
+			case '4': {
+				_canMove[Map.NORTH] = false;
+				_canMove[Map.EAST] = false;
+				_canMove[Map.SOUTH] = true;
+				_canMove[Map.WEST] = false;
+				break;
+			}
+			case '5': {
+				_canMove[Map.NORTH] = true;
+				_canMove[Map.EAST] = false;
+				_canMove[Map.SOUTH] = true;
+				_canMove[Map.WEST] = false;
+				break;
+			}
+			case '6': {
+				_canMove[Map.NORTH] = false;
+				_canMove[Map.EAST] = true;
+				_canMove[Map.SOUTH] = true;
+				_canMove[Map.WEST] = false;
+				break;
+			}
+			case '7': {
+				_canMove[Map.NORTH] = true;
+				_canMove[Map.EAST] = true;
+				_canMove[Map.SOUTH] = true;
+				_canMove[Map.WEST] = false;
+				break;
+			}
+			case '8': {
+				_canMove[Map.NORTH] = false;
+				_canMove[Map.EAST] = false;
+				_canMove[Map.SOUTH] = false;
+				_canMove[Map.WEST] = true;
+				break;
+			}
+			case '9': {
+				_canMove[Map.NORTH] = true;
+				_canMove[Map.EAST] = false;
+				_canMove[Map.SOUTH] = false;
+				_canMove[Map.WEST] = true;
+				break;
+			}
+			case 'A': {
+				_canMove[Map.NORTH] = false;
+				_canMove[Map.EAST] = true;
+				_canMove[Map.SOUTH] = false;
+				_canMove[Map.WEST] = true;
+				break;
+			}
+			case 'B': {
+				_canMove[Map.NORTH] = true;
+				_canMove[Map.EAST] = true;
+				_canMove[Map.SOUTH] = false;
+				_canMove[Map.WEST] = true;
+				break;
+			}
+			case 'C': {
+				_canMove[Map.NORTH] = false;
+				_canMove[Map.EAST] = false;
+				_canMove[Map.SOUTH] = true;
+				_canMove[Map.WEST] = true;
+				break;
+			}
+			case 'D': {
+				_canMove[Map.NORTH] = true;
+				_canMove[Map.EAST] = false;
+				_canMove[Map.SOUTH] = true;
+				_canMove[Map.WEST] = true;
+				break;
+			}
+			case 'E': {
+				_canMove[Map.NORTH] = false;
+				_canMove[Map.EAST] = true;
+				_canMove[Map.SOUTH] = true;
+				_canMove[Map.WEST] = true;
+				break;
+			}
+			case 'F': {
+				_canMove[Map.NORTH] = true;
+				_canMove[Map.EAST] = true;
+				_canMove[Map.SOUTH] = true;
+				_canMove[Map.WEST] = true;
+				break;
+			}
+			default: throw new InvalidTileException();
+		}
+	}
+	
 	public Tile(JPanel container, String path) {
 		super(container, new java.awt.geom.Rectangle2D.Double());
 		_path = path;
@@ -38,7 +161,7 @@ public class Tile extends graphics.Shape {
 	 * @param tileString the string representing the tile
 	 * @return a new tile given by the string
 	 */
-	public static Tile tile(String tileString) {
+	public static Tile tile(BufferedImage image, char permissions) {
 		return null;
 	}
 	

@@ -37,11 +37,7 @@ public class Heap<T> {
         return lastElement_ + 1;
     }
     
-    /**
-     * inserts an element into the heap
-     * @param element the element to insert
-     * @return the index in the heap into which the element was inserted
-     */
+    // inserts the given element into the heap
     @SuppressWarnings("unchecked")
 	public int insert(T element) {
         if (lastElement_ == heapArray_.length - 1) {
@@ -61,10 +57,6 @@ public class Heap<T> {
     
     //halves the length of the heapArray to save space
     //will only be called when less than 1/4 of the array is used
-    /**
-     * halves the length of the heapArray to save space
-     * precondition: the heapArray is only filled to 1/4 capacity
-     */
     @SuppressWarnings("unchecked")
 	private void shrink() {
     	T[] update = (T[]) new Object[heapArray_.length/2];
@@ -73,10 +65,7 @@ public class Heap<T> {
     	heapArray_ = update;
     }
     
-    /**
-     * removes and returns the highest-priority element in the heap
-     * @return the highest-priority element in the heap
-     */
+    // removes the first element from the heap and returns it
     public T extractMin() {
     	if (!isEmpty()) {
     		T item = heapArray_[0];
@@ -93,18 +82,12 @@ public class Heap<T> {
     	return null;
     }
     
-    /**
-     * @return the lowest-priority item in the heap
-     */
     public T getWorstElement() {
     	return worstElement_;
     }
     
-    /**
-     * removes an element from the heap
-     * @param element the desired element to remove
-     * @return whether or not the element was contained in the heap (removed successfully)
-     */
+    // removes the given element from the heap
+    // returns true iff the given element was found in the heap
     public boolean remove(T element) {
     	int index = -1;
     	for (int i = 0; i < size(); i++)
@@ -126,11 +109,7 @@ public class Heap<T> {
     	return true;
     }
     
-    /**
-     * sifts an element up the heap (maintains heap invariant if a priority changes)
-     * @param element the ocation element to sift up
-     * @return the new location in the heap
-     */
+    // sifts up the given element
     public int siftUp(int element) {
     	int parent = (int) Math.floor((element - 1) / 2);
         
@@ -146,11 +125,8 @@ public class Heap<T> {
         return element;
     }
     
-    /**
-     * sifts an element down the heap
-     * @param element the location of the element to sift down
-     * @return the new location in the heap
-     */
+    // sifts down the given element
+    // assumes that element is within the bounds of the heapArray
     public int siftDown(int element) {
     	if (isEmpty())
     		return -1;
@@ -187,10 +163,7 @@ public class Heap<T> {
 		return element;
     }
     
-    /**
-     * generates a string representation of the heap
-     * lists elements in order of how they are stored in the array
-     */
+    // generates a string for the heap; lists all the elements of its array in order
     public String toString() {
     	if (isEmpty())
     		return "This heap is empty.";
