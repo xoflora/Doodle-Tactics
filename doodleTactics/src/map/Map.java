@@ -60,8 +60,36 @@ public class Map {
 		return null;
 	}
 	
+	public String toString() {
+		String build = "\t";
+		for (int i = 0; i < _map.length; i++)
+			build += "  " + i + (i < 10 ? "   ":"  ");
+		build += "\n";
+		for (int i = 0; i < _map.length; i++) {
+			build += i + "\t";
+			for (int j = 0; j < _map[i].length; j++)
+				build += (_map[i][j].canMove(EAST) ? "->" : "xx") + _map[i][j].cost() + (_map[i][j].canMove(WEST) ? "<-" : "xx") + " ";
+			build += "\n";
+			if (i != _map.length - 1) {
+				build += "\t";
+				for (int j = 0; j < _map[i].length; j++)
+					build += "  " + (_map[i][j].canMove(SOUTH) ? "^":"x") + "   ";
+				build += "\n\t";
+				for (int j = 0; j < _map[i].length; j++)
+					build += "  " + (_map[i][j].canMove(NORTH) ? "v":"x") + "   ";
+				build += "\n";
+			}
+		}
+		
+		return build;
+	}
+	
 	public Tile getTile(int x, int y) {
-		return _map[x][y];
+		try {
+			return _map[x][y];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return null;
+		}
 	}
 	
 	/**
@@ -114,6 +142,9 @@ public class Map {
 	 * @return an ordered list of all tiles in the path
 	 */
 	public List<Tile> getPath(Tile source, Tile dest) {
+		if (source == null || dest == null)
+			return null;
+		
 		final Hashtable<Tile, Integer> distances = new Hashtable<Tile, Integer>();
 		final Hashtable<Tile, Tile> previous = new Hashtable<Tile, Tile>();
 		final Hashtable<Tile, Integer> heapPositions = new Hashtable<Tile, Integer>();
