@@ -151,13 +151,13 @@ public class Tile extends graphics.Shape {
 		}
 	}
 	
-	public Tile(JPanel container, String path, int x, int y) {
+	public Tile(JPanel container, String path, int x, int y, int cost) {
 		super(container, new java.awt.geom.Rectangle2D.Double());
 		_path = path;
 		this.setSize(TILE_SIZE,TILE_SIZE);
 		
 		_canMove = new boolean[4];
-		_cost = 1;
+		_cost = 0;
 		_x = x;
 		_y = y;
 	}
@@ -169,7 +169,7 @@ public class Tile extends graphics.Shape {
 	 */
 	public static Tile tile(JPanel container, String path, char permissions,
 			int x, int y, int cost) throws InvalidTileException {
-		Tile t = new Tile(container, path, x, y);
+		Tile t = new Tile(container, path, x, y, cost);
 		t.setTilePermissions(permissions);
 		return t;
 	}

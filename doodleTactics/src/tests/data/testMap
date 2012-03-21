@@ -14,3 +14,29 @@ F	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F
 F	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F
 F	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F
 Costs:
+
+
+
+
+<root>
+	<map height="16" width="16">
+		<permission x="23" y="32">
+			<north />
+			<south />
+			<east />
+			<west />
+		</permission>
+		
+		<cost x="234" y="23526432" c="192876584" />
+		
+		<image x="432689" y="0" img=path />
+	</map
+
+</root>
+
+
+{
+	map:{
+		
+	}
+}

@@ -17,7 +17,7 @@ public class MainMenu extends Screen {
 		
 		for(int i = 0; i < 21; i++) {
 			for(int j = 0; j < 17; j++) {
-				kirbies[i][j] = new Tile(this,"src/graphics/kirby.png", i, j);
+				kirbies[i][j] = new Tile(this,"src/graphics/kirby.png", i, j, 1);
 				kirbies[i][j].setFillColor(java.awt.Color.BLACK);
 				kirbies[i][j].setLocation(i*48, j*48);
 				kirbies[i][j].setVisible(true);
