@@ -37,9 +37,13 @@ public class Heap<T> {
         return lastElement_ + 1;
     }
     
-    // inserts the given element into the heap
+    /**
+     * inserts an element into the heap
+     * @param element the element to insert
+     * @return the index in the heap into which the element was inserted
+     */
     @SuppressWarnings("unchecked")
-	public void insert(T element) {
+	public int insert(T element) {
         if (lastElement_ == heapArray_.length - 1) {
             T[] newArray = (T[]) new Object[heapArray_.length * 2 + 1];
             for (int i = 0; i < heapArray_.length; i++) {
@@ -52,11 +56,15 @@ public class Heap<T> {
         	worstElement_ = element;
         heapArray_[++lastElement_] = element;
 
-        siftUp(lastElement_);
+        return siftUp(lastElement_);
     }
     
     //halves the length of the heapArray to save space
     //will only be called when less than 1/4 of the array is used
+    /**
+     * halves the length of the heapArray to save space
+     * precondition: the heapArray is only filled to 1/4 capacity
+     */
     @SuppressWarnings("unchecked")
 	private void shrink() {
     	T[] update = (T[]) new Object[heapArray_.length/2];
@@ -65,7 +73,10 @@ public class Heap<T> {
     	heapArray_ = update;
     }
     
-    // removes the first element from the heap and returns it
+    /**
+     * removes and returns the highest-priority element in the heap
+     * @return the highest-priority element in the heap
+     */
     public T extractMin() {
     	if (!isEmpty()) {
     		T item = heapArray_[0];
@@ -82,12 +93,18 @@ public class Heap<T> {
     	return null;
     }
     
+    /**
+     * @return the lowest-priority item in the heap
+     */
     public T getWorstElement() {
     	return worstElement_;
     }
     
-    // removes the given element from the heap
-    // returns true iff the given element was found in the heap
+    /**
+     * removes an element from the heap
+     * @param element the desired element to remove
+     * @return whether or not the element was contained in the heap (removed successfully)
+     */
     public boolean remove(T element) {
     	int index = -1;
     	for (int i = 0; i < size(); i++)
@@ -109,8 +126,12 @@ public class Heap<T> {
     	return true;
     }
     
-    // sifts up the given element
-    protected void siftUp(int element) {
+    /**
+     * sifts an element up the heap (maintains heap invariant if a priority changes)
+     * @param element the ocation element to sift up
+     * @return the new location in the heap
+     */
+    public int siftUp(int element) {
     	int parent = (int) Math.floor((element - 1) / 2);
         
         T elementItem = heapArray_[element];
@@ -120,15 +141,19 @@ public class Heap<T> {
             heapArray_[parent] = elementItem;
             heapArray_[element] = parentItem;
             
-            siftUp(parent);
+            return siftUp(parent);
         }
+        return element;
     }
     
-    // sifts down the given element
-    // assumes that element is within the bounds of the heapArray
-    protected void siftDown(int element) {
+    /**
+     * sifts an element down the heap
+     * @param element the location of the element to sift down
+     * @return the new location in the heap
+     */
+    public int siftDown(int element) {
     	if (isEmpty())
-    		return;
+    		return -1;
     	
 		int leftChild = 2*element + 1;
 		int rightChild = 2*element + 2;
@@ -141,14 +166,14 @@ public class Heap<T> {
     			T item = heapArray_[element];
     			heapArray_[element] = heapArray_[leftChild];
     			heapArray_[leftChild] = item;
-    			siftDown(leftChild);
+    			return siftDown(leftChild);
     		}
     		else if (comp.compare(heapArray_[rightChild], heapArray_[element]) <= 0) {
     			// right is less than left, so element replaces right
     			T item = heapArray_[element];
     			heapArray_[element] = heapArray_[rightChild];
     			heapArray_[rightChild] = item;
-    			siftDown(rightChild);
+    			return siftDown(rightChild);
     		}
 		}
 		else if (leftChild <= lastElement_ &&
@@ -157,10 +182,15 @@ public class Heap<T> {
 			T item = heapArray_[element];
 			heapArray_[element] = heapArray_[leftChild];
 			heapArray_[leftChild] = item;
+			return leftChild;
 		}
+		return element;
     }
     
-    // generates a string for the heap; lists all the elements of its array in order
+    /**
+     * generates a string representation of the heap
+     * lists elements in order of how they are stored in the array
+     */
     public String toString() {
     	if (isEmpty())
     		return "This heap is empty.";

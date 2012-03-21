@@ -1,10 +1,16 @@
 package map;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
+
+import javax.swing.JPanel;
 
 import util.Heap;
 
@@ -24,13 +30,38 @@ public class Map {
 	private Tile[][] _map;
 	String _name;
 	
+	public Map(Tile[][] tiles, String name) {
+		_map = tiles;
+		_overflow = null;
+		_name = "";
+	}
+	
 	/**
 	 * parses a map to generate a map instance
-	 * @param file the file to parse from
-	 * @return
+	 * @param permissionFile the file to parse tile permissions from
+	 * @return a new map given by the data from the map files
 	 */
-	public static Map map(String file) throws InvalidMapException {
+	public static Map map(JPanel container, String permissionFile)
+			throws InvalidMapException {
+		try {
+		BufferedReader reader = new BufferedReader(new FileReader(new File(permissionFile)));
+		String name = reader.readLine();
+		String[] dimensions = reader.readLine().split("/");
+		Tile[][] _tiles = new Tile[Integer.parseInt(dimensions[0])][Integer.parseInt(dimensions[1])];
+		
+		
+		
+		} catch(IOException e) {
+			throw new InvalidMapException();
+		} catch(NumberFormatException e) {
+			throw new InvalidMapException();
+		}
+		
 		return null;
+	}
+	
+	public Tile getTile(int x, int y) {
+		return _map[x][y];
 	}
 	
 	/**
@@ -84,8 +115,8 @@ public class Map {
 	 */
 	public List<Tile> getPath(Tile source, Tile dest) {
 		final Hashtable<Tile, Integer> distances = new Hashtable<Tile, Integer>();
-		Hashtable<Tile, Tile> previous = new Hashtable<Tile, Tile>();
-		Hashtable<Tile, Integer> heapPositions = new Hashtable<Tile, Integer>();
+		final Hashtable<Tile, Tile> previous = new Hashtable<Tile, Tile>();
+		final Hashtable<Tile, Integer> heapPositions = new Hashtable<Tile, Integer>();
 		
 		Heap<Tile> heap = new Heap<Tile>(estimateDistance(source, dest),
 				new Comparator<Tile>() {
@@ -103,41 +134,108 @@ public class Map {
 		});
 		
 		distances.put(source, 0);
+		heapPositions.put(source, heap.insert(source));
 		
-		Tile north, east, south, west;
-		Tile consider = source;
-		while (distances.get(dest) == null) {
+		Tile consider;
+		Tile check = null;
+		Integer dist, compare;
+		while (distances.get(dest) == null && !heap.isEmpty()) {
+		//	System.out.println("Stuff");
+			consider = heap.extractMin();
+			heapPositions.put(consider, -1);
 
 			try {
-				north = getNorth(consider);
-				if (north.canMove(SOUTH)) {
-					distances.put(north, distances.get(consider) + north.cost());
-				}
-			} catch(ArrayIndexOutOfBoundsException e) { }
-			
-			try {
-				east = getEast(consider);
-				if (east.canMove(WEST)) {
-					distances.put(east, distances.get(consider) + east.cost());
-				}
-			} catch(ArrayIndexOutOfBoundsException e) { }
-			
-			try {
-				south = getSouth(consider);
-				if (south.canMove(NORTH)) {
+				check = getNorth(consider);
+				if (check.canMove(SOUTH) && !check.isOccupied()) {
+					dist = distances.get(check);
+					compare = distances.get(consider) + consider.cost();
 					
+					if (dist == null) {	//tile hasn't been seen yet
+						distances.put(check, compare);
+						heapPositions.put(check, heap.insert(check));
+						previous.put(check, consider);
+					}
+					else if (dist > compare) {	//more optimal way to get to the tile
+						distances.put(check, compare);
+						heap.siftUp(heapPositions.get(check));
+						previous.put(check, consider);
+					}
 				}
 			} catch(ArrayIndexOutOfBoundsException e) { }
 			
 			try {
-				west = getWest(consider);
-				if (west.canMove(EAST)) {
+				check = getEast(consider);
+				if (check.canMove(WEST) && !check.isOccupied()) {
+					dist = distances.get(check);
+					compare = distances.get(consider) + consider.cost();
 					
+					if (dist == null) {	//tile hasn't been seen yet
+						distances.put(check, compare);
+						heapPositions.put(check, heap.insert(check));
+						previous.put(check, consider);
+					}
+					else if (dist > compare) {	//more optimal way to get to the tile
+						distances.put(check, compare);
+						heap.siftUp(heapPositions.get(check));
+						previous.put(check, consider);
+						System.out.println("FIUEW");
+					}
+				}
+			} catch(ArrayIndexOutOfBoundsException e) { }
+			
+			try {
+				check = getSouth(consider);
+				if (check.canMove(NORTH) && !check.isOccupied()) {
+					dist = distances.get(check);
+					compare = distances.get(consider) + consider.cost();
+					
+					if (dist == null) {	//tile hasn't been seen yet
+						distances.put(check, compare);
+						heapPositions.put(check, heap.insert(check));
+						previous.put(check, consider);
+					}
+					else if (dist > compare) {	//more optimal way to get to the tile
+						distances.put(check, compare);
+						heap.siftUp(heapPositions.get(check));
+						previous.put(check, consider);
+					}
+				}
+			} catch(ArrayIndexOutOfBoundsException e) { }
+			
+			try {
+				check = getWest(consider);
+				if (check.canMove(EAST) && !check.isOccupied()) {
+					dist = distances.get(check);
+					compare = distances.get(consider) + consider.cost();
+					
+					if (dist == null) {	//tile hasn't been seen yet
+						distances.put(check, compare);
+						heapPositions.put(check, heap.insert(check));
+						previous.put(check, consider);
+					}
+					else if (dist > compare) {	//more optimal way to get to the tile
+						distances.put(check, compare);
+						heap.siftUp(heapPositions.get(check));
+						previous.put(check, consider);
+					}
 				}
 			} catch(ArrayIndexOutOfBoundsException e) { }
 		}
 		
-		return null;
+		if (distances.get(dest) == null) {
+			System.out.println("lol");
+			return null;
+		}
+		
+		LinkedList<Tile> path = new LinkedList<Tile>();
+		Tile previousTile = dest;
+		while (previousTile != source) {
+			path.addFirst(previousTile);
+			previousTile = previous.get(previousTile);
+		}
+		path.addFirst(previousTile);
+		
+		return path;
 	}
 	
 	/**

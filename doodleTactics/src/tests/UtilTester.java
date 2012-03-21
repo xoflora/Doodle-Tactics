@@ -6,6 +6,11 @@ import org.junit.Test;
 
 import util.*;
 
+/**
+ * 
+ * @author rroelke
+ * tests the classes and methods of the utility package
+ */
 public class UtilTester {
 
 	@Test
