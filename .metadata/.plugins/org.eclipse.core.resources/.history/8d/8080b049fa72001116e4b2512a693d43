@@ -110,7 +110,7 @@ public class Heap<T> {
     }
     
     // sifts up the given element
-    public int siftUp(int element) {
+    protected int siftUp(int element) {
     	int parent = (int) Math.floor((element - 1) / 2);
         
         T elementItem = heapArray_[element];
@@ -127,7 +127,7 @@ public class Heap<T> {
     
     // sifts down the given element
     // assumes that element is within the bounds of the heapArray
-    public int siftDown(int element) {
+    protected int siftDown(int element) {
     	if (isEmpty())
     		return -1;
     	

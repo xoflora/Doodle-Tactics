@@ -24,7 +24,6 @@ public class Tile extends graphics.Shape {
 	private int opacity;
 	
 	private Event _event;
-	private Character _character;
 	private String _path;
 	
 	public Tile(JPanel container, String path) {
@@ -48,10 +47,6 @@ public class Tile extends graphics.Shape {
 	 */
 	public boolean canMove(int direction) {
 		return _canMove[direction];
-	}
-	
-	public boolean isOccupied() {
-		return _character == null;
 	}
 	
 	/**

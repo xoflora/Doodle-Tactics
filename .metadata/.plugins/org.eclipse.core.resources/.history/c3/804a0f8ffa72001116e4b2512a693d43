@@ -84,8 +84,8 @@ public class Map {
 	 */
 	public List<Tile> getPath(Tile source, Tile dest) {
 		final Hashtable<Tile, Integer> distances = new Hashtable<Tile, Integer>();
-		final Hashtable<Tile, Tile> previous = new Hashtable<Tile, Tile>();
-		final Hashtable<Tile, Integer> heapPositions = new Hashtable<Tile, Integer>();
+		Hashtable<Tile, Tile> previous = new Hashtable<Tile, Tile>();
+		Hashtable<Tile, Integer> heapPositions = new Hashtable<Tile, Integer>();
 		
 		Heap<Tile> heap = new Heap<Tile>(estimateDistance(source, dest),
 				new Comparator<Tile>() {
@@ -104,98 +104,53 @@ public class Map {
 		
 		distances.put(source, 0);
 		
-		Tile consider = source, check = null;
+		Tile north, east, south, west;
+		Tile consider = source;
 		Integer dist, compare;
-		while (distances.get(dest) == null && !heap.isEmpty()) {
+		while (distances.get(dest) == null) {
 
 			try {
-				check = getNorth(consider);
-				if (check.canMove(SOUTH) && !check.isOccupied()) {
-					dist = distances.get(check);
+				north = getNorth(consider);
+				if (north.canMove(SOUTH)) {
+					dist = distances.get(north);
 					compare = distances.get(consider) + consider.cost();
-					
-					if (dist == null) {	//tile hasn't been seen yet
-						distances.put(check, compare);
-						heapPositions.put(check, heap.insert(check));
-						previous.put(check, consider);
+					if (dist == null) {
+						//add to "open list"
+						distances.put(north, compare);
+						heapPositions.put(north, heap.insert(north));
+						previous.put(north, consider);
 					}
-					else if (dist > compare) {	//more optimal way to get to the tile
-						distances.put(check, compare);
-						heap.siftUp(heapPositions.get(check));
-						previous.put(check, consider);
+					else if (dist > compare) {
+						distances.put(north, compare);
+						previous.put(north, consider);
+						heap.siftUp(heapPositions.get(north));
 					}
 				}
 			} catch(ArrayIndexOutOfBoundsException e) { }
 			
 			try {
-				check = getEast(consider);
-				if (check.canMove(WEST) && !check.isOccupied()) {
-					dist = distances.get(check);
-					compare = distances.get(consider) + consider.cost();
-					
-					if (dist == null) {	//tile hasn't been seen yet
-						distances.put(check, compare);
-						heapPositions.put(check, heap.insert(check));
-						previous.put(check, consider);
-					}
-					else if (dist > compare) {	//more optimal way to get to the tile
-						distances.put(check, compare);
-						heap.siftUp(heapPositions.get(check));
-						previous.put(check, consider);
-					}
+				east = getEast(consider);
+				if (east.canMove(WEST)) {
+					distances.put(east, distances.get(consider) + east.cost());
 				}
 			} catch(ArrayIndexOutOfBoundsException e) { }
 			
 			try {
-				check = getSouth(consider);
-				if (check.canMove(NORTH) && !check.isOccupied()) {
-					dist = distances.get(check);
-					compare = distances.get(consider) + consider.cost();
+				south = getSouth(consider);
+				if (south.canMove(NORTH)) {
 					
-					if (dist == null) {	//tile hasn't been seen yet
-						distances.put(check, compare);
-						heapPositions.put(check, heap.insert(check));
-						previous.put(check, consider);
-					}
-					else if (dist > compare) {	//more optimal way to get to the tile
-						distances.put(check, compare);
-						heap.siftUp(heapPositions.get(check));
-						previous.put(check, consider);
-					}
 				}
 			} catch(ArrayIndexOutOfBoundsException e) { }
 			
 			try {
-				check = getWest(consider);
-				if (check.canMove(EAST) && !check.isOccupied()) {
-					dist = distances.get(check);
-					compare = distances.get(consider) + consider.cost();
+				west = getWest(consider);
+				if (west.canMove(EAST)) {
 					
-					if (dist == null) {	//tile hasn't been seen yet
-						distances.put(check, compare);
-						heapPositions.put(check, heap.insert(check));
-						previous.put(check, consider);
-					}
-					else if (dist > compare) {	//more optimal way to get to the tile
-						distances.put(check, compare);
-						heap.siftUp(heapPositions.get(check));
-						previous.put(check, consider);
-					}
 				}
 			} catch(ArrayIndexOutOfBoundsException e) { }
 		}
 		
-		if (distances.get(dest) == null)
-			return null;
-		
-		LinkedList<Tile> path = new LinkedList<Tile>();
-		Tile previousTile = dest;
-		while (previousTile != source) {
-			path.addLast(previousTile);
-			previousTile = previous.get(previousTile);
-		}
-		
-		return path;
+		return null;
 	}
 	
 	/**

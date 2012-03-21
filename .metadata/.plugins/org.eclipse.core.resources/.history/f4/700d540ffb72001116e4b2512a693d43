@@ -104,9 +104,10 @@ public class Map {
 		
 		distances.put(source, 0);
 		
+		Tile north, east, south, west;
 		Tile consider = source, check = null;
 		Integer dist, compare;
-		while (distances.get(dest) == null && !heap.isEmpty()) {
+		while (distances.get(dest) == null) {
 
 			try {
 				check = getNorth(consider);
@@ -185,17 +186,7 @@ public class Map {
 			} catch(ArrayIndexOutOfBoundsException e) { }
 		}
 		
-		if (distances.get(dest) == null)
-			return null;
-		
-		LinkedList<Tile> path = new LinkedList<Tile>();
-		Tile previousTile = dest;
-		while (previousTile != source) {
-			path.addLast(previousTile);
-			previousTile = previous.get(previousTile);
-		}
-		
-		return path;
+		return null;
 	}
 	
 	/**
