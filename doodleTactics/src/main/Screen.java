@@ -12,6 +12,10 @@ import controller.Controller;
 public abstract class Screen extends JPanel {
 	private Controller _controller;
 	
+	public Screen(Controller control) {
+		_controller = control;
+	}
+	
 	/**
 	 * switches control of the screen from one controller to another
 	 * @param c the new controller

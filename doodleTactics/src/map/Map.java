@@ -1,10 +1,16 @@
 package map;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
+
+import javax.swing.JPanel;
 
 import util.Heap;
 
@@ -24,13 +30,98 @@ public class Map {
 	private Tile[][] _map;
 	String _name;
 	
+	public Map(Tile[][] tiles, String name) {
+		_map = tiles;
+		_overflow = null;
+		_name = "";
+	}
+	
 	/**
 	 * parses a map to generate a map instance
-	 * @param file the file to parse from
-	 * @return
+	 * @param permissionFile the file to parse tile permissions from
+	 * @return a new map given by the data from the map files
 	 */
-	public static Map map(String file) throws InvalidMapException {
+	public static Map map(JPanel container, String permissionFile)
+			throws InvalidMapException {
+		try {
+		BufferedReader reader = new BufferedReader(new FileReader(new File(permissionFile)));
+		String name = reader.readLine();
+		String[] dimensions = reader.readLine().split("/");
+		Tile[][] _tiles = new Tile[Integer.parseInt(dimensions[0])][Integer.parseInt(dimensions[1])];
+		
+		
+		
+		} catch(IOException e) {
+			throw new InvalidMapException();
+		} catch(NumberFormatException e) {
+			throw new InvalidMapException();
+		}
+		
 		return null;
+	}
+	
+	public String toString() {
+		String build = "\t";
+		for (int i = 0; i < _map.length; i++)
+			build += "  " + i + (i < 10 ? "   ":"  ");
+		build += "\n";
+		for (int i = 0; i < _map.length; i++) {
+			build += i + "\t";
+			for (int j = 0; j < _map[i].length; j++)
+				build += (_map[i][j].canMove(EAST) ? "->" : "xx") + _map[i][j].cost() + (_map[i][j].canMove(WEST) ? "<-" : "xx") + " ";
+			build += "\n";
+			if (i != _map.length - 1) {
+				build += "\t";
+				for (int j = 0; j < _map[i].length; j++)
+					build += "  " + (_map[i][j].canMove(SOUTH) ? "^":"x") + "   ";
+				build += "\n\t";
+				for (int j = 0; j < _map[i].length; j++)
+					build += "  " + (_map[i][j].canMove(NORTH) ? "v":"x") + "   ";
+				build += "\n";
+			}
+		}
+		
+		return build;
+	}
+	
+	public Tile getTile(int x, int y) {
+		try {
+			return _map[x][y];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * @param source
+	 * @return the tile to the north of the source tile
+	 */
+	public Tile getNorth(Tile source) {
+		return _map[source.x()][source.y() - 1];
+	}
+	
+	/**
+	 * @param source
+	 * @return the tile to the east of the source tile
+	 */
+	public Tile getEast(Tile source) {
+		return _map[source.x() + 1][source.y()];
+	}
+	
+	/**
+	 * @param source
+	 * @return the tile to the south of the source tile
+	 */
+	public Tile getSouth(Tile source) {
+		return _map[source.x()][source.y() + 1];
+	}
+	
+	/**
+	 * @param source
+	 * @return the tile to the west of the source tile
+	 */
+	public Tile getWest(Tile source) {
+		return _map[source.x() - 1][source.y()];
 	}
 	
 	/**
@@ -40,7 +131,7 @@ public class Map {
 	 * @param dest the end tile
 	 * @return an estimate of the distance between the two tiles
 	 */
-	private int estimateDistance(Tile source, Tile dest) {
+	public int estimateDistance(Tile source, Tile dest) {
 		return Math.abs(source.x() - dest.x()) + Math.abs(source.y() - dest.y());
 	}
 	
@@ -51,11 +142,15 @@ public class Map {
 	 * @return an ordered list of all tiles in the path
 	 */
 	public List<Tile> getPath(Tile source, Tile dest) {
+		if (source == null || dest == null)
+			return null;
+		
 		final Hashtable<Tile, Integer> distances = new Hashtable<Tile, Integer>();
-		Hashtable<Tile, Tile> previous = new Hashtable<Tile, Tile>();
+		final Hashtable<Tile, Tile> previous = new Hashtable<Tile, Tile>();
+		final Hashtable<Tile, Integer> heapPositions = new Hashtable<Tile, Integer>();
+		
 		Heap<Tile> heap = new Heap<Tile>(estimateDistance(source, dest),
 				new Comparator<Tile>() {
-
 					@Override
 					public int compare(Tile o1, Tile o2) {
 						int d1 = distances.get(o1);
@@ -67,17 +162,119 @@ public class Map {
 						else
 							return 1;
 					}
-			
 		});
 		
 		distances.put(source, 0);
+		heapPositions.put(source, heap.insert(source));
 		
-		Tile consider = source;
-		while (distances.get(dest) == null) {
+		Tile consider;
+		Tile check = null;
+		Integer dist, compare;
+		while (distances.get(dest) == null && !heap.isEmpty()) {
+		//	System.out.println("Stuff");
+			consider = heap.extractMin();
+			heapPositions.put(consider, -1);
 			
+		//	System.out.println("Considering tile " + consider.x() + ", " + consider.y());
+			
+		//	System.out.println(distances.get(check));
+
+			try {
+				check = getNorth(consider);
+				if (check.canMove(SOUTH) && !check.isOccupied()) {
+					dist = distances.get(check);
+					compare = distances.get(consider) + check.cost();
+					
+					if (dist == null) {	//tile hasn't been seen yet
+						distances.put(check, compare);
+						heapPositions.put(check, heap.insert(check));
+						previous.put(check, consider);
+				//		System.out.println(check.x() + ", " + check.y() + ": " + distances.get(check));
+					}
+					else if (dist > compare) {	//more optimal way to get to the tile
+						distances.put(check, compare);
+						heap.siftUp(heapPositions.get(check));
+						previous.put(check, consider);
+				//		System.out.println(check.x() + ", " + check.y() + ": " + distances.get(check));
+					}
+				}
+			} catch(ArrayIndexOutOfBoundsException e) { }
+			
+			try {
+				check = getEast(consider);
+				if (check.canMove(WEST) && !check.isOccupied()) {
+					dist = distances.get(check);
+					compare = distances.get(consider) + check.cost();
+					
+					if (dist == null) {	//tile hasn't been seen yet
+						distances.put(check, compare);
+						heapPositions.put(check, heap.insert(check));
+						previous.put(check, consider);
+				//		System.out.println(check.x() + ", " + check.y() + ": " + distances.get(check));
+					}
+					else if (dist > compare) {	//more optimal way to get to the tile
+						distances.put(check, compare);
+						heap.siftUp(heapPositions.get(check));
+						previous.put(check, consider);
+					}
+				}
+			} catch(ArrayIndexOutOfBoundsException e) { }
+			
+			try {
+				check = getSouth(consider);
+				if (check.canMove(NORTH) && !check.isOccupied()) {
+					dist = distances.get(check);
+					compare = distances.get(consider) + check.cost();
+					
+					if (dist == null) {	//tile hasn't been seen yet
+						distances.put(check, compare);
+						heapPositions.put(check, heap.insert(check));
+						previous.put(check, consider);
+				//		System.out.println(check.x() + ", " + check.y() + ": " + distances.get(check));
+					}
+					else if (dist > compare) {	//more optimal way to get to the tile
+						distances.put(check, compare);
+						heap.siftUp(heapPositions.get(check));
+						previous.put(check, consider);
+					}
+				}
+			} catch(ArrayIndexOutOfBoundsException e) { }
+			
+			try {
+				check = getWest(consider);
+				if (check.canMove(EAST) && !check.isOccupied()) {
+					dist = distances.get(check);
+					compare = distances.get(consider) + check.cost();
+					
+					if (dist == null) {	//tile hasn't been seen yet
+						distances.put(check, compare);
+						heapPositions.put(check, heap.insert(check));
+						previous.put(check, consider);
+				//		System.out.println(check.x() + ", " + check.y() + ": " + distances.get(check));
+					}
+					else if (dist > compare) {	//more optimal way to get to the tile
+						distances.put(check, compare);
+						heap.siftUp(heapPositions.get(check));
+						previous.put(check, consider);
+					}
+				}
+			} catch(ArrayIndexOutOfBoundsException e) { }
 		}
 		
-		return null;
+		if (distances.get(dest) == null) {
+			System.out.println("lol");
+			return null;
+		}
+		
+		LinkedList<Tile> path = new LinkedList<Tile>();
+		Tile previousTile = dest;
+		while (previousTile != source) {
+			path.addFirst(previousTile);
+			previousTile = previous.get(previousTile);
+		}
+		path.addFirst(previousTile);
+		
+		return path;
 	}
 	
 	/**
@@ -99,5 +296,18 @@ public class Map {
 	 */
 	public List<Tile> getAttackRange(Tile source, int movementRange, int attackRange) {
 		return getMovementRange(source, movementRange);
+	}
+	
+	/** 
+	 * @param brush 
+	 * Paints all of the tiles in the map with their respective images
+	 */
+	
+	public void paint(java.awt.Graphics2D brush) {
+		for(int i = 0; i < _map.length; i++) {
+			for(int j = 0; j < _map[i].length; j++) {
+				_map[i][j].paint(brush,_map[i][j].getPath());
+			}
+		}
 	}
 }

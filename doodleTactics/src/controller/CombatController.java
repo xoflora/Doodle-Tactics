@@ -1,21 +1,23 @@
-package event;
+package controller;
 
 import java.awt.event.MouseEvent;
 import java.util.List;
-
-
+import map.Tile;
 /**
  * 
  * @author rroelke
- * a dialogue instance controls a dialogue between characters
+ *
  */
-public class Dialogue extends Event {
+public class CombatController extends Controller{
+	List<Character> _characters;
 	
-	List<String> _phrases;
-	//List<Character> _characters;
-	
-	public static Dialogue dialogue(String filename) {
-		return null;
+	public void move(Character c, Tile start, Tile destination){
+		//TODO 
+	}
+	@Override
+	public void release() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -45,11 +47,6 @@ public class Dialogue extends Event {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
-	}
-
-	
-	public void display() {
 		
 	}
 }
