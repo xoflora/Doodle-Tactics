@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="21" version="2.0">
+<workbench progressCount="19" version="2.0">
 <workbenchAdvisor/>
 <window height="768" maximized="true" width="1024" x="0" y="25">
 <fastViewData fastViewLocation="1024"/>
@@ -37,6 +37,10 @@
 <part id="6"/>
 <part id="7"/>
 <part id="8"/>
+<part id="9"/>
+<part id="10"/>
+<part id="11"/>
+<part id="12"/>
 </presentation>
 </folder>
 </info>
@@ -51,15 +55,15 @@
 </editor>
 <editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Tile.java" partName="Tile.java" path="/gpfs/main/home/rroelke/course/cs032/term/Doodle-Tactics/doodleTactics/src/map/Tile.java" title="Tile.java" tooltip="doodleTactics/src/map/Tile.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/map/Tile.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="4282" selectionTopPixel="657"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1327" selectionTopPixel="1770"/>
 </editor>
 <editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Map.java" partName="Map.java" path="/gpfs/main/home/rroelke/course/cs032/term/Doodle-Tactics/doodleTactics/src/map/Map.java" title="Map.java" tooltip="doodleTactics/src/map/Map.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/map/Map.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="4387" selectionTopPixel="1765"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1920" selectionTopPixel="692"/>
 </editor>
 <editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MapTester.java" partName="MapTester.java" path="/gpfs/main/home/rroelke/course/cs032/term/Doodle-Tactics/doodleTactics/src/tests/MapTester.java" title="MapTester.java" tooltip="doodleTactics/src/tests/MapTester.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/tests/MapTester.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1080" selectionTopPixel="357"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="8281" selectionTopPixel="3455"/>
 </editor>
 <editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="InvalidTileException.java" partName="InvalidTileException.java" path="/gpfs/main/home/rroelke/course/cs032/term/Doodle-Tactics/doodleTactics/src/map/InvalidTileException.java" title="InvalidTileException.java" tooltip="doodleTactics/src/map/InvalidTileException.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/map/InvalidTileException.java"/>
@@ -67,7 +71,7 @@
 </editor>
 <editor id="org.eclipse.ui.DefaultTextEditor" name="testMap" partName="testMap" path="/gpfs/main/home/rroelke/course/cs032/term/Doodle-Tactics/doodleTactics/src/tests/data/testMap" title="testMap" tooltip="doodleTactics/src/tests/data/testMap" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/tests/data/testMap"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="417" selectionTopPixel="0"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="702" selectionTopPixel="55"/>
 </editor>
 <editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Screen.java" partName="Screen.java" path="/gpfs/main/home/rroelke/course/cs032/term/Doodle-Tactics/doodleTactics/src/main/Screen.java" title="Screen.java" tooltip="doodleTactics/src/main/Screen.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/main/Screen.java"/>
@@ -76,6 +80,22 @@
 <editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="DoodleTactics.java" partName="DoodleTactics.java" path="/gpfs/main/home/rroelke/course/cs032/term/Doodle-Tactics/doodleTactics/src/main/DoodleTactics.java" title="DoodleTactics.java" tooltip="doodleTactics/src/main/DoodleTactics.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/main/DoodleTactics.java"/>
 <editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="678" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MainMenu.java" partName="MainMenu.java" path="/gpfs/main/home/rroelke/course/cs032/term/Doodle-Tactics/doodleTactics/src/main/MainMenu.java" title="MainMenu.java" tooltip="doodleTactics/src/main/MainMenu.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/main/MainMenu.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="569" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="UtilTester.java" partName="UtilTester.java" path="/gpfs/main/home/rroelke/course/cs032/term/Doodle-Tactics/doodleTactics/src/tests/UtilTester.java" title="UtilTester.java" tooltip="doodleTactics/src/tests/UtilTester.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/tests/UtilTester.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Archer.java" partName="Archer.java" path="/gpfs/main/home/rroelke/course/cs032/term/Doodle-Tactics/doodleTactics/src/character/Archer.java" title="Archer.java" tooltip="doodleTactics/src/character/Archer.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/character/Archer.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Character.java" partName="Character.java" path="/gpfs/main/home/rroelke/course/cs032/term/Doodle-Tactics/doodleTactics/src/character/Character.java" title="Character.java" tooltip="doodleTactics/src/character/Character.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/character/Character.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
 </editor>
 </editors>
 <views>
@@ -86,8 +106,8 @@
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
 <expanded>
-<category IMemento.internal.id="Warnings"/>
 <category IMemento.internal.id="Errors"/>
+<category IMemento.internal.id="Warnings"/>
 </expanded>
 <columnWidths org.eclipse.ui.ide.locationField="0" org.eclipse.ui.ide.markerType="0" org.eclipse.ui.ide.pathField="0" org.eclipse.ui.ide.resourceField="0" org.eclipse.ui.ide.severityAndDescriptionField="0"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
@@ -218,7 +238,7 @@
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.22931442" ratioLeft="291" ratioRight="978" relationship="2" relative="left"/>
-<info folder="true" part="bottom" ratio="0.74960876" ratioLeft="479" ratioRight="160" relationship="4" relative="org.eclipse.ui.editorss">
+<info folder="true" part="bottom" ratio="0.7264706" ratioLeft="741" ratioRight="279" relationship="4" relative="org.eclipse.ui.editorss">
 <folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
 <page content="org.eclipse.jdt.ui.JavadocView" label="Javadoc"/>
@@ -253,160 +273,159 @@
 <navigationHistory>
 <editors>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/tests/MapTester.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/map/Map.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ui.DefaultTextEditor" path="/doodleTactics/src/tests/data/testMap"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/map/Tile.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/main/DoodleTactics.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/map/Map.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/character/MapCharacter.java"/>
 </editors>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="3702" y="0"/>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="3706" y="0"/>
 </item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="3707" y="1"/>
-</item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="3711" y="0"/>
-</item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="3711" y="0"/>
+<item historyLabel="Tile.java" index="1">
+<position info="not_deleted" x="1327" y="0"/>
 </item>
 <item historyLabel="MapTester.java" index="0">
-<position info="not_deleted" x="1094" y="0"/>
-</item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="3711" y="0"/>
-</item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="3460" y="0"/>
-</item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="3483" y="0"/>
-</item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="3480" y="0"/>
-</item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="3639" y="0"/>
-</item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="3640" y="0"/>
-</item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="3613" y="0"/>
-</item>
-<item historyLabel="testMap" index="2">
-<position info="not_deleted" x="417" y="0"/>
-</item>
-<item historyLabel="Tile.java" index="3">
-<position info="not_deleted" x="3943" y="0"/>
+<position info="not_deleted" x="2959" y="78"/>
 </item>
 <item historyLabel="MapTester.java" index="0">
-<position info="not_deleted" x="1094" y="0"/>
+<position info="not_deleted" x="8237" y="0"/>
 </item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="3613" y="0"/>
+<item historyLabel="MapTester.java" index="0">
+<position info="not_deleted" x="7965" y="0"/>
 </item>
-<item historyLabel="Map.java" index="1">
+<item historyLabel="MapTester.java" index="0">
+<position info="not_deleted" x="7992" y="43"/>
+</item>
+<item historyLabel="MapTester.java" index="0">
+<position info="not_deleted" x="1346" y="0"/>
+</item>
+<item historyLabel="MapTester.java" index="0">
+<position info="not_deleted" x="1369" y="0"/>
+</item>
+<item historyLabel="MapTester.java" index="0">
+<position info="not_deleted" x="1372" y="0"/>
+</item>
+<item historyLabel="Tile.java" index="1">
+<position info="not_deleted" x="1327" y="0"/>
+</item>
+<item historyLabel="MapTester.java" index="0">
+<position info="not_deleted" x="8281" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="3706" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1491" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1659" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1714" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1727" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1515" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1791" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1794" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1639" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1850" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1868" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1898" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1951" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1964" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1983" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1994" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1997" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="2012" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="2032" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="2018" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
 <position/>
 </item>
-<item historyLabel="Map.java" index="1">
-<position/>
+<item historyLabel="MapCharacter.java" index="3">
+<position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="Map.java" index="1">
-<position/>
+<item historyLabel="Tile.java" index="1">
+<position info="not_deleted" x="1327" y="0"/>
 </item>
-<item historyLabel="Map.java" index="1">
-<position/>
-</item>
-<item historyLabel="Map.java" index="1">
-<position/>
-</item>
-<item historyLabel="Map.java" index="1">
-<position/>
-</item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="6449" y="0"/>
-</item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="4985" y="0"/>
-</item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="4947" y="0"/>
-</item>
-<item historyLabel="Map.java" index="1">
-<position/>
-</item>
-<item historyLabel="Map.java" index="1">
+<item historyLabel="Map.java" index="2">
 <position/>
 </item>
 <item historyLabel="MapTester.java" index="0">
-<position info="not_deleted" x="1094" y="0"/>
+<position info="not_deleted" x="8281" y="0"/>
 </item>
-<item historyLabel="Map.java" index="1">
+<item historyLabel="MapTester.java" index="0">
+<position info="not_deleted" x="8281" y="0"/>
+</item>
+<item historyLabel="Map.java" index="2">
 <position/>
 </item>
-<item historyLabel="Tile.java" index="3">
-<position info="not_deleted" x="4282" y="0"/>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="2052" y="0"/>
 </item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="4758" y="0"/>
-</item>
-<item historyLabel="MapTester.java" index="0">
-<position info="not_deleted" x="1080" y="28"/>
-</item>
-<item historyLabel="MapTester.java" index="0">
-<position info="not_deleted" x="1020" y="0"/>
-</item>
-<item historyLabel="MapTester.java" index="0">
-<position info="not_deleted" x="1080" y="28"/>
-</item>
-<item historyLabel="MapTester.java" index="0">
+<item historyLabel="Map.java" index="2">
 <position/>
 </item>
-<item historyLabel="MapTester.java" index="0">
-<position/>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="2004" y="0"/>
 </item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="4719" y="0"/>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="2031" y="0"/>
 </item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="6601" y="0"/>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="2184" y="0"/>
 </item>
-<item historyLabel="MapTester.java" index="0">
-<position info="not_deleted" x="1145" y="0"/>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1556" y="0"/>
 </item>
-<item historyLabel="MapTester.java" index="0">
-<position info="not_deleted" x="1186" y="0"/>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1573" y="0"/>
 </item>
-<item historyLabel="MapTester.java" index="0">
-<position info="not_deleted" x="1186" y="0"/>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1618" y="0"/>
 </item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="6601" y="0"/>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1595" y="0"/>
 </item>
-<item historyLabel="Map.java" index="1">
-<position info="not_deleted" x="6602" y="0"/>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1600" y="0"/>
 </item>
-<item historyLabel="DoodleTactics.java" index="4">
-<position info="not_deleted" x="678" y="0"/>
+<item historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1682" y="0"/>
 </item>
-<item historyLabel="MapTester.java" index="0">
-<position info="not_deleted" x="1186" y="0"/>
-</item>
-<item historyLabel="MapTester.java" index="0">
-<position info="not_deleted" x="1547" y="0"/>
-</item>
-<item historyLabel="MapTester.java" index="0">
-<position info="not_deleted" x="1539" y="0"/>
-</item>
-<item historyLabel="MapTester.java" index="0">
-<position info="not_deleted" x="1546" y="0"/>
-</item>
-<item historyLabel="MapTester.java" index="0">
-<position info="not_deleted" x="1080" y="0"/>
-</item>
-<item active="true" historyLabel="Map.java" index="1">
-<position info="not_deleted" x="6602" y="0"/>
+<item active="true" historyLabel="Map.java" index="2">
+<position info="not_deleted" x="1918" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -414,6 +433,12 @@
 <workbenchWindowAdvisor/>
 <actionBarAdvisor/>
 <trimLayout>
+<trimArea IMemento.internal.id="16384">
+<trimItem IMemento.internal.id="left"/>
+</trimArea>
+<trimArea IMemento.internal.id="131072">
+<trimItem IMemento.internal.id="right"/>
+</trimArea>
 <trimArea IMemento.internal.id="128">
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.WorkbenchWindow.topBar"/>
 </trimArea>
@@ -421,10 +446,23 @@
 <trimItem IMemento.internal.id="org.eclise.ui.internal.FastViewBar"/>
 <trimItem IMemento.internal.id="org.eclipse.jface.action.StatusLineManager"/>
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.progress.ProgressRegion"/>
+<trimItem IMemento.internal.id="bottom"/>
 </trimArea>
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Character.java" tooltip="doodleTactics/src/character/Character.java">
+<persistable path="/doodleTactics/src/character/Character.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Archer.java" tooltip="doodleTactics/src/character/Archer.java">
+<persistable path="/doodleTactics/src/character/Archer.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="UtilTester.java" tooltip="doodleTactics/src/tests/UtilTester.java">
+<persistable path="/doodleTactics/src/tests/UtilTester.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MainMenu.java" tooltip="doodleTactics/src/main/MainMenu.java">
+<persistable path="/doodleTactics/src/main/MainMenu.java"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="DoodleTactics.java" tooltip="doodleTactics/src/main/DoodleTactics.java">
 <persistable path="/doodleTactics/src/main/DoodleTactics.java"/>
 </file>
@@ -440,9 +478,6 @@
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="InvalidTileException.java" tooltip="doodleTactics/src/map/InvalidTileException.java">
 <persistable path="/doodleTactics/src/map/InvalidTileException.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="UtilTester.java" tooltip="doodleTactics/src/tests/UtilTester.java">
-<persistable path="/doodleTactics/src/tests/UtilTester.java"/>
-</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MapTester.java" tooltip="doodleTactics/src/tests/MapTester.java">
 <persistable path="/doodleTactics/src/tests/MapTester.java"/>
 </file>
@@ -455,17 +490,11 @@
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Tile.java" tooltip="doodleTactics/src/map/Tile.java">
 <persistable path="/doodleTactics/src/map/Tile.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MainMenu.java" tooltip="doodleTactics/src/main/MainMenu.java">
-<persistable path="/doodleTactics/src/main/MainMenu.java"/>
-</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MapCharacter.java" tooltip="doodleTactics/src/character/MapCharacter.java">
 <persistable path="/doodleTactics/src/character/MapCharacter.java"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Weapon.java" tooltip="doodleTactics/src/items/Weapon.java">
 <persistable path="/doodleTactics/src/items/Weapon.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Character.java" tooltip="doodleTactics/src/character/Character.java">
-<persistable path="/doodleTactics/src/character/Character.java"/>
 </file>
 </mruList>
 </workbench>

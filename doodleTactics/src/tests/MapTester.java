@@ -1,18 +1,8 @@
 package tests;
 
-import java.util.ArrayList;
-
-import character.Character;
-import character.Warrior;
-
-import java.util.LinkedList;
 import java.util.List;
-
 import javax.swing.JPanel;
-
 import org.junit.*;
-
-import character.Archer;
 
 import map.*;
 
@@ -33,7 +23,7 @@ public class MapTester {
 	public static void setUpClass() throws Exception {
 		try {
 			JPanel panel = new JPanel();
-			Tile[][] tiles = new Tile[32][24];
+			Tile[][] tiles = new Tile[32][32];
 			for (int i = 0; i < tiles.length; i++)
 				for (int j = 0; j < tiles[i].length; j++)
 					tiles[i][j] = Tile.tile(panel, "", 'F', i, j, 1);
@@ -46,10 +36,23 @@ public class MapTester {
 			_test.getTile(21, 16).setCost(7);
 			_test.getTile(19, 16).setCost(2);
 			
-			//26, 12), _test.getTile(23, 11
 			_test.getTile(24, 12).setCost(6);
 			_test.getTile(24, 11).setCost(6);
 			_test.getTile(24, 13).setCost(2);
+			
+			_test.getTile(24, 4).setTilePermissions('A');
+			_test.getTile(25, 3).setTilePermissions('6');
+			_test.getTile(25, 4).setTilePermissions('A');
+			
+			_test.getTile(24, 23).setTilePermissions('0');
+			_test.getTile(24, 24).setTilePermissions('0');
+			_test.getTile(24, 25).setTilePermissions('0');
+			_test.getTile(25, 24).setTilePermissions('E');
+			_test.getTile(25, 23).setTilePermissions('B');
+			_test.getTile(24, 26).setCost(2);
+			_test.getTile(25, 26).setCost(2);
+			_test.getTile(25, 25).setCost(2);
+			_test.getTile(22, 23).setCost(2);
 			
 		} catch(InvalidTileException e) {
 			assert(false);
@@ -93,9 +96,15 @@ public class MapTester {
 	public void testPathFinding() {
 		
 		/*
+		 * failing cases - no path exists
+		 */
+		List<Tile> path = _test.getPath(_test.getTile(-1, 0), _test.getTile(0, 0));
+		assert(path == null);
+		
+		/*
 		 * trivial test cases - test a straight-line path with no obstructions
 		 */
-		List<Tile> path = _test.getPath(_test.getTile(0, 0), _test.getTile(0, 1));
+		path = _test.getPath(_test.getTile(0, 0), _test.getTile(0, 1));
 		assert(path.size() == 2);
 		assert(tileEquals(path.get(0), 0, 0));
 		assert(tileEquals(path.get(1), 0, 1));
@@ -158,7 +167,6 @@ public class MapTester {
 		 * tests paths moving through movement-cost obstructions
 		 */
 		path = _test.getPath(_test.getTile(25, 13), _test.getTile(23, 11));
-		System.out.println(path.size());
 	//	for (int i = 0; i < path.size(); i++)
 	//		System.out.println("Path " + i + ": " + path.get(i).x() + ", " + path.get(i).y());
 		assert(path.size() == 5);
@@ -168,6 +176,69 @@ public class MapTester {
 		assert(tileEquals(path.get(3), 23, 12));
 		assert(tileEquals(path.get(4), 23, 11));
 		
+		/*
+		 * tests paths moving around movement-permission constraints
+		 */
+		path = _test.getPath(_test.getTile(24, 3), _test.getTile(24, 4));
+		assert(path.size() == 4);
+		assert(tileEquals(path.get(0), 24, 3));
+		assert(tileEquals(path.get(1), 23, 3));
+		assert(tileEquals(path.get(2), 23, 4));
+		assert(tileEquals(path.get(3), 24, 4));
 		
+		path = _test.getPath(_test.getTile(24, 3), _test.getTile(25, 4));
+		assert(path.size() == 5);
+		assert(tileEquals(path.get(0), 24, 3));
+		assert(tileEquals(path.get(1), 23, 3));
+		assert(tileEquals(path.get(2), 23, 4));
+		assert(tileEquals(path.get(3), 24, 4));
+		assert(tileEquals(path.get(4), 25, 4));
+		
+		path = _test.getPath(_test.getTile(24, 3), _test.getTile(25, 3));
+		assert(path.size() == 6);
+		assert(tileEquals(path.get(0), 24, 3));
+		assert(tileEquals(path.get(1), 24, 2));
+		assert(tileEquals(path.get(2), 25, 2));
+		assert(tileEquals(path.get(3), 26, 2));
+		assert(tileEquals(path.get(4), 26, 3));
+		assert(tileEquals(path.get(5), 25, 3));
+		
+		/*
+		 * tests paths with mixed permission and cost constraints
+		 */
+		path = _test.getPath(_test.getTile(22, 24), _test.getTile(25, 24));
+		assert(path.size() == 10);
+		assert(tileEquals(path.get(0), 22, 24));
+		assert(tileEquals(path.get(1), 23, 24));
+		assert(tileEquals(path.get(2), 23, 23));
+		assert(tileEquals(path.get(3), 23, 22));
+		assert(tileEquals(path.get(4), 24, 22));
+		assert(tileEquals(path.get(5), 25, 22));
+		assert(tileEquals(path.get(6), 25, 23));
+		assert(tileEquals(path.get(7), 26, 23));
+		assert(tileEquals(path.get(8), 26, 24));
+		assert(tileEquals(path.get(9), 25, 24));
+		
+		path = _test.getPath(_test.getTile(23, 25), _test.getTile(25, 24));
+		assert(path.size() == 6);
+		assert(tileEquals(path.get(0), 23, 25));
+		assert(tileEquals(path.get(1), 23, 26));
+		assert(tileEquals(path.get(2), 24, 26));
+		assert(tileEquals(path.get(3), 25, 26));
+		assert(tileEquals(path.get(4), 25, 25));
+		assert(tileEquals(path.get(5), 25, 24));
+		
+		path = _test.getPath(_test.getTile(25, 24), _test.getTile(23, 25));
+		for (int i = 0; i < path.size(); i++)
+				System.out.println("Path " + i + ": " + path.get(i).x() + ", " + path.get(i).y());
+		assert(path.size() == 6);
+		assert(tileEquals(path.get(5), 23, 25));
+		assert(tileEquals(path.get(4), 23, 26));
+		assert(tileEquals(path.get(3), 24, 26));
+		assert(tileEquals(path.get(2), 25, 26));
+		assert(tileEquals(path.get(1), 25, 25));
+		assert(tileEquals(path.get(0), 25, 24));
+		
+		System.out.println(_test);
 	}
 }
