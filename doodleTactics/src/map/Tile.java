@@ -192,6 +192,15 @@ public class Tile extends graphics.Shape {
 	public int cost() {
 		return _cost;
 	}
+	
+	/**
+	 * updates the cost of a tile
+	 * @param cost the new cost
+	 */
+	public void setCost(int cost) {
+		_cost = cost;
+	}
+	
 	public int x() {
 		return _x;
 	}
