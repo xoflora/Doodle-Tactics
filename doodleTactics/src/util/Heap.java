@@ -39,7 +39,7 @@ public class Heap<T> {
     
     // inserts the given element into the heap
     @SuppressWarnings("unchecked")
-	public void insert(T element) {
+	public int insert(T element) {
         if (lastElement_ == heapArray_.length - 1) {
             T[] newArray = (T[]) new Object[heapArray_.length * 2 + 1];
             for (int i = 0; i < heapArray_.length; i++) {
@@ -52,7 +52,7 @@ public class Heap<T> {
         	worstElement_ = element;
         heapArray_[++lastElement_] = element;
 
-        siftUp(lastElement_);
+        return siftUp(lastElement_);
     }
     
     //halves the length of the heapArray to save space
@@ -110,7 +110,7 @@ public class Heap<T> {
     }
     
     // sifts up the given element
-    protected void siftUp(int element) {
+    protected int siftUp(int element) {
     	int parent = (int) Math.floor((element - 1) / 2);
         
         T elementItem = heapArray_[element];
@@ -120,15 +120,16 @@ public class Heap<T> {
             heapArray_[parent] = elementItem;
             heapArray_[element] = parentItem;
             
-            siftUp(parent);
+            return siftUp(parent);
         }
+        return element;
     }
     
     // sifts down the given element
     // assumes that element is within the bounds of the heapArray
-    protected void siftDown(int element) {
+    protected int siftDown(int element) {
     	if (isEmpty())
-    		return;
+    		return -1;
     	
 		int leftChild = 2*element + 1;
 		int rightChild = 2*element + 2;
@@ -141,14 +142,14 @@ public class Heap<T> {
     			T item = heapArray_[element];
     			heapArray_[element] = heapArray_[leftChild];
     			heapArray_[leftChild] = item;
-    			siftDown(leftChild);
+    			return siftDown(leftChild);
     		}
     		else if (comp.compare(heapArray_[rightChild], heapArray_[element]) <= 0) {
     			// right is less than left, so element replaces right
     			T item = heapArray_[element];
     			heapArray_[element] = heapArray_[rightChild];
     			heapArray_[rightChild] = item;
-    			siftDown(rightChild);
+    			return siftDown(rightChild);
     		}
 		}
 		else if (leftChild <= lastElement_ &&
@@ -157,7 +158,9 @@ public class Heap<T> {
 			T item = heapArray_[element];
 			heapArray_[element] = heapArray_[leftChild];
 			heapArray_[leftChild] = item;
+			return leftChild;
 		}
+		return element;
     }
     
     // generates a string for the heap; lists all the elements of its array in order
