@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.List;
+import controller.CombatController;
 
 import items.*;
 public abstract class Character implements Serializable{
@@ -12,7 +13,7 @@ public abstract class Character implements Serializable{
 	 */
 	
 	final static int LEVELCAP = 99;
-	
+	final static int NUM_STATS = 8;
 	protected String _name;
 	
 	//stats
@@ -53,6 +54,14 @@ public abstract class Character implements Serializable{
 	
 	private CombatController _affiliation; //player/AI etc
 	
+	//constructor
+	public Character(){
+		_BASE_STATS = new int[NUM_STATS];
+		_currentStats = new int[NUM_STATS];
+		_unitPoints = new int[NUM_STATS];
+		YIELD = new int[NUM_STATS];
+	}
+	
 	
 	//methods
 	
@@ -88,7 +97,8 @@ public abstract class Character implements Serializable{
 	 * @return
 	 */
 	public int getMovementRange(){
-		
+		//TODO
+		return -1;
 	}
 	
 	/** 
@@ -148,7 +158,7 @@ public abstract class Character implements Serializable{
 	 * @author czchapma
 	 */
 	public void serialize(){
-		String filename = _name + ".ser";
+		String filename = "src/character/" + _name + ".ser";
 		FileOutputStream fos = null;
 		ObjectOutputStream out  = null;
 		try{
@@ -169,7 +179,7 @@ public abstract class Character implements Serializable{
 		FileInputStream fis = null;
 		ObjectInputStream in = null;
 		try{
-			fis = new FileInputStream(name + ".ser");
+			fis = new FileInputStream("src/character/" + name + ".ser");
 			in = new ObjectInputStream(fis);
 			c = (Character)in.readObject();
 			in.close();
@@ -178,6 +188,50 @@ public abstract class Character implements Serializable{
 		} catch(ClassNotFoundException e){
 			e.printStackTrace();
 		}
+		return c;
+	}
+	
+	public boolean equals(Character other){
+		for(int i=0; i<NUM_STATS; i++)
+			if(_BASE_STATS[i] != other._BASE_STATS[i])
+				return false;
+		if(_exp != other._exp)
+			return false;
+		if(_currentHP != other._currentHP)
+			return false;
+		if(_level != other._level)
+			return false;
+		
+		return true;
+	}
+	
+	public static void main(String[] args){
+		//serialization test
+		Archer a = new Archer();
+		a._exp = 500;
+		a.serialize();
+		Archer restored = (Archer) restore(a._name);
+		assert(restored.equals(a));
+		
+		Warrior w = new Warrior();
+		w._currentHP = 100;
+		w.serialize();
+		Warrior restoredW = (Warrior) restore(w._name);
+		assert(restoredW.equals(w));
+		
+		Mage m = new Mage();
+		m._level = 5;
+		m.serialize();
+		Mage restoredM = (Mage) restore(m._name);
+		assert(restoredM.equals(m));
+		
+		Thief t = new Thief();
+		t._level = 1;
+		t._currentHP = 50;
+		t._exp = 200;
+		t.serialize();
+		Thief restoredT = (Thief) restore(t._name);
+		assert(restoredT.equals(t));
 	}
 
 }
