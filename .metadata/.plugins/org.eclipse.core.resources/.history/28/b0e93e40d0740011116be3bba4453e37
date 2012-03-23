@@ -1,0 +1,15 @@
+package controller;
+
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
+
+import javax.swing.event.MouseInputListener;
+
+import main.*;
+
+public abstract class Controller implements MouseListener, KeyListener, MouseInputListener {
+	
+	protected DoodleTactics _dt;
+	
+	public abstract void release();
+}
