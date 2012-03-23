@@ -1,7 +1,12 @@
 package character;
 
+import javax.swing.JPanel;
+
 public class Mage extends Character{
-	public Mage(){
+	
+	public Mage(JPanel container, String avatar, String profile, String left, String right, String up, String down){
+		super(container, avatar, profile, left, right, up, down);
+		
 		_name = "Mage";
 		
 		//set base stats

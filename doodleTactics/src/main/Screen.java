@@ -26,6 +26,7 @@ public abstract class Screen extends JPanel {
 		removeMouseListener(toReturn);
 		_controller = c;
 		addMouseListener(c);
+		addKeyListener(c);
 		return toReturn;
 	}
 	

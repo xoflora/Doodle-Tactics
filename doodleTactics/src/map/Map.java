@@ -88,7 +88,7 @@ public class Map {
 		try {
 			return _map[x][y];
 		} catch (ArrayIndexOutOfBoundsException e) {
-			return null;
+			throw new IllegalArgumentException("x = " + x + ", y = " + y);
 		}
 	}
 	
@@ -306,7 +306,7 @@ public class Map {
 	public void paint(java.awt.Graphics2D brush) {
 		for(int i = 0; i < _map.length; i++) {
 			for(int j = 0; j < _map[i].length; j++) {
-				_map[i][j].paint(brush,_map[i][j].getPath());
+				_map[i][j].paint(brush,_map[i][j].getImage());
 			}
 		}
 	}

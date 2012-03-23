@@ -4,10 +4,16 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
+
 import controller.CombatController;
 
+import graphics.Rectangle;
+import graphics.Shape;
 import items.*;
-public abstract class Character implements Serializable{
+public abstract class Character extends Rectangle implements Serializable{
 	/**
 	 * @author czchapma
 	 */
@@ -47,6 +53,7 @@ public abstract class Character implements Serializable{
 	//images
 	private BufferedImage _avatar;
 	private BufferedImage _profile;
+	private BufferedImage _currentImage;
 	private BufferedImage _left;
 	private BufferedImage _right;
 	private BufferedImage _up;
@@ -55,15 +62,23 @@ public abstract class Character implements Serializable{
 	private CombatController _affiliation; //player/AI etc
 	
 	//constructor
-	public Character(){
+	public Character(JPanel container, String avatar, String profile, String left, String right, String up, String down){
+		super(container);
 		_BASE_STATS = new int[NUM_STATS];
 		_currentStats = new int[NUM_STATS];
-		_unitPoints = new int[NUM_STATS];
+		_unitPoints = new int[NUM_STATS]; 
 		YIELD = new int[NUM_STATS];
+		try {
+			_avatar = ImageIO.read(new File(avatar));
+			_profile = ImageIO.read(new File(profile));
+			_left = ImageIO.read(new File(left));
+			_right = ImageIO.read(new File(right));
+			_up = ImageIO.read(new File(up));
+			_down = ImageIO.read(new File(down));
+		} catch(IOException e) {
+			System.out.println("Bad file path!");
+		}
 	}
-	
-	
-	//methods
 	
 	/**
 	 * getters and setters
@@ -142,39 +157,48 @@ public abstract class Character implements Serializable{
 	}
 	
 	/**
-	 * paintLeft
+	 * setLeft
 	 * paints the left character image
 	 * @author jeshapir
 	 */
-	public void paintLeft(Graphics2D brush){
-		//TODO fill in
+	public void setLeft(){
+		_currentImage = _left;
 	}
 	
 	/**
-	 * paintRight
+	 * setRight
 	 * paints the right character image
 	 * @author jeshapir
 	 */
-	public void paintRight(Graphics2D brush){
-		//TODO fill in
+	public void setRight(){
+		_currentImage = _right;
 	}
 	
 	/**
-	 * paintUp
+	 * setUp
 	 * paints the 'up' character image
 	 * @author jeshapir
 	 */
-	public void paintUp(Graphics2D brush){
-		//TODO fill in
+	public void setUp(){
+		_currentImage = _up;
 	}
 	
 	/**
-	 * paintDown
+	 * setDown
 	 * paints the 'down' character image
 	 * @author jeshapir
 	 */
-	public void paintDown(Graphics2D brush){
-		//TODO Joe fills in
+	public void setDown(){
+		_currentImage = _down;
+	}
+	
+	/**
+	 * accessor method for the current image
+	 * @return the current image on the game map
+	 */
+	
+	public BufferedImage getCurrentImage() {
+		return _currentImage;
 	}
 	
 	/**

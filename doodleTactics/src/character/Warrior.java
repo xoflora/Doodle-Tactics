@@ -1,7 +1,11 @@
 package character;
 
+import javax.swing.JPanel;
+
 public class Warrior extends Character{
-	public Warrior(){
+	
+	public Warrior(JPanel container, String avatar, String profile, String left, String right, String up, String down){
+		super(container, avatar, profile, left, right, up, down);
 		_name = "Warrior";
 		
 		//set base stats

@@ -1,7 +1,10 @@
 package controller;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.List;
+
+import main.GameScreen;
 import map.Tile;
 /**
  * 
@@ -9,7 +12,8 @@ import map.Tile;
  *
  */
 public class CombatController extends Controller{
-	List<Character> _characters;
+	private List<Character> _characters;
+	private GameScreen _gameScreen;
 	
 	public void move(Character c, Tile start, Tile destination){
 		//TODO 
@@ -46,6 +50,21 @@ public class CombatController extends Controller{
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
 		
 	}

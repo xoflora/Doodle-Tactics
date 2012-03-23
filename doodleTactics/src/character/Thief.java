@@ -1,7 +1,11 @@
 package character;
 
+import javax.swing.JPanel;
+
 public class Thief extends Character{
-	public Thief(){
+	
+	public Thief(JPanel container, String avatar, String profile, String left, String right, String up, String down){
+		super(container, avatar, profile, left, right, up, down);
 		_name = "Thief";
 		
 		//set base stats

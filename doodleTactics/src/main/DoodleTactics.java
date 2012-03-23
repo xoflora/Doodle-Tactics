@@ -6,6 +6,7 @@ import java.util.Stack;
 import javax.swing.JFrame;
 
 import controller.Controller;
+import controller.OverworldController;
 
 /**
  * 
@@ -17,6 +18,9 @@ public class DoodleTactics extends JFrame {
 	public static final int TILE_ROWS = 17;
 	public static final int TILE_COLS = 21;
 	private Screen _currentScreen;
+	private GameScreen _game;
+	private GameMenuScreen _gameMenu;
+	private MainMenuScreen _mainMenu;
 	private Stack<Controller> _control;
 	private HashMap<String, Character> _allChars;
 	
@@ -24,8 +28,14 @@ public class DoodleTactics extends JFrame {
 		super("Doodle Tactics");
 		this.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
 		this.setSize(TILE_COLS*map.Tile.TILE_SIZE,TILE_ROWS*map.Tile.TILE_SIZE);
-		MainMenu mp = new MainMenu(null);
-		this.add(mp);
+		_mainMenu = new MainMenuScreen(null);
+		_game = new GameScreen(null);
+		_gameMenu = new GameMenuScreen(null);
+		_control = new Stack<Controller>();
+		
+		this.setScreen(_game);
+		this.add(_game);
+		this.pushController(new OverworldController(_game));
 		//this.pack();
 		this.setVisible(true);
 	}
@@ -37,6 +47,24 @@ public class DoodleTactics extends JFrame {
 	public void pushController(Controller c) {
 		_control.push(c);
 		_currentScreen.switchController(c);
+	}
+	
+	/** 
+	 * @param screen, the new screen for the game
+	 * 
+	 */
+	
+	public void setScreen(Screen screen) {
+		
+		/* Check that the current screen is not null before
+		 * removing */
+		if(_currentScreen != null) {
+			this.remove(_currentScreen);
+			_currentScreen.setFocusable(false);
+		}
+			_currentScreen = screen;
+			_currentScreen.setFocusable(true);
+			this.add(screen);
 	}
 	
 	/**

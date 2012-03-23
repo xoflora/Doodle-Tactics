@@ -1,13 +1,13 @@
 package controller;
 
+import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 
 import main.*;
 
-public abstract class Controller implements MouseListener {
+public abstract class Controller implements MouseListener, KeyListener {
 	
 	protected DoodleTactics _dt;
-	protected Screen _screen;
 	
 	public abstract void release();
 }
