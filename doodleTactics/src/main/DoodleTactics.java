@@ -6,6 +6,7 @@ import java.util.Stack;
 import javax.swing.JFrame;
 
 import controller.Controller;
+import controller.MainMenuController;
 import controller.OverworldController;
 
 /**
@@ -35,6 +36,10 @@ public class DoodleTactics extends JFrame {
 		
 		this.setScreen(_game);
 		this.pushController(new OverworldController(_game));
+		
+//		this.setScreen(_mainMenu);
+//		this.pushController(new MainMenuController(_mainMenu));
+		
 		//this.pack();
 		this.setVisible(true);
 	}

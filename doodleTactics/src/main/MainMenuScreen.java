@@ -54,5 +54,28 @@ public class MainMenuScreen extends Screen {
 		_continue.paint((Graphics2D) g, _continue.getCurrentImage());
 		_quit.paint((Graphics2D) g, _quit.getCurrentImage());
 	}
+	
+	public void checkContains(java.awt.Point point) {
+		
+		/* set all of the buttons to default */
+		_newGame.setDefault();
+		_continue.setDefault();
+		_quit.setDefault();
+		
+		/* check if the point is in any of the buttons */
+		if(_newGame.contains(point)) {
+			_newGame.setHovered();
+		}
+		
+		if(_continue.contains(point)) {
+			_continue.setHovered();
+		}
+		
+		if(_quit.contains(point)) {
+			_quit.setHovered();
+		}
+		
+		this.repaint();
+	}
 
 }
