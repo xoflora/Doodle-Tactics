@@ -34,7 +34,6 @@ public class DoodleTactics extends JFrame {
 		_control = new Stack<Controller>();
 		
 		this.setScreen(_game);
-		this.add(_game);
 		this.pushController(new OverworldController(_game));
 		//this.pack();
 		this.setVisible(true);
