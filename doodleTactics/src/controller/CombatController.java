@@ -68,4 +68,14 @@ public class CombatController extends Controller{
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }
