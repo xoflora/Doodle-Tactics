@@ -27,8 +27,6 @@ public abstract class Shape {
 
 		/** Whether or not the shape should paint itself. */
 		private boolean _isVisible;
-		
-		private BufferedImage _image;
 
 		/** 
 		 * Initialize all instance variables here.  You'll need to store the
@@ -189,18 +187,13 @@ public abstract class Shape {
 		/** @param a Graphics brush 
 		 *  paints the given shape using an image
 		 */
-		public void paint(java.awt.Graphics2D brush, String path) {
+		public void paint(java.awt.Graphics2D brush, BufferedImage img) {
 			if (_isVisible) {
-				try {   
-					_image = ImageIO.read(new File(path));
 					brush.rotate(_rotationAngle, _shape.getCenterX(), _shape.getCenterY());
 					brush.draw(_shape);
-					brush.setPaint(new TexturePaint(_image, (Rectangle2D) _shape));
+					brush.setPaint(new TexturePaint(img, (Rectangle2D) _shape));
 					brush.fill(_shape);
 					brush.rotate(-_rotationAngle, _shape.getCenterX(), _shape.getCenterY());
-				} catch (IOException e) {
-					System.out.println("Bad file path!");
-				}
 			}
 		}
 

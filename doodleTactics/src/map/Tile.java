@@ -2,7 +2,10 @@ package map;
 
 import java.awt.geom.RectangularShape;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import event.Event;
@@ -12,7 +15,7 @@ import event.Event;
  * @author rroelke
  * a tile is a square of a map
  */
-public class Tile extends graphics.Shape {
+public class Tile extends graphics.Rectangle {
 
 	public static final int TILE_SIZE = 48;
 	
@@ -27,6 +30,30 @@ public class Tile extends graphics.Shape {
 	private Event _event;
 	private Character _character;
 	private String _path;
+	
+	/**
+	 * Constructor
+	 * @param container
+	 * @param path
+	 * @param x
+	 * @param y
+	 */
+	public Tile(JPanel container, String path, int x, int y) {
+		super(container);
+		_path = path;
+		this.setSize(TILE_SIZE,TILE_SIZE);
+		
+		try {
+			_image = ImageIO.read(new File(path));
+		} catch(IOException e) {
+			System.out.println("Bad file path!");
+		}
+		
+		_canMove = new boolean[4];
+		_cost = 1;
+		_x = x;
+		_y = y;
+	}
 	
 	/**
 	 * sets the tile's movement permissions
@@ -151,17 +178,6 @@ public class Tile extends graphics.Shape {
 		}
 	}
 	
-	public Tile(JPanel container, String path, int x, int y) {
-		super(container, new java.awt.geom.Rectangle2D.Double());
-		_path = path;
-		this.setSize(TILE_SIZE,TILE_SIZE);
-		
-		_canMove = new boolean[4];
-		_cost = 1;
-		_x = x;
-		_y = y;
-	}
-	
 	/**
 	 * generates a tile given a string
 	 * @param tileString the string representing the tile
@@ -208,8 +224,12 @@ public class Tile extends graphics.Shape {
 		return _y;
 	}
 	
-	public String getPath() {
-		return _path;
+	/** 
+	 * @returns the String representing the path to the image file
+	 */
+	
+	public BufferedImage getImage() {
+		return _image;
 	}
 	
 }

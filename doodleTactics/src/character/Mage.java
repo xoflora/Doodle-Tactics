@@ -1,8 +1,18 @@
 package character;
 
+import javax.swing.JPanel;
+
 public class Mage extends Character{
+<<<<<<< HEAD
 	public Mage(String name){
 		super(name);
+=======
+	
+	public Mage(JPanel container, String avatar, String profile, String left, String right, String up, String down){
+		super(container, avatar, profile, left, right, up, down);
+		
+		_name = "Mage";
+>>>>>>> fcd3420727af5008370212e05ace5a3fb2d234d6
 		
 		//set base stats
 		_BASE_STATS[STRENGTH] = 4;
