@@ -1,7 +1,7 @@
 package items;
 
 import java.awt.image.BufferedImage;
-
+import character.Character;
 public abstract class Weapon extends Equipment{
 	String _name;
 	int _attackRange;
@@ -10,4 +10,8 @@ public abstract class Weapon extends Equipment{
 	
 	BufferedImage _displayImage;
 	BufferedImage _menuImage;
+	
+	public void exert(Character c){
+		c.changeWeapon(this);
+	}
 }

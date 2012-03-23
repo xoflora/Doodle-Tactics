@@ -40,7 +40,7 @@ public class GameScreen extends Screen {
 				}
 			}
 		}
-		_mainCharacter = new MainCharacter(this, "src/graphics/warrior_front.png", "src/graphics/warrior_front.png", "src/graphics/warrior_left.png", "src/graphics/warrior_right.png", "src/graphics/warrior_back.png", "src/graphics/warrior_front.png");
+		_mainCharacter = new MainCharacter(this, "src/graphics/warrior_front.png", "src/graphics/warrior_front.png", "src/graphics/warrior_left.png", "src/graphics/warrior_right.png", "src/graphics/warrior_back.png", "src/graphics/warrior_front.png","test");
 		_mainCharacter.setDown();
 		_mainCharacter.setFillColor(java.awt.Color.BLACK);
 		_mainCharacter.setSize(65, 50);

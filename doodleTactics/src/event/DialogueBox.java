@@ -59,6 +59,12 @@ public class DialogueBox extends Event {
 		}
 	}
 	
+	public void print(){
+		for(int i=0; i<_phrases.size(); i++){
+			System.out.println(_characters.get(i).getName() + ": " + _phrases.get(i));
+		}
+	}
+	
 	//getters
 	public List<Character> getCharList(){
 		return _characters;

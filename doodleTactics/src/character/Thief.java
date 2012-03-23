@@ -4,8 +4,9 @@ import javax.swing.JPanel;
 
 public class Thief extends Character{
 	
-	public Thief(JPanel container, String avatar, String profile, String left, String right, String up, String down){
-		super(container, avatar, profile, left, right, up, down);
+
+	public Thief(JPanel container, String avatar, String profile, String left, String right, String up, String down, String name){
+		super(container, avatar, profile, left, right, up, down, name);
 		_name = "Thief";
 		
 		//set base stats
@@ -17,5 +18,6 @@ public class Thief extends Character{
 		_BASE_STATS[SKILL] = 7;
 		_BASE_STATS[LUCK] = 9;
 		_BASE_STATS[MAX_HP] = 13;
+		initStats();
 	}
 }

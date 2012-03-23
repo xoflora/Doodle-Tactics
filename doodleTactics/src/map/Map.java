@@ -2,8 +2,13 @@ package map;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
@@ -12,14 +17,17 @@ import java.util.PriorityQueue;
 
 import javax.swing.JPanel;
 
+import character.Character;
+
 import util.Heap;
 
 /**
  * 
  * @author rroelke
  * a Map is a segment of the game world during which gameplay occurs
+ * implements Serializable, for saving purposes
  */
-public class Map {
+public class Map implements Serializable{
 	
 	public static final int NORTH = 0;
 	public static final int EAST = 1;
@@ -310,4 +318,9 @@ public class Map {
 			}
 		}
 	}
+	
+
+	
+
+
 }
