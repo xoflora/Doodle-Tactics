@@ -108,9 +108,6 @@ public class DialogueBox extends Event {
 	public void display() {
 		
 	}
-<<<<<<< HEAD
-	
-=======
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -129,5 +126,4 @@ public class DialogueBox extends Event {
 		// TODO Auto-generated method stub
 		
 	}
->>>>>>> fcd3420727af5008370212e05ace5a3fb2d234d6
 }

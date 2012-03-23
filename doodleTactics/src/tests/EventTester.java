@@ -40,10 +40,10 @@ public class EventTester {
 	public void testDialogueParsing(){
 		HashMap<String, Character> map = new HashMap<String,Character>();
 		DialogueBox db;
-		Archer a = new Archer("archer");
-		Mage m = new Mage("mage");
-		Thief t = new Thief("thief");
-		Warrior w = new Warrior("warrior");
+		Archer a = new Archer(null, null, null, null, null, null, null,"archer");
+		Mage m = new Mage(null, null, null, null, null, null, null,"mage");
+		Thief t = new Thief(null, null, null, null, null, null, null,"thief");
+		Warrior w = new Warrior(null, null, null, null, null, null, null,"warrior");
 		
 		//base case (no characters), working
 		try{

@@ -4,16 +4,11 @@ import javax.swing.JPanel;
 
 public class Thief extends Character{
 	
-<<<<<<< HEAD
-	public Thief(String name){
-		super(name);
 
-=======
-	public Thief(JPanel container, String avatar, String profile, String left, String right, String up, String down){
-		super(container, avatar, profile, left, right, up, down);
+	public Thief(JPanel container, String avatar, String profile, String left, String right, String up, String down, String name){
+		super(container, avatar, profile, left, right, up, down, name);
 		_name = "Thief";
 		
->>>>>>> fcd3420727af5008370212e05ace5a3fb2d234d6
 		//set base stats
 		_BASE_STATS[STRENGTH] = 6;
 		_BASE_STATS[DEFENSE] = 6;

@@ -6,15 +6,12 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-<<<<<<< HEAD
 import java.util.Map.Entry;
 import event.DialogueBox;
 import event.InvalidFileException;
-=======
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
->>>>>>> fcd3420727af5008370212e05ace5a3fb2d234d6
 
 import controller.CombatController;
 
@@ -77,29 +74,20 @@ public abstract class Character extends Rectangle implements Serializable{
 	private CombatController _affiliation; //player/AI etc
 
 	//constructor
-<<<<<<< HEAD
-	public Character(String name){
-=======
-	public Character(JPanel container, String avatar, String profile, String left, String right, String up, String down){
+
+	public Character(JPanel container, String avatar, String profile, String left, String right, String up, String down, String name){
 		super(container);
->>>>>>> fcd3420727af5008370212e05ace5a3fb2d234d6
 		_BASE_STATS = new int[NUM_STATS];
 		_currentStats = new int[NUM_STATS];
 		_unitPoints = new int[NUM_STATS]; 
 		YIELD = new int[NUM_STATS];
-<<<<<<< HEAD
 		_id = numCharacters;
 		numCharacters++;
 		_name = name;
 		_level = 1;
 		_inventory	= new HashMap<Integer,Item>();
 		_capacity = 5;
-	}
 
-
-	//methods
-
-=======
 		try {
 			_avatar = ImageIO.read(new File(avatar));
 			_profile = ImageIO.read(new File(profile));
@@ -108,11 +96,10 @@ public abstract class Character extends Rectangle implements Serializable{
 			_up = ImageIO.read(new File(up));
 			_down = ImageIO.read(new File(down));
 		} catch(IOException e) {
-			System.out.println("Bad file path!");
+			//System.out.println("Bad file path!");
 		}
 	}
 	
->>>>>>> fcd3420727af5008370212e05ace5a3fb2d234d6
 	/**
 	 * getters and setters
 	 */
@@ -447,7 +434,7 @@ public abstract class Character extends Rectangle implements Serializable{
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			System.out.println("Character Demo:");
 			System.out.println("Creating Characters...");
-			Archer katniss = new Archer("Katniss");
+			Archer katniss = new Archer(null, null, null, null, null, null, null, "Katniss");
 
 			//Show Characters
 			katniss.printStats();
@@ -477,8 +464,8 @@ public abstract class Character extends Rectangle implements Serializable{
 			//Battles
 			System.out.println("Battle Simulation");
 			br.readLine();
-			Warrior jace = new Warrior("Jace");
-			Mage sebastian = new Mage("Sebastian");
+			Warrior jace = new Warrior(null, null, null, null, null, null, null,"Jace");
+			Mage sebastian = new Mage(null, null, null, null, null, null, null,"Sebastian");
 			jace.printStats();
 			sebastian.printStats();
 			br.readLine();
@@ -571,7 +558,7 @@ public abstract class Character extends Rectangle implements Serializable{
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			br.readLine();
 			System.out.println("Dialogue");
-			Thief margo = new Thief("Margo");
+			Thief margo = new Thief(null, null, null, null, null, null, null,"Margo");
 			HashMap<String, Character> h = new HashMap<String,Character>();
 			h.put("Sebastian", sebastian);
 			h.put("Jace", jace);
