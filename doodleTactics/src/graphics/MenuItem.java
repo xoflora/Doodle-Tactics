@@ -7,6 +7,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import main.DoodleTactics;
+
 /**
  * models an item in the menu
  * @author jeshapir
@@ -18,12 +20,14 @@ public class MenuItem extends Rectangle {
 	private BufferedImage _default;
 	private BufferedImage _hovered;
 	private BufferedImage _current;
+	protected DoodleTactics _dt;
 	
-	public MenuItem(JPanel container, String deflt, String hovered) {
+	public MenuItem(JPanel container, String defltPath, String hoveredPath, DoodleTactics dt) {
 		super(container);
 		try {
-			_hovered = ImageIO.read(new File(hovered));
-			_default = ImageIO.read(new File(deflt));
+			_dt = dt;
+			_default = ImageIO.read(new File(defltPath));
+			_hovered = ImageIO.read(new File(hoveredPath));
 		} catch(IOException e) {
 			System.out.println("Bad file path!");
 		}
@@ -45,6 +49,10 @@ public class MenuItem extends Rectangle {
 	
 	public void setHovered() {
 		_current = _hovered;
+	}
+	
+	public void activate() {
+		
 	}
 
 }

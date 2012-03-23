@@ -1,5 +1,7 @@
 package controller;
 
+import graphics.MenuItem;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
@@ -22,8 +24,11 @@ public class MainMenuController extends Controller {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("click");
+		MenuItem _clickedButton = _mainMenu.checkContains(e.getPoint());
+		if (_clickedButton != null) {
+			_clickedButton.activate();
+		}
 	}
 
 	@Override

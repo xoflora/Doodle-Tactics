@@ -29,16 +29,16 @@ public class DoodleTactics extends JFrame {
 		super("Doodle Tactics");
 		this.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
 		this.setSize(TILE_COLS*map.Tile.TILE_SIZE,TILE_ROWS*map.Tile.TILE_SIZE);
-		_mainMenu = new MainMenuScreen(null);
-		_game = new GameScreen(null);
-		_gameMenu = new GameMenuScreen(null);
+		_game = new GameScreen(null, this);
+		_mainMenu = new MainMenuScreen(null, this);
+		_gameMenu = new GameMenuScreen(null, this);
 		_control = new Stack<Controller>();
 		
-		this.setScreen(_game);
-		this.pushController(new OverworldController(_game));
+//		this.setScreen(_game);
+//		this.pushController(new OverworldController(_game));
 		
-//		this.setScreen(_mainMenu);
-//		this.pushController(new MainMenuController(_mainMenu));
+		this.setScreen(_mainMenu);
+		this.pushController(new MainMenuController(_mainMenu));
 		
 		//this.pack();
 		this.setVisible(true);
@@ -86,6 +86,18 @@ public class DoodleTactics extends JFrame {
 	 */
 	public HashMap<String,Character> getCharacterMap(){
 		return _allChars;
+	}
+	
+	public Screen getGameScreen() {
+		return _game;
+	}
+	
+	public Screen getGameMenuScreen() {
+		return _gameMenu;
+	}
+	
+	public Screen getMainMenuScreen() {
+		return _mainMenu;
 	}
 	
 	public static void main(String[] args) {

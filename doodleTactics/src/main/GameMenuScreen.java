@@ -10,8 +10,8 @@ import controller.Controller;
 @SuppressWarnings("serial")
 public class GameMenuScreen extends Screen {
 
-	public GameMenuScreen(Controller control) {
-		super(control);
+	public GameMenuScreen(Controller control, DoodleTactics dt) {
+		super(control, dt);
 		// TODO Auto-generated constructor stub
 	}
 

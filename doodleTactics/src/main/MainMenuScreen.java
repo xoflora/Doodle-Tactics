@@ -14,17 +14,17 @@ import controller.Controller;
 public class MainMenuScreen extends Screen {
 
 	private MenuItem _title;
-	private MenuItem _newGame;
+	private ScreenChangeMenuItem _newGame;
 	private MenuItem _continue;
 	private MenuItem _quit;
 	
-	public MainMenuScreen(Controller control) {
-		super(control);
+	public MainMenuScreen(Controller control, DoodleTactics dt) {
+		super(control, dt);
 		this.setBackground(java.awt.Color.GRAY);
-		_title = new MenuItem(this, "src/graphics/title.png","src/graphics/title.png");
-		_newGame = new MenuItem(this, "src/graphics/new_game.png","src/graphics/new_game_hovered.png");
-		_continue = new MenuItem(this, "src/graphics/continue.png","src/graphics/continue_hovered.png");
-		_quit = new MenuItem(this, "src/graphics/quit.png","src/graphics/quit_hovered.png");
+		_title = new MenuItem(this, "src/graphics/title.png","src/graphics/title.png", dt);
+		_newGame = new ScreenChangeMenuItem(this, "src/graphics/new_game.png","src/graphics/new_game_hovered.png", dt, dt.getGameScreen());
+		_continue = new MenuItem(this, "src/graphics/continue.png","src/graphics/continue_hovered.png", dt);
+		_quit = new MenuItem(this, "src/graphics/quit.png","src/graphics/quit_hovered.png", dt);
 		_title.setSize(_title.getCurrentImage().getWidth(), _title.getCurrentImage().getHeight());
 		_newGame.setSize(_newGame.getCurrentImage().getWidth(), _newGame.getCurrentImage().getHeight());
 		_continue.setSize(_continue.getCurrentImage().getWidth(), _continue.getCurrentImage().getHeight());
@@ -55,7 +55,7 @@ public class MainMenuScreen extends Screen {
 		_quit.paint((Graphics2D) g, _quit.getCurrentImage());
 	}
 	
-	public void checkContains(java.awt.Point point) {
+	public MenuItem checkContains(java.awt.Point point) {
 		
 		/* set all of the buttons to default */
 		_newGame.setDefault();
@@ -65,17 +65,24 @@ public class MainMenuScreen extends Screen {
 		/* check if the point is in any of the buttons */
 		if(_newGame.contains(point)) {
 			_newGame.setHovered();
+			this.repaint();
+			return _newGame;
 		}
 		
 		if(_continue.contains(point)) {
 			_continue.setHovered();
+			this.repaint();
+			return _continue;
 		}
 		
 		if(_quit.contains(point)) {
 			_quit.setHovered();
+			this.repaint();
+			return _quit;
 		}
 		
 		this.repaint();
+		return null;
 	}
 
 }

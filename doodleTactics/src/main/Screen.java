@@ -11,9 +11,11 @@ import controller.Controller;
 @SuppressWarnings("serial")
 public abstract class Screen extends JPanel {
 	private Controller _controller;
+	private DoodleTactics _dt;
 	
-	public Screen(Controller control) {
+	public Screen(Controller control, DoodleTactics dt) {
 		_controller = control;
+		_dt = dt;
 	}
 	
 	/**

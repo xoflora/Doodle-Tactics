@@ -17,8 +17,8 @@ public class GameScreen extends Screen {
 	private Map _map;
 	private int _xRef, _yRef;
 	
-	public GameScreen(controller.Controller control) {
-		super(control);
+	public GameScreen(controller.Controller control, DoodleTactics dt) {
+		super(control, dt);
 		this.setBackground(java.awt.Color.BLACK);
 		MAP_WIDTH = 10;
 		MAP_HEIGHT = 50;
