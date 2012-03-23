@@ -1,8 +1,8 @@
 package character;
 
 public class Warrior extends Character{
-	public Warrior(){
-		_name = "Warrior";
+	public Warrior(String name){
+		super(name);
 		
 		//set base stats
 		_BASE_STATS[STRENGTH] = 8;
@@ -13,5 +13,7 @@ public class Warrior extends Character{
 		_BASE_STATS[SKILL] = 7;
 		_BASE_STATS[LUCK] = 3;
 		_BASE_STATS[MAX_HP] = 15;
+		initStats();
+
 	}
 }

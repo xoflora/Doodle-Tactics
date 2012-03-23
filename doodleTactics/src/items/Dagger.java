@@ -1,5 +1,6 @@
 package items;
 
-public class Dagger extends Weapon{
+
+public class Dagger extends Weapon {
 	
 }

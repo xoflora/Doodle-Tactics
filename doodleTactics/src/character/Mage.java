@@ -1,8 +1,8 @@
 package character;
 
 public class Mage extends Character{
-	public Mage(){
-		_name = "Mage";
+	public Mage(String name){
+		super(name);
 		
 		//set base stats
 		_BASE_STATS[STRENGTH] = 4;
@@ -13,5 +13,7 @@ public class Mage extends Character{
 		_BASE_STATS[SKILL] = 5;
 		_BASE_STATS[LUCK] = 5;
 		_BASE_STATS[MAX_HP] = 12;
+		initStats();
+
 	}
 }

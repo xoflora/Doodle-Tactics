@@ -1,5 +1,7 @@
 package items;
 
-public class Staff extends Weapon{
+import java.io.Serializable;
+
+public class Staff extends Weapon implements Serializable{
 
 }
