@@ -18,11 +18,11 @@ import controller.CombatController;
 import graphics.Rectangle;
 import graphics.Shape;
 import items.*;
-public abstract class Character extends Rectangle implements Serializable{
+public abstract class Character extends Rectangle{
+
 	/**
 	 * 
 	 */
-	protected static final long serialVersionUID = 3313650769538769993L;
 	/**
 	 * @author czchapma
 	 */
@@ -73,8 +73,6 @@ public abstract class Character extends Rectangle implements Serializable{
 
 	private CombatController _affiliation; //player/AI etc
 
-	//constructor
-
 	public Character(JPanel container, String avatar, String profile, String left, String right, String up, String down, String name){
 		super(container);
 		_BASE_STATS = new int[NUM_STATS];
@@ -83,6 +81,7 @@ public abstract class Character extends Rectangle implements Serializable{
 		YIELD = new int[NUM_STATS];
 		_id = numCharacters;
 		numCharacters++;
+		
 		_name = name;
 		_level = 1;
 		_inventory	= new HashMap<Integer,Item>();
@@ -434,7 +433,7 @@ public abstract class Character extends Rectangle implements Serializable{
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			System.out.println("Character Demo:");
 			System.out.println("Creating Characters...");
-			Archer katniss = new Archer(null, null, null, null, null, null, null, "Katniss");
+			Archer katniss = new Archer(null, "","","","","", "",  "Katniss");
 
 			//Show Characters
 			katniss.printStats();
@@ -464,9 +463,9 @@ public abstract class Character extends Rectangle implements Serializable{
 			//Battles
 			System.out.println("Battle Simulation");
 			br.readLine();
-			Warrior jace = new Warrior(null, null, null, null, null, null, null,"Jace");
-			Mage sebastian = new Mage(null, null, null, null, null, null, null,"Sebastian");
-			jace.printStats();
+			Warrior jace = new Warrior(null, "","","","","", "", "Jace");
+			Mage sebastian = new Mage(null, "","","","","", "", "Sebastian");
+			jace.printStats(); 
 			sebastian.printStats();
 			br.readLine();
 			
@@ -548,8 +547,8 @@ public abstract class Character extends Rectangle implements Serializable{
 	}
 	public static void testPostSerialize(){
 		System.out.println("Restore:");
-		Character jace = restore("src/character/Jace1");
-		Character sebastian =  restore("src/character/Sebastian2");
+		Warrior jace = (Warrior)restore("src/character/Jace1");
+		Mage sebastian =  (Mage) restore("src/character/Sebastian2");
 		jace.printStats();
 		sebastian.printStats();
 		
@@ -558,7 +557,7 @@ public abstract class Character extends Rectangle implements Serializable{
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			br.readLine();
 			System.out.println("Dialogue");
-			Thief margo = new Thief(null, null, null, null, null, null, null,"Margo");
+			Thief margo = new Thief(null, "","","","","", "","Margo");
 			HashMap<String, Character> h = new HashMap<String,Character>();
 			h.put("Sebastian", sebastian);
 			h.put("Jace", jace);
@@ -579,7 +578,7 @@ public abstract class Character extends Rectangle implements Serializable{
 	}
 	
 	public static void main(String[] args){
-		//testPreSerialize();
+		testPreSerialize();
 		testPostSerialize();
 	}
 }

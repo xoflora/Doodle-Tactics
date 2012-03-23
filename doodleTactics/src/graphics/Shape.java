@@ -5,10 +5,16 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.imageio.ImageIO;
 
-public abstract class Shape {
+public abstract class Shape implements Serializable{
+
+		/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1726365966149266800L;
 
 		/** Used to store some geometric data for this shape. */
 		private java.awt.geom.RectangularShape _shape;

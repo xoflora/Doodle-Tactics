@@ -7,7 +7,6 @@ public class Mage extends Character{
 	public Mage(JPanel container, String avatar, String profile, String left, String right, String up, String down, String name){
 		super(container, avatar, profile, left, right, up, down, name);
 		
-		_name = "Mage";		
 		//set base stats
 		_BASE_STATS[STRENGTH] = 4;
 		_BASE_STATS[DEFENSE] = 5;

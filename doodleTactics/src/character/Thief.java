@@ -3,11 +3,10 @@ package character;
 import javax.swing.JPanel;
 
 public class Thief extends Character{
-	
+	 
 
 	public Thief(JPanel container, String avatar, String profile, String left, String right, String up, String down, String name){
 		super(container, avatar, profile, left, right, up, down, name);
-		_name = "Thief";
 		
 		//set base stats
 		_BASE_STATS[STRENGTH] = 6;

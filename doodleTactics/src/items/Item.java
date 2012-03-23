@@ -7,6 +7,9 @@ import character.Character;
 public abstract class Item implements Serializable{
 
 	
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 6745186650125253186L;
 	protected boolean _removable;
 	private BufferedImage _image;

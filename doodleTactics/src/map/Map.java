@@ -319,7 +319,46 @@ public class Map implements Serializable{
 		}
 	}
 	
-
+	/**
+	 * flattens a Map to a file (using serialization), for saving purposes
+	 * @author czchapma
+	 * @param filepath - the location of the file to write to
+	 */
+	public void serialize(String filepath){
+		FileOutputStream fos = null;
+		ObjectOutputStream out  = null;
+		try{
+			fos = new FileOutputStream(filepath);
+			out = new ObjectOutputStream(fos);
+			out.writeObject(this);
+			out.close();
+		} catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * unflattens a character, opposite of serialize()
+	 * @author czchapma
+	 * @param filepath -- location of serialized file
+	 * @return the unflattened Character retrieved from filepath
+	 */
+	public static Map restore(String filepath){
+		Map m = null;
+		FileInputStream fis = null;
+		ObjectInputStream in = null;
+		try{
+			fis = new FileInputStream(filepath);
+			in = new ObjectInputStream(fis);
+			m = (Map)in.readObject();
+			in.close();
+		} catch(IOException e){
+			e.printStackTrace();
+		} catch(ClassNotFoundException e){
+			e.printStackTrace();
+		}
+		return m;
+	}
 	
 
 
