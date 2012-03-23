@@ -1,0 +1,18 @@
+package main;
+
+import controller.Controller;
+
+public class MenuScreen extends Screen {
+
+	public MenuScreen(Controller control) {
+		super(control);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

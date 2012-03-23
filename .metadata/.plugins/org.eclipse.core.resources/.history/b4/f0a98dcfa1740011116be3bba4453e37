@@ -1,0 +1,78 @@
+package main;
+
+import java.awt.Graphics2D;
+import java.util.List;
+
+import character.MainCharacter;
+
+import map.Map;
+import map.Tile;
+
+@SuppressWarnings("serial")
+public class GameScreen extends Screen {
+
+	private MainCharacter _mainCharacter;
+	private List<Character> _characters;
+	private Map _map;
+	int _xRef, _yRef;
+	
+	public GameScreen(controller.Controller control) {
+		super(control);
+		this.setBackground(java.awt.Color.LIGHT_GRAY);
+		_xRef = 50;
+		_yRef = 50;
+		Tile[][] testTiles = new Tile[100][100];
+		_mainCharacter = new MainCharacter(this, "src/graphics/warrior_front.png", "src/graphics/warrior_front.png", "src/graphics/warrior_left.png", "src/graphics/warrior_right.png", "src/graphics/warrior_back.png", "src/graphics/warrior_front.png");
+		_mainCharacter.setLocation(_xRef*Tile.TILE_SIZE, _yRef*Tile.TILE_SIZE);
+		_mainCharacter.setVisible(true);
+		for(int i = 0; i < 100; i++) {
+			for(int j = 0; j < 100; j++) {
+				testTiles[i][j] = new Tile(this,"src/graphics/grass.png", i, j);
+				testTiles[i][j].setFillColor(java.awt.Color.BLACK);
+				testTiles[i][j].setLocation(i*Tile.TILE_SIZE, j*Tile.TILE_SIZE);
+				testTiles[i][j].setVisible(true);
+			}
+		}
+		
+		_map = new Map(testTiles,"c-level demo map");
+	}
+	
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void	mapUp() {
+		for(int i = 0; i < 100; i++) {
+			for(int j = 0; j < 100; j++) {
+				_map.getTile(i,j).setLocation(_map.getTile(i,j).getX(), Tile.TILE_SIZE +  _map.getTile(i,j).getY());
+			}
+		}
+	}
+	
+	public void	mapDown() {
+		
+	}
+	
+	public void	mapLeft() {
+		
+	}
+	
+	public void	mapRight() {
+		
+	}
+	
+	public void paintComponent(java.awt.Graphics g) {
+		super.paintComponent(g);
+		for(int i = 0; i < 21; i++) {
+			for(int j = 0; j < 17; j++) {
+				_map.getTile(i,j).paint((Graphics2D) g, _map.getTile(i,j).getImage());
+			}
+		}
+		
+		
+		
+	}
+
+}

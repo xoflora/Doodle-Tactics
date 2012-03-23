@@ -1,0 +1,85 @@
+package controller;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+
+import main.GameScreen;
+
+public class OverworldController extends Controller {
+
+	protected GameScreen _gameScreen;
+	
+	public OverworldController(GameScreen game) {
+		_gameScreen = game;
+	}
+	
+	@Override
+	public void release() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		
+		switch(e.getKeyChar()) {
+		
+		case 'w':
+			_gameScreen.getMainChar().setUp();
+			break;
+		case 'a':
+			_gameScreen.getMainChar().setLeft();
+			break;
+		case 's':
+			_gameScreen.getMainChar().setRight();
+			break;
+		case 'd':
+			_gameScreen.getMainChar().setDown();
+			break;
+		}
+		
+	}
+
+}

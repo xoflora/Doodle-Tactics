@@ -1,0 +1,18 @@
+package main;
+
+import controller.Controller;
+
+@SuppressWarnings("serial")
+public class MainMenuScreen extends Screen {
+
+	public MainMenuScreen(Controller control) {
+		super(control);
+	}
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

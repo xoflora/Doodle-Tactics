@@ -1,0 +1,35 @@
+package graphics;
+
+import java.awt.image.BufferedImage;
+
+import javax.swing.JPanel;
+
+/**
+ * models an item in the menu
+ * @author jeshapir
+ *
+ */
+
+public class MenuItem extends Rectangle {
+
+	private BufferedImage _default;
+	private BufferedImage _hovered;
+	private BufferedImage _current;
+	
+	public MenuItem(JPanel container) {
+		super(container);
+	}
+	
+	public BufferedImage getCurrent() {
+		return _current;
+	}
+	
+	public void setDefault() {
+		_current = _default;
+	}
+	
+	public void setHovered() {
+		_current = _hovered;
+	}
+
+}

@@ -1,0 +1,48 @@
+package main;
+
+import java.awt.Graphics2D;
+import java.util.List;
+
+import character.MainCharacter;
+
+import map.Tile;
+
+@SuppressWarnings("serial")
+public class GameScreen extends Screen {
+
+	private MainCharacter _mainCharacter;
+	private List<Character> _characters;
+	private Map _map;
+	
+	public GameScreen(controller.Controller control) {
+		super(control);
+		this.setBackground(java.awt.Color.LIGHT_GRAY);
+		
+		kirbies = new Tile[21][17];
+		
+		for(int i = 0; i < 21; i++) {
+			for(int j = 0; j < 17; j++) {
+				kirbies[i][j] = new Tile(this,"src/graphics/warrior_front.png", i, j);
+				kirbies[i][j].setFillColor(java.awt.Color.BLACK);
+				kirbies[i][j].setLocation(i*48, j*48);
+				kirbies[i][j].setVisible(true);
+			}
+		}
+	}
+	
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void paintComponent(java.awt.Graphics g) {
+		super.paintComponent(g);
+		for(int i = 0; i < 21; i++) {
+			for(int j = 0; j < 17; j++) {
+				kirbies[i][j].paint((Graphics2D) g, kirbies[i][j].getPath());
+			}
+		}
+	}
+
+}

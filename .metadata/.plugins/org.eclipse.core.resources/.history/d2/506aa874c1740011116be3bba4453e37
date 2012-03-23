@@ -1,0 +1,42 @@
+package main;
+
+import graphics.*;
+import java.awt.Graphics2D;
+import controller.Controller;
+
+/** 
+ * 
+ * @author jeshapir
+ */
+
+@SuppressWarnings("serial")
+public class MainMenuScreen extends Screen {
+
+	private MenuItem _title;
+	private MenuItem _newGame;
+	private MenuItem _continue;
+	private MenuItem _quit;
+	
+	public MainMenuScreen(Controller control) {
+		super(control);
+		_title = new MenuItem();
+		_newGame = new MenuItem();
+		_continue = new MenuItem();
+		_quit = new MenuItem();
+	}
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void paintComponent(java.awt.Graphics g) {
+		super.paintComponent(g);
+		_title.paint((Graphics2D) g, _title.getCurrentImage());
+		_newGame.paint((Graphics2D) g, _newGame.getCurrentImage());
+		_continue.paint((Graphics2D) g, _continue.getCurrentImage());
+		_quit.paint((Graphics2D) g, _quit.getCurrentImage());
+	}
+
+}

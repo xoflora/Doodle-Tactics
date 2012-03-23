@@ -1,0 +1,12 @@
+package main;
+
+@SuppressWarnings("serial")
+public class PauseScreen extends Screen {
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

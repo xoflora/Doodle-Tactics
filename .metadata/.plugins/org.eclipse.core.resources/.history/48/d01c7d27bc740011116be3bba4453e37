@@ -1,0 +1,35 @@
+package main;
+
+import graphics.*;
+
+import java.awt.Graphics2D;
+
+import controller.Controller;
+
+/** 
+ * 
+ * @author jeshapir
+ */
+
+@SuppressWarnings("serial")
+public class MainMenuScreen extends Screen {
+
+	private Rectangle _title;
+	private Rectangle _newGame;
+	private Rectangle _
+	
+	public MainMenuScreen(Controller control) {
+		super(control);
+	}
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void paintComponent(java.awt.Graphics g) {
+		super.paintComponent(g);
+	}
+
+}

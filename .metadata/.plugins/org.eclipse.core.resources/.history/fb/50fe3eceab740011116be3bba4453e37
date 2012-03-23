@@ -1,0 +1,79 @@
+package main;
+
+import java.awt.Graphics2D;
+import java.util.List;
+
+import character.MainCharacter;
+
+import map.Map;
+import map.Tile;
+
+@SuppressWarnings("serial")
+public class GameScreen extends Screen {
+
+	private MainCharacter _mainCharacter;
+	private List<Character> _characters;
+	private Map _map;
+	int _xRef, _yRef;
+	
+	public GameScreen(controller.Controller control) {
+		super(control);
+		this.setBackground(java.awt.Color.LIGHT_GRAY);
+		_xRef = 10;
+		_yRef = 10;
+		Tile[][] testTiles = new Tile[50][50];
+		for(int i = 0; i < 50; i++) {
+			for(int j = 0; j < 50; j++) {
+				testTiles[i][j] = new Tile(this,"src/graphics/grass.png", i, j);
+			}
+		}
+		for (int k = _xRef; k<_xRef+21; k++) {
+			for (int m = _yRef; m<_yRef+17; m++) {
+				testTiles[k][m].setFillColor(java.awt.Color.BLACK);
+				testTiles[k][m].setLocation((k-_xRef)*Tile.TILE_SIZE, (m-_yRef)*Tile.TILE_SIZE);
+				testTiles[k][m].setVisible(true);
+			}
+		}
+		_mainCharacter = new MainCharacter(this, "src/graphics/warrior_front.png", "src/graphics/warrior_front.png", "src/graphics/warrior_left.png", "src/graphics/warrior_right.png", "src/graphics/warrior_back.png", "src/graphics/warrior_front.png");
+		_mainCharacter.setDown();
+		_mainCharacter.setFillColor(java.awt.Color.BLACK);
+		_mainCharacter.setSize(65, 50);
+		int overflow = (65-48);
+		_mainCharacter.setLocation((10*Tile.TILE_SIZE)-overflow, 8*Tile.TILE_SIZE);
+		_mainCharacter.setVisible(true);
+		_map = new Map(testTiles,"c-level demo map");
+		this.repaint();
+	}
+	
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void mapUpdate(int deltaX, int deltaY) {
+		_yRef += deltaY;
+		_xRef += deltaX;
+		for (int k = _xRef; k<_xRef+21; k++) {
+			for (int m = _yRef; m<_yRef+17; m++) {
+				_map.getTile(k,m).setLocation((k-_xRef)*Tile.TILE_SIZE, (m-_yRef)*Tile.TILE_SIZE);
+			}
+		}
+	}
+	
+	public MainCharacter getMainChar() {
+		return _mainCharacter;
+	}
+	 
+	public void paintComponent(java.awt.Graphics g) {
+		super.paintComponent(g);
+		for(int i = _xRef; i < _xRef+21; i++) {
+			for(int j = _yRef; j < _yRef+17; j++) {
+				_map.getTile(i,j).paint((Graphics2D) g, _map.getTile(i,j).getImage());
+			}
+		}
+//		System.out.println(_mainCharacter.getCurrentImage());
+		_mainCharacter.paint((Graphics2D) g,_mainCharacter.getCurrentImage());
+	}
+
+}

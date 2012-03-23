@@ -1,0 +1,18 @@
+package main;
+
+import controller.Controller;
+
+@SuppressWarnings("serial")
+public class PauseScreen extends Screen {
+
+	public PauseScreen(Controller control) {
+		super(control);
+	}
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

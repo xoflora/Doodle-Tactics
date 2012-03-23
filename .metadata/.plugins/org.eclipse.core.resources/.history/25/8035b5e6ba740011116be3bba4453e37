@@ -1,0 +1,38 @@
+package main;
+
+import java.awt.Graphics2D;
+
+import controller.Controller;
+
+/** 
+ * 
+ * @author jeshapir
+ */
+
+@SuppressWarnings("serial")
+public class MainMenuScreen extends Screen {
+
+	public MainMenuScreen(Controller control) {
+		super(control);
+	}
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void paintComponent(java.awt.Graphics g) {
+		super.paintComponent(g);
+		for(int i = _xRef; i < _xRef+21; i++) {
+			for(int j = _yRef; j < _yRef+17; j++) {
+				if (i >= 0 && i < MAP_WIDTH && j >= 0 && j < MAP_HEIGHT) {
+					_map.getTile(i,j).paint((Graphics2D) g, _map.getTile(i,j).getImage());
+				}
+			}
+		}
+//		System.out.println(_mainCharacter.getCurrentImage());
+		_mainCharacter.paint((Graphics2D) g,_mainCharacter.getCurrentImage());
+	}
+
+}

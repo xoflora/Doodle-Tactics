@@ -1,0 +1,56 @@
+package main;
+
+import java.awt.Graphics2D;
+import java.util.List;
+
+import character.MainCharacter;
+
+import map.Map;
+import map.Tile;
+
+@SuppressWarnings("serial")
+public class GameScreen extends Screen {
+
+	private MainCharacter _mainCharacter;
+	private List<Character> _characters;
+	private Map _map;
+	
+	public GameScreen(controller.Controller control) {
+		super(control);
+		this.setBackground(java.awt.Color.LIGHT_GRAY);
+		
+		Tile[][] testTiles = new Tile[100][100];
+		
+		for(int i = 0; i < 100; i++) {
+			for(int j = 0; j < 100; j++) {
+				testTiles[i][j] = new Tile(this,"src/graphics/grass.png", i, j);
+				testTiles[i][j].setFillColor(java.awt.Color.BLACK);
+				testTiles[i][j].setLocation(i*48, j*48);
+				testTiles[i][j].setVisible(true);
+			}
+		}
+		
+		_map = new Map(testTiles,"c-level demo map");
+	}
+	
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void move
+	
+	public void paintComponent(java.awt.Graphics g) {
+		super.paintComponent(g);
+		for(int i = 0; i < 21; i++) {
+			for(int j = 0; j < 17; j++) {
+				_map.getTile(i,j).paint((Graphics2D) g, _map.getTile(i,j).getImage());
+			}
+		}
+		
+		
+		
+	}
+
+}

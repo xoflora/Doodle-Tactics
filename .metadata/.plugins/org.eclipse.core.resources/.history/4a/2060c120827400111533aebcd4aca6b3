@@ -1,0 +1,11 @@
+package main;
+
+public class MenuScreen extends Screen {
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
