@@ -96,7 +96,7 @@ public class Map implements Serializable{
 		try {
 			return _map[x][y];
 		} catch (ArrayIndexOutOfBoundsException e) {
-			throw new IllegalArgumentException("x = " + x + ", y = " + y);
+			return null;
 		}
 	}
 	

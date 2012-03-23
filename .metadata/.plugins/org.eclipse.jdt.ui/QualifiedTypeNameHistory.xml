@@ -3,7 +3,6 @@
 <fullyQualifiedTypeName name="main.PauseScreen"/>
 <fullyQualifiedTypeName name="java.awt.event.KeyListener"/>
 <fullyQualifiedTypeName name="main.GameScreen"/>
-<fullyQualifiedTypeName name="controller.OverworldController"/>
 <fullyQualifiedTypeName name="character.MainCharacter"/>
 <fullyQualifiedTypeName name="java.util.Map"/>
 <fullyQualifiedTypeName name="map.Map"/>
@@ -20,4 +19,6 @@
 <fullyQualifiedTypeName name="graphics.MenuItem"/>
 <fullyQualifiedTypeName name="main.DoodleTactics"/>
 <fullyQualifiedTypeName name="main.Screen"/>
+<fullyQualifiedTypeName name="controller.Controller"/>
+<fullyQualifiedTypeName name="controller.OverworldController"/>
 </qualifiedTypeNameHistroy>

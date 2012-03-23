@@ -1,5 +1,8 @@
 package tests;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import javax.swing.JPanel;
 import org.junit.*;
@@ -26,7 +29,7 @@ public class MapTester {
 			Tile[][] tiles = new Tile[32][32];
 			for (int i = 0; i < tiles.length; i++)
 				for (int j = 0; j < tiles[i].length; j++)
-					tiles[i][j] = Tile.tile(panel, "", 'F', i, j, 1);
+					tiles[i][j] = Tile.tile(panel, "src/graphics/tile.png", 'F', i, j, 1);
 			_test = new Map(tiles, "TestMap");
 			
 			_test.getTile(7, 7).setCost(5);
@@ -238,7 +241,40 @@ public class MapTester {
 		assert(tileEquals(path.get(2), 25, 26));
 		assert(tileEquals(path.get(1), 25, 25));
 		assert(tileEquals(path.get(0), 25, 24));
-		
+
 		System.out.println(_test);
+
+		try {
+			BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+			String input = r.readLine();
+			String[] coordinates;
+			while (input != null && !input.equals("quit")) {
+				try {
+					if (input.equals("print map")) {
+						System.out.println(_test);
+					}
+					else {
+						coordinates = input.split(" ");
+						path = _test.getPath(_test.getTile(Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1])),
+								_test.getTile(Integer.parseInt(coordinates[2]), Integer.parseInt(coordinates[3])));
+						if (path == null)
+							System.out.println("No path.");
+						else {
+							for (int i = 0; i < path.size(); i++)
+								System.out.println("Node " + i + ": " + path.get(i).x() + ", " + path.get(i).y());
+						}
+					}
+					
+				} catch(Exception e) {
+					System.out.println("Input error.");
+				} finally {
+					System.out.println();
+					input = r.readLine();
+				}
+			}
+		} catch(IOException e) {
+
+		}
+
 	}
 }
