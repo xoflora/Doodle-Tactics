@@ -73,8 +73,8 @@ public class GameScreen extends Screen {
 			}
 		}
 		
-		System.out.println("xref:" + _xRef);
-		System.out.println("yref:" + _yRef);
+//		System.out.println("xref:" + _xRef);
+//		System.out.println("yref:" + _yRef);
 	}
 	
 	public MainCharacter getMainChar() {

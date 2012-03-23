@@ -26,6 +26,8 @@ public abstract class Screen extends JPanel {
 	public Controller switchController(Controller c) {
 		Controller toReturn = _controller;
 		removeMouseListener(toReturn);
+		removeKeyListener(toReturn);
+		removeMouseMotionListener(toReturn);
 		_controller = c;
 		addMouseListener(c);
 		addKeyListener(c);

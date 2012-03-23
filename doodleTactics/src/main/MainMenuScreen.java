@@ -3,6 +3,7 @@ package main;
 import graphics.*;
 import java.awt.Graphics2D;
 import controller.Controller;
+import controller.OverworldController;
 
 /** 
  * This screen models the main menu and is initially displayed
@@ -22,7 +23,7 @@ public class MainMenuScreen extends Screen {
 		super(control, dt);
 		this.setBackground(java.awt.Color.GRAY);
 		_title = new MenuItem(this, "src/graphics/title.png","src/graphics/title.png", dt);
-		_newGame = new ScreenChangeMenuItem(this, "src/graphics/new_game.png","src/graphics/new_game_hovered.png", dt, dt.getGameScreen());
+		_newGame = new ScreenChangeMenuItem(this, "src/graphics/new_game.png","src/graphics/new_game_hovered.png", dt, dt.getGameScreen(), new OverworldController(dt.getGameScreen()));
 		_continue = new MenuItem(this, "src/graphics/continue.png","src/graphics/continue_hovered.png", dt);
 		_quit = new MenuItem(this, "src/graphics/quit.png","src/graphics/quit_hovered.png", dt);
 		_title.setSize(_title.getCurrentImage().getWidth(), _title.getCurrentImage().getHeight());

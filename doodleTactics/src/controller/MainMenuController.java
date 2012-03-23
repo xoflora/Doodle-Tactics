@@ -24,9 +24,9 @@ public class MainMenuController extends Controller {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		System.out.println("click");
 		MenuItem _clickedButton = _mainMenu.checkContains(e.getPoint());
 		if (_clickedButton != null) {
+			System.out.println("click");
 			_clickedButton.activate();
 		}
 	}

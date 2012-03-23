@@ -34,13 +34,13 @@ public class DoodleTactics extends JFrame {
 		_gameMenu = new GameMenuScreen(null, this);
 		_control = new Stack<Controller>();
 		
-//		this.setScreen(_game);
-//		this.pushController(new OverworldController(_game));
-		
 		this.setScreen(_mainMenu);
 		this.pushController(new MainMenuController(_mainMenu));
+		this.setFocusable(false);
 		
-		//this.pack();
+//		this.setScreen(_game);
+		//this.pushController(new OverworldController(_game));
+
 		this.setVisible(true);
 	}
 	
@@ -64,11 +64,15 @@ public class DoodleTactics extends JFrame {
 		 * removing */
 		if(_currentScreen != null) {
 			this.remove(_currentScreen);
+			screen.setVisible(false);
 			_currentScreen.setFocusable(false);
 		}
 			_currentScreen = screen;
-			_currentScreen.setFocusable(true);
+			screen.setFocusable(true);
 			this.add(screen);
+			screen.setVisible(true);
+			this.repaint();
+			screen.grabFocus();
 	}
 	
 	/**
@@ -88,15 +92,15 @@ public class DoodleTactics extends JFrame {
 		return _allChars;
 	}
 	
-	public Screen getGameScreen() {
+	public GameScreen getGameScreen() {
 		return _game;
 	}
 	
-	public Screen getGameMenuScreen() {
+	public GameMenuScreen getGameMenuScreen() {
 		return _gameMenu;
 	}
 	
-	public Screen getMainMenuScreen() {
+	public MainMenuScreen getMainMenuScreen() {
 		return _mainMenu;
 	}
 	
