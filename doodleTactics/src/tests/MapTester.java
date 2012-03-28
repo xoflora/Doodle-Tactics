@@ -1,8 +1,6 @@
 package tests;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPanel;
 import org.junit.*;
@@ -160,7 +158,7 @@ public class MapTester {
 		assert(path.size() == 7);
 		assert(tileEquals(path.get(0), 27, 11));
 		assert(tileEquals(path.get(1), 26, 11));
-		assert(tileEquals(path.get(2), 26, 10));
+		assert(tileEquals(path.get(2), 25, 11));
 		assert(tileEquals(path.get(3), 25, 10));
 		assert(tileEquals(path.get(4), 24, 10));
 		assert(tileEquals(path.get(5), 23, 10));
@@ -170,8 +168,6 @@ public class MapTester {
 		 * tests paths moving through movement-cost obstructions
 		 */
 		path = _test.getPath(_test.getTile(25, 13), _test.getTile(23, 11));
-	//	for (int i = 0; i < path.size(); i++)
-	//		System.out.println("Path " + i + ": " + path.get(i).x() + ", " + path.get(i).y());
 		assert(path.size() == 5);
 		assert(tileEquals(path.get(0), 25, 13));
 		assert(tileEquals(path.get(1), 24, 13));
@@ -232,8 +228,6 @@ public class MapTester {
 		assert(tileEquals(path.get(5), 25, 24));
 		
 		path = _test.getPath(_test.getTile(25, 24), _test.getTile(23, 25));
-		for (int i = 0; i < path.size(); i++)
-				System.out.println("Path " + i + ": " + path.get(i).x() + ", " + path.get(i).y());
 		assert(path.size() == 6);
 		assert(tileEquals(path.get(5), 23, 25));
 		assert(tileEquals(path.get(4), 23, 26));
@@ -244,7 +238,7 @@ public class MapTester {
 
 		System.out.println(_test);
 
-		try {
+	/*	try {
 			BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 			String input = r.readLine();
 			String[] coordinates;
@@ -274,7 +268,107 @@ public class MapTester {
 			}
 		} catch(IOException e) {
 
-		}
+		}       */
 
+	}
+	
+	
+	@Test
+	/**
+	 * tests movement range generation of the map
+	 */
+	public void testMovementRange() {
+		/*
+		 * trivial test cases - 0 range
+		 */
+		List<Tile> range = _test.getMovementRange(_test.getTile(0, 0), 0);
+		assert(range.size() == 1);
+		assert(tileEquals(range.get(0), 0, 0));
+		
+		range = _test.getMovementRange(_test.getTile(1, 1), 0);
+		assert(range.size() == 1);
+		assert(tileEquals(range.get(0), 1, 1));
+		
+		/*
+		 * test cases with no movement impediments
+		 */
+		List<Tile> compare = new LinkedList<Tile>();
+		compare.add(_test.getTile(1, 1));	compare.add(_test.getTile(1, 0));
+		compare.add(_test.getTile(0, 1));	compare.add(_test.getTile(2, 1));
+		compare.add(_test.getTile(1, 2));
+		range = _test.getMovementRange(_test.getTile(1, 1), 1);
+		assert(compare.size() == range.size() && compare.containsAll(range));
+		
+		compare = new LinkedList<Tile>();
+		compare.add(_test.getTile(0, 0));	compare.add(_test.getTile(1, 0));
+		compare.add(_test.getTile(0, 1));	compare.add(_test.getTile(2, 0));
+		compare.add(_test.getTile(0, 2));	compare.add(_test.getTile(3, 0));
+		compare.add(_test.getTile(0, 3));
+		compare.add(_test.getTile(1, 1));	compare.add(_test.getTile(2, 1));
+		compare.add(_test.getTile(1, 2));
+		range = _test.getMovementRange(_test.getTile(0, 0), 3);
+		assert(compare.size() == range.size() && compare.containsAll(range));
+		
+		compare = new LinkedList<Tile>();
+		compare.add(_test.getTile(0, 4));
+		compare.add(_test.getTile(1, 3));	compare.add(_test.getTile(1, 4));	compare.add(_test.getTile(1, 5));
+		compare.add(_test.getTile(2, 2));	compare.add(_test.getTile(2, 3));	compare.add(_test.getTile(2, 4));
+											compare.add(_test.getTile(2, 5));	compare.add(_test.getTile(2, 6));
+		compare.add(_test.getTile(3, 1));	compare.add(_test.getTile(3, 2));	compare.add(_test.getTile(3, 3));
+											compare.add(_test.getTile(3, 4));	compare.add(_test.getTile(3, 5));
+											compare.add(_test.getTile(3, 6));	compare.add(_test.getTile(3, 7));
+		compare.add(_test.getTile(4, 0));	compare.add(_test.getTile(4, 1));	compare.add(_test.getTile(4, 2));
+											compare.add(_test.getTile(4, 3));	compare.add(_test.getTile(4, 4));
+											compare.add(_test.getTile(4, 5));	compare.add(_test.getTile(4, 6));
+											compare.add(_test.getTile(4, 7));	compare.add(_test.getTile(4, 8));
+		compare.add(_test.getTile(5, 1));	compare.add(_test.getTile(5, 2));	compare.add(_test.getTile(5, 3));
+											compare.add(_test.getTile(5, 4));	compare.add(_test.getTile(5, 5));
+											compare.add(_test.getTile(5, 6));	compare.add(_test.getTile(5, 7));
+		compare.add(_test.getTile(6, 2));	compare.add(_test.getTile(6, 3));	compare.add(_test.getTile(6, 4));
+											compare.add(_test.getTile(6, 5));	compare.add(_test.getTile(6, 6));
+		compare.add(_test.getTile(7, 3));	compare.add(_test.getTile(7, 4));	compare.add(_test.getTile(7, 5));
+		compare.add(_test.getTile(8, 4));
+										
+		range = _test.getMovementRange(_test.getTile(4, 4), 4);
+		assert(compare.size() == range.size() && compare.containsAll(range));
+		
+		
+		/*
+		 * test cases with a cost impediment
+		 */
+		compare = new LinkedList<Tile>();
+		compare.add(_test.getTile(7, 8));	compare.add(_test.getTile(7, 9));
+		compare.add(_test.getTile(8, 8));
+		range = _test.getMovementRange(_test.getTile(7, 8), 1);
+		assert(compare.size() == range.size() && compare.containsAll(range));
+		
+		compare = new LinkedList<Tile>();
+		compare.add(_test.getTile(7, 8));	compare.add(_test.getTile(7, 9));	compare.add(_test.getTile(7, 10));
+		compare.add(_test.getTile(6, 8));	compare.add(_test.getTile(6, 9));
+		compare.add(_test.getTile(8, 8));	compare.add(_test.getTile(8, 9));	compare.add(_test.getTile(8, 7));
+		compare.add(_test.getTile(9, 8));
+		range = _test.getMovementRange(_test.getTile(7, 8), 2);
+	//	System.out.println(range.size() + " " + compare.size());
+	//		for (int i = 0; i < range.size(); i++)
+	//			System.out.println("Path " + i + ": " + range.get(i).x() + ", " + range.get(i).y());
+		assert(compare.size() == range.size() && compare.containsAll(range));
+		
+		compare = new LinkedList<Tile>();
+		compare.add(_test.getTile(7, 8));	compare.add(_test.getTile(7, 9));	compare.add(_test.getTile(7, 10));
+											compare.add(_test.getTile(6, 9));	compare.add(_test.getTile(6, 10));
+											compare.add(_test.getTile(8, 9));	compare.add(_test.getTile(8, 10));
+											compare.add(_test.getTile(5, 9));	compare.add(_test.getTile(9, 9));
+		compare.add(_test.getTile(6, 8));	compare.add(_test.getTile(6, 7));	compare.add(_test.getTile(5, 8));
+		compare.add(_test.getTile(8, 8));	compare.add(_test.getTile(9, 8));	compare.add(_test.getTile(8, 7));
+											compare.add(_test.getTile(10, 8));	compare.add(_test.getTile(9, 7));
+											compare.add(_test.getTile(8, 6));	compare.add(_test.getTile(7, 11));
+		range = _test.getMovementRange(_test.getTile(7, 8), 3);
+		assert(compare.size() == range.size() && compare.containsAll(range));
+		
+		
+		/*
+		 * test ranges with movement-permission constraints
+		 */
+		
 	}
 }

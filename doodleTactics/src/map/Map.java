@@ -149,7 +149,7 @@ public class Map implements Serializable{
 	 * @param dest the tile to end at
 	 * @return an ordered list of all tiles in the path
 	 */
-	public List<Tile> getPath(Tile source, Tile dest) {
+	public List<Tile> getPath(final Tile source, final Tile dest) {
 		if (source == null || dest == null)
 			return null;
 		
@@ -161,8 +161,9 @@ public class Map implements Serializable{
 				new Comparator<Tile>() {
 					@Override
 					public int compare(Tile o1, Tile o2) {
-						int d1 = distances.get(o1);
-						int d2 = distances.get(o2);
+						int d1 = distances.get(o1) + estimateDistance(o1, dest);
+						int d2 = distances.get(o2) + estimateDistance(o2, dest);
+						
 						if (d1 < d2)
 							return -1;
 						else if (d1 == d2)
@@ -179,14 +180,9 @@ public class Map implements Serializable{
 		Tile check = null;
 		Integer dist, compare;
 		while (distances.get(dest) == null && !heap.isEmpty()) {
-		//	System.out.println("Stuff");
 			consider = heap.extractMin();
 			heapPositions.put(consider, -1);
-			
-		//	System.out.println("Considering tile " + consider.x() + ", " + consider.y());
-			
-		//	System.out.println(distances.get(check));
-
+				
 			try {
 				check = getNorth(consider);
 				if (check.canMove(SOUTH) && !check.isOccupied()) {
@@ -197,13 +193,11 @@ public class Map implements Serializable{
 						distances.put(check, compare);
 						heapPositions.put(check, heap.insert(check));
 						previous.put(check, consider);
-				//		System.out.println(check.x() + ", " + check.y() + ": " + distances.get(check));
 					}
 					else if (dist > compare) {	//more optimal way to get to the tile
 						distances.put(check, compare);
 						heap.siftUp(heapPositions.get(check));
 						previous.put(check, consider);
-				//		System.out.println(check.x() + ", " + check.y() + ": " + distances.get(check));
 					}
 				}
 			} catch(ArrayIndexOutOfBoundsException e) { }
@@ -218,7 +212,6 @@ public class Map implements Serializable{
 						distances.put(check, compare);
 						heapPositions.put(check, heap.insert(check));
 						previous.put(check, consider);
-				//		System.out.println(check.x() + ", " + check.y() + ": " + distances.get(check));
 					}
 					else if (dist > compare) {	//more optimal way to get to the tile
 						distances.put(check, compare);
@@ -238,7 +231,6 @@ public class Map implements Serializable{
 						distances.put(check, compare);
 						heapPositions.put(check, heap.insert(check));
 						previous.put(check, consider);
-				//		System.out.println(check.x() + ", " + check.y() + ": " + distances.get(check));
 					}
 					else if (dist > compare) {	//more optimal way to get to the tile
 						distances.put(check, compare);
@@ -258,7 +250,6 @@ public class Map implements Serializable{
 						distances.put(check, compare);
 						heapPositions.put(check, heap.insert(check));
 						previous.put(check, consider);
-				//		System.out.println(check.x() + ", " + check.y() + ": " + distances.get(check));
 					}
 					else if (dist > compare) {	//more optimal way to get to the tile
 						distances.put(check, compare);
@@ -269,10 +260,8 @@ public class Map implements Serializable{
 			} catch(ArrayIndexOutOfBoundsException e) { }
 		}
 		
-		if (distances.get(dest) == null) {
-			System.out.println("lol");
+		if (distances.get(dest) == null)
 			return null;
-		}
 		
 		LinkedList<Tile> path = new LinkedList<Tile>();
 		Tile previousTile = dest;
@@ -292,9 +281,123 @@ public class Map implements Serializable{
 	 * @return an unordered list of all tiles that can be reached from the source 
 	 */
 	public List<Tile> getMovementRange(Tile source, int range) {
-		return null;
+		if (source == null)
+			return null;
+
+		final Hashtable<Tile, Integer> distances = new Hashtable<Tile, Integer>();
+		final Hashtable<Tile, Tile> previous = new Hashtable<Tile, Tile>();
+		final Hashtable<Tile, Integer> heapPositions = new Hashtable<Tile, Integer>();
+
+		Heap<Tile> heap = new Heap<Tile>(range*range,
+				new Comparator<Tile>() {
+					@Override
+					public int compare(Tile o1, Tile o2) {
+						int d1 = distances.get(o1);
+						int d2 = distances.get(o2);
+						if (d1 < d2)
+							return -1;
+						else if (d1 == d2)
+							return 0;
+						else
+							return 1;
+					}
+		});
+
+		distances.put(source, 0);
+		heapPositions.put(source, heap.insert(source));
+
+		LinkedList<Tile> movementRange = new LinkedList<Tile>();
+		Tile consider, check;
+		Integer dist, compare;
+		while (!heap.isEmpty()) {
+			consider = heap.extractMin();
+			heapPositions.put(consider, -1);
+			
+			if (distances.get(consider) <= range) {
+				movementRange.add(consider);
+				
+				try {
+					check = getNorth(consider);
+					if (check.canMove(SOUTH) && !check.isOccupied()) {
+						dist = distances.get(check);
+						compare = distances.get(consider) + check.cost();
+						
+						if (dist == null) {	//tile hasn't been seen yet
+							distances.put(check, compare);
+							heapPositions.put(check, heap.insert(check));
+							previous.put(check, consider);
+						}
+						else if (dist > compare) {	//more optimal way to get to the tile
+							distances.put(check, compare);
+							heap.siftUp(heapPositions.get(check));
+							previous.put(check, consider);
+						}
+					}
+				} catch(ArrayIndexOutOfBoundsException e) { }
+				
+				try {
+					check = getEast(consider);
+					if (check.canMove(WEST) && !check.isOccupied()) {
+						dist = distances.get(check);
+						compare = distances.get(consider) + check.cost();
+						
+						if (dist == null) {	//tile hasn't been seen yet
+							distances.put(check, compare);
+							heapPositions.put(check, heap.insert(check));
+							previous.put(check, consider);
+						}
+						else if (dist > compare) {	//more optimal way to get to the tile
+							distances.put(check, compare);
+							heap.siftUp(heapPositions.get(check));
+							previous.put(check, consider);
+						}
+					}
+				} catch(ArrayIndexOutOfBoundsException e) { }
+				
+				try {
+					check = getSouth(consider);
+					if (check.canMove(NORTH) && !check.isOccupied()) {
+						dist = distances.get(check);
+						compare = distances.get(consider) + check.cost();
+						
+						if (dist == null) {	//tile hasn't been seen yet
+							distances.put(check, compare);
+							heapPositions.put(check, heap.insert(check));
+							previous.put(check, consider);
+						}
+						else if (dist > compare) {	//more optimal way to get to the tile
+							distances.put(check, compare);
+							heap.siftUp(heapPositions.get(check));
+							previous.put(check, consider);
+						}
+					}
+				} catch(ArrayIndexOutOfBoundsException e) { }
+				
+				try {
+					check = getWest(consider);
+					if (check.canMove(EAST) && !check.isOccupied()) {
+						dist = distances.get(check);
+						compare = distances.get(consider) + check.cost();
+						
+						if (dist == null) {	//tile hasn't been seen yet
+							distances.put(check, compare);
+							heapPositions.put(check, heap.insert(check));
+							previous.put(check, consider);
+						}
+						else if (dist > compare) {	//more optimal way to get to the tile
+							distances.put(check, compare);
+							heap.siftUp(heapPositions.get(check));
+							previous.put(check, consider);
+						}
+					}
+				} catch(ArrayIndexOutOfBoundsException e) { }
+			}
+		}
+
+
+		return movementRange;
 	}
-	
+
 	/**
 	 * lists all tiles that could be attacked from the source tile with the given movement and attack ranges
 	 * @param source
