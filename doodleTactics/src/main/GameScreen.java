@@ -25,6 +25,7 @@ public class GameScreen extends Screen {
 		_xRef = Math.min(MAP_WIDTH - 11, 0);
 		_yRef = Math.min(MAP_HEIGHT - 9, 0);
 		//Tile[x][y]
+		
 		Tile[][] testTiles = new Tile[MAP_WIDTH][MAP_HEIGHT];
 		for(int i = 0; i < MAP_WIDTH; i++) {
 			for(int j = 0; j < MAP_HEIGHT; j++) {

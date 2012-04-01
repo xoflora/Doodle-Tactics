@@ -74,6 +74,12 @@ public class Map implements Serializable{
 			build += "  " + i + (i < 10 ? "   ":"  ");
 		build += "\n";
 		for (int i = 0; i < _map.length; i++) {
+			if (i != 0) {
+				build += "\t";
+				for (int j = 0; j < _map[i].length; j++)
+					build += "  " + (_map[i][j].canMove(NORTH) ? "v":"x") + "   ";
+				build += "\n";
+			}
 			build += i + "\t";
 			for (int j = 0; j < _map[i].length; j++)
 				build += (_map[i][j].canMove(EAST) ? "->" : "xx") + _map[i][j].cost() + (_map[i][j].canMove(WEST) ? "<-" : "xx") + " ";
@@ -82,9 +88,6 @@ public class Map implements Serializable{
 				build += "\t";
 				for (int j = 0; j < _map[i].length; j++)
 					build += "  " + (_map[i][j].canMove(SOUTH) ? "^":"x") + "   ";
-				build += "\n\t";
-				for (int j = 0; j < _map[i].length; j++)
-					build += "  " + (_map[i][j].canMove(NORTH) ? "v":"x") + "   ";
 				build += "\n";
 			}
 		}
