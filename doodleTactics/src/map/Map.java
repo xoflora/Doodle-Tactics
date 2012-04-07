@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 
 import character.Character;
 
+import util.Hashpairing;
 import util.Heap;
 
 /**
@@ -155,14 +156,15 @@ public class Map implements Serializable{
 	 * @param previous a table mapping tiles to the tile encountered before them in the search
 	 */
 	private void searchTile(Tile search, Heap<Tile> heap, Hashtable<Tile, Integer> distances,
-				Hashtable<Tile, Integer> heapPositions, Hashtable<Tile, Tile> previous) {
+				Hashtable<Tile, Integer> heapPositions, Hashtable<Tile, Tile> previous,
+				boolean useCost, boolean usePermissions) {
 		Tile check;
 		Integer dist, compare;
 		try {
 			check = getNorth(search);
-			if (check.canMove(SOUTH) && !check.isOccupied()) {
+			if (check.canMove(SOUTH) || !usePermissions) {
 				dist = distances.get(check);
-				compare = distances.get(search) + check.cost();
+				compare = distances.get(search) + (useCost ? check.cost():1);
 				
 				if (dist == null) {	//tile hasn't been seen yet
 					distances.put(check, compare);
@@ -179,9 +181,9 @@ public class Map implements Serializable{
 		
 		try {
 			check = getEast(search);
-			if (check.canMove(WEST) && !check.isOccupied()) {
+			if (check.canMove(WEST) || !usePermissions) {
 				dist = distances.get(check);
-				compare = distances.get(search) + check.cost();
+				compare = distances.get(search) + (useCost ? check.cost():1);
 				
 				if (dist == null) {	//tile hasn't been seen yet
 					distances.put(check, compare);
@@ -198,9 +200,9 @@ public class Map implements Serializable{
 		
 		try {
 			check = getSouth(search);
-			if (check.canMove(NORTH) && !check.isOccupied()) {
+			if (check.canMove(NORTH) || !usePermissions) {
 				dist = distances.get(check);
-				compare = distances.get(search) + check.cost();
+				compare = distances.get(search) + (useCost ? check.cost():1);
 				
 				if (dist == null) {	//tile hasn't been seen yet
 					distances.put(check, compare);
@@ -217,9 +219,9 @@ public class Map implements Serializable{
 		
 		try {
 			check = getWest(search);
-			if (check.canMove(EAST) && !check.isOccupied()) {
+			if (check.canMove(EAST) || !usePermissions) {
 				dist = distances.get(check);
-				compare = distances.get(search) + check.cost();
+				compare = distances.get(search) + (useCost ? check.cost():1);
 				
 				if (dist == null) {	//tile hasn't been seen yet
 					distances.put(check, compare);
@@ -233,6 +235,47 @@ public class Map implements Serializable{
 				}
 			}
 		} catch(ArrayIndexOutOfBoundsException e) { }
+	}
+	
+	private List<Tile> getTilesWithinRange(Tile source, int minRange, int maxRange, boolean useCost, boolean usePermissions) {
+		final Hashtable<Tile, Integer> distances = new Hashtable<Tile, Integer>();
+		final Hashtable<Tile, Tile> previous = new Hashtable<Tile, Tile>();
+		final Hashtable<Tile, Integer> heapPositions = new Hashtable<Tile, Integer>();
+
+		Heap<Tile> heap = new Heap<Tile>(minRange*minRange,
+				new Comparator<Tile>() {
+					@Override
+					public int compare(Tile o1, Tile o2) {
+						int d1 = distances.get(o1);
+						int d2 = distances.get(o2);
+						if (d1 < d2)
+							return -1;
+						else if (d1 == d2)
+							return 0;
+						else
+							return 1;
+					}
+		});
+
+		distances.put(source, 0);
+		heapPositions.put(source, heap.insert(source));
+
+		LinkedList<Tile> movementRange = new LinkedList<Tile>();
+		Tile consider;
+		
+		while (!heap.isEmpty()) {
+			consider = heap.extractMin();
+			heapPositions.put(consider, -1);
+			
+			int dist = distances.get(consider);
+			if (minRange <= dist && dist <= maxRange) {
+				System.out.println("stuff");
+				movementRange.add(consider);
+				searchTile(consider, heap, distances, heapPositions, previous, useCost, usePermissions);
+			}
+		}
+
+		return movementRange;
 	}
 	
 	/**
@@ -272,7 +315,7 @@ public class Map implements Serializable{
 		while (distances.get(dest) == null && !heap.isEmpty()) {
 			consider = heap.extractMin();
 			heapPositions.put(consider, -1);
-			searchTile(consider, heap, distances, heapPositions, previous);
+			searchTile(consider, heap, distances, heapPositions, previous, true, true);
 		}
 		
 		if (distances.get(dest) == null)
@@ -299,53 +342,75 @@ public class Map implements Serializable{
 		if (source == null)
 			return null;
 
-		final Hashtable<Tile, Integer> distances = new Hashtable<Tile, Integer>();
-		final Hashtable<Tile, Tile> previous = new Hashtable<Tile, Tile>();
-		final Hashtable<Tile, Integer> heapPositions = new Hashtable<Tile, Integer>();
-
-		Heap<Tile> heap = new Heap<Tile>(range*range,
-				new Comparator<Tile>() {
-					@Override
-					public int compare(Tile o1, Tile o2) {
-						int d1 = distances.get(o1);
-						int d2 = distances.get(o2);
-						if (d1 < d2)
-							return -1;
-						else if (d1 == d2)
-							return 0;
-						else
-							return 1;
-					}
-		});
-
-		distances.put(source, 0);
-		heapPositions.put(source, heap.insert(source));
-
-		LinkedList<Tile> movementRange = new LinkedList<Tile>();
-		Tile consider;
-		
-		while (!heap.isEmpty()) {
-			consider = heap.extractMin();
-			heapPositions.put(consider, -1);
-			
-			if (distances.get(consider) <= range) {
-				movementRange.add(consider);
-				searchTile(consider, heap, distances, heapPositions, previous);
-			}
-		}
-
-		return movementRange;
+		return getTilesWithinRange(source, 0, range, true, true);
 	}
 
 	/**
 	 * lists all tiles that could be attacked from the source tile with the given movement and attack ranges
 	 * @param source
-	 * @param movementRange
+	 * @param moveRange
 	 * @param attackRange
 	 * @return an unordered list of tiles that could be attacked from the source tile
 	 */
-	public List<Tile> getAttackRange(Tile source, int movementRange, int attackRange) {
-		return getMovementRange(source, movementRange);
+	public List<Tile> getAttackRange(Tile source, int moveRange, int minAttackRange, int maxAttackRange) {
+		List<Tile> movementRange = getMovementRange(source, moveRange);
+		List<Tile> range = new LinkedList<Tile>();
+		
+		Hashtable<Tile, Boolean> included = new Hashtable<Tile, Boolean>();
+
+		for (Tile attackFrom : movementRange) {
+			System.out.println("moved");
+			//add each tile within attackRange tiles to accumulating list
+			//can be done with the search helper
+			//perform a search on each of the tiles; do not include the tile when it is removed from the heap
+			//but rather when it is added to it
+			//unfortunately will have to copy code from movementRange
+		/*	final Hashtable<Tile, Integer> distances = new Hashtable<Tile, Integer>();
+			final Hashtable<Tile, Tile> previous = new Hashtable<Tile, Tile>();
+			final Hashtable<Tile, Integer> heapPositions = new Hashtable<Tile, Integer>();
+
+			Heap<Tile> heap = new Heap<Tile>(minAttackRange*minAttackRange,
+					new Comparator<Tile>() {
+				@Override
+				public int compare(Tile o1, Tile o2) {
+					int d1 = distances.get(o1);
+					int d2 = distances.get(o2);
+					if (d1 < d2)
+						return -1;
+					else if (d1 == d2)
+						return 0;
+					else
+						return 1;
+				}
+			});
+
+			distances.put(source, 0);
+			heapPositions.put(source, heap.insert(source));
+
+			Tile consider;
+
+			while (!heap.isEmpty()) {
+				consider = heap.extractMin();
+				heapPositions.put(consider, -1);
+
+				if (distances.get(consider) <= attackRange) {
+					if (consider != attackFrom && !range.contains(consider))
+						range.add(consider);
+					searchTile(consider, heap, distances, heapPositions, previous, false, false);
+				}
+			}	*/
+			
+			for (Tile add : getTilesWithinRange(attackFrom, minAttackRange, maxAttackRange, false, false)) {
+				if (included.get(add) == null || !included.get(add)) {
+					included.put(add, true);
+					range.add(add);
+					System.out.println("added");
+				}
+				System.out.println("arange");
+			}
+		}
+	
+		return range;
 	}
 	
 	/** 
@@ -401,7 +466,5 @@ public class Map implements Serializable{
 		}
 		return m;
 	}
-	
-
 
 }

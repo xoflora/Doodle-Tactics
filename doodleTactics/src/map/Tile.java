@@ -195,7 +195,7 @@ public class Tile extends graphics.Rectangle {
 	 * @return whether a character can move from this tile in the given direction
 	 */
 	public boolean canMove(int direction) {
-		return _canMove[direction];
+		return _canMove[direction] && !isOccupied();
 	}
 	
 	public boolean isOccupied() {

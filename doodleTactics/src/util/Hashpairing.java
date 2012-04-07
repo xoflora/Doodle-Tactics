@@ -1,6 +1,7 @@
 package util;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * 
@@ -34,6 +35,7 @@ public class Hashpairing<K, T, V> {
 				return _key1.hashCode()*_key1.hashCode() + _key2.hashCode();
 		}
 		
+		@SuppressWarnings("unchecked")
 		@Override
 		public boolean equals(Object other) {
 			try {
@@ -45,10 +47,10 @@ public class Hashpairing<K, T, V> {
 		}
 	}
 	
-	private Hashtable<Key, V> _table;
+	private HashMap<Key, V> _table;
 	
 	public Hashpairing() {
-		_table = new Hashtable<Key, V>();
+		_table = new HashMap<Key, V>();
 	}
 	
 	/**
