@@ -13,13 +13,9 @@ import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 
 import javax.swing.JPanel;
 
-import character.Character;
-
-import util.Hashpairing;
 import util.Heap;
 
 /**
@@ -268,9 +264,9 @@ public class Map implements Serializable{
 			heapPositions.put(consider, -1);
 			
 			int dist = distances.get(consider);
-			if (minRange <= dist && dist <= maxRange) {
-				System.out.println("stuff");
-				movementRange.add(consider);
+			if (dist <= maxRange) {
+				if (minRange <= dist)
+					movementRange.add(consider);
 				searchTile(consider, heap, distances, heapPositions, previous, useCost, usePermissions);
 			}
 		}
@@ -358,55 +354,12 @@ public class Map implements Serializable{
 		
 		Hashtable<Tile, Boolean> included = new Hashtable<Tile, Boolean>();
 
-		for (Tile attackFrom : movementRange) {
-			System.out.println("moved");
-			//add each tile within attackRange tiles to accumulating list
-			//can be done with the search helper
-			//perform a search on each of the tiles; do not include the tile when it is removed from the heap
-			//but rather when it is added to it
-			//unfortunately will have to copy code from movementRange
-		/*	final Hashtable<Tile, Integer> distances = new Hashtable<Tile, Integer>();
-			final Hashtable<Tile, Tile> previous = new Hashtable<Tile, Tile>();
-			final Hashtable<Tile, Integer> heapPositions = new Hashtable<Tile, Integer>();
-
-			Heap<Tile> heap = new Heap<Tile>(minAttackRange*minAttackRange,
-					new Comparator<Tile>() {
-				@Override
-				public int compare(Tile o1, Tile o2) {
-					int d1 = distances.get(o1);
-					int d2 = distances.get(o2);
-					if (d1 < d2)
-						return -1;
-					else if (d1 == d2)
-						return 0;
-					else
-						return 1;
-				}
-			});
-
-			distances.put(source, 0);
-			heapPositions.put(source, heap.insert(source));
-
-			Tile consider;
-
-			while (!heap.isEmpty()) {
-				consider = heap.extractMin();
-				heapPositions.put(consider, -1);
-
-				if (distances.get(consider) <= attackRange) {
-					if (consider != attackFrom && !range.contains(consider))
-						range.add(consider);
-					searchTile(consider, heap, distances, heapPositions, previous, false, false);
-				}
-			}	*/
-			
+		for (Tile attackFrom : movementRange) {			
 			for (Tile add : getTilesWithinRange(attackFrom, minAttackRange, maxAttackRange, false, false)) {
 				if (included.get(add) == null || !included.get(add)) {
 					included.put(add, true);
 					range.add(add);
-					System.out.println("added");
 				}
-				System.out.println("arange");
 			}
 		}
 	

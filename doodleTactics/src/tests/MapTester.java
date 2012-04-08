@@ -431,7 +431,6 @@ public class MapTester {
 	 * tests attack range generation of the map
 	 */
 	public void testAttackRange() {
-		System.out.println("attack range tests");
 		List<Tile> compare, range;
 		
 		/*
@@ -439,9 +438,6 @@ public class MapTester {
 		 */
 		compare = new LinkedList<Tile>();
 		range = _test.getAttackRange(_test.getTile(24, 24), 0, 1, 0);
-		for (Tile t : range)
-			System.out.println(t.x() + " " + t.y());
-		System.out.println(range.size());
 		assert(compare.size() == range.size() && compare.containsAll(range));
 		
 		
@@ -449,10 +445,8 @@ public class MapTester {
 		compare.add(_test.getTile(1, 0));
 		compare.add(_test.getTile(0, 1));
 		range = _test.getAttackRange(_test.getTile(0, 0), 0, 1, 1);
-		for (Tile t : range)
-			System.out.println(t.x() + " " + t.y());
-		System.out.println(range.size());
 		assert(compare.size() == range.size() && compare.containsAll(range));
+		
 				
 		compare = new LinkedList<Tile>();
 		compare.add(_test.getTile(2, 0));
@@ -461,29 +455,69 @@ public class MapTester {
 		compare.add(_test.getTile(3, 2));	compare.add(_test.getTile(4, 2));
 		compare.add(_test.getTile(1, 3));	compare.add(_test.getTile(2, 3));	compare.add(_test.getTile(3, 3));
 		compare.add(_test.getTile(2, 4));
-		range = _test.getAttackRange(_test.getTile(2, 2), 0, 2, 1);
+		range = _test.getAttackRange(_test.getTile(2, 2), 0, 1, 2);
+		assert(compare.size() == range.size() && compare.containsAll(range));
+		
+		
+		compare = new LinkedList<Tile>();
+		compare.add(_test.getTile(4, 7));	compare.add(_test.getTile(4, 8));	compare.add(_test.getTile(4, 7));
+											compare.add(_test.getTile(4, 6));
+		compare.add(_test.getTile(4, 1));	compare.add(_test.getTile(4, 0));	compare.add(_test.getTile(5, 2));
+											compare.add(_test.getTile(5, 0));
+		compare.add(_test.getTile(7, 4));	compare.add(_test.getTile(8, 4));	compare.add(_test.getTile(7, 5));
+											compare.add(_test.getTile(7, 3));
+		compare.add(_test.getTile(1, 4));	compare.add(_test.getTile(0, 4));	compare.add(_test.getTile(1, 5));
+											compare.add(_test.getTile(1, 3));
+		range = _test.getAttackRange(_test.getTile(4, 4), 0, 3, 4);
+		
+		
+		/*
+		 * test cases with movement
+		 */
+		compare = new LinkedList<Tile>();
+		compare.add(_test.getTile(1, 2));	compare.add(_test.getTile(0, 2));	compare.add(_test.getTile(1, 1));
+											compare.add(_test.getTile(1, 3));	compare.add(_test.getTile(2, 2));
+		compare.add(_test.getTile(3, 2));	compare.add(_test.getTile(4, 2));	compare.add(_test.getTile(3, 3));
+											compare.add(_test.getTile(3, 1));
+		compare.add(_test.getTile(2, 1));	compare.add(_test.getTile(2, 0));
+		compare.add(_test.getTile(2, 3));	compare.add(_test.getTile(2, 4));
+		range = _test.getAttackRange(_test.getTile(2, 2), 1, 1, 1);
+		assert(compare.size() == range.size() && compare.containsAll(range));
+		
+		
+		compare = new LinkedList<Tile>();
+		compare.addAll(_test.getMovementRange(_test.getTile(5, 5), 2));
+		compare.add(_test.getTile(0, 5));
+		compare.add(_test.getTile(1, 4));	compare.add(_test.getTile(1, 5));	compare.add(_test.getTile(1, 6));
+		compare.add(_test.getTile(2, 3));	compare.add(_test.getTile(2, 4));	compare.add(_test.getTile(2, 5));
+											compare.add(_test.getTile(2, 6));	compare.add(_test.getTile(2, 7));
+		compare.add(_test.getTile(3, 2));	compare.add(_test.getTile(3, 3));	compare.add(_test.getTile(3, 4));
+											compare.add(_test.getTile(3, 6));	compare.add(_test.getTile(3, 7));
+											compare.add(_test.getTile(3, 8));
+		compare.add(_test.getTile(4, 1));	compare.add(_test.getTile(4, 2));	compare.add(_test.getTile(4, 3));
+											compare.add(_test.getTile(4, 7));	compare.add(_test.getTile(4, 8));
+											compare.add(_test.getTile(4, 9));
+		compare.add(_test.getTile(5, 0));	compare.add(_test.getTile(5, 1));	compare.add(_test.getTile(5, 2));
+											compare.add(_test.getTile(5, 8));	compare.add(_test.getTile(5, 9));
+											compare.add(_test.getTile(5, 10));
+		compare.add(_test.getTile(6, 1));	compare.add(_test.getTile(6, 2));	compare.add(_test.getTile(6, 3));
+											compare.add(_test.getTile(6, 7));	compare.add(_test.getTile(6, 8));
+											compare.add(_test.getTile(6, 9));
+		compare.add(_test.getTile(7, 2));	compare.add(_test.getTile(7, 3));	compare.add(_test.getTile(7, 4));
+											compare.add(_test.getTile(7, 6));	compare.add(_test.getTile(7, 7));
+											compare.add(_test.getTile(7, 8));
+		compare.add(_test.getTile(8, 3));	compare.add(_test.getTile(8, 4));	compare.add(_test.getTile(8, 5));
+											compare.add(_test.getTile(8, 6));	compare.add(_test.getTile(8, 7));
+		compare.add(_test.getTile(9, 4));	compare.add(_test.getTile(9, 5));	compare.add(_test.getTile(9, 6));
+		compare.add(_test.getTile(10, 5));
+	
+		range = _test.getAttackRange(_test.getTile(5, 5), 2, 2, 3);
 		assert(compare.size() == range.size() && compare.containsAll(range));
 		
 		
 		/*
-		 * test cases with no movement constraints
+		 * note that testing with costs and permissions is not necessary since attackRange
+		 * does not depend on the properties of a tile, beyond generating the movementRange
 		 */
-		
-		
-		/*
-		 * test cases with cost constrictions
-		 */
-		
-		
-		/*
-		 * test cases with movement-permission constraints
-		 */
-	/*	compare = new LinkedList<Tile>();
-		compare.add(_test.getTile(29, 28));
-		compare.add(_test.getTile(28, 29));	compare.add(_test.getTile(29, 29));	compare.add(_test.getTile(30, 29));
-		compare.add(_test.getTile(27, 30));	compare.add(_test.getTile(28, 30));
-		compare.add(_test.getTile(30, 30));	compare.add(_test.getTile(
-		
-		range = _test.getAttackRange(_test.getTile(29, 30), 0, 2);	*/
 	}
 }

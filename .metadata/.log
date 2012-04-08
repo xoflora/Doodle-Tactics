@@ -8,3 +8,87 @@ Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.e
 
 !ENTRY org.eclipse.epp.usagedata.recording 1 0 2012-04-06 16:14:18.133
 !MESSAGE Usage data uploaded to http://udc.eclipse.org/upload.php in 2809 milliseconds.
+!SESSION 2012-04-07 14:48:00.208 -----------------------------------------------
+eclipse.buildId=M20100211-1343
+java.version=1.6.0_26
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=linux, ARCH=x86, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86
+
+!ENTRY org.eclipse.ui 4 0 2012-04-07 14:48:28.726
+!MESSAGE Problems occurred restoring workbench.
+!SUBENTRY 1 org.eclipse.ui 0 0 2012-04-07 14:48:28.726
+!MESSAGE 
+!SUBENTRY 1 org.eclipse.core.runtime 0 0 2012-04-07 14:48:28.726
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.runtime 0 0 2012-04-07 14:48:28.726
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.runtime 0 0 2012-04-07 14:48:28.726
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.ui 4 0 2012-04-07 14:48:28.726
+!MESSAGE Unable to restore perspective: Workspace - Java.
+!SUBENTRY 2 org.eclipse.ui 0 0 2012-04-07 14:48:28.726
+!MESSAGE Problems occurred restoring perspective.
+!SUBENTRY 3 org.eclipse.ui 0 0 2012-04-07 14:48:28.726
+!MESSAGE 
+!SUBENTRY 2 org.eclipse.ui 0 0 2012-04-07 14:48:28.726
+!MESSAGE 
+!SUBENTRY 2 org.eclipse.ui 0 0 2012-04-07 14:48:28.726
+!MESSAGE 
+!SUBENTRY 2 org.eclipse.ui 0 0 2012-04-07 14:48:28.726
+!MESSAGE 
+!SUBENTRY 2 org.eclipse.ui 4 4 2012-04-07 14:48:28.726
+!MESSAGE Could not create view: org.eclipse.mylyn.tasks.ui.views.tasks
+!STACK 1
+org.eclipse.ui.PartInitException: Could not create view: org.eclipse.mylyn.tasks.ui.views.tasks
+	at org.eclipse.ui.internal.ViewFactory.createView(ViewFactory.java:158)
+	at org.eclipse.ui.internal.Perspective.createReferences(Perspective.java:1247)
+	at org.eclipse.ui.internal.Perspective.restoreState(Perspective.java:1217)
+	at org.eclipse.ui.internal.WorkbenchPage$17.runWithException(WorkbenchPage.java:3205)
+	at org.eclipse.ui.internal.StartupThreading$StartupRunnable.run(StartupThreading.java:31)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:35)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:134)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:3468)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3115)
+	at org.eclipse.ui.application.WorkbenchAdvisor.openWindows(WorkbenchAdvisor.java:803)
+	at org.eclipse.ui.internal.Workbench$28.runWithException(Workbench.java:1384)
+	at org.eclipse.ui.internal.StartupThreading$StartupRunnable.run(StartupThreading.java:31)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:35)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:134)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:3468)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3115)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2316)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2221)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:500)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:493)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:113)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:194)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:368)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:559)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:514)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1311)
+!SUBENTRY 3 org.eclipse.ui 4 0 2012-04-07 14:48:28.727
+!MESSAGE Could not create view: org.eclipse.mylyn.tasks.ui.views.tasks
+!SUBENTRY 2 org.eclipse.ui 0 0 2012-04-07 14:48:28.727
+!MESSAGE 
+!SUBENTRY 2 org.eclipse.ui 0 0 2012-04-07 14:48:28.727
+!MESSAGE 
+!SUBENTRY 2 org.eclipse.ui 0 0 2012-04-07 14:48:28.727
+!MESSAGE 
+!SUBENTRY 2 org.eclipse.ui 0 0 2012-04-07 14:48:28.727
+!MESSAGE 
+!SUBENTRY 2 org.eclipse.ui 0 0 2012-04-07 14:48:28.727
+!MESSAGE 
+!SUBENTRY 2 org.eclipse.ui 4 0 2012-04-07 14:48:28.727
+!MESSAGE Could not find view: org.eclipse.mylyn.tasks.ui.views.tasks
+!SUBENTRY 1 org.eclipse.core.runtime 0 0 2012-04-07 14:48:28.727
+!MESSAGE OK
