@@ -21,4 +21,7 @@
 <fullyQualifiedTypeName name="main.Screen"/>
 <fullyQualifiedTypeName name="controller.Controller"/>
 <fullyQualifiedTypeName name="controller.OverworldController"/>
+<fullyQualifiedTypeName name="java.io.BufferedReader"/>
+<fullyQualifiedTypeName name="java.io.InputStreamReader"/>
+<fullyQualifiedTypeName name="java.io.IOException"/>
 </qualifiedTypeNameHistroy>
