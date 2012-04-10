@@ -1,9 +1,0 @@
-1332463908462	Delete element
-1332463927173	Rename type 'MainMenu'
-1332463944526	Rename type 'MainMenuScreen'
-1332464583585	Rename type 'PauseScreen'
-1332464620422	Rename type 'MenuScreen'
-1332474076786	Rename method 'getPath'
-1332486698651	Rename field 'MAP_LENGTH'
-1332490885962	Rename method 'getCurrent'
-1332496979896	Rename field '_gameMenu'
