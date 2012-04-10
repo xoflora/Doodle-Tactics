@@ -1,0 +1,15 @@
+package graphics;
+
+public class ScreenChangeMenuItem extends MenuItem {
+
+	@Override
+	public void activate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void changeScreen() {
+		
+	}
+	
+}
