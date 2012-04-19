@@ -70,25 +70,21 @@ public class OverworldController extends Controller {
 			System.out.println("w");
 			_gameScreen.getMainChar().setUp();
 			_gameScreen.mapUpdate(0, -1);
-			_gameScreen.repaint();
 			break;
 		case 'a':
 			System.out.println("a");
 			_gameScreen.getMainChar().setLeft();
 			_gameScreen.mapUpdate(-1, 0);
-			_gameScreen.repaint();
 			break;
 		case 's':
 			System.out.println("s");
 			_gameScreen.getMainChar().setDown();
 			_gameScreen.mapUpdate(0, 1);
-			_gameScreen.repaint();
 			break;
 		case 'd':
 			System.out.println("d");
 			_gameScreen.getMainChar().setRight();
 			_gameScreen.mapUpdate(1, 0);
-			_gameScreen.repaint();
 			break;
 		}
 		

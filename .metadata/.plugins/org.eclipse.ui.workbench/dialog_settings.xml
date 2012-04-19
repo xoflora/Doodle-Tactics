@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+<<<<<<< HEAD
 	<section name="InstallationDialogSettings">
 		<item value="934" key="DIALOG_WIDTH"/>
 		<item value="-278" key="DIALOG_Y_ORIGIN"/>
@@ -14,4 +15,6 @@
 			<item value="org.eclipse.jst.j2ee.internal"/>
 		</list>
 	</section>
+=======
+>>>>>>> b72594de820541d6939515d28d3579aa59d7ddf7
 </section>

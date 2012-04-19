@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Graphics2D;
 import java.util.List;
+import javax.swing.Timer;
 
 import character.MainCharacter;
 
@@ -52,13 +53,85 @@ public class GameScreen extends Screen {
 		this.repaint();
 	}
 	
+	private class MapMoveTimer extends Timer {
+		
+		private GameScreen _gs;
+		private Tile[][] _newTiles;
+		private Tile[][] _oldTiles;
+		private int _deltaX, _deltaY;
+		public int cnt = 0;
+		
+		public MapMoveTimer(GameScreen gs, Tile[][] newTiles, Tile[][] oldTiles, int deltaX, int deltaY) {
+			super(50, null);
+			this.addActionListener(new MyMoveListener(this));
+			_gs = gs;
+			_newTiles = newTiles;
+			_oldTiles = oldTiles;
+			_deltaX = deltaX;
+			_deltaY = deltaY;
+		}
+		
+		private class MyMoveListener implements java.awt.event.ActionListener {
+
+			Timer _timer;
+			
+			public MyMoveListener (Timer t) {
+				_timer = t;
+			}
+			
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				if (cnt == 8) {
+					_timer.stop();
+				}
+				else {
+					for(int i = 0; i < _newTiles.length; i++) {
+						for(int j = 0; j < _newTiles[i].length; j++) {
+							if (_oldTiles[i][j] != null) {
+								_oldTiles[i][j].setLocation(_oldTiles[i][j].getX()+ Math.abs(_deltaX)*(Tile.TILE_SIZE/8), _oldTiles[i][j].getY()+ Math.abs(_deltaY)*(Tile.TILE_SIZE/8));
+							}
+							if (_newTiles[i][j] != null) {
+								_newTiles[i][j].setLocation(_newTiles[i][j].getX()+ (Tile.TILE_SIZE/8), _newTiles[i][j].getY()+ (Tile.TILE_SIZE/8));
+							}
+						}
+					}
+					cnt+=1;
+					_gs.repaint();
+				}
+			}
+		}
+	}
+	
 	@Override
 	public void render() {
 		// TODO Auto-generated method stub
 		
 	}
 	
+	public Tile[][] getCurrentTiles() {
+		Tile[][] tiles = new Tile[21][17];
+		
+		for (int k = _xRef; k<_xRef+21; k++) {
+			for (int m = _yRef; m<_yRef+17; m++) {
+				//System.out.println("k = " + k + " ;m = " + m);
+				if (k >= 0 && k < MAP_WIDTH && m >= 0 && m < MAP_HEIGHT) {
+					tiles[k-_xRef][m -_yRef] = _map.getTile(k,m);
+				}
+			}
+		}
+		return tiles;
+	}
+	
 	public void mapUpdate(int deltaX, int deltaY) {
+		
+		int cnt = 0;
+		
+		Tile[][] oldTiles = getCurrentTiles();
+		for (int i = 0; i<21; i++) {
+			for (int j = 0; j<17; j++) {
+				System.out.println(oldTiles[i][j]);
+			}
+		}
+		
 		if (_yRef+deltaY < MAP_HEIGHT - 8 && _yRef+deltaY>=0-8) {
 			_yRef += deltaY;
 		}
@@ -74,8 +147,49 @@ public class GameScreen extends Screen {
 			}
 		}
 		
-//		System.out.println("xref:" + _xRef);
-//		System.out.println("yref:" + _yRef);
+		Tile[][] newTiles = getCurrentTiles();
+		
+		Tile[][] toAnimate = new Tile[MAP_WIDTH + Math.abs(deltaX)][MAP_HEIGHT + Math.abs(deltaY)];
+		
+		for (int i = 0; i< toAnimate.length; i++) {
+			for (int j = 0; i< toAnimate[i].length; j++) {
+				if (deltaX == -1) {
+					if (i == 0) {
+						toAnimate[i][j] = newTiles[i][j];
+					}
+					else {
+						toAnimate[i][j] = oldTiles[i-1][j];
+					}
+				}
+				else if (deltaX == 1) {
+					if (i == 0) {
+						toAnimate[i][j] = oldTiles[i][j];
+					}
+					else {
+						toAnimate[i][j] = newTiles[i-1][j];
+					}
+				}
+				else if (deltaY == -1) {
+					//moving up
+					if (j == 0) {
+						toAnimate[i][j] = newTiles[i][j];
+					}
+					else {
+						toAnimate[i][j] = oldTiles[i][j-1];
+					}
+				}
+				else {
+					//moving down
+					if (j == 0) {
+						
+					}
+				}
+			}
+		}
+		
+		MapMoveTimer t = new MapMoveTimer(this,newTiles,oldTiles,deltaX,deltaY);
+		t.start();
+		this.repaint();
 	}
 	
 	public MainCharacter getMainChar() {
