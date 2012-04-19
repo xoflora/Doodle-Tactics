@@ -4,8 +4,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import javax.swing.event.MouseInputListener;
-
 import main.*;
 
 public abstract class Controller implements MouseListener, KeyListener, MouseMotionListener {
