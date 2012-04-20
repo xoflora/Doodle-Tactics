@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import event.Event;
+import character.Character;
 
 /**
  * 
@@ -230,6 +231,13 @@ public class Tile extends graphics.Rectangle {
 	
 	public BufferedImage getImage() {
 		return _image;
+	}
+	
+	/**
+	 * @return the Character presently occupying this tile
+	 */
+	public Character getOccupant() {
+		return _character;
 	}
 	
 }

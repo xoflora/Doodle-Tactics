@@ -195,6 +195,10 @@ public class GameScreen extends Screen {
 	public MainCharacter getMainChar() {
 		return _mainCharacter;
 	}
+	
+	public Map getMap() {
+		return _map;
+	}
 	 
 	public void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);

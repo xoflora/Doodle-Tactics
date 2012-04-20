@@ -4,6 +4,7 @@ import java.util.List;
 
 import main.GameScreen;
 import map.*;
+import character.Character;
 
 /**
  * 
@@ -16,13 +17,21 @@ public abstract class CombatController extends Controller {
 	
 	protected Map _map;
 	
-	public void move(Character c, Tile start, Tile destination){
-		//TODO 
+	public void move(Character c, List<Tile> path){
+		//TODO draw the character moving along the path of tiles
 	}
 	
 	@Override
 	public void release() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	/**
+	 * @param c the character to check
+	 * @return whether the given character is affiliated with this controller
+	 */
+	public boolean isAffiliated(Character c) {
+		return c.getAffiliation() == this;
 	}
 }
