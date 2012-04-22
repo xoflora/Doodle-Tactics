@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Event;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
@@ -52,7 +53,10 @@ public class OverworldController extends Controller {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+		if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+			//do stuff
+			_gameScreen.switchToGameMenu();
+		}
 	}
 
 	@Override
@@ -63,11 +67,12 @@ public class OverworldController extends Controller {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		
+
 		System.out.println("isAnimating:" + _gameScreen.isAnimating());
 		
 		if(!_gameScreen.isAnimating()) {
-		
+					
+			
 			switch(e.getKeyChar()) {
 			
 			case 'w':
@@ -90,7 +95,7 @@ public class OverworldController extends Controller {
 				_gameScreen.getMainChar().setRight();
 				_gameScreen.mapUpdate(1, 0);
 				break;
-			}
+			}			
 		}
 	}
 

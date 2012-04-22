@@ -28,19 +28,16 @@ public class DoodleTactics extends JFrame {
 	public DoodleTactics() {
 		super("Doodle Tactics");
 		this.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-		this.setSize(TILE_COLS*map.Tile.TILE_SIZE,TILE_ROWS*map.Tile.TILE_SIZE);
+		this.setSize(TILE_COLS*map.Tile.TILE_SIZE+13,TILE_ROWS*map.Tile.TILE_SIZE+33);
+		_gameMenu = new GameMenuScreen(null, this);
 		_game = new GameScreen(null, this);
 		_mainMenu = new MainMenuScreen(null, this);
-		_gameMenu = new GameMenuScreen(null, this);
 		_control = new Stack<Controller>();
 		
 		this.setScreen(_mainMenu);
 		this.pushController(new MainMenuController(_mainMenu));
 		this.setFocusable(false);
-		
-//		this.setScreen(_game);
-		//this.pushController(new OverworldController(_game));
-
+		this.setResizable(false);
 		this.setVisible(true);
 	}
 	

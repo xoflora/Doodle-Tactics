@@ -28,8 +28,7 @@ public class PlayerCombatController extends CombatController {
 			if (check.isOccupied()) {
 				_selectedTile = (Tile) e.getSource();
 				_selectedMovementRange =
-					_gameScreen.getMap().
-						getMovementRange(_selectedTile, check.getOccupant().getMovementRange());
+					_gameScreen.getMap().getMovementRange(_selectedTile, check.getOccupant().getMovementRange());
 			}
 		}
 

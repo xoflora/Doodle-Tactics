@@ -33,6 +33,7 @@ public class MenuItem extends Rectangle {
 		}
 		
 		this.setDefault();
+		this.setSize(_current.getWidth(), _current.getHeight());
 	}
 	
 	/**

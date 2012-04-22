@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import javax.swing.Timer;
 
+import controller.GameMenuController;
+
 import character.MainCharacter;
 
 import map.Map;
@@ -24,13 +26,16 @@ public class GameScreen extends Screen {
 	private int _xRef;
 	private int _yRef;
 	private boolean _isAnimating;
+	private DoodleTactics _dt;
+	private GameMenuController _gameMenuController;
 	
 	public GameScreen(controller.Controller control, DoodleTactics dt) {
 		super(control, dt);
+		_dt = dt;
 		this.setBackground(java.awt.Color.BLACK);
-		MAP_WIDTH = 100;
-		MAP_HEIGHT = 100;
-		
+		MAP_WIDTH = 20;
+		MAP_HEIGHT = 20;
+		_gameMenuController = new GameMenuController(_dt.getGameMenuScreen());
 		Tile[][] testTiles = new Tile[MAP_WIDTH][MAP_HEIGHT];
 		for(int i = 0; i < MAP_WIDTH; i++) {
 			for(int j = 0; j < MAP_HEIGHT; j++) {
@@ -86,26 +91,26 @@ public class GameScreen extends Screen {
 		public void actionPerformed(java.awt.event.ActionEvent e) {
 			
 			/* if we've incremented numSteps times, then we should stop */
+				/* otherwise, continue incrementing */
+			for(int i = 0; i < MAP_WIDTH; i++) {
+				for(int j = 0; j < MAP_HEIGHT; j++) {
+					Tile t = _currMap.getTile(i, j);
+					t.setLocation((t.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), t.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
+					repaint();
+				}
+			}
+			_cnt+=1;
 			if (_cnt == _numSteps) {
 				_isAnimating = false;
 				_timer.stop();
 			}
-			
-			else {
-				/* otherwise, continue incrementing */
-				for(int i = 0; i < MAP_WIDTH; i++) {
-					for(int j = 0; j < MAP_HEIGHT; j++) {
-						Tile t = _currMap.getTile(i, j);
-						t.setLocation((t.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), t.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
-					}
-				}
-				
-				_cnt+=1;
-				repaint();
-			}
 		}
 	}
-}
+	}
+	
+	public Map getMap() {
+		return _currMap;
+	}
 	
 	public MainCharacter getMainChar() {
 		return _mainCharacter;
@@ -123,9 +128,9 @@ public class GameScreen extends Screen {
 		/* if in the bounds of the map, specifically in relation to the main character,
 		 * update the screen reference points and animate the map */
 		
-		//System.out.println("--------MAP UPDATE---------");
-//		System.out.println("xRef: " + _xRef);
-//		System.out.println("YRef: " + _yRef);
+		System.out.println("--------MAP UPDATE---------");
+		System.out.println("xRef: " + _xRef);
+		System.out.println("YRef: " + _yRef);
 		
 		if((_xRef + x + 11) <= MAP_WIDTH && (_xRef + x + 11) > 0 && (_yRef + y + 9) <= MAP_HEIGHT && (_yRef + y + 9) > 0) {
 			
@@ -138,7 +143,7 @@ public class GameScreen extends Screen {
 			_yRef += y;
 		}
 		
-		//System.out.println("--------------------------");
+		System.out.println("--------------------------");
 	}
 	
 	public void paintComponent(java.awt.Graphics g) {
@@ -172,6 +177,11 @@ public class GameScreen extends Screen {
 	public void render() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void switchToGameMenu() {
+		_dt.setScreen(_dt.getGameMenuScreen());
+		_dt.pushController(_gameMenuController);
 	}
 }
 

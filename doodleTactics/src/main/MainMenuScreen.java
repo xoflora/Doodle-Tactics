@@ -26,11 +26,6 @@ public class MainMenuScreen extends Screen {
 		_newGame = new ScreenChangeMenuItem(this, "src/graphics/new_game.png","src/graphics/new_game_hovered.png", dt, dt.getGameScreen(), new OverworldController(dt.getGameScreen()));
 		_continue = new MenuItem(this, "src/graphics/continue.png","src/graphics/continue_hovered.png", dt);
 		_quit = new MenuItem(this, "src/graphics/quit.png","src/graphics/quit_hovered.png", dt);
-		_title.setSize(_title.getCurrentImage().getWidth(), _title.getCurrentImage().getHeight());
-		_newGame.setSize(_newGame.getCurrentImage().getWidth(), _newGame.getCurrentImage().getHeight());
-		_continue.setSize(_continue.getCurrentImage().getWidth(), _continue.getCurrentImage().getHeight());
-		_quit.setSize(_quit.getCurrentImage().getWidth(), _quit.getCurrentImage().getHeight());
-		
 		_title.setLocation(((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _title.getCurrentImage().getWidth())/2, 50);
 		int offset = ((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _newGame.getCurrentImage().getWidth())/2;
 		_newGame.setLocation(offset, 250);
