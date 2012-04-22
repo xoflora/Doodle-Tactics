@@ -41,10 +41,14 @@
 <part id="11"/>
 <<<<<<< HEAD
 <part id="12"/>
+=======
+<<<<<<< HEAD
+<part id="12"/>
 <part id="13"/>
 <part id="14"/>
 =======
 >>>>>>> b72594de820541d6939515d28d3579aa59d7ddf7
+>>>>>>> b0c55793edaaf6b84170005f9b59de2b1872ffe1
 </presentation>
 </folder>
 </info>
@@ -60,12 +64,16 @@
 =======
 <editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="DoodleTactics.java" partName="DoodleTactics.java" path="/gpfs/main/home/jeshapir/course/cs032/term/Doodle-Tactics/doodleTactics/src/main/DoodleTactics.java" title="DoodleTactics.java" tooltip="doodleTactics/src/main/DoodleTactics.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/main/DoodleTactics.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="2246" selectionTopPixel="821"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1885" selectionTopPixel="894"/>
 </editor>
 <editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="GameScreen.java" partName="GameScreen.java" path="/gpfs/main/home/jeshapir/course/cs032/term/Doodle-Tactics/doodleTactics/src/main/GameScreen.java" title="GameScreen.java" tooltip="doodleTactics/src/main/GameScreen.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/main/GameScreen.java"/>
+<<<<<<< HEAD
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="616" selectionTopPixel="0"/>
+=======
 <editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="696" selectionTopPixel="0"/>
 >>>>>>> b72594de820541d6939515d28d3579aa59d7ddf7
+>>>>>>> b0c55793edaaf6b84170005f9b59de2b1872ffe1
 </editor>
 <editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Staff.java" partName="Staff.java" path="/gpfs/main/home/jeshapir/course/cs032/term/Doodle-Tactics/doodleTactics/src/items/Staff.java" title="Staff.java" tooltip="doodleTactics/src/items/Staff.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/items/Staff.java"/>
@@ -113,6 +121,11 @@
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/main/MainMenuScreen.java"/>
 <editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
 </editor>
+<<<<<<< HEAD
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="OverworldController.java" partName="OverworldController.java" path="/gpfs/main/home/jeshapir/course/cs032/term/Doodle-Tactics/doodleTactics/src/controller/OverworldController.java" title="OverworldController.java" tooltip="doodleTactics/src/controller/OverworldController.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/controller/OverworldController.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1149" selectionTopPixel="1040"/>
+=======
 <editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="OverworldController.java" partName="OverworldController.java" path="/gpfs/main/home/rroelke/course/cs032/term/Doodle-Tactics/doodleTactics/src/controller/OverworldController.java" title="OverworldController.java" tooltip="doodleTactics/src/controller/OverworldController.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/controller/OverworldController.java"/>
 <editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="276" selectionTopPixel="0"/>
@@ -136,12 +149,20 @@
 <editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MainMenuController.java" partName="MainMenuController.java" path="/gpfs/main/home/rroelke/course/cs032/term/Doodle-Tactics/doodleTactics/src/controller/MainMenuController.java" title="MainMenuController.java" tooltip="doodleTactics/src/controller/MainMenuController.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/doodleTactics/src/controller/MainMenuController.java"/>
 <editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+>>>>>>> b0c55793edaaf6b84170005f9b59de2b1872ffe1
 </editor>
 </editors>
 <views>
 <view id="org.eclipse.jdt.ui.TypeHierarchy" partName="Hierarchy"/>
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
+<<<<<<< HEAD
+<expanded>
+<category IMemento.internal.id="Warnings"/>
+<category IMemento.internal.id="Errors"/>
+</expanded>
+<columnWidths org.eclipse.ui.ide.locationField="0" org.eclipse.ui.ide.markerType="0" org.eclipse.ui.ide.pathField="0" org.eclipse.ui.ide.resourceField="0" org.eclipse.ui.ide.severityAndDescriptionField="0"/>
+=======
 <<<<<<< HEAD
 <expanded>
 <category IMemento.internal.id="Warnings (58 items)"/>
@@ -152,6 +173,7 @@
 </expanded>
 <columnWidths org.eclipse.ui.ide.locationField="73" org.eclipse.ui.ide.markerType="108" org.eclipse.ui.ide.pathField="143" org.eclipse.ui.ide.resourceField="108" org.eclipse.ui.ide.severityAndDescriptionField="350"/>
 >>>>>>> b72594de820541d6939515d28d3579aa59d7ddf7
+>>>>>>> b0c55793edaaf6b84170005f9b59de2b1872ffe1
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
@@ -282,7 +304,7 @@
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.24950495" ratioLeft="252" ratioRight="758" relationship="2" relative="left"/>
-<info folder="true" part="bottom" ratio="0.7488226" ratioLeft="477" ratioRight="160" relationship="4" relative="org.eclipse.ui.editorss">
+<info folder="true" part="bottom" ratio="0.5637255" ratioLeft="575" ratioRight="445" relationship="4" relative="org.eclipse.ui.editorss">
 <folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
 <page content="org.eclipse.jdt.ui.JavadocView" label="Javadoc"/>
@@ -328,6 +350,8 @@
 <workingSets/>
 <navigationHistory>
 <editors>
+<<<<<<< HEAD
+=======
 <<<<<<< HEAD
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/tests/MapTester.java"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/map/Map.java"/>
@@ -492,82 +516,166 @@
 =======
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/main/DoodleTactics.java"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/main/MainMenuScreen.java"/>
+>>>>>>> b0c55793edaaf6b84170005f9b59de2b1872ffe1
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/main/GameScreen.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/controller/OverworldController.java"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/main/DoodleTactics.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/items/Staff.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/items/HealthPotion.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/items/Equipment.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/character/Thief.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/character/MainCharacter.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/character/Mage.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/character/InvalidLevelException.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/character/Character.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/main/DoodleTactics.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/main/GameMenuScreen.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/main/GameScreen.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/main/MainMenuScreen.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/doodleTactics/src/main/GameMenuScreen.java"/>
 </editors>
-<item historyLabel="DoodleTactics.java" index="0">
-<position info="not_deleted" x="1787" y="0"/>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="9441" y="7"/>
 </item>
-<item historyLabel="MainMenuScreen.java" index="1">
-<position info="not_deleted" x="329" y="0"/>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="9685" y="0"/>
 </item>
-<item historyLabel="DoodleTactics.java" index="0">
-<position info="not_deleted" x="2241" y="0"/>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="9724" y="0"/>
 </item>
-<item historyLabel="GameScreen.java" index="2">
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="9726" y="0"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="9619" y="69"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="9848" y="0"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="9619" y="69"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="9743" y="0"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="9685" y="0"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="10165" y="0"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="8852" y="295"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="5273" y="11"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="9435" y="0"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="9126" y="0"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="3261" y="0"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="8844" y="0"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="9060" y="0"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="463" y="13"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="1438" y="0"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="363" y="0"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="382" y="10"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="3932" y="0"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="2947" y="0"/>
+</item>
+<item historyLabel="OverworldController.java" index="1">
+<position info="not_deleted" x="1935" y="0"/>
+</item>
+<item historyLabel="OverworldController.java" index="1">
 <position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="DoodleTactics.java" index="3">
-<position info="not_deleted" x="2241" y="0"/>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="2947" y="0"/>
 </item>
-<item historyLabel="Staff.java" index="4">
+<item historyLabel="OverworldController.java" index="1">
 <position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="HealthPotion.java" index="5">
-<position info="not_deleted" x="0" y="0"/>
+<<<<<<< HEAD
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="2947" y="0"/>
 </item>
-<item historyLabel="Equipment.java" index="6">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="OverworldController.java" index="1">
+<position info="not_deleted" x="1334" y="0"/>
 </item>
-<item historyLabel="Thief.java" index="7">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="2947" y="0"/>
 </item>
-<item historyLabel="MainCharacter.java" index="8">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="DoodleTactics.java" index="2">
+<position info="not_deleted" x="1866" y="0"/>
 </item>
-<item historyLabel="Mage.java" index="9">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="3099" y="0"/>
 </item>
-<item historyLabel="InvalidLevelException.java" index="10">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="654" y="0"/>
 </item>
-<item historyLabel="Character.java" index="11">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="OverworldController.java" index="1">
+<position info="not_deleted" x="202" y="0"/>
 </item>
-<item historyLabel="DoodleTactics.java" index="12">
-<position info="not_deleted" x="2246" y="0"/>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="685" y="0"/>
 </item>
-<item historyLabel="GameMenuScreen.java" index="13">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="1186" y="0"/>
 </item>
-<item historyLabel="GameScreen.java" index="14">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="636" y="0"/>
 </item>
-<item historyLabel="MainMenuScreen.java" index="15">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="OverworldController.java" index="1">
+<position info="not_deleted" x="1181" y="0"/>
 </item>
-<item historyLabel="GameScreen.java" index="14">
-<position info="not_deleted" x="228" y="0"/>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="3290" y="0"/>
 </item>
-<item historyLabel="GameMenuScreen.java" index="16">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="OverworldController.java" index="1">
+<position info="not_deleted" x="1717" y="0"/>
 </item>
+<item historyLabel="DoodleTactics.java" index="2">
+<position info="not_deleted" x="1885" y="0"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="2672" y="0"/>
+</item>
+<item historyLabel="OverworldController.java" index="1">
+<position info="not_deleted" x="1184" y="0"/>
+</item>
+<item historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="2069" y="0"/>
+</item>
+<item historyLabel="OverworldController.java" index="1">
+<position info="not_deleted" x="1184" y="0"/>
+</item>
+<item historyLabel="OverworldController.java" index="1">
+<position info="not_deleted" x="1149" y="0"/>
+</item>
+<item active="true" historyLabel="GameScreen.java" index="0">
+<position info="not_deleted" x="2069" y="0"/>
+=======
 <item active="true" historyLabel="GameScreen.java" index="14">
 <position info="not_deleted" x="228" y="0"/>
 >>>>>>> b72594de820541d6939515d28d3579aa59d7ddf7
+>>>>>>> b0c55793edaaf6b84170005f9b59de2b1872ffe1
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -586,6 +694,11 @@
 </trimLayout>
 </window>
 <mruList>
+<<<<<<< HEAD
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="OverworldController.java" tooltip="doodleTactics/src/controller/OverworldController.java">
+<persistable path="/doodleTactics/src/controller/OverworldController.java"/>
+</file>
+=======
 <<<<<<< HEAD
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MainMenuController.java" tooltip="doodleTactics/src/controller/MainMenuController.java">
 <persistable path="/doodleTactics/src/controller/MainMenuController.java"/>
@@ -608,6 +721,7 @@
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="UtilTester.java" tooltip="doodleTactics/src/tests/UtilTester.java">
 <persistable path="/doodleTactics/src/tests/UtilTester.java"/>
 =======
+>>>>>>> b0c55793edaaf6b84170005f9b59de2b1872ffe1
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MainMenuScreen.java" tooltip="doodleTactics/src/main/MainMenuScreen.java">
 <persistable path="/doodleTactics/src/main/MainMenuScreen.java"/>
 >>>>>>> b72594de820541d6939515d28d3579aa59d7ddf7

@@ -1,6 +1,6 @@
 package main;
-
 import java.awt.Graphics2D;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.Timer;
 
@@ -9,7 +9,11 @@ import character.MainCharacter;
 import map.Map;
 import map.Tile;
 
-@SuppressWarnings("serial")
+/* currmap / prevmap vars
+ * this is an idea we had about the game screen needing know what starting location
+ * to set for the game screen when we enter from different locations
+ */
+
 public class GameScreen extends Screen {
 	
 	private static final int NUM_TILES_X = 21;
@@ -18,17 +22,30 @@ public class GameScreen extends Screen {
 	private static int MAP_WIDTH, MAP_HEIGHT;
 	private MainCharacter _mainCharacter;
 	private List<Character> _characters;
+<<<<<<< HEAD
 	private Map _map;
 	private int _xRef;
 	private int _yRef;
+=======
+	private Map _prevMap; 
+	private Map _currMap;
+	private int _xRef;
+	private int _yRef;
+	private boolean _isAnimating;
+>>>>>>> cc7e9b457e01a7503880263ffb10f8aad9205c8f
 	
 	public GameScreen(controller.Controller control, DoodleTactics dt) {
 		super(control, dt);
 		this.setBackground(java.awt.Color.BLACK);
+<<<<<<< HEAD
 		MAP_WIDTH = 10;
 		MAP_HEIGHT = 10;
 		_xRef = Math.min(MAP_WIDTH - 11, 0);
 		_yRef = Math.min(MAP_HEIGHT - 9, 0);
+=======
+		MAP_WIDTH = 100;
+		MAP_HEIGHT = 100;
+>>>>>>> cc7e9b457e01a7503880263ffb10f8aad9205c8f
 		
 		Tile[][] testTiles = new Tile[MAP_WIDTH][MAP_HEIGHT];
 		for(int i = 0; i < MAP_WIDTH; i++) {
@@ -37,14 +54,28 @@ public class GameScreen extends Screen {
 				testTiles[i][j].setVisible(true);
 			}
 		}
+<<<<<<< HEAD
 		for (int k = _xRef; k < _xRef + NUM_TILES_X; k++) {
 			for (int m = _yRef; m < _yRef + NUM_TILES_Y; m++) {
 				if (k >= 0 && k < MAP_WIDTH && m >= 0 && m < MAP_HEIGHT) {
 					testTiles[k][m].setFillColor(java.awt.Color.BLACK);
 					testTiles[k][m].setLocation((k - _xRef)*Tile.TILE_SIZE, (m - _yRef)*Tile.TILE_SIZE);
 				}
+=======
+		
+		//select a tile to go at the top left of the screen
+		_xRef = 5;
+		_yRef = 5;
+		_isAnimating = false;
+		
+		//set the location of the rest of the tiles relative to the topleft tile
+		for(int i = 0; i < MAP_WIDTH; i++) {
+			for(int j = 0; j < MAP_HEIGHT; j++) {
+				testTiles[i][j].setLocation((i-_xRef)*Tile.TILE_SIZE, (j-_yRef)*Tile.TILE_SIZE);
+>>>>>>> cc7e9b457e01a7503880263ffb10f8aad9205c8f
 			}
 		}
+		
 		_mainCharacter = new MainCharacter(this, "src/graphics/warrior_front.png", "src/graphics/warrior_front.png", "src/graphics/warrior_left.png", "src/graphics/warrior_right.png", "src/graphics/warrior_back.png", "src/graphics/warrior_front.png","test");
 		_mainCharacter.setDown();
 		_mainCharacter.setFillColor(java.awt.Color.BLACK);
@@ -52,64 +83,60 @@ public class GameScreen extends Screen {
 		int overflow = (65-48)/2;
 		_mainCharacter.setLocation((10*Tile.TILE_SIZE)-overflow, 8*Tile.TILE_SIZE);
 		_mainCharacter.setVisible(true);
-		_map = new Map(testTiles,"c-level demo map");
+		_currMap = new Map(testTiles,"c-level demo map");
 		this.repaint();
 	}
 	
 	private class MapMoveTimer extends Timer {
 		
-		private GameScreen _gs;
-		private Tile[][] _newTiles;
-		private Tile[][] _oldTiles;
-		private int _deltaX, _deltaY;
-		public int cnt = 0;
-		
-		public MapMoveTimer(GameScreen gs, Tile[][] newTiles, Tile[][] oldTiles, int deltaX, int deltaY) {
-			super(50, null);
-			this.addActionListener(new MyMoveListener(this));
-			_gs = gs;
-			_newTiles = newTiles;
-			_oldTiles = oldTiles;
-			_deltaX = deltaX;
-			_deltaY = deltaY;
-		}
-		
-		private class MyMoveListener implements java.awt.event.ActionListener {
+	private int _deltaX, _deltaY;
+	
+	public MapMoveTimer(int deltaX, int deltaY) {
+		super(50, null);
+		this.addActionListener(new MyMoveListener(this));
+		_deltaX = deltaX;
+		_deltaY = deltaY;
+	}
+	
+	private class MyMoveListener implements java.awt.event.ActionListener {
 
-			Timer _timer;
+		private Timer _timer;
+		private int _cnt = 0;
+		private final int _numSteps = 6;
+		
+		public MyMoveListener (Timer t) {
+			_timer = t;
+		}
+		
+		public void actionPerformed(java.awt.event.ActionEvent e) {
 			
-			public MyMoveListener (Timer t) {
-				_timer = t;
+			/* if we've incremented numSteps times, then we should stop */
+			if (_cnt == _numSteps) {
+				_isAnimating = false;
+				_timer.stop();
 			}
 			
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				if (cnt == 8) {
-					_timer.stop();
-				}
-				else {
-					for(int i = 0; i < _newTiles.length; i++) {
-						for(int j = 0; j < _newTiles[i].length; j++) {
-							if (_oldTiles[i][j] != null) {
-								_oldTiles[i][j].setLocation(_oldTiles[i][j].getX()+ Math.abs(_deltaX)*(Tile.TILE_SIZE/8), _oldTiles[i][j].getY()+ Math.abs(_deltaY)*(Tile.TILE_SIZE/8));
-							}
-							if (_newTiles[i][j] != null) {
-								_newTiles[i][j].setLocation(_newTiles[i][j].getX()+ (Tile.TILE_SIZE/8), _newTiles[i][j].getY()+ (Tile.TILE_SIZE/8));
-							}
-						}
+			else {
+				/* otherwise, continue incrementing */
+				for(int i = 0; i < MAP_WIDTH; i++) {
+					for(int j = 0; j < MAP_HEIGHT; j++) {
+						Tile t = _currMap.getTile(i, j);
+						t.setLocation((t.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), t.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
 					}
-					cnt+=1;
-					_gs.repaint();
 				}
+				
+				_cnt+=1;
+				repaint();
 			}
 		}
 	}
+}
 	
-	@Override
-	public void render() {
-		// TODO Auto-generated method stub
-		
+	public MainCharacter getMainChar() {
+		return _mainCharacter;
 	}
 	
+<<<<<<< HEAD
 	public Tile[][] getCurrentTiles() {
 		Tile[][] tiles = new Tile[NUM_TILES_X][NUM_TILES_Y];
 		
@@ -149,11 +176,25 @@ public class GameScreen extends Screen {
 				}
 			}
 		}
+=======
+	/* accessor method returning whether or not the GameScreen is currently animating, used by Timer */
+	public boolean isAnimating() {
+		return _isAnimating;
+	}
+	
+	public void mapUpdate(int x, int y) {
 		
-		Tile[][] newTiles = getCurrentTiles();
+		// oh my god this is soooooo awesome
+>>>>>>> cc7e9b457e01a7503880263ffb10f8aad9205c8f
 		
-		Tile[][] toAnimate = new Tile[MAP_WIDTH + Math.abs(deltaX)][MAP_HEIGHT + Math.abs(deltaY)];
+		/* if in the bounds of the map, specifically in relation to the main character,
+		 * update the screen reference points and animate the map */
 		
+		//System.out.println("--------MAP UPDATE---------");
+//		System.out.println("xRef: " + _xRef);
+//		System.out.println("YRef: " + _yRef);
+		
+<<<<<<< HEAD
 		for (int i = 0; i < toAnimate.length; i++) {
 			for (int j = 0; i < toAnimate[i].length; j++) {
 				if (deltaX == -1) {
@@ -188,17 +229,23 @@ public class GameScreen extends Screen {
 					}
 				}
 			}
+=======
+		if((_xRef + x + 11) <= MAP_WIDTH && (_xRef + x + 11) > 0 && (_yRef + y + 9) <= MAP_HEIGHT && (_yRef + y + 9) > 0) {
+			
+			_isAnimating = true;
+			
+			MapMoveTimer timer = new MapMoveTimer(x,y);
+			timer.start();
+			
+			_xRef += x;
+			_yRef += y;
+>>>>>>> cc7e9b457e01a7503880263ffb10f8aad9205c8f
 		}
 		
-		MapMoveTimer t = new MapMoveTimer(this,newTiles,oldTiles,deltaX,deltaY);
-		t.start();
-		this.repaint();
+		//System.out.println("--------------------------");
 	}
 	
-	public MainCharacter getMainChar() {
-		return _mainCharacter;
-	}
-	
+<<<<<<< HEAD
 	public Map getMap() {
 		return _map;
 	}
@@ -229,17 +276,242 @@ public class GameScreen extends Screen {
 		return (_yRef + y) / Tile.TILE_SIZE;
 	}
 	 
+=======
+>>>>>>> cc7e9b457e01a7503880263ffb10f8aad9205c8f
 	public void paintComponent(java.awt.Graphics g) {
+		
+//		System.out.println("-------PAINT--------");
+//		System.out.println("xMin: " + (_xRef - 1));
+//		System.out.println("xMax: " + (_xRef + 22));
+//		System.out.println("yMin: " + (_yRef - 1));
+//		System.out.println("yMax: " + (_yRef + 18));
+//		System.out.println("--------------------");
+		
 		super.paintComponent(g);
+<<<<<<< HEAD
 		for(int i = _xRef; i < _xRef + NUM_TILES_X; i++) {
 			for(int j = _yRef; j < _yRef + NUM_TILES_Y; j++) {
 				if (i >= 0 && i < MAP_WIDTH && j >= 0 && j < MAP_HEIGHT) {
 					_map.getTile(i,j).paint((Graphics2D) g, _map.getTile(i,j).getImage());
+=======
+		for(int i = 0; i < MAP_WIDTH; i++) {
+			for(int j = 0; j < MAP_HEIGHT; j++) {
+				// check that the given tile is within the bounds before painting it 
+				
+
+				
+				if((i < _xRef + 22 && i >= _xRef - 1) && (j < (_yRef + 18) && j >= (_yRef - 1))) { 
+					_currMap.getTile(i,j).paint((Graphics2D) g, _currMap.getTile(i,j).getImage());
+>>>>>>> cc7e9b457e01a7503880263ffb10f8aad9205c8f
 				}
 			}
 		}
-//		System.out.println(_mainCharacter.getCurrentImage());
-		_mainCharacter.paint((Graphics2D) g,_mainCharacter.getCurrentImage());
-	}
 
+		_mainCharacter.paint((Graphics2D) g,_mainCharacter.getCurrentImage());
+		
+		//System.out.println("--------------------");
 }
+	
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+}
+
+
+//package main;
+//
+//import java.awt.Graphics2D;
+//import java.util.HashMap;
+//import java.util.List;
+//import javax.swing.Timer;
+//
+//import character.MainCharacter;
+//
+//import map.Map;
+//import map.Tile;
+//
+//@SuppressWarnings("serial")
+//public class GameScreen extends Screen {
+//
+//	private static int MAP_WIDTH, MAP_HEIGHT;
+//	private MainCharacter _mainCharacter;
+//	private List<Character> _characters;
+//	private Map _map;
+//	private int _xRef, _yRef;
+//	
+//	public GameScreen(controller.Controller control, DoodleTactics dt) {
+//		super(control, dt);
+//		this.setBackground(java.awt.Color.BLACK);
+//		MAP_WIDTH = 10;
+//		MAP_HEIGHT = 50;
+//		_xRef = Math.min(MAP_WIDTH - 11, 0);
+//		_yRef = Math.min(MAP_HEIGHT - 9, 0);
+//		//Tile[x][y]
+//		
+//		Tile[][] testTiles = new Tile[MAP_WIDTH][MAP_HEIGHT];
+//		for(int i = 0; i < MAP_WIDTH; i++) {
+//			for(int j = 0; j < MAP_HEIGHT; j++) {
+//				testTiles[i][j] = new Tile(this,"src/graphics/tile.png", i, j);
+//				testTiles[i][j].setVisible(true);
+//			}
+//		}
+//		for (int k = _xRef; k<_xRef+21; k++) {
+//			for (int m = _yRef; m<_yRef+17; m++) {
+//				if (k >= 0 && k < MAP_WIDTH && m >= 0 && m < MAP_HEIGHT) {
+//					testTiles[k][m].setFillColor(java.awt.Color.BLACK);
+//					testTiles[k][m].setLocation((k-_xRef)*Tile.TILE_SIZE, (m-_yRef)*Tile.TILE_SIZE);
+//				}
+//			}
+//		}
+//		_mainCharacter = new MainCharacter(this, "src/graphics/warrior_front.png", "src/graphics/warrior_front.png", "src/graphics/warrior_left.png", "src/graphics/warrior_right.png", "src/graphics/warrior_back.png", "src/graphics/warrior_front.png","test");
+//		_mainCharacter.setDown();
+//		_mainCharacter.setFillColor(java.awt.Color.BLACK);
+//		_mainCharacter.setSize(65, 50);
+//		int overflow = (65-48)/2;
+//		_mainCharacter.setLocation((10*Tile.TILE_SIZE)-overflow, 8*Tile.TILE_SIZE);
+//		_mainCharacter.setVisible(true);
+//		_map = new Map(testTiles,"c-level demo map");
+//		this.repaint();
+//	}
+//	
+//	private class MapMoveTimer extends Timer {
+//		
+//		private GameScreen _gs;
+//		private HashMap<Tile,Integer> _tiles;
+//		private int _deltaX, _deltaY;
+//		public int cnt = 0;
+//		
+//		public MapMoveTimer(GameScreen gs, HashMap<Tile,Integer> tiles, int deltaX, int deltaY) {
+//			super(50, null);
+//			this.addActionListener(new MyMoveListener(this));
+//			_gs = gs;
+//			_tiles = tiles;
+//			_deltaX = deltaX;
+//			_deltaY = deltaY;
+//		}
+//		
+//		private class MyMoveListener implements java.awt.event.ActionListener {
+//
+//			Timer _timer;
+//			
+//			public MyMoveListener (Timer t) {
+//				_timer = t;
+//			}
+//			
+//			public void actionPerformed(java.awt.event.ActionEvent e) {
+//				if (cnt == 8) {
+//					_timer.stop();
+//				}
+//				else {
+//					
+//					for(Tile t : _tiles.keySet()) {
+//							t.setLocation(t.getX()- _deltaX*(Tile.TILE_SIZE/8), t.getY()- _deltaY*(Tile.TILE_SIZE/8));
+//					}
+//					
+//					cnt+=1;
+//					_gs.repaint();
+//				}
+//			}
+//		}
+//	}
+//	
+//	@Override
+//	public void render() {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//	
+//	public Tile[][] getCurrentTiles() {
+//		Tile[][] tiles = new Tile[21][17];
+//		
+//		for (int k = _xRef; k<_xRef+21; k++) {
+//			for (int m = _yRef; m<_yRef+17; m++) {
+//				//System.out.println("k = " + k + " ;m = " + m);
+//				if (k >= 0 && k < MAP_WIDTH && m >= 0 && m < MAP_HEIGHT) {
+//					tiles[k-_xRef][m -_yRef] = _map.getTile(k,m);
+//				}
+//			}
+//		}
+//		return tiles;
+//	}
+//	
+//	public void mapUpdate(int deltaX, int deltaY) {
+//		
+//		System.out.println("xRef: " + _xRef);
+//		System.out.println("yRef: " + _yRef);
+//		
+//		// get the tiles before we changed their locations
+//		Tile[][] oldTiles = getCurrentTiles();
+//		
+//		//change the locations of the tiles based on deltaX, deltaY, xRef, and YRef
+//		
+//		if (_yRef+deltaY < MAP_HEIGHT - 8 && _yRef+deltaY>=0-8) {
+//			_yRef += deltaY;
+//		}
+//		if (_xRef+deltaX < MAP_WIDTH - 10 && _xRef+deltaX >= 0-10) {
+//			_xRef += deltaX;
+//		}
+//		
+//		boolean canMove = true;
+//		
+//		//if()
+//		
+//		for (int k = _xRef; k<_xRef+21; k++) {
+//			for (int m = _yRef; m<_yRef+17; m++) {
+//				if (! (_xRef >= 0 && k < MAP_WIDTH && m>= 0 && m < MAP_HEIGHT)) {
+//					System.out.println("k: " + k + "; m: " + m);
+////					canMove = false;
+////					System.out.println("MADE IT");
+//				}
+//			}
+//		}
+//		
+//		// get the new tiles that are in the range of xRef and YRef
+//		Tile[][] newTiles = getCurrentTiles();
+//		
+//		/* if we are in the boundaries create a dictionary of all of the tiles that were in the
+//		 * range before the change and after the change */
+//		if(canMove) {
+//			
+//			HashMap<Tile,Integer> tiles = new HashMap<Tile,Integer>();
+//			
+//			for (int i = 0; i < newTiles.length; i++) {
+//				for (int j = 0; j < newTiles[i].length; j++) {
+//					
+//					if(tiles.get(newTiles[i][j]) == null && newTiles[i][j] != null) {
+//						tiles.put(newTiles[i][j], 1);
+//					}
+//					
+//					if(tiles.get(oldTiles[i][j]) == null && oldTiles[i][j] != null) {
+//						tiles.put(oldTiles[i][j], 0);
+//					}
+//				}
+//			}
+//			
+//			MapMoveTimer t = new MapMoveTimer(this,tiles,deltaX,deltaY);
+//			t.start();
+//			this.repaint();
+//		}
+//	}
+//	
+//	public MainCharacter getMainChar() {
+//		return _mainCharacter;
+//	}
+//	 
+//	public void paintComponent(java.awt.Graphics g) {
+//		System.out.println("paint");
+//		super.paintComponent(g);
+//		for(int i = _xRef; i < _xRef+21; i++) {
+//			for(int j = _yRef; j < _yRef+17; j++) {
+//				if (i >= 0 && i < MAP_WIDTH && j >= 0 && j < MAP_HEIGHT) {
+//					_map.getTile(i,j).paint((Graphics2D) g, _map.getTile(i,j).getImage());
+//				}
+//			}
+//		}
+////		System.out.println(_mainCharacter.getCurrentImage());
+//		_mainCharacter.paint((Graphics2D) g,_mainCharacter.getCurrentImage());
+//	}
+//
+//}
