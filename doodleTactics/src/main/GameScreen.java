@@ -128,8 +128,8 @@ public class GameScreen extends Screen {
 		 * update the screen reference points and animate the map */
 		
 		//System.out.println("--------MAP UPDATE---------");
-//		System.out.println("xRef: " + _xRef);
-//		System.out.println("YRef: " + _yRef);
+		System.out.println("xRef: " + _xRef);
+		System.out.println("YRef: " + _yRef);
 		
 		if((_xRef + x + 11) <= MAP_WIDTH && (_xRef + x + 11) > 0 && (_yRef + y + 9) <= MAP_HEIGHT && (_yRef + y + 9) > 0) {
 			
@@ -164,7 +164,7 @@ public class GameScreen extends Screen {
 	 */
 	public int getMapX(int x) {
 	//	System.out.print("xRef: " + _xRef);
-		return (_xRef + x) / Tile.TILE_SIZE;
+		return (x / Tile.TILE_SIZE) + _xRef;
 	}
 	
 	/**
@@ -172,7 +172,7 @@ public class GameScreen extends Screen {
 	 * @return the y-index of the tile in the map given the y-coordinate in the window
 	 */
 	public int getMapY(int y) {
-		return (_yRef + y) / Tile.TILE_SIZE;
+		return (y / Tile.TILE_SIZE) + _yRef;
 	}
 	 
 	public void paintComponent(java.awt.Graphics g) {

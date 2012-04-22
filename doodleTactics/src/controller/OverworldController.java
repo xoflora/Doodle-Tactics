@@ -23,13 +23,13 @@ public class OverworldController extends Controller {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-/*		Tile t = _gameScreen.getTile(e.getX(), e.getY());
+		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		
 		System.out.println("Mouse pos: " + e.getX() + " " + e.getY());
 		System.out.println("Map pos: " + _gameScreen.getMapX(e.getX()) + " " + _gameScreen.getMapY(e.getY()));
 		
 		if (t != null)
-			System.out.println(t.x() + " " + t.y());	*/
+			System.out.println(t.x() + " " + t.y());
 
 	}
 
