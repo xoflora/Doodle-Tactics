@@ -394,6 +394,13 @@ public abstract class Character extends Rectangle{
 
 		return true;
 	}
+	
+	/**
+	 * @return the combat controller this unit is affiliated with
+	 */
+	public CombatController getAffiliation() {
+		return _affiliation;
+	}
 
 	public void printStats(){
 		System.out.println("---------Character Info----------");

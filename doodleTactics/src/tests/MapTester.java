@@ -519,5 +519,6 @@ public class MapTester {
 		 * note that testing with costs and permissions is not necessary since attackRange
 		 * does not depend on the properties of a tile, beyond generating the movementRange
 		 */
+		assert(false);
 	}
 }

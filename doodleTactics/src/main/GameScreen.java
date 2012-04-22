@@ -138,7 +138,7 @@ public class GameScreen extends Screen {
 		
 		//System.out.println("--------------------------");
 	}
-
+	
 	public void paintComponent(java.awt.Graphics g) {
 		
 //		System.out.println("-------PAINT--------");
