@@ -17,10 +17,14 @@ import map.Tile;
  */
 
 public class GameScreen extends Screen {
+	
+	private static final int NUM_TILES_X = 21;
+	private static final int NUM_TILES_Y = 17;
 
 	private static int MAP_WIDTH, MAP_HEIGHT;
 	private MainCharacter _mainCharacter;
 	private List<Character> _characters;
+
 	private Map _prevMap; 
 	private Map _currMap;
 	private int _xRef;
@@ -42,8 +46,7 @@ public class GameScreen extends Screen {
 				testTiles[i][j] = new Tile(this,"src/graphics/tile.png", i, j);
 				testTiles[i][j].setVisible(true);
 			}
-		}
-		
+		}		
 		//select a tile to go at the top left of the screen
 		_xRef = 5;
 		_yRef = 5;
@@ -108,10 +111,6 @@ public class GameScreen extends Screen {
 	}
 	}
 	
-	public Map getMap() {
-		return _currMap;
-	}
-	
 	public MainCharacter getMainChar() {
 		return _mainCharacter;
 	}
@@ -127,7 +126,6 @@ public class GameScreen extends Screen {
 		
 		/* if in the bounds of the map, specifically in relation to the main character,
 		 * update the screen reference points and animate the map */
-		
 		System.out.println("--------MAP UPDATE---------");
 		System.out.println("xRef: " + _xRef);
 		System.out.println("YRef: " + _yRef);
@@ -146,6 +144,36 @@ public class GameScreen extends Screen {
 		System.out.println("--------------------------");
 	}
 	
+	public Map getMap() {
+		return _currMap;
+	}
+	
+	/**
+	 * @param x the window x-coordinate
+	 * @param y the window y-coordinate
+	 * @return the tile corresponding to the given (x,y) coordinate in the window
+	 */
+	public Tile getTile(int x, int y) {
+		return _currMap.getTile(getMapX(x), getMapY(y));
+	}
+	
+	/**
+	 * @param x
+	 * @return the x-index of the tile in the map given the x-coordinate in the window
+	 */
+	public int getMapX(int x) {
+	//	System.out.print("xRef: " + _xRef);
+		return (x / Tile.TILE_SIZE) + _xRef;
+	}
+	
+	/**
+	 * @param y
+	 * @return the y-index of the tile in the map given the y-coordinate in the window
+	 */
+	public int getMapY(int y) {
+		return (y / Tile.TILE_SIZE) + _yRef;
+	}
+	 
 	public void paintComponent(java.awt.Graphics g) {
 		
 //		System.out.println("-------PAINT--------");
@@ -156,6 +184,7 @@ public class GameScreen extends Screen {
 //		System.out.println("--------------------");
 		
 		super.paintComponent(g);
+
 		for(int i = 0; i < MAP_WIDTH; i++) {
 			for(int j = 0; j < MAP_HEIGHT; j++) {
 				// check that the given tile is within the bounds before painting it 
