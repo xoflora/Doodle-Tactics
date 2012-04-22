@@ -118,6 +118,8 @@ public class GameScreen extends Screen {
 	
 	public void mapUpdate(int x, int y) {
 		
+		// oh my god this is soooooo awesome
+		
 		/* if in the bounds of the map, specifically in relation to the main character,
 		 * update the screen reference points and animate the map */
 		
