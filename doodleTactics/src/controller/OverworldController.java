@@ -64,30 +64,34 @@ public class OverworldController extends Controller {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		
-		switch(e.getKeyChar()) {
+		System.out.println("isAnimating:" + _gameScreen.isAnimating());
 		
-		case 'w':
-			System.out.println("w");
-			_gameScreen.getMainChar().setUp();
-			_gameScreen.mapUpdate(0, -1);
-			break;
-		case 'a':
-			System.out.println("a");
-			_gameScreen.getMainChar().setLeft();
-			_gameScreen.mapUpdate(-1, 0);
-			break;
-		case 's':
-			System.out.println("s");
-			_gameScreen.getMainChar().setDown();
-			_gameScreen.mapUpdate(0, 1);
-			break;
-		case 'd':
-			System.out.println("d");
-			_gameScreen.getMainChar().setRight();
-			_gameScreen.mapUpdate(1, 0);
-			break;
+		if(!_gameScreen.isAnimating()) {
+		
+			switch(e.getKeyChar()) {
+			
+			case 'w':
+				System.out.println("w");
+				_gameScreen.getMainChar().setUp();
+				_gameScreen.mapUpdate(0, -1);
+				break;
+			case 'a':
+				System.out.println("a");
+				_gameScreen.getMainChar().setLeft();
+				_gameScreen.mapUpdate(-1, 0);
+				break;
+			case 's':
+				System.out.println("s");
+				_gameScreen.getMainChar().setDown();
+				_gameScreen.mapUpdate(0, 1);
+				break;
+			case 'd':
+				System.out.println("d");
+				_gameScreen.getMainChar().setRight();
+				_gameScreen.mapUpdate(1, 0);
+				break;
+			}
 		}
-		
 	}
 
 	@Override
