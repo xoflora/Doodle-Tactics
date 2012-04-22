@@ -15,51 +15,6 @@ import character.Character;
  */
 public class PlayerCombatController extends CombatController {
 	
-	/**
-	 * 
-	 * @author rroelke
-	 *
-	 */
-	private class TileMouseListener implements MouseListener {
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			Tile check = (Tile) e.getSource();
-			if (check.isOccupied()) {
-				_selectedTile = (Tile) e.getSource();
-				_selectedMovementRange =
-					_gameScreen.getMap().
-						getMovementRange(_selectedTile, check.getOccupant().getMovementRange());
-			}
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			if (_selectedTile != null) {
-				
-			}
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-	}
-	
 	private Tile _selectedTile;
 	private Character _selectedCharacter;
 	

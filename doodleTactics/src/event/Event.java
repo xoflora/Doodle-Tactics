@@ -14,5 +14,4 @@ public abstract class Event extends Controller {
 	public void release() {
 		_dt.releaseControl();
 	}
-	
 }

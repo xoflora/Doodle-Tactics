@@ -9,7 +9,7 @@ import character.Character;
 /**
  * 
  * @author rroelke
- *
+ * abstract interface for regulating combat
  */
 public abstract class CombatController extends Controller {
 	protected List<Character> _characters;

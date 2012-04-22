@@ -11,21 +11,24 @@ import map.Tile;
 
 @SuppressWarnings("serial")
 public class GameScreen extends Screen {
+	
+	private static final int NUM_TILES_X = 21;
+	private static final int NUM_TILES_Y = 17;
 
 	private static int MAP_WIDTH, MAP_HEIGHT;
 	private MainCharacter _mainCharacter;
 	private List<Character> _characters;
 	private Map _map;
-	private int _xRef, _yRef;
+	private int _xRef;
+	private int _yRef;
 	
 	public GameScreen(controller.Controller control, DoodleTactics dt) {
 		super(control, dt);
 		this.setBackground(java.awt.Color.BLACK);
 		MAP_WIDTH = 10;
-		MAP_HEIGHT = 50;
+		MAP_HEIGHT = 10;
 		_xRef = Math.min(MAP_WIDTH - 11, 0);
 		_yRef = Math.min(MAP_HEIGHT - 9, 0);
-		//Tile[x][y]
 		
 		Tile[][] testTiles = new Tile[MAP_WIDTH][MAP_HEIGHT];
 		for(int i = 0; i < MAP_WIDTH; i++) {
@@ -34,11 +37,11 @@ public class GameScreen extends Screen {
 				testTiles[i][j].setVisible(true);
 			}
 		}
-		for (int k = _xRef; k<_xRef+21; k++) {
-			for (int m = _yRef; m<_yRef+17; m++) {
+		for (int k = _xRef; k < _xRef + NUM_TILES_X; k++) {
+			for (int m = _yRef; m < _yRef + NUM_TILES_Y; m++) {
 				if (k >= 0 && k < MAP_WIDTH && m >= 0 && m < MAP_HEIGHT) {
 					testTiles[k][m].setFillColor(java.awt.Color.BLACK);
-					testTiles[k][m].setLocation((k-_xRef)*Tile.TILE_SIZE, (m-_yRef)*Tile.TILE_SIZE);
+					testTiles[k][m].setLocation((k - _xRef)*Tile.TILE_SIZE, (m - _yRef)*Tile.TILE_SIZE);
 				}
 			}
 		}
@@ -108,10 +111,10 @@ public class GameScreen extends Screen {
 	}
 	
 	public Tile[][] getCurrentTiles() {
-		Tile[][] tiles = new Tile[21][17];
+		Tile[][] tiles = new Tile[NUM_TILES_X][NUM_TILES_Y];
 		
-		for (int k = _xRef; k<_xRef+21; k++) {
-			for (int m = _yRef; m<_yRef+17; m++) {
+		for (int k = _xRef; k<_xRef + NUM_TILES_X; k++) {
+			for (int m = _yRef; m<_yRef + NUM_TILES_Y; m++) {
 				//System.out.println("k = " + k + " ;m = " + m);
 				if (k >= 0 && k < MAP_WIDTH && m >= 0 && m < MAP_HEIGHT) {
 					tiles[k-_xRef][m -_yRef] = _map.getTile(k,m);
@@ -123,11 +126,11 @@ public class GameScreen extends Screen {
 	
 	public void mapUpdate(int deltaX, int deltaY) {
 		
-		int cnt = 0;
+	//	int cnt = 0;
 		
 		Tile[][] oldTiles = getCurrentTiles();
-		for (int i = 0; i<21; i++) {
-			for (int j = 0; j<17; j++) {
+		for (int i = 0; i < NUM_TILES_X; i++) {
+			for (int j = 0; j < NUM_TILES_Y; j++) {
 				System.out.println(oldTiles[i][j]);
 			}
 		}
@@ -138,11 +141,11 @@ public class GameScreen extends Screen {
 		if (_xRef+deltaX < MAP_WIDTH - 10 && _xRef+deltaX >= 0-10) {
 			_xRef += deltaX;
 		}
-		for (int k = _xRef; k<_xRef+21; k++) {
-			for (int m = _yRef; m<_yRef+17; m++) {
+		for (int k = _xRef; k < _xRef + NUM_TILES_X; k++) {
+			for (int m = _yRef; m < _yRef + NUM_TILES_Y; m++) {
 				//System.out.println("k = " + k + " ;m = " + m);
 				if (k >= 0 && k < MAP_WIDTH && m >= 0 && m < MAP_HEIGHT) {
-					_map.getTile(k,m).setLocation((k-_xRef)*Tile.TILE_SIZE, (m-_yRef)*Tile.TILE_SIZE);
+					_map.getTile(k,m).setLocation((k - _xRef)*Tile.TILE_SIZE, (m - _yRef)*Tile.TILE_SIZE);
 				}
 			}
 		}
@@ -151,8 +154,8 @@ public class GameScreen extends Screen {
 		
 		Tile[][] toAnimate = new Tile[MAP_WIDTH + Math.abs(deltaX)][MAP_HEIGHT + Math.abs(deltaY)];
 		
-		for (int i = 0; i< toAnimate.length; i++) {
-			for (int j = 0; i< toAnimate[i].length; j++) {
+		for (int i = 0; i < toAnimate.length; i++) {
+			for (int j = 0; i < toAnimate[i].length; j++) {
 				if (deltaX == -1) {
 					if (i == 0) {
 						toAnimate[i][j] = newTiles[i][j];
@@ -199,11 +202,37 @@ public class GameScreen extends Screen {
 	public Map getMap() {
 		return _map;
 	}
+	
+	/**
+	 * @param x the window x-coordinate
+	 * @param y the window y-coordinate
+	 * @return the tile corresponding to the given (x,y) coordinate in the window
+	 */
+	public Tile getTile(int x, int y) {
+		return _map.getTile(getMapX(x), getMapY(y));
+	}
+	
+	/**
+	 * @param x
+	 * @return the x-index of the tile in the map given the x-coordinate in the window
+	 */
+	public int getMapX(int x) {
+	//	System.out.print("xRef: " + _xRef);
+		return (_xRef + x) / Tile.TILE_SIZE;
+	}
+	
+	/**
+	 * @param y
+	 * @return the y-index of the tile in the map given the y-coordinate in the window
+	 */
+	public int getMapY(int y) {
+		return (_yRef + y) / Tile.TILE_SIZE;
+	}
 	 
 	public void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);
-		for(int i = _xRef; i < _xRef+21; i++) {
-			for(int j = _yRef; j < _yRef+17; j++) {
+		for(int i = _xRef; i < _xRef + NUM_TILES_X; i++) {
+			for(int j = _yRef; j < _yRef + NUM_TILES_Y; j++) {
 				if (i >= 0 && i < MAP_WIDTH && j >= 0 && j < MAP_HEIGHT) {
 					_map.getTile(i,j).paint((Graphics2D) g, _map.getTile(i,j).getImage());
 				}
