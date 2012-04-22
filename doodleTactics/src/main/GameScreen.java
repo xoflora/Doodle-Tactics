@@ -22,30 +22,19 @@ public class GameScreen extends Screen {
 	private static int MAP_WIDTH, MAP_HEIGHT;
 	private MainCharacter _mainCharacter;
 	private List<Character> _characters;
-<<<<<<< HEAD
-	private Map _map;
-	private int _xRef;
-	private int _yRef;
-=======
+
 	private Map _prevMap; 
 	private Map _currMap;
 	private int _xRef;
 	private int _yRef;
 	private boolean _isAnimating;
->>>>>>> cc7e9b457e01a7503880263ffb10f8aad9205c8f
 	
 	public GameScreen(controller.Controller control, DoodleTactics dt) {
 		super(control, dt);
 		this.setBackground(java.awt.Color.BLACK);
-<<<<<<< HEAD
-		MAP_WIDTH = 10;
-		MAP_HEIGHT = 10;
-		_xRef = Math.min(MAP_WIDTH - 11, 0);
-		_yRef = Math.min(MAP_HEIGHT - 9, 0);
-=======
+
 		MAP_WIDTH = 100;
 		MAP_HEIGHT = 100;
->>>>>>> cc7e9b457e01a7503880263ffb10f8aad9205c8f
 		
 		Tile[][] testTiles = new Tile[MAP_WIDTH][MAP_HEIGHT];
 		for(int i = 0; i < MAP_WIDTH; i++) {
@@ -53,16 +42,7 @@ public class GameScreen extends Screen {
 				testTiles[i][j] = new Tile(this,"src/graphics/tile.png", i, j);
 				testTiles[i][j].setVisible(true);
 			}
-		}
-<<<<<<< HEAD
-		for (int k = _xRef; k < _xRef + NUM_TILES_X; k++) {
-			for (int m = _yRef; m < _yRef + NUM_TILES_Y; m++) {
-				if (k >= 0 && k < MAP_WIDTH && m >= 0 && m < MAP_HEIGHT) {
-					testTiles[k][m].setFillColor(java.awt.Color.BLACK);
-					testTiles[k][m].setLocation((k - _xRef)*Tile.TILE_SIZE, (m - _yRef)*Tile.TILE_SIZE);
-				}
-=======
-		
+		}		
 		//select a tile to go at the top left of the screen
 		_xRef = 5;
 		_yRef = 5;
@@ -72,7 +52,6 @@ public class GameScreen extends Screen {
 		for(int i = 0; i < MAP_WIDTH; i++) {
 			for(int j = 0; j < MAP_HEIGHT; j++) {
 				testTiles[i][j].setLocation((i-_xRef)*Tile.TILE_SIZE, (j-_yRef)*Tile.TILE_SIZE);
->>>>>>> cc7e9b457e01a7503880263ffb10f8aad9205c8f
 			}
 		}
 		
@@ -136,47 +115,6 @@ public class GameScreen extends Screen {
 		return _mainCharacter;
 	}
 	
-<<<<<<< HEAD
-	public Tile[][] getCurrentTiles() {
-		Tile[][] tiles = new Tile[NUM_TILES_X][NUM_TILES_Y];
-		
-		for (int k = _xRef; k<_xRef + NUM_TILES_X; k++) {
-			for (int m = _yRef; m<_yRef + NUM_TILES_Y; m++) {
-				//System.out.println("k = " + k + " ;m = " + m);
-				if (k >= 0 && k < MAP_WIDTH && m >= 0 && m < MAP_HEIGHT) {
-					tiles[k-_xRef][m -_yRef] = _map.getTile(k,m);
-				}
-			}
-		}
-		return tiles;
-	}
-	
-	public void mapUpdate(int deltaX, int deltaY) {
-		
-	//	int cnt = 0;
-		
-		Tile[][] oldTiles = getCurrentTiles();
-		for (int i = 0; i < NUM_TILES_X; i++) {
-			for (int j = 0; j < NUM_TILES_Y; j++) {
-				System.out.println(oldTiles[i][j]);
-			}
-		}
-		
-		if (_yRef+deltaY < MAP_HEIGHT - 8 && _yRef+deltaY>=0-8) {
-			_yRef += deltaY;
-		}
-		if (_xRef+deltaX < MAP_WIDTH - 10 && _xRef+deltaX >= 0-10) {
-			_xRef += deltaX;
-		}
-		for (int k = _xRef; k < _xRef + NUM_TILES_X; k++) {
-			for (int m = _yRef; m < _yRef + NUM_TILES_Y; m++) {
-				//System.out.println("k = " + k + " ;m = " + m);
-				if (k >= 0 && k < MAP_WIDTH && m >= 0 && m < MAP_HEIGHT) {
-					_map.getTile(k,m).setLocation((k - _xRef)*Tile.TILE_SIZE, (m - _yRef)*Tile.TILE_SIZE);
-				}
-			}
-		}
-=======
 	/* accessor method returning whether or not the GameScreen is currently animating, used by Timer */
 	public boolean isAnimating() {
 		return _isAnimating;
@@ -185,7 +123,6 @@ public class GameScreen extends Screen {
 	public void mapUpdate(int x, int y) {
 		
 		// oh my god this is soooooo awesome
->>>>>>> cc7e9b457e01a7503880263ffb10f8aad9205c8f
 		
 		/* if in the bounds of the map, specifically in relation to the main character,
 		 * update the screen reference points and animate the map */
@@ -194,42 +131,6 @@ public class GameScreen extends Screen {
 //		System.out.println("xRef: " + _xRef);
 //		System.out.println("YRef: " + _yRef);
 		
-<<<<<<< HEAD
-		for (int i = 0; i < toAnimate.length; i++) {
-			for (int j = 0; i < toAnimate[i].length; j++) {
-				if (deltaX == -1) {
-					if (i == 0) {
-						toAnimate[i][j] = newTiles[i][j];
-					}
-					else {
-						toAnimate[i][j] = oldTiles[i-1][j];
-					}
-				}
-				else if (deltaX == 1) {
-					if (i == 0) {
-						toAnimate[i][j] = oldTiles[i][j];
-					}
-					else {
-						toAnimate[i][j] = newTiles[i-1][j];
-					}
-				}
-				else if (deltaY == -1) {
-					//moving up
-					if (j == 0) {
-						toAnimate[i][j] = newTiles[i][j];
-					}
-					else {
-						toAnimate[i][j] = oldTiles[i][j-1];
-					}
-				}
-				else {
-					//moving down
-					if (j == 0) {
-						
-					}
-				}
-			}
-=======
 		if((_xRef + x + 11) <= MAP_WIDTH && (_xRef + x + 11) > 0 && (_yRef + y + 9) <= MAP_HEIGHT && (_yRef + y + 9) > 0) {
 			
 			_isAnimating = true;
@@ -239,15 +140,13 @@ public class GameScreen extends Screen {
 			
 			_xRef += x;
 			_yRef += y;
->>>>>>> cc7e9b457e01a7503880263ffb10f8aad9205c8f
 		}
 		
 		//System.out.println("--------------------------");
 	}
 	
-<<<<<<< HEAD
 	public Map getMap() {
-		return _map;
+		return _currMap;
 	}
 	
 	/**
@@ -256,7 +155,7 @@ public class GameScreen extends Screen {
 	 * @return the tile corresponding to the given (x,y) coordinate in the window
 	 */
 	public Tile getTile(int x, int y) {
-		return _map.getTile(getMapX(x), getMapY(y));
+		return _currMap.getTile(getMapX(x), getMapY(y));
 	}
 	
 	/**
@@ -276,8 +175,6 @@ public class GameScreen extends Screen {
 		return (_yRef + y) / Tile.TILE_SIZE;
 	}
 	 
-=======
->>>>>>> cc7e9b457e01a7503880263ffb10f8aad9205c8f
 	public void paintComponent(java.awt.Graphics g) {
 		
 //		System.out.println("-------PAINT--------");
@@ -288,12 +185,7 @@ public class GameScreen extends Screen {
 //		System.out.println("--------------------");
 		
 		super.paintComponent(g);
-<<<<<<< HEAD
-		for(int i = _xRef; i < _xRef + NUM_TILES_X; i++) {
-			for(int j = _yRef; j < _yRef + NUM_TILES_Y; j++) {
-				if (i >= 0 && i < MAP_WIDTH && j >= 0 && j < MAP_HEIGHT) {
-					_map.getTile(i,j).paint((Graphics2D) g, _map.getTile(i,j).getImage());
-=======
+
 		for(int i = 0; i < MAP_WIDTH; i++) {
 			for(int j = 0; j < MAP_HEIGHT; j++) {
 				// check that the given tile is within the bounds before painting it 
@@ -302,7 +194,6 @@ public class GameScreen extends Screen {
 				
 				if((i < _xRef + 22 && i >= _xRef - 1) && (j < (_yRef + 18) && j >= (_yRef - 1))) { 
 					_currMap.getTile(i,j).paint((Graphics2D) g, _currMap.getTile(i,j).getImage());
->>>>>>> cc7e9b457e01a7503880263ffb10f8aad9205c8f
 				}
 			}
 		}
