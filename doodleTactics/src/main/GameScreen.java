@@ -1,5 +1,6 @@
 package main;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -8,7 +9,11 @@ import javax.swing.Timer;
 import controller.GameMenuController;
 import controller.GameScreenController;
 import controller.OverworldController;
+import controller.combatController.CombatController;
+import controller.combatController.CombatOrchestrator;
+import controller.combatController.RandomBattleAI;
 
+import character.Character;
 import character.MainCharacter;
 
 import map.InvalidMapException;
@@ -188,6 +193,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	 * @param x the window x-coordinate
 	 * @param y the window y-coordinate
 	 * @return the tile corresponding to the given (x,y) coordinate in the window
+	 * @author rroelke
 	 */
 	public Tile getTile(int x, int y) {
 		return _currMap.getTile(getMapX(x), getMapY(y));
@@ -196,6 +202,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	/**
 	 * @param x
 	 * @return the x-index of the tile in the map given the x-coordinate in the window
+	 * @author rroelke
 	 */
 	public int getMapX(int x) {
 	//	System.out.print("xRef: " + _xRef);
@@ -205,6 +212,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	/**
 	 * @param y
 	 * @return the y-index of the tile in the map given the y-coordinate in the window
+	 * @author rroelke
 	 */
 	public int getMapY(int y) {
 		return (y / Tile.TILE_SIZE) + _yRef;
@@ -244,6 +252,38 @@ public class GameScreen extends Screen<GameScreenController> {
 	
 	public void switchToGameMenu() {
 		_dt.changeScreens(_dt.getGameMenuScreen());
+	}
+	
+	/**
+	 * transitions the game to a new combat
+	 * @author rroelke
+	 */
+	public void enterCombat(CombatOrchestrator orch) {
+		pushControl(orch);
+	}
+	
+	/**
+	 * transitions the game to a new combat
+	 * used principally for random battles
+	 * @param enemies
+	 * @author rroelke
+	 */
+	public void enterCombat(List<Character> enemies) {
+		RandomBattleAI enemy = new RandomBattleAI(_dt, enemies);
+		List<CombatController> e = new ArrayList<CombatController>();
+		e.add(enemy);
+		enterCombat(new CombatOrchestrator(_dt, e, null, null, RandomBattleAI.RANDOM_BATTLE_NUM_UNITS));
+	}
+	
+	/**
+	 * @param x the x-coordinate
+	 * @param y the y-coordinate
+	 * @param num the number of requested setup tiles
+	 * @return a list of valid setup tiles given a map position
+	 * @author rroelke
+	 */
+	public List<Tile> getValidSetupTiles(int num) {
+		return _currMap.getValidSetupTiles(_currMap.getTile(getMapX(getWidth()/2), getHeight()/2), num);
 	}
 }
 

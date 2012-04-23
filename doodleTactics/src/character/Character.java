@@ -86,6 +86,8 @@ public abstract class Character extends Rectangle{
 		_level = 1;
 		_inventory	= new HashMap<Integer,Item>();
 		_capacity = 5;
+		
+		_affiliation = null;
 
 		try {
 			_avatar = ImageIO.read(new File(avatar));
@@ -410,9 +412,18 @@ public abstract class Character extends Rectangle{
 	
 	/**
 	 * @return the combat controller this unit is affiliated with
+	 * @author rroelke
 	 */
 	public CombatController getAffiliation() {
 		return _affiliation;
+	}
+	
+	/**
+	 * affiliates the character with the given combat controller
+	 * @author rroelke
+	 */
+	public void affiliate(CombatController aff) {
+		_affiliation = aff;
 	}
 
 	public void printStats(){

@@ -1,5 +1,6 @@
 package controller.combatController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -26,8 +27,13 @@ public abstract class CombatController extends GameScreenController {
 	
 	protected List<CombatController> _enemyAffiliations;
 	
-	public CombatController(DoodleTactics dt) {
+	public CombatController(DoodleTactics dt, List<Character> units) {
 		super(dt);
+		_units = units;
+		_enemyAffiliations = new ArrayList<CombatController>();
+		
+		for (Character c : _units)
+			c.affiliate(this);
 	}
 	
 	/**
@@ -37,6 +43,14 @@ public abstract class CombatController extends GameScreenController {
 	public boolean hasMoved(Character c) {
 		Boolean m = _hasMoved.get(c);
 		return m != null && m;
+	}
+	
+	/**
+	 * sets the enemy affiliations of this combat controller
+	 * @param aff
+	 */
+	public void setEnemyAffiliations(List<CombatController> aff) {
+		_enemyAffiliations = aff;
 	}
 	
 	/**

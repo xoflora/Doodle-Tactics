@@ -3,8 +3,13 @@ package controller;
 import java.awt.Event;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
+
+import controller.combatController.RandomBattleAI;
+import character.Character;
 
 import main.DoodleTactics;
 import main.GameScreen;
@@ -70,6 +75,13 @@ public class OverworldController extends GameScreenController {
 		if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
 			//do stuff
 			_gameScreen.switchToGameMenu();
+		}
+		
+		/*	TEST COMBAT CONTROLLER STUFF:
+		 *  REMOVE WHEN DONE WITH ALL THAT
+		 */
+		else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			_gameScreen.enterCombat((List<Character>)new ArrayList<Character>());
 		}
 	}
 

@@ -1,7 +1,9 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Stack;
 
 import javax.swing.JFrame;
@@ -26,6 +28,7 @@ public class DoodleTactics extends JFrame {
 	
 	private Stack<Screen<?>> _screens;
 	private HashMap<String, Character> _allChars;
+	private List<Character> _party;
 	
 	public DoodleTactics() {
 		super("Doodle Tactics");
@@ -35,7 +38,9 @@ public class DoodleTactics extends JFrame {
 		_gameMenu = new GameMenuScreen(this);
 		_game = new GameScreen(this);
 		_mainMenu = new MainMenuScreen(this);
+		
 		_screens = new Stack<Screen<?>>();
+		_party = new ArrayList<Character>();
 		
 		this.changeScreens(_mainMenu);
 		this.setFocusable(false);
@@ -157,6 +162,25 @@ public class DoodleTactics extends JFrame {
 	
 	public MainMenuScreen getMainMenuScreen() {
 		return _mainMenu;
+	}
+	
+	/**
+	 * @return a list of all the units currently in the game
+	 */
+	public List<Character> characterList() {
+		List<Character> toReturn = new ArrayList<Character>();
+		
+		for (String s : _allChars.keySet())
+			toReturn.add(_allChars.get(s));
+		
+		return toReturn;
+	}
+	
+	/**
+	 * @return the player's party of units
+	 */
+	public List<Character> getParty() {
+		return _party;
 	}
 	
 	public static void main(String[] args) {

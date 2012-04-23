@@ -2,6 +2,7 @@ package controller.combatController;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -13,10 +14,29 @@ public class CombatOrchestrator extends GameScreenController {
 	
 	private List<CombatController> _factions;
 	private ListIterator<List<CombatController>> _it;
-	private boolean _begin;
+	private boolean _setup;
 	
-	public CombatOrchestrator(DoodleTactics dt) {
+	private int _numUnits;
+	
+	public CombatOrchestrator(DoodleTactics dt, List<CombatController> enemies, List<CombatController> partners,
+				List<CombatController> others, int numUnits) {
 		super(dt);
+		
+		_setup = false;
+		
+		PlayerCombatController player = new PlayerCombatController(dt);
+
+		if (partners == null)
+			partners = new ArrayList<CombatController>();
+		partners.add(player);
+		
+		for (CombatController p : partners)
+			p.setEnemyAffiliations(enemies);
+		
+		for (CombatController e : enemies)
+			e.setEnemyAffiliations(partners);
+		
+		_numUnits = numUnits;
 	}
 
 	@Override
@@ -35,7 +55,12 @@ public class CombatOrchestrator extends GameScreenController {
 	 */
 	public void take() {
 		// TODO Auto-generated method stub
-		
+		if (_setup) {
+			
+		}
+		else {
+			_gameScreen.pushControl(new PlayerSetup(_dt, _gameScreen.getValidSetupTiles(_numUnits)));
+		}
 	}
 
 	@Override

@@ -66,11 +66,11 @@ public class PlayerSetup extends GameScreenController {
 	private Tile _selectedTile;
 	private CharacterPool _pool;
 
-	public PlayerSetup(DoodleTactics dt, List<Tile> validTiles, List<Character> units) {
+	public PlayerSetup(DoodleTactics dt, List<Tile> validTiles) {
 		super(dt);
 		_validTiles = validTiles;
-		_units = units;
-		_toPlace = Util.clone(units);
+		_units = _dt.getParty();
+		_toPlace = Util.clone(_units);
 		_inPlace = new ArrayList<Character>();
 	}
 
@@ -96,6 +96,8 @@ public class PlayerSetup extends GameScreenController {
 			else
 				break;
 		}
+		
+		_pool.setVisible(true);
 	}
 
 	@Override

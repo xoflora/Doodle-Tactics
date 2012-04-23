@@ -23,7 +23,7 @@ import util.Heap;
 
 /**
  * 
- * @author rroelke
+ * @author rroelke (except where noted)
  * a Map is a segment of the game world during which gameplay occurs
  * implements Serializable, for saving purposes
  */
@@ -57,6 +57,8 @@ public class Map implements Serializable{
 	 * ...
 	 * 
 	 * (where x and y are 0-indexed)
+	 * 
+	 * @author czchapma
 	 */
 	public static Map map(JPanel container, String path) throws InvalidMapException {
 		int count = 2;
@@ -505,4 +507,48 @@ public class Map implements Serializable{
 		return m;
 	}
 
+	/**
+	 * @param source the tile to search from
+	 * @param num
+	 * @return a list of valid tiles for unit placement on this map (which happen to be the closest num
+	 * 			to the given tile)
+	 */
+	public List<Tile> getValidSetupTiles(Tile source, int num) {
+		final Hashtable<Tile, Integer> distances = new Hashtable<Tile, Integer>();
+		final Hashtable<Tile, Tile> previous = new Hashtable<Tile, Tile>();
+		final Hashtable<Tile, Integer> heapPositions = new Hashtable<Tile, Integer>();
+
+		Heap<Tile> heap = new Heap<Tile>(num,
+				new Comparator<Tile>() {
+			@Override
+			public int compare(Tile o1, Tile o2) {
+				int d1 = distances.get(o1);
+				int d2 = distances.get(o2);
+				if (d1 < d2)
+					return -1;
+				else if (d1 == d2)
+					return 0;
+				else
+					return 1;
+			}
+		});
+
+		distances.put(source, 0);
+		heapPositions.put(source, heap.insert(source));
+
+		LinkedList<Tile> validTiles = new LinkedList<Tile>();
+		Tile consider;
+
+		while (!heap.isEmpty()) {
+			consider = heap.extractMin();
+			heapPositions.put(consider, -1);
+			
+			if (validTiles.size() < num) {
+				validTiles.add(consider);
+				searchTile(consider, heap, distances, heapPositions, previous, true, true);
+			}
+		}
+
+		return validTiles;
+	}
 }
