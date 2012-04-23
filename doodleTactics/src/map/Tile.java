@@ -1,6 +1,5 @@
 package map;
 
-import java.awt.geom.RectangularShape;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -294,5 +293,13 @@ public class Tile extends graphics.Rectangle {
 	public boolean isAdjacent(Tile t) {
 		return t != null && ((_x == t._x && (_y == t._y + 1 || _y == t._y - 1))
 			|| (_y == t._y && (_x == t._x + 1 || _x == t._x - 1)));
+	}
+	
+	/**
+	 * sets the character contained within this tile to the given character
+	 * @param c the character
+	 */
+	public void setOccupant(Character c) {
+		_character = c;
 	}
 }

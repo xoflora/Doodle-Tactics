@@ -26,23 +26,34 @@ public abstract class Screen<T extends Controller> extends JPanel {
 		pushControl(defaultController());
 	}
 	
+	private void removeController(Controller c) {
+		removeMouseListener(c);
+		removeMouseMotionListener(c);
+		removeKeyListener(c);
+		
+		c.release();
+	}
+	
+	private void addController(Controller c) {
+		addMouseListener(c);
+		addMouseMotionListener(c);
+		addKeyListener(c);
+		
+		c.take();
+	}
+	
 	/**
 	 * sets the current control of the screen to the given controller
 	 * @param controller the new controller for the screen
 	 */
 	public void pushControl(T controller) {
-		if (getController() != null) {
-			removeMouseListener(getController());
-			removeMouseMotionListener(getController());
-			removeKeyListener(getController());
-		}
+		if (getController() != null)
+			removeController(getController());
 		
-		addMouseListener(controller);
-		addMouseMotionListener(controller);
-		addKeyListener(controller);
+		
+		addController(controller);
 		
 		_control.push(controller);
-		controller.take();
 	}
 	
 	/**
@@ -52,15 +63,8 @@ public abstract class Screen<T extends Controller> extends JPanel {
 	public T popControl() {
 		T toReturn = _control.pop();
 		
-		toReturn.release();
-		
-		removeMouseListener(toReturn);
-		removeMouseMotionListener(toReturn);
-		removeKeyListener(toReturn);
-		
-		addMouseListener(_control.peek());
-		addMouseMotionListener(_control.peek());
-		addKeyListener(_control.peek());
+		removeController(toReturn);
+		addController(_control.peek());
 		
 		return toReturn;
 	}

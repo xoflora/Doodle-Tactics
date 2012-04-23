@@ -13,7 +13,7 @@ import event.InvalidFileException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import controller.CombatController;
+import controller.combatController.CombatController;
 
 import graphics.Rectangle;
 import graphics.Shape;
@@ -340,6 +340,14 @@ public abstract class Character extends Rectangle{
 	
 	public BufferedImage getCurrentImage() {
 		return _currentImage;
+	}
+	
+	public BufferedImage getProfileImage() {
+		return _profile;
+	}
+	
+	public BufferedImage getDownImage() {
+		return _down;
 	}
 
 	/**

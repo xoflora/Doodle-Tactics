@@ -4,6 +4,8 @@ import java.awt.Event;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JFrame;
+
 import main.DoodleTactics;
 import main.GameScreen;
 import map.Tile;

@@ -135,4 +135,26 @@ public class UtilTester {
 		assert(cmp.contains(25));
 		assert(cmp.contains(49));
 	}
+	
+	@Test
+	/**
+	 * tests list cloning
+	 */
+	public void testListCloning() {
+		List<Integer> test = new LinkedList<Integer>();
+		List<Integer> cloned = Util.clone(test);
+		assert(cloned.isEmpty());
+		
+		test.add(9);
+		cloned = Util.clone(test);
+		assert(cloned.size() == 1 && cloned.get(0) == 9);
+		
+		test.clear();
+		for (int i = 0; i < 23; i++)
+			test.add(i);
+		cloned = Util.clone(test);
+		assert(cloned.size() == test.size());
+		for (int i = 0; i < 23; i++)
+			assert(cloned.get(i) == i);
+	}
 }
