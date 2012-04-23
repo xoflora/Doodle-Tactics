@@ -2,9 +2,9 @@ package controller;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.List;
 
+import main.DoodleTactics;
 import map.*;
 import character.Character;
 
@@ -20,6 +20,10 @@ public class PlayerCombatController extends CombatController {
 	
 	private List<Tile> _selectedMovementRange;
 	private List<Tile> _enemyAttackRange;
+	
+	public PlayerCombatController(DoodleTactics dt) {
+		super(dt);
+	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -84,6 +88,24 @@ public class PlayerCombatController extends CombatController {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	/**
+	 * ends the player's turn
+	 */
+	public void release() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	/**
+	 * begins the player's turn
+	 */
+	public void take() {
 		// TODO Auto-generated method stub
 		
 	}

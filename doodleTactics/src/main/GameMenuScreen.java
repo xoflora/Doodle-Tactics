@@ -55,7 +55,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	}
 	
 	protected GameMenuController defaultController() {
-		return new GameMenuController(this);
+		return new GameMenuController(_dt, this);
 	}
 
 	public void paintComponent(java.awt.Graphics g) {

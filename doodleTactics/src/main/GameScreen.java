@@ -76,7 +76,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	
 	@Override
 	protected GameScreenController defaultController() {
-		return new OverworldController(this);
+		return new OverworldController(_dt, this);
 	}
 	
 	private class MapMoveTimer extends Timer {

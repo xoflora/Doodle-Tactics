@@ -1,7 +1,9 @@
 package controller;
 
+import java.util.HashMap;
 import java.util.List;
 
+import main.DoodleTactics;
 import main.GameScreen;
 import map.*;
 import character.Character;
@@ -14,23 +16,31 @@ import character.Character;
 public abstract class CombatController extends GameScreenController {
 	protected List<Character> _characters;
 	protected GameScreen _gameScreen;
+	protected HashMap<Character, Boolean> _moved;
 	
 	protected Map _map;
+	
+	public CombatController(DoodleTactics dt) {
+		super(dt);
+	}
 	
 	public void move(Character c, List<Tile> path){
 		//TODO draw the character moving along the path of tiles
 	}
 	
 	@Override
-	public void take() {
-		// TODO
-	}
+	/**
+	 * takes control of combat
+	 * for this particular controller type, represents the beginning of a new turn
+	 */
+	public abstract void take();
 	
 	@Override
-	public void release() {
-		// TODO Auto-generated method stub
-		
-	}
+	/**
+	 * releases control of combat
+	 * for this particular controller type, represents the end of a turn (cleanup step)
+	 */
+	public abstract void release();
 	
 	/**
 	 * @param c the character to check

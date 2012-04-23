@@ -4,6 +4,8 @@ import graphics.MenuItem;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+
+import main.DoodleTactics;
 import main.GameMenuScreen;
 
 /** 
@@ -15,7 +17,8 @@ public class GameMenuController extends Controller {
 
 	private GameMenuScreen _gameMenu;
 	
-	public GameMenuController(GameMenuScreen gameMenu) {
+	public GameMenuController(DoodleTactics dt, GameMenuScreen gameMenu) {
+		super(dt);
 		_gameMenu = gameMenu;
 	}
 	

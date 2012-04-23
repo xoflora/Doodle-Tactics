@@ -4,12 +4,14 @@ import java.awt.Event;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
+import main.DoodleTactics;
 import main.GameScreen;
 import map.Tile;
 
 public class OverworldController extends GameScreenController {
 	
-	public OverworldController(GameScreen game) {
+	public OverworldController(DoodleTactics dt, GameScreen game) {
+		super(dt);
 		_gameScreen = game;
 	}
 	

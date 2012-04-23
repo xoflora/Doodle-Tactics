@@ -5,13 +5,15 @@ import graphics.MenuItem;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
+import main.DoodleTactics;
 import main.MainMenuScreen;
 
 public class MainMenuController extends Controller {
 
 	private MainMenuScreen _mainMenu;
 	
-	public MainMenuController(MainMenuScreen gameMenu) {
+	public MainMenuController(DoodleTactics dt, MainMenuScreen gameMenu) {
+		super(dt);
 		_mainMenu = gameMenu;
 		System.out.println(gameMenu);
 	}

@@ -55,7 +55,7 @@ public class MainMenuScreen extends Screen<MainMenuController> {
 		
 		
 	//	System.out.println(this);
-		return new MainMenuController(this);
+		return new MainMenuController(_dt, this);
 	}
 
 	@Override

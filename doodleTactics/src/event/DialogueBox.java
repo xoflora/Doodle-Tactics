@@ -37,7 +37,9 @@ public class DialogueBox extends Event {
 	 * @throws InvalidFileException --if something goes wrong during csv file parsing
 	 * @throws IOException, FileNotFoundException 
 	 */
-	public DialogueBox(String filename, HashMap<String,Character> allChars) throws InvalidFileException, IOException, FileNotFoundException{
+	public DialogueBox(DoodleTactics dt, String filename, HashMap<String,Character> allChars) throws InvalidFileException, IOException, FileNotFoundException{
+		super(dt);
+		
 		BufferedReader br = new BufferedReader(new FileReader(filename));
 		 _phrases = new LinkedList<String>();
 		 _characters = new LinkedList<Character>();

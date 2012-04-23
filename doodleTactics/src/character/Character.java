@@ -570,7 +570,7 @@ public abstract class Character extends Rectangle{
 			h.put("Jace", jace);
 			h.put("Margo", margo);
 
-			DialogueBox d = new DialogueBox("src/tests/data/testDemo",h);
+			DialogueBox d = new DialogueBox(null, "src/tests/data/testDemo",h);
 			d.print();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

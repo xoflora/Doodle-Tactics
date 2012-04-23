@@ -1,5 +1,6 @@
 package controller;
 
+import main.DoodleTactics;
 import main.GameScreen;
 
 /**
@@ -8,6 +9,11 @@ import main.GameScreen;
  *
  */
 public abstract class GameScreenController extends Controller {
+	
+	public GameScreenController(DoodleTactics dt) {
+		super(dt);
+	}
+
 	protected GameScreen _gameScreen;
 	
 	@Override
