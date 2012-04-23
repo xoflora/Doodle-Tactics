@@ -25,5 +25,4 @@ public class GameMenuItem extends MenuItem {
 		public void activate() {
 			//_dt.pushController(_control);
 		}
-		
 	}

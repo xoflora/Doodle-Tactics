@@ -3,7 +3,13 @@ package event;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-public class Warp extends Event{
+import main.DoodleTactics;
+
+public class Warp extends Event {
+	
+	public Warp(DoodleTactics dt) {
+		super(dt);
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {

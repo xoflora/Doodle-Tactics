@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import graphics.MenuItem;
 import graphics.ScreenChangeMenuItem;
 import controller.Controller;
+import controller.GameMenuController;
 import controller.OverworldController;
 
 /** 
@@ -13,7 +14,7 @@ import controller.OverworldController;
  */
 
 @SuppressWarnings("serial")
-public class GameMenuScreen extends Screen {
+public class GameMenuScreen extends Screen<GameMenuController> {
 
 	private MenuItem _units;
 	private MenuItem _quit;
@@ -22,17 +23,17 @@ public class GameMenuScreen extends Screen {
 	private MenuItem _options;
 	private MenuItem _title;
 	
-	public GameMenuScreen(Controller control, DoodleTactics dt) {
+	public GameMenuScreen(DoodleTactics dt) {
 		
-		super(control, dt);
+		super(dt);
 		this.setBackground(java.awt.Color.DARK_GRAY);
 		
-		_units = new MenuItem(this, "src/graphics/units.png","src/graphics/units_hovered.png", dt);
-		_map = new MenuItem(this, "src/graphics/map.png","src/graphics/map_hovered.png",dt);
-		_save = new MenuItem(this, "src/graphics/save.png","src/graphics/save_hovered.png",dt);
-		_options = new MenuItem(this, "src/graphics/options.png","src/graphics/options_hovered.png",dt);
-		_quit = new MenuItem(this, "src/graphics/quit_game_menu.png","src/graphics/quit_game_menu_hovered.png",dt);
-		_title = new MenuItem(this, "src/graphics/overlay.png", "src/graphics/overlay.png", dt);
+		_units = new MenuItem(this, "src/graphics/menu/units.png","src/graphics/menu/units_hovered.png", dt);
+		_map = new MenuItem(this, "src/graphics/menu/map.png","src/graphics/menu/map_hovered.png",dt);
+		_save = new MenuItem(this, "src/graphics/menu/save.png","src/graphics/menu/save_hovered.png",dt);
+		_options = new MenuItem(this, "src/graphics/menu/options.png","src/graphics/menu/options_hovered.png",dt);
+		_quit = new MenuItem(this, "src/graphics/menu/quit_game_menu.png","src/graphics/menu/quit_game_menu_hovered.png",dt);
+		_title = new MenuItem(this, "src/graphics/menu/overlay.png", "src/graphics/menu/overlay.png", dt);
 		
 		int buttonHeight = _units.getCurrentImage().getHeight();
 		int buffer = 5;
@@ -51,6 +52,10 @@ public class GameMenuScreen extends Screen {
 		_options.setVisible(true);
 		_quit.setVisible(true);
 		_title.setVisible(true);
+	}
+	
+	protected GameMenuController defaultController() {
+		return new GameMenuController(_dt, this);
 	}
 
 	public void paintComponent(java.awt.Graphics g) {

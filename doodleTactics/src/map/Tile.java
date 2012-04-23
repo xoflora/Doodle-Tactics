@@ -1,6 +1,5 @@
 package map;
 
-import java.awt.geom.RectangularShape;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,8 +19,26 @@ public class Tile extends graphics.Rectangle {
 
 	public static final int TILE_SIZE = 48;
 	
+	private static final char PERMISSION_NONE = '0';
+	private static final char PERMISSION_NORTH = '1';
+	private static final char PERMISSION_EAST = '2';
+	private static final char PERMISSION_NORTH_EAST = '3';
+	private static final char PERMISSION_SOUTH = '4';
+	private static final char PERMISSION_NORTH_SOUTH = '5';
+	private static final char PERMISSION_EAST_SOUTH = '6';
+	private static final char PERMISSION_NES = '7';
+	private static final char PERMISSION_WEST = '8';
+	private static final char PERMISSION_NORTH_WEST = '9';
+	private static final char PERMISSION_EAST_WEST = 'A';
+	private static final char PERMISSION_NEW = 'B';
+	private static final char PERMISSION_SOUTH_WEST = 'C';
+	private static final char PERMISSION_NSW = 'D';
+	private static final char PERMISSION_ESW = 'E';
+	private static final char PERMISSION_ALL = 'F';
+	
 	private boolean[] _canMove;
 	private int _cost;
+	private int _height;
 	private int _x;
 	private int _y;
 	
@@ -32,26 +49,34 @@ public class Tile extends graphics.Rectangle {
 	private Character _character;
 	private String _path;
 	
+	private boolean _inMovementRange;
+	private boolean _inAttackRange;
+	
 	/**
 	 * Constructor
 	 * @param container
 	 * @param path
 	 * @param x
 	 * @param y
+	 * @param height
+	 * @param cost
 	 */
-	public Tile(JPanel container, String path, int x, int y) {
+	public Tile(JPanel container, String path, int x, int y, int height, int cost) 
+			throws InvalidTileException {
 		super(container);
 		_path = path;
 		this.setSize(TILE_SIZE,TILE_SIZE);
 		
 		try {
 			_image = ImageIO.read(new File(path));
+		//	System.out.println(path);
 		} catch(IOException e) {
-			System.out.println("Bad file path!");
+			throw new InvalidTileException();
 		}
 		
 		_canMove = new boolean[4];
-		_cost = 1;
+		_cost = cost;
+		_height = height;
 		_x = x;
 		_y = y;
 	}
@@ -63,112 +88,112 @@ public class Tile extends graphics.Rectangle {
 	 */
 	public void setTilePermissions(char c) throws InvalidTileException {
 		switch (c) {
-			case '0': {
+			case PERMISSION_NONE: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '1': {
+			case PERMISSION_NORTH: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '2': {
+			case PERMISSION_EAST: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '3': {
+			case PERMISSION_NORTH_EAST: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '4': {
+			case PERMISSION_SOUTH: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = true;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '5': {
+			case PERMISSION_NORTH_SOUTH: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = true;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '6': {
+			case PERMISSION_EAST_SOUTH: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = true;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '7': {
+			case PERMISSION_NES: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = true;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '8': {
+			case PERMISSION_WEST: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = true;
 				break;
 			}
-			case '9': {
+			case PERMISSION_NORTH_WEST: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = true;
 				break;
 			}
-			case 'A': {
+			case PERMISSION_EAST_WEST: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = true;
 				break;
 			}
-			case 'B': {
+			case PERMISSION_NEW: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = true;
 				break;
 			}
-			case 'C': {
+			case PERMISSION_SOUTH_WEST: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = true;
 				_canMove[Map.WEST] = true;
 				break;
 			}
-			case 'D': {
+			case PERMISSION_NSW: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = true;
 				_canMove[Map.WEST] = true;
 				break;
 			}
-			case 'E': {
+			case PERMISSION_ESW: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = true;
 				_canMove[Map.WEST] = true;
 				break;
 			}
-			case 'F': {
+			case PERMISSION_ALL: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = true;
@@ -185,8 +210,8 @@ public class Tile extends graphics.Rectangle {
 	 * @return a new tile given by the string
 	 */
 	public static Tile tile(JPanel container, String path, char permissions,
-			int x, int y, int cost) throws InvalidTileException {
-		Tile t = new Tile(container, path, x, y);
+			int x, int y, int height, int cost) throws InvalidTileException {
+		Tile t = new Tile(container, path, x, y,height,cost);
 		t.setTilePermissions(permissions);
 		return t;
 	}
@@ -204,7 +229,7 @@ public class Tile extends graphics.Rectangle {
 	}
 	
 	/**
-	 * @return the movement cost of moving out of this tile
+	 * @return the movement cost of moving into this tile
 	 */
 	public int cost() {
 		return _cost;
@@ -240,4 +265,41 @@ public class Tile extends graphics.Rectangle {
 		return _character;
 	}
 	
+	/**
+	 * @return the cost attribute of the Tile
+	 */
+	public int getCost(){
+		return _cost;
+	}
+	
+	/**
+	 * indicates that the tile is within the player's movement range and should be drawn accordingly
+	 */
+	public void setInMovementRange(boolean b) {
+		_inMovementRange = b;
+	}
+	
+	/**
+	 * indicates that the tile is within the enemy attack range and should be drawn accordingly
+	 */
+	public void setInEnemyAttackRange(boolean b) {
+		_inAttackRange = b;
+	}
+	
+	/**
+	 * @param t a tile to compare
+	 * @return whether the given tile is adjacent on the map to this one
+	 */
+	public boolean isAdjacent(Tile t) {
+		return t != null && ((_x == t._x && (_y == t._y + 1 || _y == t._y - 1))
+			|| (_y == t._y && (_x == t._x + 1 || _x == t._x - 1)));
+	}
+	
+	/**
+	 * sets the character contained within this tile to the given character
+	 * @param c the character
+	 */
+	public void setOccupant(Character c) {
+		_character = c;
+	}
 }

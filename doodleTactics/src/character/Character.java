@@ -13,7 +13,7 @@ import event.InvalidFileException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import controller.CombatController;
+import controller.combatController.CombatController;
 
 import graphics.Rectangle;
 import graphics.Shape;
@@ -279,8 +279,13 @@ public abstract class Character extends Rectangle{
 	/** 
 	 * computes the attack range of the Character
 	 */
-	public void getAttackRange(){
+	public int getMinAttackRange(){
 		//TODO Ryan fills in
+		return 0;
+	}
+	
+	public int getMaxAttackRange() {
+		return 1;
 	}
 
 
@@ -335,6 +340,14 @@ public abstract class Character extends Rectangle{
 	
 	public BufferedImage getCurrentImage() {
 		return _currentImage;
+	}
+	
+	public BufferedImage getProfileImage() {
+		return _profile;
+	}
+	
+	public BufferedImage getDownImage() {
+		return _down;
 	}
 
 	/**
@@ -570,7 +583,7 @@ public abstract class Character extends Rectangle{
 			h.put("Jace", jace);
 			h.put("Margo", margo);
 
-			DialogueBox d = new DialogueBox("src/tests/data/testDemo",h);
+			DialogueBox d = new DialogueBox(null, "src/tests/data/testDemo",h);
 			d.print();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

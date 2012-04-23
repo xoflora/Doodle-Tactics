@@ -1,6 +1,8 @@
 package tests;
 
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -97,4 +99,62 @@ public class UtilTester {
         
         assert(test.isEmpty());
     }
+	
+	@Test
+	/**
+	 * tests the static union method of two lists
+	 */
+	public void testUnion() {
+		List<Integer> test1 = new LinkedList<Integer>();
+		List<Integer> test2 = new LinkedList<Integer>();
+		List<Integer> cmp;
+		
+		assert(Util.union(test1, test2).isEmpty());
+		
+		test1.add(2);
+		cmp = Util.union(test1, test2);
+		assert(cmp.size() == 1 && cmp.get(0) == 2);
+		
+		test2.add(3);
+		cmp = Util.union(test1, test2);
+		assert(cmp.size() == 2 && cmp.contains(2) && cmp.contains(3));
+		
+		test1.add(3);
+		cmp = Util.union(test1, test2);
+		assert(cmp.size() == 2 && cmp.contains(2) && cmp.contains(3));
+		
+		for (int i = 0; i < 8; i++) {
+			test1.add(4*i);
+			test2.add(i*i);
+		}
+		cmp = Util.union(test1, test2);
+		assert(cmp.size() == (test1.size() + test2.size() - 4));
+		assert(cmp.containsAll(test1));
+		assert(cmp.contains(1));
+		assert(cmp.contains(9));
+		assert(cmp.contains(25));
+		assert(cmp.contains(49));
+	}
+	
+	@Test
+	/**
+	 * tests list cloning
+	 */
+	public void testListCloning() {
+		List<Integer> test = new LinkedList<Integer>();
+		List<Integer> cloned = Util.clone(test);
+		assert(cloned.isEmpty());
+		
+		test.add(9);
+		cloned = Util.clone(test);
+		assert(cloned.size() == 1 && cloned.get(0) == 9);
+		
+		test.clear();
+		for (int i = 0; i < 23; i++)
+			test.add(i);
+		cloned = Util.clone(test);
+		assert(cloned.size() == test.size());
+		for (int i = 0; i < 23; i++)
+			assert(cloned.get(i) == i);
+	}
 }

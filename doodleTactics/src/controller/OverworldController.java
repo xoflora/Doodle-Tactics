@@ -4,15 +4,22 @@ import java.awt.Event;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JFrame;
+
+import main.DoodleTactics;
 import main.GameScreen;
 import map.Tile;
 
-public class OverworldController extends Controller {
-
-	protected GameScreen _gameScreen;
+public class OverworldController extends GameScreenController {
 	
-	public OverworldController(GameScreen game) {
+	public OverworldController(DoodleTactics dt, GameScreen game) {
+		super(dt);
 		_gameScreen = game;
+	}
+	
+	@Override
+	public void take() {
+		// TODO
 	}
 	
 	@Override
@@ -30,14 +37,13 @@ public class OverworldController extends Controller {
 		System.out.println("Map pos: " + _gameScreen.getMapX(e.getX()) + " " + _gameScreen.getMapY(e.getY()));
 		
 		if (t != null)
-			System.out.println(t.x() + " " + t.y());
+			System.out.println(t.x() + " " + t.y() + " " + (t.getOccupant() == null));
 
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -76,10 +82,9 @@ public class OverworldController extends Controller {
 	@Override
 	public void keyTyped(KeyEvent e) {
 
-		System.out.println("isAnimating:" + _gameScreen.isAnimating());
+	//	System.out.println("isAnimating:" + _gameScreen.isAnimating());
 		
-		if(!_gameScreen.isAnimating()) {
-					
+		if(!_gameScreen.isAnimating()) {			
 			
 			switch(e.getKeyChar()) {
 			

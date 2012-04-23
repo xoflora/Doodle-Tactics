@@ -6,10 +6,10 @@ import javax.swing.JPanel;
 import org.junit.*;
 
 import map.*;
-
+//TODO: (czchapma) Have Ryan to correct some of his tests, test working map, modify GameScreen accordingly
 /**
  * 
- * @author rroelke
+ * @author rroelke and czchapma
  * tests the classes and methods of the map package
  */
 public class MapTester {
@@ -20,31 +20,32 @@ public class MapTester {
 		return t.x() == x && t.y() == y;
 	}
 	
+
 	@BeforeClass
 	public static void setUpClass() throws Exception {
 		try {
 			JPanel panel = new JPanel();
-			Tile[][] tiles = new Tile[36][36];
+			Tile[][] tiles = new Tile[36][40];
 			for (int i = 0; i < tiles.length; i++)
 				for (int j = 0; j < tiles[i].length; j++)
-					tiles[i][j] = Tile.tile(panel, "src/graphics/tile.png", 'F', i, j, 1);
-			_test = new Map(tiles, "TestMap");
-			
+					tiles[i][j] = Tile.tile(panel, "src/graphics/tiles/tile.png", 'F', i, j, 1,0);
+			_test = new Map(tiles, "TestMap", null);
+
 			_test.getTile(7, 7).setCost(5);
 			_test.getTile(6, 8).setCost(2);
-			
+
 			_test.getTile(20, 17).setCost(7);
 			_test.getTile(21, 16).setCost(7);
 			_test.getTile(19, 16).setCost(2);
-			
+
 			_test.getTile(24, 12).setCost(6);
 			_test.getTile(24, 11).setCost(6);
 			_test.getTile(24, 13).setCost(2);
-			
+
 			_test.getTile(24, 4).setTilePermissions('A');
 			_test.getTile(25, 3).setTilePermissions('6');
 			_test.getTile(25, 4).setTilePermissions('A');
-			
+
 			_test.getTile(24, 23).setTilePermissions('0');
 			_test.getTile(24, 24).setTilePermissions('0');
 			_test.getTile(24, 25).setTilePermissions('0');
@@ -54,18 +55,21 @@ public class MapTester {
 			_test.getTile(25, 26).setCost(2);
 			_test.getTile(25, 25).setCost(2);
 			_test.getTile(22, 23).setCost(2);
-			
+
 			_test.getTile(30, 30).setTilePermissions('0');
-			
+
 			_test.getTile(32, 10).setTilePermissions('1');
 			
+			assert(_test.getWidth() == 36);
+			assert(_test.getHeight() == 40);
+
 		} catch(InvalidTileException e) {
 			assert(false);
 		}
-    }
+	}
 
-    @AfterClass
-    public static void tearDownClass() throws Exception {
+	@AfterClass
+	public static void tearDownClass() throws Exception {
     }
 
     @Before
@@ -76,6 +80,90 @@ public class MapTester {
     public void tearDown() {
     }
     
+    @Test
+    /**
+     * @author czchapma
+     * Tests parsing in a map file
+     */
+    public void testParseMap(){
+    	//Test error maps
+    	JPanel panel = new JPanel();
+    	String path = "src/tests/data/testMapError";
+    	
+    	//Error1: invalid first line
+    	try {
+			Map.map(panel, path + 1);
+			assert(false);
+		} catch (InvalidMapException e) {
+			assert(e.getMessage().equals("(line 1) Incorrect amount of data"));
+		}
+		
+		//Error2: invalid second line, too many items
+		try{
+			Map.map(panel, path + 2);
+			assert(false);
+		} catch(InvalidMapException e){
+			assert(e.getMessage().equals("(line 2) Incorrect amount of data"));
+		}
+		
+		//Error3: invalid second line, not an integer
+		try{
+			Map.map(panel, path + 3);
+			assert(false);
+		} catch(InvalidMapException e){
+			assert(e.getMessage().equals("(line 2) Expected int"));
+		}
+		
+		//Error4: tile line, not enough items
+		try{
+			Map.map(panel,path + 4);
+			assert(false);
+		} catch(InvalidMapException e){
+			assert(e.getMessage().equals("(line 7) Incorrect amount of data"));
+		}
+		
+		//Error 5: tile line, not an int
+		try{
+			Map.map(panel,path + 5);
+			assert(false);
+		} catch(InvalidMapException e){
+			assert(e.getMessage().equals("(line 6) Expected int"));
+		}
+		
+		//Error 6: duplicate location for tile
+		try{
+			Map.map(panel,path + 6);
+			assert(false);
+		} catch(InvalidMapException e){
+			assert(e.getMessage().equals("Two tiles at 1 and 0"));
+		}
+		
+		//Error 7: Incorrect tile permissions
+		try{
+			Map.map(panel,path + 7);
+			assert(false);
+		} catch(InvalidMapException e){
+			assert(e.getMessage().equals("(line 8) Invalid tile permissions"));
+		}
+		
+		//Error 8: Tile not within specified rang
+		try{
+			Map.map(panel,path + 8);
+			assert(false);
+		} catch(InvalidMapException e){
+			assert(e.getMessage().equals("(line 8) Not within given tile range"));
+		}
+		
+		//Working Map
+		try{
+			Map.map(panel,"src/tests/data/testMapDemo");
+
+		} catch(InvalidMapException e){
+			assert(false);
+		}
+    }
+    
+  
     @Test
     /**
      * tests the map's distance estimation
@@ -92,6 +180,25 @@ public class MapTester {
     	assert(_test.estimateDistance(_test.getTile(8, 8), _test.getTile(12, 5)) == 7);
     	assert(_test.estimateDistance(_test.getTile(8, 8), _test.getTile(0, 11)) == 11);
     	assert(_test.estimateDistance(_test.getTile(8, 8), _test.getTile(12, 11)) == 7);
+    }
+    
+    @Test
+    /**
+     * tests the adjacency functionality of the tiles in a map
+     */
+    public void testAdjacency() {
+    	Tile t = _test.getTile(10, 10);
+    	assert(t.isAdjacent(_test.getTile(9, 10)));
+    	assert(t.isAdjacent(_test.getTile(11, 10)));
+    	assert(t.isAdjacent(_test.getTile(10, 9)));
+    	assert(t.isAdjacent(_test.getTile(10, 11)));
+    	assert(!t.isAdjacent(_test.getTile(0, 10)));
+    	assert(!t.isAdjacent(_test.getTile(-5, 10)));
+    	assert(!t.isAdjacent(_test.getTile(10, 10)));
+    	assert(!t.isAdjacent(_test.getTile(11, 11)));
+    	assert(!t.isAdjacent(_test.getTile(11, 9)));
+    	assert(!t.isAdjacent(_test.getTile(9, 11)));
+    	assert(!t.isAdjacent(_test.getTile(9, 9)));
     }
 
 	@Test
@@ -423,6 +530,17 @@ public class MapTester {
 		compare.add(_test.getTile(25, 22));	compare.add(_test.getTile(26, 22));	compare.add(_test.getTile(27, 22));
 		compare.add(_test.getTile(26, 21));		
 		range = _test.getMovementRange(_test.getTile(25, 24), 4);
+		assert(compare.size() == range.size() && compare.containsAll(range));
+		
+		/*
+		 * test moving out of a high-cost tile
+		 */
+		compare = new LinkedList<Tile>();
+		compare.add(_test.getTile(21, 17));
+		compare.add(_test.getTile(19, 17));
+		compare.add(_test.getTile(20, 18));
+		compare.add(_test.getTile(20, 16));
+		range = _test.getMovementRange(_test.getTile(20, 17), 1);
 		assert(compare.size() == range.size() && compare.containsAll(range));
 	}
 	
