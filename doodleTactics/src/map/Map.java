@@ -240,6 +240,7 @@ public class Map implements Serializable{
 			boolean useCost, boolean usePermissions) {
 		Tile check;
 		Integer dist, compare;
+		
 		try {
 			check = getNorth(search);
 			if (check.canMove(SOUTH) || !usePermissions) {

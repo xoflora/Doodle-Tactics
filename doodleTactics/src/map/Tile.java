@@ -50,6 +50,9 @@ public class Tile extends graphics.Rectangle {
 	private Character _character;
 	private String _path;
 	
+	private boolean _inMovementRange;
+	private boolean _inAttackRange;
+	
 	/**
 	 * Constructor
 	 * @param container
@@ -227,7 +230,7 @@ public class Tile extends graphics.Rectangle {
 	}
 	
 	/**
-	 * @return the movement cost of moving out of this tile
+	 * @return the movement cost of moving into this tile
 	 */
 	public int cost() {
 		return _cost;
@@ -268,5 +271,28 @@ public class Tile extends graphics.Rectangle {
 	 */
 	public int getCost(){
 		return _cost;
+	}
+	
+	/**
+	 * indicates that the tile is within the player's movement range and should be drawn accordingly
+	 */
+	public void setInMovementRange(boolean b) {
+		_inMovementRange = b;
+	}
+	
+	/**
+	 * indicates that the tile is within the enemy attack range and should be drawn accordingly
+	 */
+	public void setInEnemyAttackRange(boolean b) {
+		_inAttackRange = b;
+	}
+	
+	/**
+	 * @param t a tile to compare
+	 * @return whether the given tile is adjacent on the map to this one
+	 */
+	public boolean isAdjacent(Tile t) {
+		return t != null && ((_x == t._x && (_y == t._y + 1 || _y == t._y - 1))
+			|| (_y == t._y && (_x == t._x + 1 || _x == t._x - 1)));
 	}
 }

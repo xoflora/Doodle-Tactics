@@ -181,6 +181,25 @@ public class MapTester {
     	assert(_test.estimateDistance(_test.getTile(8, 8), _test.getTile(0, 11)) == 11);
     	assert(_test.estimateDistance(_test.getTile(8, 8), _test.getTile(12, 11)) == 7);
     }
+    
+    @Test
+    /**
+     * tests the adjacency functionality of the tiles in a map
+     */
+    public void testAdjacency() {
+    	Tile t = _test.getTile(10, 10);
+    	assert(t.isAdjacent(_test.getTile(9, 10)));
+    	assert(t.isAdjacent(_test.getTile(11, 10)));
+    	assert(t.isAdjacent(_test.getTile(10, 9)));
+    	assert(t.isAdjacent(_test.getTile(10, 11)));
+    	assert(!t.isAdjacent(_test.getTile(0, 10)));
+    	assert(!t.isAdjacent(_test.getTile(-5, 10)));
+    	assert(!t.isAdjacent(_test.getTile(10, 10)));
+    	assert(!t.isAdjacent(_test.getTile(11, 11)));
+    	assert(!t.isAdjacent(_test.getTile(11, 9)));
+    	assert(!t.isAdjacent(_test.getTile(9, 11)));
+    	assert(!t.isAdjacent(_test.getTile(9, 9)));
+    }
 
 	@Test
 	/**
@@ -511,6 +530,17 @@ public class MapTester {
 		compare.add(_test.getTile(25, 22));	compare.add(_test.getTile(26, 22));	compare.add(_test.getTile(27, 22));
 		compare.add(_test.getTile(26, 21));		
 		range = _test.getMovementRange(_test.getTile(25, 24), 4);
+		assert(compare.size() == range.size() && compare.containsAll(range));
+		
+		/*
+		 * test moving out of a high-cost tile
+		 */
+		compare = new LinkedList<Tile>();
+		compare.add(_test.getTile(21, 17));
+		compare.add(_test.getTile(19, 17));
+		compare.add(_test.getTile(20, 18));
+		compare.add(_test.getTile(20, 16));
+		range = _test.getMovementRange(_test.getTile(20, 17), 1);
 		assert(compare.size() == range.size() && compare.containsAll(range));
 	}
 	
