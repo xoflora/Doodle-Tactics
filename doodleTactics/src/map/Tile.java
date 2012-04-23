@@ -39,6 +39,7 @@ public class Tile extends graphics.Rectangle {
 	
 	private boolean[] _canMove;
 	private int _cost;
+	private int _height;
 	private int _x;
 	private int _y;
 	
@@ -55,8 +56,10 @@ public class Tile extends graphics.Rectangle {
 	 * @param path
 	 * @param x
 	 * @param y
+	 * @param height
+	 * @param cost
 	 */
-	public Tile(JPanel container, String path, int x, int y) {
+	public Tile(JPanel container, String path, int x, int y, int height, int cost) {
 		super(container);
 		_path = path;
 		this.setSize(TILE_SIZE,TILE_SIZE);
@@ -68,7 +71,8 @@ public class Tile extends graphics.Rectangle {
 		}
 		
 		_canMove = new boolean[4];
-		_cost = 1;
+		_cost = cost;
+		_height = height;
 		_x = x;
 		_y = y;
 	}
@@ -202,8 +206,8 @@ public class Tile extends graphics.Rectangle {
 	 * @return a new tile given by the string
 	 */
 	public static Tile tile(JPanel container, String path, char permissions,
-			int x, int y, int cost) throws InvalidTileException {
-		Tile t = new Tile(container, path, x, y);
+			int x, int y, int height, int cost) throws InvalidTileException {
+		Tile t = new Tile(container, path, x, y,height,cost);
 		t.setTilePermissions(permissions);
 		return t;
 	}
@@ -257,4 +261,10 @@ public class Tile extends graphics.Rectangle {
 		return _character;
 	}
 	
+	/**
+	 * @return the cost attribute of the Tile
+	 */
+	public int getCost(){
+		return _cost;
+	}
 }

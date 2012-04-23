@@ -11,6 +11,7 @@ import controller.OverworldController;
 
 import character.MainCharacter;
 
+import map.InvalidMapException;
 import map.Map;
 import map.Tile;
 
@@ -46,7 +47,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		Tile[][] testTiles = new Tile[MAP_WIDTH][MAP_HEIGHT];
 		for(int i = 0; i < MAP_WIDTH; i++) {
 			for(int j = 0; j < MAP_HEIGHT; j++) {
-				testTiles[i][j] = new Tile(this,"src/graphics/tile.png", i, j);
+				testTiles[i][j] = new Tile(this,"src/graphics/tile.png", i, j,1,1);
 				testTiles[i][j].setVisible(true);
 			}
 		}		
@@ -69,8 +70,12 @@ public class GameScreen extends Screen<GameScreenController> {
 		int overflow = (65-48)/2;
 		_mainCharacter.setLocation((10*Tile.TILE_SIZE)-overflow, 8*Tile.TILE_SIZE);
 		_mainCharacter.setVisible(true);
-		_currMap = new Map(testTiles,"c-level demo map");
-		
+		//_currMap = new Map(testTiles,"c-level demo map");
+		try {
+			_currMap = Map.map(this, "demoMap");
+		} catch (InvalidMapException e) {
+			e.printMessage();
+		}
 		this.repaint();
 	}
 	

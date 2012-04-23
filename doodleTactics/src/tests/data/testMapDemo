@@ -1,0 +1,7 @@
+DemoMap,src/tests/data/tile.png,src/tests/data/tile.png
+20,20
+0,0,F,src/tests/data/grass.png,0,0
+1,0,F,src/tests/data/grass.png,0,0
+2,0,F,src/tests/data/grass.png,0,0
+3,0,F,src/tests/data/grass.png,0,0
+4,0,F,src/tests/data/grass.png,0,0

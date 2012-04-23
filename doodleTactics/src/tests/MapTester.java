@@ -6,10 +6,10 @@ import javax.swing.JPanel;
 import org.junit.*;
 
 import map.*;
-
+//TODO: (czchapma) Have Ryan to correct some of his tests, test working map, modify GameScreen accordingly
 /**
  * 
- * @author rroelke
+ * @author rroelke and czchapma
  * tests the classes and methods of the map package
  */
 public class MapTester {
@@ -20,6 +20,7 @@ public class MapTester {
 		return t.x() == x && t.y() == y;
 	}
 	
+	
 	@BeforeClass
 	public static void setUpClass() throws Exception {
 		try {
@@ -27,8 +28,8 @@ public class MapTester {
 			Tile[][] tiles = new Tile[36][36];
 			for (int i = 0; i < tiles.length; i++)
 				for (int j = 0; j < tiles[i].length; j++)
-					tiles[i][j] = Tile.tile(panel, "src/graphics/tile.png", 'F', i, j, 1);
-			_test = new Map(tiles, "TestMap");
+					tiles[i][j] = Tile.tile(panel, "src/graphics/tile.png", 'F', i, j, 1,0);
+			_test = new Map(tiles, "TestMap", new Tile(panel,"src/graphics/tile.png",-1,-1,-1,-1));
 			
 			_test.getTile(7, 7).setCost(5);
 			_test.getTile(6, 8).setCost(2);
@@ -76,6 +77,90 @@ public class MapTester {
     public void tearDown() {
     }
     
+    @Test
+    /**
+     * @author czchapma
+     * Tests parsing in a map file
+     */
+    public void testParseMap(){
+    	//Test error maps
+    	JPanel panel = new JPanel();
+    	String path = "src/tests/data/testMapError";
+    	
+    	//Error1: invalid first line
+    	try {
+			Map.map(panel, path + 1);
+			assert(false);
+		} catch (InvalidMapException e) {
+			assert(e.getMessage().equals("(line 1) Incorrect amount of data"));
+		}
+		
+		//Error2: invalid second line, too many items
+		try{
+			Map.map(panel, path + 2);
+			assert(false);
+		} catch(InvalidMapException e){
+			assert(e.getMessage().equals("(line 2) Incorrect amount of data"));
+		}
+		
+		//Error3: invalid second line, not an integer
+		try{
+			Map.map(panel, path + 3);
+			assert(false);
+		} catch(InvalidMapException e){
+			assert(e.getMessage().equals("(line 2) Expected int"));
+		}
+		
+		//Error4: tile line, not enough items
+		try{
+			Map.map(panel,path + 4);
+			assert(false);
+		} catch(InvalidMapException e){
+			assert(e.getMessage().equals("(line 7) Incorrect amount of data"));
+		}
+		
+		//Error 5: tile line, not an int
+		try{
+			Map.map(panel,path + 5);
+			assert(false);
+		} catch(InvalidMapException e){
+			assert(e.getMessage().equals("(line 6) Expected int"));
+		}
+		
+		//Error 6: duplicate location for tile
+		try{
+			Map.map(panel,path + 6);
+			assert(false);
+		} catch(InvalidMapException e){
+			assert(e.getMessage().equals("Two tiles at 1 and 0"));
+		}
+		
+		//Error 7: Incorrect tile permissions
+		try{
+			Map.map(panel,path + 7);
+			assert(false);
+		} catch(InvalidMapException e){
+			assert(e.getMessage().equals("(line 8) Invalid tile permissions"));
+		}
+		
+		//Error 8: Tile not within specified rang
+		try{
+			Map.map(panel,path + 8);
+			assert(false);
+		} catch(InvalidMapException e){
+			assert(e.getMessage().equals("(line 8) Not within given tile range"));
+		}
+		
+		//Working Map
+		try{
+			Map.map(panel,"src/tests/data/testMapDemo");
+
+		} catch(InvalidMapException e){
+			assert(false);
+		}
+    }
+    
+  
     @Test
     /**
      * tests the map's distance estimation

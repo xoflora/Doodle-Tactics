@@ -7,5 +7,16 @@ package map;
  */
 @SuppressWarnings("serial")
 public class InvalidMapException extends Exception {
-
+	String _error;
+	public InvalidMapException(String reason){
+		_error = reason;
+	}
+	
+	public void printMessage(){
+		System.out.println("Invalid Map: " + _error);
+	}
+	
+	public String getMessage(){
+		return _error;
+	}
 }
