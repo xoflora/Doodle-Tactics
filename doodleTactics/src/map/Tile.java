@@ -59,15 +59,17 @@ public class Tile extends graphics.Rectangle {
 	 * @param height
 	 * @param cost
 	 */
-	public Tile(JPanel container, String path, int x, int y, int height, int cost) {
+	public Tile(JPanel container, String path, int x, int y, int height, int cost) 
+			throws InvalidTileException {
 		super(container);
 		_path = path;
 		this.setSize(TILE_SIZE,TILE_SIZE);
 		
 		try {
 			_image = ImageIO.read(new File(path));
+		//	System.out.println(path);
 		} catch(IOException e) {
-			System.out.println("Bad file path!");
+			throw new InvalidTileException();
 		}
 		
 		_canMove = new boolean[4];

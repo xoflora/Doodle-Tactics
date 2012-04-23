@@ -57,7 +57,9 @@ public class PlayerCombatController extends CombatController {
 	/**
 	 * does nothing
 	 */
-	public void mouseEntered(MouseEvent e) { }
+	public void mouseEntered(MouseEvent e) {
+		System.out.println("hi");
+	}
 
 	@Override
 	/**

@@ -26,11 +26,11 @@ public class MainMenuScreen extends Screen<MainMenuController> {
 		super(dt);
 		
 		this.setBackground(java.awt.Color.GRAY);
-		_title = new MenuItem(this, "src/graphics/title.png","src/graphics/title.png", dt);
-		_newGame = new ScreenChangeMenuItem(this, "src/graphics/new_game.png","src/graphics/new_game_hovered.png", dt, dt.getGameScreen());
+		_title = new MenuItem(this, "src/graphics/menu/title.png","src/graphics/menu/title.png", dt);
+		_newGame = new ScreenChangeMenuItem(this, "src/graphics/menu/new_game.png","src/graphics/menu/new_game_hovered.png", dt, dt.getGameScreen());
 		
-		_continue = new MenuItem(this, "src/graphics/continue.png","src/graphics/continue_hovered.png", dt);
-		_quit = new MenuItem(this, "src/graphics/quit.png","src/graphics/quit_hovered.png", dt);
+		_continue = new MenuItem(this, "src/graphics/menu/continue.png","src/graphics/menu/continue_hovered.png", dt);
+		_quit = new MenuItem(this, "src/graphics/menu/quit.png","src/graphics/menu/quit_hovered.png", dt);
 		_title.setLocation(((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _title.getCurrentImage().getWidth())/2, 50);
 		int offset = ((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _newGame.getCurrentImage().getWidth())/2;
 		

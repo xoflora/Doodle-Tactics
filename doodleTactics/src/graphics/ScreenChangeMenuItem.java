@@ -19,12 +19,7 @@ public class ScreenChangeMenuItem extends MenuItem {
 	}
 
 	@Override
-	public void activate() {
-		
-	//	System.out.println("crucnh" + (_nextScreen == _dt.getGameScreen()));
-		
+	public void activate() {		
 		_dt.changeScreens(_nextScreen);
-	
-	//	_dt.pushController(_control);
 	}
 }

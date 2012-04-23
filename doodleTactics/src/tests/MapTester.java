@@ -20,32 +20,32 @@ public class MapTester {
 		return t.x() == x && t.y() == y;
 	}
 	
-	
+
 	@BeforeClass
 	public static void setUpClass() throws Exception {
 		try {
 			JPanel panel = new JPanel();
-			Tile[][] tiles = new Tile[36][36];
+			Tile[][] tiles = new Tile[36][40];
 			for (int i = 0; i < tiles.length; i++)
 				for (int j = 0; j < tiles[i].length; j++)
-					tiles[i][j] = Tile.tile(panel, "src/graphics/tile.png", 'F', i, j, 1,0);
-			_test = new Map(tiles, "TestMap", new Tile(panel,"src/graphics/tile.png",-1,-1,-1,-1));
-			
+					tiles[i][j] = Tile.tile(panel, "src/graphics/tiles/tile.png", 'F', i, j, 1,0);
+			_test = new Map(tiles, "TestMap", null);
+
 			_test.getTile(7, 7).setCost(5);
 			_test.getTile(6, 8).setCost(2);
-			
+
 			_test.getTile(20, 17).setCost(7);
 			_test.getTile(21, 16).setCost(7);
 			_test.getTile(19, 16).setCost(2);
-			
+
 			_test.getTile(24, 12).setCost(6);
 			_test.getTile(24, 11).setCost(6);
 			_test.getTile(24, 13).setCost(2);
-			
+
 			_test.getTile(24, 4).setTilePermissions('A');
 			_test.getTile(25, 3).setTilePermissions('6');
 			_test.getTile(25, 4).setTilePermissions('A');
-			
+
 			_test.getTile(24, 23).setTilePermissions('0');
 			_test.getTile(24, 24).setTilePermissions('0');
 			_test.getTile(24, 25).setTilePermissions('0');
@@ -55,18 +55,21 @@ public class MapTester {
 			_test.getTile(25, 26).setCost(2);
 			_test.getTile(25, 25).setCost(2);
 			_test.getTile(22, 23).setCost(2);
-			
+
 			_test.getTile(30, 30).setTilePermissions('0');
-			
+
 			_test.getTile(32, 10).setTilePermissions('1');
 			
+			assert(_test.getWidth() == 36);
+			assert(_test.getHeight() == 40);
+
 		} catch(InvalidTileException e) {
 			assert(false);
 		}
-    }
+	}
 
-    @AfterClass
-    public static void tearDownClass() throws Exception {
+	@AfterClass
+	public static void tearDownClass() throws Exception {
     }
 
     @Before

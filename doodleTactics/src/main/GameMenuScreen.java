@@ -28,12 +28,12 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		super(dt);
 		this.setBackground(java.awt.Color.DARK_GRAY);
 		
-		_units = new MenuItem(this, "src/graphics/units.png","src/graphics/units_hovered.png", dt);
-		_map = new MenuItem(this, "src/graphics/map.png","src/graphics/map_hovered.png",dt);
-		_save = new MenuItem(this, "src/graphics/save.png","src/graphics/save_hovered.png",dt);
-		_options = new MenuItem(this, "src/graphics/options.png","src/graphics/options_hovered.png",dt);
-		_quit = new MenuItem(this, "src/graphics/quit_game_menu.png","src/graphics/quit_game_menu_hovered.png",dt);
-		_title = new MenuItem(this, "src/graphics/overlay.png", "src/graphics/overlay.png", dt);
+		_units = new MenuItem(this, "src/graphics/menu/units.png","src/graphics/menu/units_hovered.png", dt);
+		_map = new MenuItem(this, "src/graphics/menu/map.png","src/graphics/menu/map_hovered.png",dt);
+		_save = new MenuItem(this, "src/graphics/menu/save.png","src/graphics/menu/save_hovered.png",dt);
+		_options = new MenuItem(this, "src/graphics/menu/options.png","src/graphics/menu/options_hovered.png",dt);
+		_quit = new MenuItem(this, "src/graphics/menu/quit_game_menu.png","src/graphics/menu/quit_game_menu_hovered.png",dt);
+		_title = new MenuItem(this, "src/graphics/menu/overlay.png", "src/graphics/menu/overlay.png", dt);
 		
 		int buttonHeight = _units.getCurrentImage().getHeight();
 		int buffer = 5;

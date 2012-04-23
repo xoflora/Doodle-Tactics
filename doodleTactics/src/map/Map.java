@@ -1,8 +1,10 @@
 package map;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,6 +16,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.LinkedList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import util.Heap;
@@ -31,11 +34,11 @@ public class Map implements Serializable{
 	public static final int SOUTH = 2;
 	public static final int WEST = 3;
 
-	private Tile _overflow;
+	private BufferedImage _overflow;
 	private Tile[][] _map;
 	String _name;
 
-	public Map(Tile[][] tiles, String name, Tile overflow) {
+	public Map(Tile[][] tiles, String name, BufferedImage overflow) {
 		_map = tiles;
 		_overflow = overflow;
 		_name = "";
@@ -55,15 +58,16 @@ public class Map implements Serializable{
 	 * 
 	 * (where x and y are 0-indexed)
 	 */
-	public static Map map(JPanel container, String permissionFile)
-	throws InvalidMapException {
+	public static Map map(JPanel container, String path) throws InvalidMapException {
 		int count = 2;
 		try {
 			//Parse initial data
-			BufferedReader reader = new BufferedReader(new FileReader(new File(permissionFile)));
+			BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
 			String[] splitLine = reader.readLine().split(",");
+			
 			if(splitLine.length != 3)
 				throw new InvalidMapException("(line 1) Incorrect amount of data");
+			
 			String name = splitLine[0];
 			String defaultPath = splitLine[1];
 			String overflowPath = splitLine[2];
@@ -91,23 +95,25 @@ public class Map implements Serializable{
 				if(tiles[x][y] != null)
 					throw new InvalidMapException("Two tiles at " + x + " and " + y);
 
-				tiles[x][y] = Tile.tile(container,splitLine[3], splitLine[2].charAt(0),x,y,Integer.parseInt(splitLine[4]),Integer.parseInt(splitLine[5]));
+				tiles[x][y] = Tile.tile(container, splitLine[3], splitLine[2].charAt(0),x,y,Integer.parseInt(splitLine[4]),Integer.parseInt(splitLine[5]));
 				line = reader.readLine();
 			}
 
 			//Set all currently null tiles to default
-			for(x = 0; x<numX; x++){
-				for(y = 0; y <numY; y++){
-					if(tiles[x][y] == null)
-						tiles[y][x] = Tile.tile(container, defaultPath, 'F', y, x, 0, 0);
+			for(x = 0; x < numX; x++){
+				for(y = 0; y < numY; y++){
+					if (tiles[x][y] == null)
+						tiles[x][y] = Tile.tile(container, defaultPath, 'F', x, y, 0, 0);
 				}
 			}
 			
 			//Create Map
-			return new Map(tiles,name,Tile.tile(container, overflowPath, '0', -1,-1,-1,-1));
+			return new Map(tiles,name, ImageIO.read(new File(defaultPath)));
 
+		} catch(FileNotFoundException e) {
+			throw new InvalidMapException("Error reading map from file located at " + path + ".");
 		} catch(IOException e) {
-			throw new InvalidMapException("Something went wrong while reading the file");
+			throw new InvalidMapException("Something went wrong while reading the file.");
 		} catch(NumberFormatException e) {
 			String msg = "Expected int";
 			if(count > 2)
@@ -116,7 +122,7 @@ public class Map implements Serializable{
 				msg = "(line 2) " + msg;
 			throw new InvalidMapException(msg);
 		} catch (InvalidTileException e) {
-			String msg = "Invalid tile permissions";
+			String msg = "Invalid tile ";
 			if(count > 2)
 				msg = "(line " + count + ") " + msg;
 			throw new InvalidMapException(msg);
@@ -162,6 +168,20 @@ public class Map implements Serializable{
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return null;
 		}
+	}
+	
+	/**
+	 * @return the number of columns of the map
+	 */
+	public int getWidth() {
+		return _map.length;
+	}
+	
+	/**
+	 * @return the number of rows of the map
+	 */
+	public int getHeight() {
+		return _map[0].length;
 	}
 
 	/**
