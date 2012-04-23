@@ -244,7 +244,6 @@ public class GameScreen extends Screen<GameScreenController> {
 	
 	public void switchToGameMenu() {
 		_dt.changeScreens(_dt.getGameMenuScreen());
-	//	_dt.pushController(_gameMenuController);
 	}
 }
 

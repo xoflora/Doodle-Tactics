@@ -35,14 +35,13 @@ public class OverworldController extends GameScreenController {
 		System.out.println("Map pos: " + _gameScreen.getMapX(e.getX()) + " " + _gameScreen.getMapY(e.getY()));
 		
 		if (t != null)
-			System.out.println(t.x() + " " + t.y());
+			System.out.println(t.x() + " " + t.y() + " " + (t.getOccupant() == null));
 
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -81,10 +80,9 @@ public class OverworldController extends GameScreenController {
 	@Override
 	public void keyTyped(KeyEvent e) {
 
-		System.out.println("isAnimating:" + _gameScreen.isAnimating());
+	//	System.out.println("isAnimating:" + _gameScreen.isAnimating());
 		
-		if(!_gameScreen.isAnimating()) {
-					
+		if(!_gameScreen.isAnimating()) {			
 			
 			switch(e.getKeyChar()) {
 			

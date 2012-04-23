@@ -1,4 +1,4 @@
-DemoMap,src/graphics/tiles/grass.png,src/graphics/tiles/grass.png
+DemoMap,src/graphics/tiles/tile.png,src/graphics/tiles/grass.png
 20,20
 0,0,F,src/graphics/tiles/grass.png,0,0
 1,0,F,src/graphics/tiles/grass.png,0,0

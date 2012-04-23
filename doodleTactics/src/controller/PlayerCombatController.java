@@ -20,6 +20,7 @@ public class PlayerCombatController extends CombatController {
 	
 	private Tile _selectedTile;
 	private Character _selectedCharacter;
+	private Character _hovered;
 	
 	private List<Tile> _selectedMovementRange;
 	private List<Tile> _enemyAttackRange;
@@ -58,7 +59,7 @@ public class PlayerCombatController extends CombatController {
 	 * does nothing
 	 */
 	public void mouseEntered(MouseEvent e) {
-		System.out.println("hi");
+		
 	}
 
 	@Override
@@ -106,7 +107,10 @@ public class PlayerCombatController extends CombatController {
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		Tile t = _gameScreen.getTile(e.getX(), e.getY());
+		if (t != null) {
+			_hovered = t.getOccupant();
+		}
 	}
 
 	@Override
