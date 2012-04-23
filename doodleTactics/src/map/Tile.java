@@ -20,6 +20,23 @@ public class Tile extends graphics.Rectangle {
 
 	public static final int TILE_SIZE = 48;
 	
+	private static final char PERMISSION_NONE = '0';
+	private static final char PERMISSION_NORTH = '1';
+	private static final char PERMISSION_EAST = '2';
+	private static final char PERMISSION_NORTH_EAST = '3';
+	private static final char PERMISSION_SOUTH = '4';
+	private static final char PERMISSION_NORTH_SOUTH = '5';
+	private static final char PERMISSION_EAST_SOUTH = '6';
+	private static final char PERMISSION_NES = '7';
+	private static final char PERMISSION_WEST = '8';
+	private static final char PERMISSION_NORTH_WEST = '9';
+	private static final char PERMISSION_EAST_WEST = 'A';
+	private static final char PERMISSION_NEW = 'B';
+	private static final char PERMISSION_SOUTH_WEST = 'C';
+	private static final char PERMISSION_NSW = 'D';
+	private static final char PERMISSION_ESW = 'E';
+	private static final char PERMISSION_ALL = 'F';
+	
 	private boolean[] _canMove;
 	private int _cost;
 	private int _x;
@@ -63,112 +80,112 @@ public class Tile extends graphics.Rectangle {
 	 */
 	public void setTilePermissions(char c) throws InvalidTileException {
 		switch (c) {
-			case '0': {
+			case PERMISSION_NONE: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '1': {
+			case PERMISSION_NORTH: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '2': {
+			case PERMISSION_EAST: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '3': {
+			case PERMISSION_NORTH_EAST: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '4': {
+			case PERMISSION_SOUTH: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = true;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '5': {
+			case PERMISSION_NORTH_SOUTH: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = true;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '6': {
+			case PERMISSION_EAST_SOUTH: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = true;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '7': {
+			case PERMISSION_NES: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = true;
 				_canMove[Map.WEST] = false;
 				break;
 			}
-			case '8': {
+			case PERMISSION_WEST: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = true;
 				break;
 			}
-			case '9': {
+			case PERMISSION_NORTH_WEST: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = true;
 				break;
 			}
-			case 'A': {
+			case PERMISSION_EAST_WEST: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = true;
 				break;
 			}
-			case 'B': {
+			case PERMISSION_NEW: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = false;
 				_canMove[Map.WEST] = true;
 				break;
 			}
-			case 'C': {
+			case PERMISSION_SOUTH_WEST: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = true;
 				_canMove[Map.WEST] = true;
 				break;
 			}
-			case 'D': {
+			case PERMISSION_NSW: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = false;
 				_canMove[Map.SOUTH] = true;
 				_canMove[Map.WEST] = true;
 				break;
 			}
-			case 'E': {
+			case PERMISSION_ESW: {
 				_canMove[Map.NORTH] = false;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = true;
 				_canMove[Map.WEST] = true;
 				break;
 			}
-			case 'F': {
+			case PERMISSION_ALL: {
 				_canMove[Map.NORTH] = true;
 				_canMove[Map.EAST] = true;
 				_canMove[Map.SOUTH] = true;
