@@ -143,12 +143,13 @@ public class GameScreen extends Screen<GameScreenController> {
 						repaint();
 					}
 				}
-				_cnt+=1;
-				if (_cnt == _numSteps) {
-					_isAnimating = false;
-					_timer.stop();
-				}
+			System.out.println("cnt: " + _cnt);
+			_cnt+=1;
+			if (_cnt == _numSteps) {
+				_isAnimating = false;
+				_timer.stop();
 			}
+		}
 		}
 	}
 
@@ -162,8 +163,6 @@ public class GameScreen extends Screen<GameScreenController> {
 	}
 	
 	public void mapUpdate(int x, int y) {
-		
-		// oh my god this is soooooo awesome
 		
 		/* if in the bounds of the map, specifically in relation to the main character,
 		 * update the screen reference points and animate the map */
@@ -286,7 +285,6 @@ public class GameScreen extends Screen<GameScreenController> {
 		return _currMap.getValidSetupTiles(_currMap.getTile(getMapX(getWidth()/2), getHeight()/2), num);
 	}
 }
-
 
 //package main;
 //
