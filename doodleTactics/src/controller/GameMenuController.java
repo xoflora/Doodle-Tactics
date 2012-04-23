@@ -20,6 +20,16 @@ public class GameMenuController extends Controller {
 	}
 	
 	@Override
+	public GameMenuScreen getScreen() {
+		return _gameMenu;
+	}
+	
+	@Override
+	public void take() {
+		// TODO
+	}
+	
+	@Override
 	public void release() {
 		// TODO Auto-generated method stub
 	}

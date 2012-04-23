@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import graphics.MenuItem;
 import graphics.ScreenChangeMenuItem;
 import controller.Controller;
+import controller.GameMenuController;
 import controller.OverworldController;
 
 /** 
@@ -13,7 +14,7 @@ import controller.OverworldController;
  */
 
 @SuppressWarnings("serial")
-public class GameMenuScreen extends Screen {
+public class GameMenuScreen extends Screen<GameMenuController> {
 
 	private MenuItem _units;
 	private MenuItem _quit;
@@ -22,9 +23,9 @@ public class GameMenuScreen extends Screen {
 	private MenuItem _options;
 	private MenuItem _title;
 	
-	public GameMenuScreen(Controller control, DoodleTactics dt) {
+	public GameMenuScreen(DoodleTactics dt) {
 		
-		super(control, dt);
+		super(dt);
 		this.setBackground(java.awt.Color.DARK_GRAY);
 		
 		_units = new MenuItem(this, "src/graphics/units.png","src/graphics/units_hovered.png", dt);
@@ -51,6 +52,10 @@ public class GameMenuScreen extends Screen {
 		_options.setVisible(true);
 		_quit.setVisible(true);
 		_title.setVisible(true);
+	}
+	
+	protected GameMenuController defaultController() {
+		return new GameMenuController(this);
 	}
 
 	public void paintComponent(java.awt.Graphics g) {

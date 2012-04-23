@@ -7,12 +7,15 @@ import java.awt.event.MouseEvent;
 import main.GameScreen;
 import map.Tile;
 
-public class OverworldController extends Controller {
-
-	protected GameScreen _gameScreen;
+public class OverworldController extends GameScreenController {
 	
 	public OverworldController(GameScreen game) {
 		_gameScreen = game;
+	}
+	
+	@Override
+	public void take() {
+		// TODO
 	}
 	
 	@Override

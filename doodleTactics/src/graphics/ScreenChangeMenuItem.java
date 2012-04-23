@@ -9,24 +9,22 @@ import main.Screen;
 
 public class ScreenChangeMenuItem extends MenuItem {
 
-	private Screen _nextScreen;
-	private Controller _control;
+	private Screen<? extends Controller> _nextScreen;
 	
 	public ScreenChangeMenuItem(JPanel container, String defltPath, String hoveredPath,
-			DoodleTactics dt, Screen screen, Controller control) {
+			DoodleTactics dt, Screen<? extends Controller> screen) {
+		
 		super(container, defltPath, hoveredPath, dt);
 		_nextScreen = screen;
-		_control = control;
 	}
-
-	/**
-	 * 
-	 */
 
 	@Override
 	public void activate() {
-		_dt.setScreen(_nextScreen);
-		_dt.pushController(_control);
-	}
+		
+	//	System.out.println("crucnh" + (_nextScreen == _dt.getGameScreen()));
+		
+		_dt.changeScreens(_nextScreen);
 	
+	//	_dt.pushController(_control);
+	}
 }

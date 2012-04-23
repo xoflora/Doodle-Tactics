@@ -10,5 +10,8 @@ public abstract class Controller implements MouseListener, KeyListener, MouseMot
 	
 	protected DoodleTactics _dt;
 	
+	public abstract void take();
 	public abstract void release();
+	
+	public abstract Screen<? extends Controller> getScreen();
 }

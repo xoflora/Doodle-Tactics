@@ -23,8 +23,15 @@ public class PlayerCombatController extends CombatController {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		Tile t = _gameScreen.getTile(e.getX(), e.getY());
+		if (t != null && t.getOccupant() != null) {
+			if (t.getOccupant().getAffiliation() == this) {
+				_selectedTile = t;
+			}
+			else {
+				//add attack range to the attack range list
+			}
+		}
 	}
 
 	@Override

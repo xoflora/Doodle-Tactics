@@ -1,13 +1,14 @@
 package main;
 
+import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Stack;
 
 import javax.swing.JFrame;
 
 import controller.Controller;
-import controller.MainMenuController;
-import controller.OverworldController;
+
+import character.Character;
 
 /**
  * 
@@ -18,53 +19,55 @@ public class DoodleTactics extends JFrame {
 	
 	public static final int TILE_ROWS = 17;
 	public static final int TILE_COLS = 21;
-	private Screen _currentScreen;
+	
 	private GameScreen _game;
 	private GameMenuScreen _gameMenu;
 	private MainMenuScreen _mainMenu;
-	private Stack<Controller> _control;
+	
+	private Stack<Screen<?>> _screens;
 	private HashMap<String, Character> _allChars;
 	
 	public DoodleTactics() {
 		super("Doodle Tactics");
 		this.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
 		this.setSize(TILE_COLS*map.Tile.TILE_SIZE+13,TILE_ROWS*map.Tile.TILE_SIZE+33);
-		_gameMenu = new GameMenuScreen(null, this);
-		_game = new GameScreen(null, this);
-		_mainMenu = new MainMenuScreen(null, this);
-		_control = new Stack<Controller>();
 		
-		this.setScreen(_mainMenu);
-		this.pushController(new MainMenuController(_mainMenu));
+		_gameMenu = new GameMenuScreen(this);
+		_game = new GameScreen(this);
+		_mainMenu = new MainMenuScreen(this);
+		_screens = new Stack<Screen<?>>();
+		
+		this.changeScreens(_mainMenu);
 		this.setFocusable(false);
 		this.setResizable(false);
 		this.setVisible(true);
 	}
 	
 	/**
-	 * changes control of the game to a new source
-	 * @param c the new controller for the game
+	 * @return the current screen of the game
 	 */
-	public void pushController(Controller c) {
-		_control.push(c);
-		_currentScreen.switchController(c);
+	public Screen<? extends Controller> currentScreen() {
+		try {
+			return _screens.peek();
+		} catch(EmptyStackException e) {
+			return null;
+		}
 	}
 	
 	/** 
 	 * @param screen, the new screen for the game
-	 * 
 	 */
-	
 	public void setScreen(Screen screen) {
 		
 		/* Check that the current screen is not null before
 		 * removing */
-		if(_currentScreen != null) {
-			this.remove(_currentScreen);
+		if(currentScreen() != null) {
+			this.remove(currentScreen());
 			screen.setVisible(false);
-			_currentScreen.setFocusable(false);
+			currentScreen().setFocusable(false);
 		}
-			_currentScreen = screen;
+		//	currentScreen() = screen;
+		_screens.push(screen);
 			screen.setFocusable(true);
 			this.add(screen);
 			screen.setVisible(true);
@@ -73,12 +76,67 @@ public class DoodleTactics extends JFrame {
 	}
 	
 	/**
-	 * reverts control of the game to the previous controller
-	 * @return the controller releasing control
+	 * instructs a game screen to sleep; it is no longer the active part of the game
+	 * @param screen the screen to temporarily shut down
 	 */
-	public Controller releaseControl() {
-		_control.pop();
-		return _currentScreen.switchController(_control.peek());
+	private void screenSleep(Screen<? extends Controller> screen) {
+		remove(screen);
+		screen.setVisible(false);
+		screen.setFocusable(false);
+		
+		System.out.println("hello " + (screen == _game));
+		
+		repaint();
+	}
+	
+	/**
+	 * activates a dormant screen, setting it to the main game screen
+	 * @param screen the screen to set to the forefront of gameplay
+	 */
+	private void screenActivate(Screen<? extends Controller> screen) {
+	/*	screen.setVisible(true);
+		screen.setFocusable(true);
+		repaint();
+		this.add(screen);
+
+		screen.grabFocus();		*/
+		
+		screen.setFocusable(true);
+		this.add(screen);
+		screen.setVisible(true);
+		this.repaint();
+		screen.grabFocus();
+		
+		System.out.println("wertwer " + (screen == _game));
+				
+		repaint();
+	}
+	
+	/**
+	 * sets the screen to the given screen
+	 * @param screen the new active screen of the game
+	 */
+	public void changeScreens(Screen<? extends Controller> screen) {
+	/*	if (currentScreen() != null) {
+			System.out.println("sellpgin " + (screen == currentScreen()));
+			screenSleep(currentScreen());
+		}
+		
+		_screens.push(screen);
+		screenActivate(screen);	*/
+		setScreen(screen);
+	}
+	
+	/**
+	 * reverts the game back to the previous screen
+	 * @return the previous game screen
+	 */
+	public Screen<? extends Controller> revertScreen() {
+		Screen<? extends Controller> toReturn = _screens.pop();
+		screenSleep(toReturn);
+		screenActivate(_screens.peek());
+				
+		return toReturn;
 	}
 	
 	/**

@@ -3,7 +3,7 @@ package event;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-public class Warp extends Event{
+public class Warp extends Event {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {

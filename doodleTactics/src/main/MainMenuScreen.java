@@ -2,7 +2,10 @@ package main;
 
 import graphics.*;
 import java.awt.Graphics2D;
+import java.util.Stack;
+
 import controller.Controller;
+import controller.MainMenuController;
 import controller.OverworldController;
 
 /** 
@@ -12,22 +15,25 @@ import controller.OverworldController;
  */
 
 @SuppressWarnings("serial")
-public class MainMenuScreen extends Screen {
+public class MainMenuScreen extends Screen<MainMenuController> {
 
 	private MenuItem _title;
 	private ScreenChangeMenuItem _newGame;
 	private MenuItem _continue;
 	private MenuItem _quit;
-	
-	public MainMenuScreen(Controller control, DoodleTactics dt) {
-		super(control, dt);
+		
+	public MainMenuScreen(DoodleTactics dt) {
+		super(dt);
+		
 		this.setBackground(java.awt.Color.GRAY);
 		_title = new MenuItem(this, "src/graphics/title.png","src/graphics/title.png", dt);
-		_newGame = new ScreenChangeMenuItem(this, "src/graphics/new_game.png","src/graphics/new_game_hovered.png", dt, dt.getGameScreen(), new OverworldController(dt.getGameScreen()));
+		_newGame = new ScreenChangeMenuItem(this, "src/graphics/new_game.png","src/graphics/new_game_hovered.png", dt, dt.getGameScreen());
+		
 		_continue = new MenuItem(this, "src/graphics/continue.png","src/graphics/continue_hovered.png", dt);
 		_quit = new MenuItem(this, "src/graphics/quit.png","src/graphics/quit_hovered.png", dt);
 		_title.setLocation(((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _title.getCurrentImage().getWidth())/2, 50);
 		int offset = ((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _newGame.getCurrentImage().getWidth())/2;
+		
 		_newGame.setLocation(offset, 250);
 		_continue.setLocation(offset, 400);
 		_quit.setLocation(offset, 550);
@@ -35,6 +41,21 @@ public class MainMenuScreen extends Screen {
 		_newGame.setVisible(true);
 		_continue.setVisible(true);
 		_quit.setVisible(true);
+	}
+	
+
+	@Override
+	/**
+	 * @return the default controller for a main menu screen
+	 */
+	protected MainMenuController defaultController() {
+	//	MainMenuController cont = new MainMenuController(this);
+		
+	//	System.out.println(cont.getScreen() == this);
+		
+		
+	//	System.out.println(this);
+		return new MainMenuController(this);
 	}
 
 	@Override
@@ -52,7 +73,7 @@ public class MainMenuScreen extends Screen {
 	}
 	
 	public MenuItem checkContains(java.awt.Point point) {
-		
+				
 		/* set all of the buttons to default */
 		_newGame.setDefault();
 		_continue.setDefault();
@@ -62,6 +83,8 @@ public class MainMenuScreen extends Screen {
 		if(_newGame.contains(point)) {
 			_newGame.setHovered();
 			this.repaint();
+			
+		//	System.out.println("WEORIUEW");
 			return _newGame;
 		}
 		
@@ -80,5 +103,4 @@ public class MainMenuScreen extends Screen {
 		this.repaint();
 		return null;
 	}
-
 }

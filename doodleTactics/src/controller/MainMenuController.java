@@ -5,7 +5,6 @@ import graphics.MenuItem;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-import main.GameMenuScreen;
 import main.MainMenuScreen;
 
 public class MainMenuController extends Controller {
@@ -14,6 +13,16 @@ public class MainMenuController extends Controller {
 	
 	public MainMenuController(MainMenuScreen gameMenu) {
 		_mainMenu = gameMenu;
+		System.out.println(gameMenu);
+	}
+	
+	public MainMenuScreen getScreen() {
+		return _mainMenu;
+	}
+	
+	@Override
+	public void take() {
+		// TODO
 	}
 	
 	@Override
@@ -83,5 +92,4 @@ public class MainMenuController extends Controller {
 	public void mouseMoved(MouseEvent e) {
 		_mainMenu.checkContains(e.getPoint());
 	}
-
 }

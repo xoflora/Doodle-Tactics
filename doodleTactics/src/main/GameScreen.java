@@ -1,10 +1,13 @@
 package main;
 import java.awt.Graphics2D;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
+
 import javax.swing.Timer;
 
 import controller.GameMenuController;
+import controller.GameScreenController;
+import controller.OverworldController;
 
 import character.MainCharacter;
 
@@ -16,7 +19,7 @@ import map.Tile;
  * to set for the game screen when we enter from different locations
  */
 
-public class GameScreen extends Screen {
+public class GameScreen extends Screen<GameScreenController> {
 	
 	private static final int NUM_TILES_X = 21;
 	private static final int NUM_TILES_Y = 17;
@@ -30,16 +33,16 @@ public class GameScreen extends Screen {
 	private int _xRef;
 	private int _yRef;
 	private boolean _isAnimating;
-	private DoodleTactics _dt;
 	private GameMenuController _gameMenuController;
 	
-	public GameScreen(controller.Controller control, DoodleTactics dt) {
-		super(control, dt);
-		_dt = dt;
+	public GameScreen(DoodleTactics dt) {
+		super(dt);
+				
 		this.setBackground(java.awt.Color.BLACK);
 		MAP_WIDTH = 20;
 		MAP_HEIGHT = 20;
-		_gameMenuController = new GameMenuController(_dt.getGameMenuScreen());
+		
+		_gameMenuController = _dt.getGameMenuScreen().getController();
 		Tile[][] testTiles = new Tile[MAP_WIDTH][MAP_HEIGHT];
 		for(int i = 0; i < MAP_WIDTH; i++) {
 			for(int j = 0; j < MAP_HEIGHT; j++) {
@@ -67,54 +70,60 @@ public class GameScreen extends Screen {
 		_mainCharacter.setLocation((10*Tile.TILE_SIZE)-overflow, 8*Tile.TILE_SIZE);
 		_mainCharacter.setVisible(true);
 		_currMap = new Map(testTiles,"c-level demo map");
+		
 		this.repaint();
 	}
 	
-	private class MapMoveTimer extends Timer {
-		
-	private int _deltaX, _deltaY;
-	
-	public MapMoveTimer(int deltaX, int deltaY) {
-		super(50, null);
-		this.addActionListener(new MyMoveListener(this));
-		_deltaX = deltaX;
-		_deltaY = deltaY;
+	@Override
+	protected GameScreenController defaultController() {
+		return new OverworldController(this);
 	}
 	
-	private class MyMoveListener implements java.awt.event.ActionListener {
+	private class MapMoveTimer extends Timer {
 
-		private Timer _timer;
-		private int _cnt = 0;
-		private final int _numSteps = 6;
-		
-		public MyMoveListener (Timer t) {
-			_timer = t;
+		private int _deltaX, _deltaY;
+
+		public MapMoveTimer(int deltaX, int deltaY) {
+			super(50, null);
+			this.addActionListener(new MyMoveListener(this));
+			_deltaX = deltaX;
+			_deltaY = deltaY;
 		}
-		
-		public void actionPerformed(java.awt.event.ActionEvent e) {
-			
-			/* if we've incremented numSteps times, then we should stop */
+
+		private class MyMoveListener implements java.awt.event.ActionListener {
+
+			private Timer _timer;
+			private int _cnt = 0;
+			private final int _numSteps = 6;
+
+			public MyMoveListener (Timer t) {
+				_timer = t;
+			}
+
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+
+				/* if we've incremented numSteps times, then we should stop */
 				/* otherwise, continue incrementing */
-			for(int i = 0; i < MAP_WIDTH; i++) {
-				for(int j = 0; j < MAP_HEIGHT; j++) {
-					Tile t = _currMap.getTile(i, j);
-					t.setLocation((t.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), t.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
-					repaint();
+				for(int i = 0; i < MAP_WIDTH; i++) {
+					for(int j = 0; j < MAP_HEIGHT; j++) {
+						Tile t = _currMap.getTile(i, j);
+						t.setLocation((t.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), t.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
+						repaint();
+					}
+				}
+				_cnt+=1;
+				if (_cnt == _numSteps) {
+					_isAnimating = false;
+					_timer.stop();
 				}
 			}
-			_cnt+=1;
-			if (_cnt == _numSteps) {
-				_isAnimating = false;
-				_timer.stop();
-			}
 		}
 	}
-	}
-	
+
 	public MainCharacter getMainChar() {
 		return _mainCharacter;
 	}
-	
+
 	/* accessor method returning whether or not the GameScreen is currently animating, used by Timer */
 	public boolean isAnimating() {
 		return _isAnimating;
@@ -176,12 +185,12 @@ public class GameScreen extends Screen {
 	 
 	public void paintComponent(java.awt.Graphics g) {
 		
-//		System.out.println("-------PAINT--------");
-//		System.out.println("xMin: " + (_xRef - 1));
-//		System.out.println("xMax: " + (_xRef + 22));
-//		System.out.println("yMin: " + (_yRef - 1));
-//		System.out.println("yMax: " + (_yRef + 18));
-//		System.out.println("--------------------");
+		System.out.println("-------PAINT--------");
+		System.out.println("xMin: " + (_xRef - 1));
+		System.out.println("xMax: " + (_xRef + 22));
+		System.out.println("yMin: " + (_yRef - 1));
+		System.out.println("yMax: " + (_yRef + 18));
+		System.out.println("--------------------");
 		
 		super.paintComponent(g);
 
@@ -209,8 +218,8 @@ public class GameScreen extends Screen {
 	}
 	
 	public void switchToGameMenu() {
-		_dt.setScreen(_dt.getGameMenuScreen());
-		_dt.pushController(_gameMenuController);
+		_dt.changeScreens(_dt.getGameMenuScreen());
+	//	_dt.pushController(_gameMenuController);
 	}
 }
 

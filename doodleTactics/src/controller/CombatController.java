@@ -11,7 +11,7 @@ import character.Character;
  * @author rroelke
  * abstract interface for regulating combat
  */
-public abstract class CombatController extends Controller {
+public abstract class CombatController extends GameScreenController {
 	protected List<Character> _characters;
 	protected GameScreen _gameScreen;
 	
@@ -19,6 +19,11 @@ public abstract class CombatController extends Controller {
 	
 	public void move(Character c, List<Tile> path){
 		//TODO draw the character moving along the path of tiles
+	}
+	
+	@Override
+	public void take() {
+		// TODO
 	}
 	
 	@Override
