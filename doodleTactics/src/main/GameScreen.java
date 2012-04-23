@@ -145,6 +145,7 @@ public class GameScreen extends Screen<GameScreenController> {
 				_timer.stop();
 			}
 		}
+		}
 	}
 
 	public MainCharacter getMainChar() {
