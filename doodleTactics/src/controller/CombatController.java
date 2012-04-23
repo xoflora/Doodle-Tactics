@@ -5,8 +5,8 @@ import java.util.List;
 
 import main.DoodleTactics;
 import main.GameScreen;
-import map.*;
 import character.Character;
+import map.*;
 
 /**
  * 
@@ -14,18 +14,36 @@ import character.Character;
  * abstract interface for regulating combat
  */
 public abstract class CombatController extends GameScreenController {
-	protected List<Character> _characters;
+	protected List<Character> _units;
 	protected GameScreen _gameScreen;
-	protected HashMap<Character, Boolean> _moved;
+	protected HashMap<Character, Boolean> _hasMoved;
 	
 	protected Map _map;
+	
+	protected List<CombatController> _enemyAffiliations;
 	
 	public CombatController(DoodleTactics dt) {
 		super(dt);
 	}
 	
+	/**
+	 * @param c the character to check
+	 * @return whether the indicated character has moved yet this turn
+	 */
+	public boolean hasMoved(Character c) {
+		Boolean m = _hasMoved.get(c);
+		return m != null && m;
+	}
+	
+	/**
+	 * moves a character across a path
+	 * @param c the character to move
+	 * @param path the path across which to move the character
+	 */
 	public void move(Character c, List<Tile> path){
 		//TODO draw the character moving along the path of tiles
+		
+		_hasMoved.put(c, true);
 	}
 	
 	@Override

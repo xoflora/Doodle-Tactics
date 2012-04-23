@@ -279,8 +279,13 @@ public abstract class Character extends Rectangle{
 	/** 
 	 * computes the attack range of the Character
 	 */
-	public void getAttackRange(){
+	public int getMinAttackRange(){
 		//TODO Ryan fills in
+		return 0;
+	}
+	
+	public int getMaxAttackRange() {
+		return 1;
 	}
 
 

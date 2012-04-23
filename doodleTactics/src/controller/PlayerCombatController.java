@@ -2,7 +2,10 @@ package controller;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
+
+import util.Util;
 
 import main.DoodleTactics;
 import map.*;
@@ -23,32 +26,44 @@ public class PlayerCombatController extends CombatController {
 	
 	public PlayerCombatController(DoodleTactics dt) {
 		super(dt);
+		
+		_enemyAttackRange = new ArrayList<Tile>();
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		if (t != null && t.getOccupant() != null) {
-			if (t.getOccupant().getAffiliation() == this) {
+			Character c = t.getOccupant();
+			if (c.getAffiliation() == this) {
 				_selectedTile = t;
+				_selectedMovementRange = _map.getMovementRange(t, c.getMovementRange());
+				
+				//
 			}
-			else {
-				//add attack range to the attack range list
+			else if (_enemyAffiliations.contains(c.getAffiliation())) {
+				_enemyAttackRange = Util.union(_enemyAttackRange,
+						_map.getAttackRange(t, c.getMovementRange(),
+								c.getMinAttackRange(), c.getMaxAttackRange()));
+				//paint all tiles in that range.
+				for (Tile paint : _enemyAttackRange) {
+					
+				}
 			}
 		}
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	/**
+	 * does nothing
+	 */
+	public void mouseEntered(MouseEvent e) { }
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	/**
+	 * does nothing
+	 */
+	public void mouseExited(MouseEvent e) { }
 
 	@Override
 	public void mousePressed(MouseEvent e) {
