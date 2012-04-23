@@ -10,11 +10,12 @@ import main.GameScreen;
  */
 public abstract class GameScreenController extends Controller {
 	
+	protected GameScreen _gameScreen;
+	
 	public GameScreenController(DoodleTactics dt) {
 		super(dt);
+		_gameScreen = dt.getGameScreen();
 	}
-
-	protected GameScreen _gameScreen;
 	
 	@Override
 	public GameScreen getScreen() {

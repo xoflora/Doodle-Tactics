@@ -30,7 +30,16 @@ public class PlayerCombatController extends CombatController {
 	private int _pathCost;
 	
 	public PlayerCombatController(DoodleTactics dt) {
-		super(dt);
+		super(dt, dt.getParty());
+		
+		_selectedTile = null;
+		_selectedCharacter = null;
+		_hoveredCharacter = null;
+		
+		_selectedMovementRange = new ArrayList<Tile>();
+		_enemyAttackRange = new ArrayList<Tile>();
+		_path = new ArrayList<Tile>();
+		_pathCost = 0;
 		
 		clear();
 	}
