@@ -94,6 +94,7 @@ public class Dialogue extends Event {
 
 	@Override
 	public void release() {
+		
 	}
 
 	@Override

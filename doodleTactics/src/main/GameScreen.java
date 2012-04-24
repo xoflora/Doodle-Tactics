@@ -53,34 +53,17 @@ public class GameScreen extends Screen<GameScreenController> {
 		MAP_HEIGHT = 20;
 		
 		_gameMenuController = _dt.getGameMenuScreen().getController();
-	/*	Tile[][] testTiles = new Tile[MAP_WIDTH][MAP_HEIGHT];
-		for(int i = 0; i < MAP_WIDTH; i++) {
-			for(int j = 0; j < MAP_HEIGHT; j++) {
-				try {
-					testTiles[i][j] = new Tile(this,"src/graphics/tiles/tile.png", i, j,1,1);
-				} catch (InvalidTileException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				testTiles[i][j].setVisible(true);
-			}
-		}			*/		
+		
 		//select a tile to go at the top left of the screen
 		_xRef = DEFAULT_XREF;
 		_yRef = DEFAULT_YREF;
 		_isAnimating = false;
 		
-		//set the location of the rest of the tiles relative to the topleft tile
-	/*	for(int i = 0; i < MAP_WIDTH; i++) {
-			for(int j = 0; j < MAP_HEIGHT; j++) {
-				testTiles[i][j].setLocation((i-_xRef)*Tile.TILE_SIZE, (j-_yRef)*Tile.TILE_SIZE);
-			}
-		}				*/
-		
 		_mainCharacter = new MainCharacter(this, "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_left.png",
 				"src/graphics/characters/warrior_right.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_front.png","test");
+		
 		_mainCharacter.setDown();
 		_mainCharacter.setFillColor(java.awt.Color.BLACK);
 		_mainCharacter.setSize(65, 50);
