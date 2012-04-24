@@ -33,39 +33,6 @@ public class PlayerSetup extends GameScreenController {
 	 * @author rroelke
 	 *
 	 */
-	private static class CharacterPool extends JPanel {
-
-		private List<Character> _inPool;
-		
-		public CharacterPool(List<Character> characters) {
-			super();
-			_inPool = Util.clone(characters);
-		}
-		
-		public void removeCharacter(Character c) {
-			_inPool.remove(c);
-		}
-		
-		public void addCharacter(Character c) {
-			_inPool.add(c);
-		}
-		
-		@Override
-		public void setVisible(boolean b) {
-			super.setVisible(b);
-			
-			repaint();
-		}
-		
-		public void paint(Graphics graphics) {
-			Graphics2D g = (Graphics2D) graphics;
-			
-			int y = 0;
-			for (Character c : _inPool) {
-				c.paint(g);
-			}
-		}
-	}
 	
 	private List<Tile> _validTiles;
 	private List<Character> _units;
@@ -73,7 +40,7 @@ public class PlayerSetup extends GameScreenController {
 	private List<Character> _toPlace;
 	private List<Character> _inPlace;
 	private Tile _selectedTile;
-	private CharacterPool _pool;
+	private UnitPool _pool;
 
 	public PlayerSetup(DoodleTactics dt, List<Tile> validTiles) {
 		super(dt);
@@ -91,7 +58,7 @@ public class PlayerSetup extends GameScreenController {
 
 	@Override
 	public void take() {
-		_pool = new CharacterPool(_units);
+	/*	_pool = new CharacterPool(_units);
 		
 		ListIterator<Character> _unitCycle = _units.listIterator();
 		Character c;
@@ -106,7 +73,7 @@ public class PlayerSetup extends GameScreenController {
 				break;
 		}
 		
-		_pool.setVisible(true);
+		_pool.setVisible(true);		*/
 	}
 
 	@Override
