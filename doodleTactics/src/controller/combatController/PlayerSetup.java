@@ -1,23 +1,9 @@
 package controller.combatController;
 
-import graphics.Rectangle;
-import graphics.Shape;
-
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.geom.RectangularShape;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import util.Util;
 
@@ -26,13 +12,12 @@ import map.Tile;
 import controller.GameScreenController;
 import character.Character;
 
-public class PlayerSetup extends GameScreenController {
-	
-	/**
-	 * 
-	 * @author rroelke
-	 *
-	 */
+/**
+ * controller class corresponding to the combat set-up step
+ * @author rroelke
+ *
+ */
+public class PlayerSetup extends GameScreenController implements PoolDependent {
 	
 	private List<Tile> _validTiles;
 	private List<Character> _units;
@@ -135,6 +120,35 @@ public class PlayerSetup extends GameScreenController {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getCharacterFromPool(Character c) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public List<Character> getUnits() {
+		return _units;
+	}
+
+	@Override
+	public UnitPool getPool() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addCharacterToPool(Character c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeUnitFromPool(Character c) {
 		// TODO Auto-generated method stub
 		
 	}

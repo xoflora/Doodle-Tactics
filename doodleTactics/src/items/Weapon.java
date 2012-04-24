@@ -1,12 +1,20 @@
 package items;
 
 import java.awt.image.BufferedImage;
+
 import character.Character;
+
 public abstract class Weapon extends Equipment{
-	String _name;
-	int _attackRange;
-	double _accuracy;
-	int _attackPower;
+	
+	private String _name;
+	private int _minAttackRange;
+	private int _maxAttackRange;
+	private double _accuracy;
+	private int _attackPower;
+	
+	public Weapon(BufferedImage image) {
+		super(image);
+	}
 	
 	BufferedImage _displayImage;
 	BufferedImage _menuImage;

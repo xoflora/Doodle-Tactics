@@ -1,8 +1,15 @@
 package items;
 
+import java.awt.image.BufferedImage;
+
 import character.Character;
 
 public abstract class Equipment extends Item{
+	
+	public Equipment(BufferedImage image) {
+		super(image);
+	}
+
 	/**
 	 *  Removes this Item from a Character's inventory 
 	 * @param c - the Character

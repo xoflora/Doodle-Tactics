@@ -353,6 +353,10 @@ public abstract class Character extends Rectangle{
 	public BufferedImage getDownImage() {
 		return _down;
 	}
+	
+	public BufferedImage getRightImage() {
+		return _right;
+	}
 
 	/**
 	 * flattens a Character to a file (using serialization), for saving purposes
@@ -465,7 +469,7 @@ public abstract class Character extends Rectangle{
 
 	}
 
-	public static void testPreSerialize(){
+/*	public static void testPreSerialize(){
 		try{
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			System.out.println("Character Demo:");
@@ -612,10 +616,10 @@ public abstract class Character extends Rectangle{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}	*/
 	
-	public static void main(String[] args){
+/*	public static void main(String[] args){
 		testPreSerialize();
 		testPostSerialize();
-	}
+	}	*/
 }

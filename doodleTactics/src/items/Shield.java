@@ -1,8 +1,15 @@
 package items;
 
+import java.awt.image.BufferedImage;
+
 import character.Character;
 
 public class Shield extends Equipment{
+	
+	public Shield(BufferedImage image) {
+		super(image);
+	}
+
 	/**
 	 * 
 	 */

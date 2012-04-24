@@ -5,6 +5,12 @@ import java.awt.image.BufferedImage;
 import character.Character;
 
 public class Cuirass extends Equipment{
+	
+	public Cuirass(BufferedImage image) {
+		super(image);
+	}
+
+
 	int _defense;
 	BufferedImage _menuImage;
 	

@@ -17,7 +17,7 @@ import character.Character;
  * @author rroelke
  * 
  */
-public class PlayerCombatController extends CombatController {
+public class PlayerCombatController extends CombatController implements PoolDependent {
 	
 	private Tile _selectedTile;
 	private Tile _hoveredTile;
@@ -156,6 +156,30 @@ public class PlayerCombatController extends CombatController {
 	 * begins the player's turn
 	 */
 	public void take() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getCharacterFromPool(Character c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public UnitPool getPool() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addCharacterToPool(Character c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeUnitFromPool(Character c) {
 		// TODO Auto-generated method stub
 		
 	}
