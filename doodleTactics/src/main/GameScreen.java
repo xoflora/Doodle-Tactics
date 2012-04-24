@@ -39,15 +39,12 @@ public class GameScreen extends Screen<GameScreenController> {
 
 	private static int MAP_WIDTH, MAP_HEIGHT;
 	private MainCharacter _mainCharacter;
-	private List<Character> _characters;
-
-	private Map _prevMap; 
 	private Map _currMap;
 	private int _xRef;
 	private int _yRef;
 	private boolean _isAnimating;
 	private GameMenuController _gameMenuController;
-	private PriorityQueue<Rectangle> _paintQueue;
+	private PriorityQueue<Rectangle> _paintQueue; // the list of characters / images to render on the screen
 	
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
@@ -76,7 +73,6 @@ public class GameScreen extends Screen<GameScreenController> {
 		int overflow = (65-48)/2;
 		_mainCharacter.setLocation((10*Tile.TILE_SIZE)-overflow, 8*Tile.TILE_SIZE);
 		_mainCharacter.setVisible(true);
-		
 		
 		try {
 			setMap(Map.map(this, "src/tests/data/testMapDemo"));
@@ -217,6 +213,8 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 		super.paintComponent(g);
 
+		// paint the tiles
+		
 		for(int i = 0; i < MAP_WIDTH; i++) {
 			for(int j = 0; j < MAP_HEIGHT; j++) {
 				// check that the given tile is within the bounds before painting it 
@@ -226,8 +224,15 @@ public class GameScreen extends Screen<GameScreenController> {
 			}
 		}
 		
+		
+		
+		
 		if (_mainCharacter != null)
 			_mainCharacter.paint((Graphics2D) g,_mainCharacter.getCurrentImage());
+		
+		
+		
+		
 		
 		//System.out.println("--------------------");
 }
