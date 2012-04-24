@@ -12,6 +12,16 @@ public class Warp extends Event {
 	}
 
 	@Override
+	public void take() {
+		
+	}
+	
+	@Override
+	public void release() {
+		
+	}
+	
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
