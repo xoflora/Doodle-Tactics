@@ -8,7 +8,6 @@ import java.util.ListIterator;
 import controller.GameScreenController;
 
 import main.DoodleTactics;
-import main.GameScreen;
 import character.Character;
 import map.*;
 
@@ -20,7 +19,6 @@ import map.*;
 public abstract class CombatController extends GameScreenController {
 	protected List<Character> _units;
 	private ListIterator<Character> _unitCycle;
-	protected GameScreen _gameScreen;
 	protected HashMap<Character, Boolean> _hasMoved;
 	
 	protected Map _map;
@@ -29,6 +27,7 @@ public abstract class CombatController extends GameScreenController {
 	
 	public CombatController(DoodleTactics dt, List<Character> units) {
 		super(dt);
+		
 		_units = units;
 		_enemyAffiliations = new ArrayList<CombatController>();
 		

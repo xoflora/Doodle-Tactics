@@ -13,18 +13,22 @@ import main.DoodleTactics;
 public class CombatOrchestrator extends GameScreenController {
 	
 	private List<CombatController> _factions;
-	private ListIterator<List<CombatController>> _it;
+	private ListIterator<CombatController> _factionCycle;
 	private boolean _setup;
 	
 	private int _numUnits;
+	
+	private PlayerCombatController _p;
 	
 	public CombatOrchestrator(DoodleTactics dt, List<CombatController> enemies, List<CombatController> partners,
 				List<CombatController> others, int numUnits) {
 		super(dt);
 		
+		_factions = new ArrayList<CombatController>();
 		_setup = false;
 		
 		PlayerCombatController player = new PlayerCombatController(dt);
+		_p = player;
 
 		if (partners == null)
 			partners = new ArrayList<CombatController>();
@@ -37,6 +41,7 @@ public class CombatOrchestrator extends GameScreenController {
 			e.setEnemyAffiliations(partners);
 		
 		_numUnits = numUnits;
+		_factionCycle = _factions.listIterator(); 
 	}
 
 	@Override
@@ -59,7 +64,8 @@ public class CombatOrchestrator extends GameScreenController {
 			
 		}
 		else {
-			_gameScreen.pushControl(new PlayerSetup(_dt, _gameScreen.getValidSetupTiles(_numUnits)));
+		//	_gameScreen.pushControl(new PlayerSetup(_dt, _gameScreen.getValidSetupTiles(_numUnits)));
+			_gameScreen.pushControl(_p);
 		}
 	}
 
