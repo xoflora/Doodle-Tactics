@@ -2,7 +2,12 @@ package main;
 
 import graphics.*;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Stack;
+
+import javax.imageio.ImageIO;
 
 import controller.Controller;
 import controller.MainMenuController;
@@ -26,13 +31,22 @@ public class MainMenuScreen extends Screen<MainMenuController> {
 		super(dt);
 		
 		this.setBackground(java.awt.Color.GRAY);
-		_title = new MenuItem(this, "src/graphics/menu/title.png","src/graphics/menu/title.png", dt);
-		_newGame = new ScreenChangeMenuItem(this, "src/graphics/menu/new_game.png","src/graphics/menu/new_game_hovered.png", dt, dt.getGameScreen());
-		
-		_continue = new MenuItem(this, "src/graphics/menu/continue.png","src/graphics/menu/continue_hovered.png", dt);
-		_quit = new MenuItem(this, "src/graphics/menu/quit.png","src/graphics/menu/quit_hovered.png", dt);
-		_title.setLocation(((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _title.getCurrentImage().getWidth())/2, 50);
-		int offset = ((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _newGame.getCurrentImage().getWidth())/2;
+		try {
+			BufferedImage titleD = ImageIO.read(new File("src/graphics/menu/title.png"));
+			BufferedImage newGameD = ImageIO.read(new File("src/graphics/menu/new_game.png"));
+			BufferedImage newGameH = ImageIO.read(new File("src/graphics/menu/new_game_hovered.png"));
+			BufferedImage continueD = ImageIO.read(new File("src/graphics/menu/continue.png"));
+			BufferedImage continueH = ImageIO.read(new File("src/graphics/menu/continue_hovered.png"));
+			BufferedImage quitD = ImageIO.read(new File("src/graphics/menu/quit.png"));
+			BufferedImage quitH = ImageIO.read(new File("src/graphics/menu/quit_hovered.png"));
+			
+			_title = new MenuItem(this, titleD, titleD, dt);
+			_newGame = new ScreenChangeMenuItem(this, newGameD,newGameH, dt, dt.getGameScreen());
+			
+			_continue = new MenuItem(this, continueD,continueH, dt);
+			_quit = new MenuItem(this, quitD,quitH, dt);
+			_title.setLocation(((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _title.getCurrentImage().getWidth())/2, 50);
+			int offset = ((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _newGame.getCurrentImage().getWidth())/2;
 		
 		_newGame.setLocation(offset, 250);
 		_continue.setLocation(offset, 400);
@@ -41,6 +55,9 @@ public class MainMenuScreen extends Screen<MainMenuController> {
 		_newGame.setVisible(true);
 		_continue.setVisible(true);
 		_quit.setVisible(true);
+		} catch (IOException e) {
+			
+		}
 	}
 	
 
