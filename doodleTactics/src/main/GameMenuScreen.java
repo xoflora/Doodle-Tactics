@@ -173,7 +173,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			this.setLocation(15, 15);
 			this.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
 			BufferedImage _profilePic = character.getProfileImage();
-			this.add(_profilePic);
+			
 		}
 	}
 }
