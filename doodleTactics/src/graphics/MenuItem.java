@@ -22,16 +22,12 @@ public class MenuItem extends Rectangle {
 	private BufferedImage _current;
 	protected DoodleTactics _dt;
 	
-	public MenuItem(JPanel container, String defltPath, String hoveredPath, DoodleTactics dt) {
+	public MenuItem(JPanel container, BufferedImage defltPath, BufferedImage hoveredPath, DoodleTactics dt) {
 		super(container);
-		try {
-			_dt = dt;
-			_default = ImageIO.read(new File(defltPath));
-			_hovered = ImageIO.read(new File(hoveredPath));
-		} catch(IOException e) {
-			System.out.println("Bad file path!");
-		}
-		
+		_dt = dt;
+		_default = defltPath;
+		_hovered = hoveredPath;
+		_current = _default;
 		this.setDefault();
 		this.setSize(_current.getWidth(), _current.getHeight());
 	}

@@ -1,5 +1,7 @@
 package graphics;
 
+import java.awt.image.BufferedImage;
+
 import javax.swing.JPanel;
 
 import controller.Controller;
@@ -11,7 +13,7 @@ public class ScreenChangeMenuItem extends MenuItem {
 
 	private Screen<? extends Controller> _nextScreen;
 	
-	public ScreenChangeMenuItem(JPanel container, String defltPath, String hoveredPath,
+	public ScreenChangeMenuItem(JPanel container, BufferedImage defltPath, BufferedImage hoveredPath,
 			DoodleTactics dt, Screen<? extends Controller> screen) {
 		
 		super(container, defltPath, hoveredPath, dt);
