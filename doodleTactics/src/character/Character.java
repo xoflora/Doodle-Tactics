@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
-import event.DialogueBox;
+import event.Dialogue;
 import event.InvalidEventException;
 
 import javax.imageio.ImageIO;
@@ -594,7 +594,7 @@ public abstract class Character extends Rectangle{
 			h.put("Jace", jace);
 			h.put("Margo", margo);
 
-			DialogueBox d = new DialogueBox(null, "src/tests/data/testDemo",h);
+			Dialogue d = new Dialogue(null, "src/tests/data/testDemo",h);
 			d.print();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

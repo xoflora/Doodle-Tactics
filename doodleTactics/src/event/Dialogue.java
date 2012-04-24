@@ -21,11 +21,10 @@ import main.DoodleTactics;
  * @author czchapma
  * a dialogue instance controls a dialogue between characters
  */
-public class DialogueBox extends Event {
+public class Dialogue extends Event {
 
 	private List<String> _phrases;
 	private List<Character> _characters;
-
 
 	/**
 	 * Creates a DialogueBox by parsing a dialogue csv file in the following format
@@ -37,7 +36,7 @@ public class DialogueBox extends Event {
 	 * @throws InvalidFileException --if something goes wrong during csv file parsing
 	 * @throws IOException, FileNotFoundException 
 	 */
-	public DialogueBox(DoodleTactics dt, String filename, HashMap<String,Character> allChars) throws InvalidEventException, IOException, FileNotFoundException{
+	public Dialogue(DoodleTactics dt, String filename, HashMap<String,Character> allChars) throws InvalidEventException, IOException, FileNotFoundException{
 		super(dt);
 
 		BufferedReader br = new BufferedReader(new FileReader(filename));
@@ -81,9 +80,11 @@ public class DialogueBox extends Event {
 		switch (e.getKeyCode()){
 		case KeyEvent.VK_UP:
 			//handle up
+			System.out.println("UP");
 			break;
 		case KeyEvent.VK_DOWN:
 			//handle down
+			System.out.println("DOWN");
 			break;
 		}
 	}
