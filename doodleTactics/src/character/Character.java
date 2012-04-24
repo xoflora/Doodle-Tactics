@@ -13,16 +13,15 @@ import event.InvalidEventException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import map.Tile;
+
 import controller.combatController.CombatController;
 
 import graphics.Rectangle;
 import graphics.Shape;
 import items.*;
 public abstract class Character extends Rectangle{
-
-	/**
-	 * 
-	 */
+	
 	/**
 	 * @author czchapma
 	 */
@@ -88,7 +87,6 @@ public abstract class Character extends Rectangle{
 		_capacity = 5;
 		
 		_affiliation = null;
-
 		try {
 			_avatar = ImageIO.read(new File(avatar));
 			_profile = ImageIO.read(new File(profile));
@@ -135,7 +133,12 @@ public abstract class Character extends Rectangle{
 	public Shield getShield(){
 		return _shield;
 	}
-
+	
+	@Override
+	public int getPaintPriority(){
+		return (int) this.getY();
+	}
+	
 	/**
 	 * Initializes Current Stats to Base Stats
 	 */
@@ -289,7 +292,6 @@ public abstract class Character extends Rectangle{
 	public int getMaxAttackRange() {
 		return 1;
 	}
-
 
 	/**
 	 * paintProfile

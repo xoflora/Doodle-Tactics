@@ -54,6 +54,7 @@ public class Map implements Serializable{
 	 * numCols,numRows
 	 * x1,y1,permissions,img_path1,height1,cost1
 	 * x2,y2,permissions,img_path2,heigh2,cost2
+	 * img, img_path, x1, y1, in_front  
 	 * ...
 	 * 
 	 * (where x and y are 0-indexed)

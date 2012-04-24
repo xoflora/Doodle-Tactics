@@ -17,12 +17,13 @@ import controller.combatController.RandomBattleAI;
 
 import character.Character;
 import character.MainCharacter;
+import graphics.Rectangle;
 
 import map.InvalidMapException;
 import map.InvalidTileException;
 import map.Map;
 import map.Tile;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /* currmap / prevmap vars
  * this is an idea we had about the game screen needing know what starting location
@@ -31,6 +32,10 @@ import java.util.PriorityQueue;
 
 public class GameScreen extends Screen<GameScreenController> {
 	
+	private static final int STAT_MENU_PRIORITY = 0;
+	private static final int SETUP_WINDOW_PRIORITY = -10;
+	private static final int DIALOGUE_PRIORITY = 10;
+	
 	private static final int NUM_TILES_X = 21;
 	private static final int NUM_TILES_Y = 17;
 	
@@ -38,13 +43,16 @@ public class GameScreen extends Screen<GameScreenController> {
 	private static final int DEFAULT_YREF = 5;
 
 	private static int MAP_WIDTH, MAP_HEIGHT;
-	private MainCharacter _mainCharacter;
+	private MainCharacter _currentCharacter;
 	private Map _currMap;
 	private int _xRef;
 	private int _yRef;
 	private boolean _isAnimating;
 	private GameMenuController _gameMenuController;
-	private PriorityQueue<Rectangle> _paintQueue; // the list of characters / images to render on the screen
+	private PriorityQueue<Rectangle> _characterQueue; // the list of characters / images to render on the screen
+	private LinkedList<Rectangle> _bottomImages;  
+	private LinkedList<Rectangle> _topImages;
+	private PriorityQueue<Rectangle> _menuQueue;
 	
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
@@ -54,25 +62,28 @@ public class GameScreen extends Screen<GameScreenController> {
 		MAP_HEIGHT = 20;
 		
 		_gameMenuController = _dt.getGameMenuScreen().getController();
-		_paintQueue = new PriorityQueue<Rectangle>();
+		_characterQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
+		_menuQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
+		_bottomImages = new LinkedList<Rectangle>();
+		_topImages = new LinkedList<Rectangle>();
 		
 		//select a tile to go at the top left of the screen
 		_xRef = DEFAULT_XREF;
 		_yRef = DEFAULT_YREF;
 		_isAnimating = false;
 		
-		_mainCharacter = new MainCharacter(this, "src/graphics/characters/warrior_front.png",
+		_currentCharacter = new MainCharacter(this, "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_left.png",
 				"src/graphics/characters/warrior_right.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_front.png","test");
 		
-		_mainCharacter.setDown();
-		_mainCharacter.setFillColor(java.awt.Color.BLACK);
-		_mainCharacter.setSize(65, 50);
+		_currentCharacter.setDown();
+		_currentCharacter.setFillColor(java.awt.Color.BLACK);
+		_currentCharacter.setSize(65, 50);
 		
 		int overflow = (65-48)/2;
-		_mainCharacter.setLocation((10*Tile.TILE_SIZE)-overflow, 8*Tile.TILE_SIZE);
-		_mainCharacter.setVisible(true);
+		_currentCharacter.setLocation((10*Tile.TILE_SIZE)-overflow, 8*Tile.TILE_SIZE);
+		_currentCharacter.setVisible(true);
 		
 		try {
 			setMap(Map.map(this, "src/tests/data/testMapDemo"));
@@ -139,7 +150,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	}
 
 	public MainCharacter getMainChar() {
-		return _mainCharacter;
+		return _currentCharacter;
 	}
 
 	/* accessor method returning whether or not the GameScreen is currently animating, used by Timer */
@@ -201,6 +212,38 @@ public class GameScreen extends Screen<GameScreenController> {
 	public int getMapY(int y) {
 		return (y / Tile.TILE_SIZE) + _yRef;
 	}
+	
+	/**
+	 * 
+	 * @return the PriorityQueue storing the Characters to paint
+	 */
+	public PriorityQueue<Rectangle> getCharacterQueue(){
+		return _characterQueue;
+	}
+	
+	/**
+	 * 
+	 * @return the LinkedList of Rectangles that should be painted before all Characters 
+	 */
+	public LinkedList<Rectangle> getBottomImages(){
+		return _bottomImages;
+	}
+	
+	/**
+	 * 
+	 * @return the LinkedList of Rectangles that should be painted after all Character
+	 */
+	public LinkedList<Rectangle> getTopImages(){
+		return _topImages;
+	}
+	
+	/**
+	 * 
+	 * @return The PriorityQueue storing the Menu items to paint
+	 */
+	public PriorityQueue<Rectangle> getMenuQueue(){
+		return _menuQueue;
+	}
 	 
 	public void paintComponent(java.awt.Graphics g) {
 		
@@ -213,8 +256,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 		super.paintComponent(g);
 
-		// paint the tiles
-		
+		// paint all of the tiles first
 		for(int i = 0; i < MAP_WIDTH; i++) {
 			for(int j = 0; j < MAP_HEIGHT; j++) {
 				// check that the given tile is within the bounds before painting it 
@@ -224,14 +266,30 @@ public class GameScreen extends Screen<GameScreenController> {
 			}
 		}
 		
+		// paint all of the bottom images, meaning that they fall behind everything
+		for(Rectangle r : _bottomImages) {
+			r.paint((Graphics2D) g);
+		}
 		
+		// paint all of the characters
+		Rectangle[] paintArray = (Rectangle []) _characterQueue.toArray();
+		Arrays.sort(paintArray);
 		
+		for(int i = 0; i < paintArray.length; i++) {
+			paintArray[i].paint((Graphics2D) g);
+		}
 		
-		if (_mainCharacter != null)
-			_mainCharacter.paint((Graphics2D) g,_mainCharacter.getCurrentImage());
+		// paint all of the top images, meaning that they are in front of everything
+		for(Rectangle r : _topImages) {
+			r.paint((Graphics2D) g);
+		}
 		
+		// finally paint all of the menus
+		Rectangle[] menuArray = (Rectangle []) _menuQueue.toArray();
+		Arrays.sort(menuArray);
 		
-		
+//		if (_currentCharacter != null)
+//			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getCurrentImage());
 		
 		
 		//System.out.println("--------------------");
