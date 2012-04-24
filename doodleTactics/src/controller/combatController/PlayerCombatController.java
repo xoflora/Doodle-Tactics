@@ -100,26 +100,6 @@ public class PlayerCombatController extends CombatController {
 	}
 
 	@Override
-	/**
-	 * does nothing
-	 */
-	public void mouseEntered(MouseEvent e) {
-		
-	}
-
-	@Override
-	/**
-	 * does nothing
-	 */
-	public void mouseExited(MouseEvent e) { }
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		

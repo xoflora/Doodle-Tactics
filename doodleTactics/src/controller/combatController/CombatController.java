@@ -138,43 +138,16 @@ public abstract class CombatController extends GameScreenController {
 	
 	
 	@Override
-	/**
-	 * reponds to key input to move the camera about the screen
-	 */
-	public void keyTyped(KeyEvent e) {
-		if(!_gameScreen.isAnimating()) {			
-
-			switch(e.getKeyChar()) {
-
-			case 'w':
-				System.out.println("w");
-				_gameScreen.getMainChar().setUp();
-				_gameScreen.mapUpdate(0, -1);
-				break;
-			case 'a':
-				System.out.println("a");
-				_gameScreen.getMainChar().setLeft();
-				_gameScreen.mapUpdate(-1, 0);
-				break;
-			case 's':
-				System.out.println("s");
-				_gameScreen.getMainChar().setDown();
-				_gameScreen.mapUpdate(0, 1);
-				break;
-			case 'd':
-				System.out.println("d");
-				_gameScreen.getMainChar().setRight();
-				_gameScreen.mapUpdate(1, 0);
-				break;
-			}			
-		}
-	}
+	public void keyTyped(KeyEvent e) { }
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
 		_draggedx = e.getX();
 		_draggedy = e.getY();
 	}
+	
+	@Override
+	public void mouseReleased(MouseEvent e) { }
 	
 	@Override
 	/**
@@ -190,4 +163,18 @@ public abstract class CombatController extends GameScreenController {
 			_draggedy = e.getY();
 		}
 	}
+	
+	@Override
+	/**
+	 * does nothing
+	 */
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+
+	@Override
+	/**
+	 * does nothing
+	 */
+	public void mouseExited(MouseEvent e) { }
 }

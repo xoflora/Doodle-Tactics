@@ -29,7 +29,7 @@ public class MapTester {
 			for (int i = 0; i < tiles.length; i++)
 				for (int j = 0; j < tiles[i].length; j++)
 					tiles[i][j] = Tile.tile(panel, "src/graphics/tiles/tile.png", 'F', i, j, 1, 1);
-			_test = new Map(tiles, "TestMap", null);
+			_test = new Map(tiles, "TestMap", null, null, null, null);
 
 			_test.getTile(7, 7).setCost(5);
 			_test.getTile(6, 8).setCost(2);

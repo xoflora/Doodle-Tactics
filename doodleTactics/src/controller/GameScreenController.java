@@ -1,6 +1,9 @@
 package controller;
 
 import java.util.LinkedList;
+import java.util.List;
+
+import util.Util;
 
 import main.DoodleTactics;
 import main.GameScreen;
@@ -24,5 +27,12 @@ public abstract class GameScreenController extends Controller {
 		return _gameScreen;
 	}
 	
-	public abstract LinkedList<Character> getCharactersToDisplay();
+	/**
+	 * @return a list of characters to display in the game screen
+	 */
+	public List<Character> getCharactersToDisplay() {
+		List<Character> main = new LinkedList<Character>();
+		main.add(_gameScreen.getMainChar());
+		return Util.union(_gameScreen.getMap().getCharactersToDisplay(), main);
+	}
 }

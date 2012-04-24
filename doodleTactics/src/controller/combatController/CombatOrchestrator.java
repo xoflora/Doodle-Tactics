@@ -51,7 +51,8 @@ public class CombatOrchestrator extends GameScreenController {
 	 * signifies the end of combat, or the beginning of a turn
 	 */
 	public void release() {
-		// TODO
+		// TODO determine whether the combat is a win or a loss and act accordingly
+		//	if combat is a loss, swap screens for the "game over" screen
 	}
 
 	@Override
@@ -63,18 +64,26 @@ public class CombatOrchestrator extends GameScreenController {
 		if (_setup) {	//swap factions
 			if (_factionCycle.hasNext())
 				_gameScreen.pushControl(_factionCycle.next());
+			else if (!_factions.isEmpty()) {	//INCORRECT CONDITION - swap for not win/loss condition
+				_factionCycle = _factions.listIterator();
+				take();
+			}
+			else	//combat has ended - win/loss condition
+				release();
 		}
 		else {
 		//	_gameScreen.pushControl(new PlayerSetup(_dt, _gameScreen.getValidSetupTiles(_numUnits)));
 			_gameScreen.pushControl(_p);
+			_setup = true;
 		}
 	}
 	
 	/**
 	 * @return a list containing all the characters involved in the battle
 	 */
-	public List<Character> getAllCombatants() {
+	public List<Character> getCharactersToDisplay() {
 		List<List<Character>> c = new ArrayList<List<Character>>();
+		c.add(super.getCharactersToDisplay());
 		for (CombatController faction : _factions)
 			c.add(faction.getUnits());
 		return Util.union(c);
