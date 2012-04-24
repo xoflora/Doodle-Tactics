@@ -191,6 +191,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private class CharInfo extends JPanel {
 		//represents a box that will display all the characters current stats, items, inventory, etc.
 		public CharInfo(Character chrter) {
+			this.setLayout(new GridLayout(1, 4));
 			java.awt.Dimension panelSize = new java.awt.Dimension(715,150);
 			this.setPreferredSize(panelSize);
 			this.setSize(715,150);
@@ -204,12 +205,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			profile.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
 			profile.setSize(chrter.getProfileImage().getWidth(), chrter.getProfileImage().getHeight());
 			profile.setVisible(true);
-			profile.setLocation(10, 10);
-			GridLayout box = new GridLayout(1, 5);
-			this.setLayout(box);
+//			profile.setLocation(10, 10);
 			JPanel col1 = new JPanel(new GridLayout(2, 1));
-			col1.add(profile);
 			this.add(col1);
+			col1.add(profile);
 		}
 	}
 }
