@@ -123,11 +123,13 @@ public class Map implements Serializable{
 			else
 				msg = "(line 2) " + msg;
 			throw new InvalidMapException(msg);
+			
 		} catch (InvalidTileException e) {
 			String msg = "Invalid tile ";
 			if(count > 2)
 				msg = "(line " + count + ") " + msg;
 			throw new InvalidMapException(msg);
+			
 		} catch(ArrayIndexOutOfBoundsException e){
 			String msg = "Not within given tile range";
 			if(count > 2)

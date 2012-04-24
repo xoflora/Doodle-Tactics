@@ -28,7 +28,7 @@ public class MapTester {
 			Tile[][] tiles = new Tile[36][40];
 			for (int i = 0; i < tiles.length; i++)
 				for (int j = 0; j < tiles[i].length; j++)
-					tiles[i][j] = Tile.tile(panel, "src/graphics/tiles/tile.png", 'F', i, j, 1,0);
+					tiles[i][j] = Tile.tile(panel, "src/graphics/tiles/tile.png", 'F', i, j, 1, 1);
 			_test = new Map(tiles, "TestMap", null);
 
 			_test.getTile(7, 7).setCost(5);
@@ -143,7 +143,8 @@ public class MapTester {
 			Map.map(panel,path + 7);
 			assert(false);
 		} catch(InvalidMapException e){
-			assert(e.getMessage().equals("(line 8) Invalid tile permissions"));
+			System.out.println(e.getMessage());
+			assert(e.getMessage().equals("(line 8) Invalid tile "));
 		}
 		
 		//Error 8: Tile not within specified rang
@@ -536,6 +537,7 @@ public class MapTester {
 		 * test moving out of a high-cost tile
 		 */
 		compare = new LinkedList<Tile>();
+		compare.add(_test.getTile(20, 17));
 		compare.add(_test.getTile(21, 17));
 		compare.add(_test.getTile(19, 17));
 		compare.add(_test.getTile(20, 18));
@@ -637,6 +639,5 @@ public class MapTester {
 		 * note that testing with costs and permissions is not necessary since attackRange
 		 * does not depend on the properties of a tile, beyond generating the movementRange
 		 */
-		assert(false);
 	}
 }
