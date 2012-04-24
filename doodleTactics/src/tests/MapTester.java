@@ -6,10 +6,10 @@ import javax.swing.JPanel;
 import org.junit.*;
 
 import map.*;
-//TODO: (czchapma) Have Ryan to correct some of his tests, test working map, modify GameScreen accordingly
+//TODO: (czchapma) Have Ryan to correct some of his tests, test working map
 /**
  * 
- * @author rroelke and czchapma
+ * @author rroelke (except where noted)
  * tests the classes and methods of the map package
  */
 public class MapTester {
