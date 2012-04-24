@@ -1,4 +1,6 @@
 package main;
+import graphics.Rectangle;
+
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ import map.InvalidMapException;
 import map.InvalidTileException;
 import map.Map;
 import map.Tile;
+import java.util.PriorityQueue;
 
 /* currmap / prevmap vars
  * this is an idea we had about the game screen needing know what starting location
@@ -44,6 +47,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	private int _yRef;
 	private boolean _isAnimating;
 	private GameMenuController _gameMenuController;
+	private PriorityQueue<Rectangle> _paintQueue;
 	
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
@@ -53,6 +57,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		MAP_HEIGHT = 20;
 		
 		_gameMenuController = _dt.getGameMenuScreen().getController();
+		_paintQueue = new PriorityQueue<Rectangle>();
 		
 		//select a tile to go at the top left of the screen
 		_xRef = DEFAULT_XREF;
@@ -71,6 +76,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		int overflow = (65-48)/2;
 		_mainCharacter.setLocation((10*Tile.TILE_SIZE)-overflow, 8*Tile.TILE_SIZE);
 		_mainCharacter.setVisible(true);
+		
 		
 		try {
 			setMap(Map.map(this, "src/tests/data/testMapDemo"));
