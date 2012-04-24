@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 
 import controller.Controller;
 
+import character.Archer;
 import character.Character;
 
 /**
@@ -46,6 +47,10 @@ public class DoodleTactics extends JFrame {
 		this.setFocusable(false);
 		this.setResizable(false);
 		this.setVisible(true);
+		
+		//TESTING HEHE
+		_party.add(new Archer(_game, "graphics.characters.warrior_front.png", "graphics.characters.warrior_front.png", "graphics.characters.warrior_front.png", "graphics.characters.warrior_front.png", "graphics.characters.warrior_front.png", "graphics.characters.warrior_front.png", "graphics.characters.warrior_front.png"));
+		System.out.println("Party size: "+ _party.size());
 	}
 	
 	/**

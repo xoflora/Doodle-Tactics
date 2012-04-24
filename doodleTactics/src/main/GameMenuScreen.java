@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
@@ -31,7 +32,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private int _currClicked = 0;
 	private DoodleTactics _dt;
 	private LinkedList<CharInfo> _charInfoList;
-	private LinkedList<JComponent> _componentsOnScreen;
+	private JPanel _unitsBox;
 	
 	public GameMenuScreen(DoodleTactics dt) {
 		
@@ -42,7 +43,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 //		this.setSize(panelSize);
 //		this.setLayout(new java.awt.BorderLayout());
 		_dt = dt;
-		
+
 		_units = new MenuItem(this, "src/graphics/menu/units.png","src/graphics/menu/units_hovered.png", dt);
 		_map = new MenuItem(this, "src/graphics/menu/map.png","src/graphics/menu/map_hovered.png",dt);
 		_save = new MenuItem(this, "src/graphics/menu/save.png","src/graphics/menu/save_hovered.png",dt);
@@ -68,13 +69,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_quit.setVisible(true);
 		_title.setVisible(true);
 		
-		_componentsOnScreen = new LinkedList<JComponent>();
 		_charInfoList = new LinkedList<CharInfo>();
-		_charInfoList.add(new CharInfo());
-		_charInfoList.add(new CharInfo());
-		_charInfoList.add(new CharInfo());
-		_charInfoList.add(new CharInfo());
-		_charInfoList.add(new CharInfo());
+		
+		_unitsBox = new JPanel();
+		_unitsBox.setOpaque(false);
 	}
 	
 	protected GameMenuController defaultController() {
@@ -89,24 +87,21 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_quit.paint((Graphics2D) g, _quit.getCurrentImage());
 		_options.paint((Graphics2D) g, _options.getCurrentImage());
 		_map.paint((Graphics2D) g, _map.getCurrentImage());
-		for (int i=0; i<_componentsOnScreen.size(); i++) {
-			this.remove(_componentsOnScreen.get(i));
-		}
+		this.removeAll();
 		if (_currClicked == 1) {
-			GridLayout gridLayout = new GridLayout(_charInfoList.size(), 1, 10, 10);
-			JPanel unitsBox = new JPanel();
-			unitsBox.setLayout(gridLayout);
-			unitsBox.setOpaque(false);
-//			unitsBox.setBackground(java.awt.Color.LIGHT_GRAY);
-			unitsBox.setSize(735,660);
-			unitsBox.setLocation(200, 120);
-//			this.add(unitsBox);
-			for (int i=1; i<_charInfoList.size(); i++) {
-				unitsBox.add(_charInfoList.get(i));
+			_unitsBox.removeAll();
+			_unitsBox.setLayout(new GridLayout(_charInfoList.size(), 1, 10, 10));
+			_unitsBox.setSize(735,660);
+			_unitsBox.setLocation(200, 120);
+			for (character.Character character: _dt.getParty()) {
+				CharInfo toAdd = new CharInfo(character);
+				toAdd.setVisible(true);
+				toAdd.revalidate();
+				_unitsBox.add(toAdd);
+				_charInfoList.add(toAdd);
 			}
-			unitsBox.setVisible(true);
-			this.add(unitsBox, java.awt.BorderLayout.CENTER);
-			_componentsOnScreen.add(unitsBox);
+			this.add(_unitsBox);
+			this.revalidate();
 		}
 	}
 	
@@ -165,20 +160,20 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			clicked = _save;
 			_currClicked = 5;
 		}
-		
 		this.repaint();
 		return clicked;
 	}
+	
 	private class CharInfo extends JPanel {
 		//represents a box that will display all the characters current stats, items, inventory, etc.
-		public CharInfo() {
-			java.awt.Dimension panelSize = new java.awt.Dimension(705,150);
+		public CharInfo(character.Character character) {
+			java.awt.Dimension panelSize = new java.awt.Dimension(715,150);
 			this.setPreferredSize(panelSize);
-			this.setSize(705,150);
+			this.setSize(715,150);
 			this.setLocation(15, 15);
-			this.setBackground(java.awt.Color.pink);
 			this.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-			this.setVisible(true);
+			BufferedImage _profilePic = character.getProfileImage();
+			this.add(_profilePic);
 		}
 	}
 }
