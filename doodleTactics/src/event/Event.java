@@ -6,34 +6,22 @@ import java.util.List;
 
 import main.DoodleTactics;
 import main.GameMenuScreen;
+import main.GameScreen;
 import main.Screen;
 
 import controller.Controller;
+import controller.GameScreenController;
 
 /**
  * 
  * @author rroelke
  *
  */
-public abstract class Event extends Controller {
+public abstract class Event extends GameScreenController {
 	
 	public Event(DoodleTactics dt) {
 		super(dt);
 	}
-	
-	@Override
-	public Screen<? extends Controller> getScreen() {
-		return null;
-	}
-	
-	public void take() {
-		//TODO
-	}
-	
-	public void release() {
-		//TODO
-	}
-	
 	
 	//Events default to ignoring all key/mouse input, 
 	// but subclasses might override and enable certain actions
