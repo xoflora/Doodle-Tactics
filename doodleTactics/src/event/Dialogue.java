@@ -25,7 +25,6 @@ public class Dialogue extends Event {
 
 	private List<String> _phrases;
 	private List<Character> _characters;
-
 	/**
 	 * Creates a DialogueBox by parsing a dialogue csv file in the following format
 	 * name, phrase 1
@@ -38,7 +37,6 @@ public class Dialogue extends Event {
 	 */
 	public Dialogue(DoodleTactics dt, String filename, HashMap<String,Character> allChars) throws InvalidEventException, IOException, FileNotFoundException{
 		super(dt);
-
 		BufferedReader br = new BufferedReader(new FileReader(filename));
 		_phrases = new LinkedList<String>();
 		_characters = new LinkedList<Character>();
@@ -91,7 +89,17 @@ public class Dialogue extends Event {
 
 
 	public void display() {
+		
+	}
 
+	@Override
+	public void release() {
+	}
+
+	@Override
+	public void take() {
+		
+		//display Dialogue box and start 		
 	}
 
 
