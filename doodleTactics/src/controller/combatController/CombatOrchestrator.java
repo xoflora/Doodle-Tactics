@@ -6,9 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import util.Util;
 import controller.GameScreenController;
-
 import main.DoodleTactics;
+import character.Character;
 
 public class CombatOrchestrator extends GameScreenController {
 	
@@ -73,7 +74,10 @@ public class CombatOrchestrator extends GameScreenController {
 	 * @return a list containing all the characters involved in the battle
 	 */
 	public List<Character> getAllCombatants() {
-		return null;
+		List<List<Character>> c = new ArrayList<List<Character>>();
+		for (CombatController faction : _factions)
+			c.add(faction.getUnits());
+		return Util.union(c);
 	}
 
 	

@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Graphics2D;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -9,6 +10,7 @@ import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -139,7 +141,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			clicked = _units;
 			_currClicked = 1;
 			_unitsBox.removeAll();
-			_unitsBox.setLayout(new GridLayout(_dt.getParty().size(), 1, 10, 10));
+			_unitsBox.setLayout(new GridLayout(_dt.getParty().size(), 0, 10, 10));
 			if (_currClicked == 1) {
 				for (Character chrter: _dt.getParty()) {
 					CharInfo toAdd = new CharInfo(chrter);
@@ -191,24 +193,82 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private class CharInfo extends JPanel {
 		//represents a box that will display all the characters current stats, items, inventory, etc.
 		public CharInfo(Character chrter) {
-			this.setLayout(new GridLayout(1, 4));
+			this.setLayout(new GridBagLayout());
 			java.awt.Dimension panelSize = new java.awt.Dimension(715,150);
 			this.setPreferredSize(panelSize);
 			this.setSize(715,150);
 			this.setLocation(15, 15);
 			this.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-			this.setBackground(java.awt.Color.MAGENTA);
-//			graphics.MenuItem profile = new graphics.MenuItem(this, chrter.getProfileImage(), chrter.getProfileImage(), _dt);
-//			profile.setLocation(20, 20);
-//			profile.setVisible(true);
+			this.setBackground(java.awt.Color.LIGHT_GRAY);
 			JLabel profile = new JLabel(new ImageIcon(chrter.getProfileImage()));
 			profile.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-			profile.setSize(chrter.getProfileImage().getWidth(), chrter.getProfileImage().getHeight());
+			profile.setSize(100, 100);
 			profile.setVisible(true);
-//			profile.setLocation(10, 10);
-			JPanel col1 = new JPanel(new GridLayout(2, 1));
-			this.add(col1);
+			profile.setLocation(10, 10);
+			
+			JLabel name = new JLabel("Name");
+			name.setSize(150, 50);
+			name.setVisible(true);
+			
+			JLabel level = new JLabel("Level : " + chrter.getLevel());
+			level.setSize(150, 50);
+			level.setVisible(true);
+			
+			JLabel exp = new JLabel("EXP : " + chrter.getExp());
+			level.setSize(150, 50);
+			level.setVisible(true);
+			
+			JPanel col1 = new JPanel();
+			col1.setLayout(new GroupLayout(col1));
+			col1.setOpaque(false);
 			col1.add(profile);
+			col1.add(name);
+			this.add(col1);
+			
+			JLabel HP = new JLabel("HP : " + chrter.getHP() + "/" + chrter.getBaseStats()[7]);
+			HP.setSize(150, 50);
+			HP.setVisible(true);
+
+			JLabel strength = new JLabel("STRENGTH : " + chrter.getBaseStats()[0]);
+			strength.setSize(150, 50);
+			strength.setVisible(true);
+			
+			JLabel defense = new JLabel("DEFENSE : " + chrter.getBaseStats()[1]);
+			defense.setSize(150, 50);
+			defense.setVisible(true);
+			
+			JLabel special = new JLabel("SPECIAL : " + chrter.getBaseStats()[2]);
+			special.setSize(150, 50);
+			special.setVisible(true);
+			
+			JLabel resistance = new JLabel("RESISTANCE : " + chrter.getBaseStats()[3]);
+			resistance.setSize(150, 50);
+			resistance.setVisible(true);
+			
+			JLabel speed = new JLabel("SPEED : " + chrter.getBaseStats()[4]);
+			speed.setSize(150, 50);
+			speed.setVisible(true);
+			
+			JLabel skill = new JLabel("SKILL : " + chrter.getBaseStats()[5]);
+			skill.setSize(150, 50);
+			skill.setVisible(true);
+			
+			JLabel luck = new JLabel("LUCK : " + chrter.getBaseStats()[6]);
+			luck.setSize(150, 50);
+			luck.setVisible(true);
+			
+			JPanel col2 = new JPanel();
+			col2.setLayout(new GridLayout(8,0, 5, 5));
+			col2.setOpaque(false);
+			col2.add(HP);
+			col2.add(strength);
+			col2.add(defense);
+			col2.add(special);
+			col2.add(resistance);
+			col2.add(speed);
+			col2.add(skill);
+			col2.add(luck);
+			this.add(col2);
 		}
 	}
 }

@@ -39,6 +39,26 @@ public class Util {
 	}
 	
 	/**
+	 * performs the union of an arbitrary number of lists
+	 * @param <T> the parameterized type of the lists
+	 * @param collections the list of lists to union
+	 * @return the union of all the given lists
+	 */
+	public static <T> List<T> union(List<List<T>> collections) {
+		HashMap<T, Boolean> include = new HashMap<T, Boolean>();
+		
+		for (List<T> collection : collections)
+			for (T elt : collection)
+				include.put(elt, true);
+		
+		List<T> toReturn = new ArrayList<T>();
+		for (T elt : include.keySet())
+			toReturn.add(elt);
+		
+		return toReturn;
+	}
+	
+	/**
 	 * clones a list (by reference)
 	 * @param <T> the parameterized type of the list
 	 * @param a the list to clone

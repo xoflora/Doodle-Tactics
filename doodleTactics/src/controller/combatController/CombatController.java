@@ -53,6 +53,13 @@ public abstract class CombatController extends GameScreenController {
 	}
 	
 	/**
+	 * @return the list of units affiliated with this combat controller
+	 */
+	public List<Character> getUnits() {
+		return _units;
+	}
+	
+	/**
 	 * sets the enemy affiliations of this combat controller
 	 * @param aff
 	 */
