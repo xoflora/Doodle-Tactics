@@ -60,7 +60,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		MAP_HEIGHT = 20;
 		
 		_gameMenuController = _dt.getGameMenuScreen().getController();
-		_characterQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
+		_characterTerrainQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
 		_menuQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
 		
 		//select a tile to go at the top left of the screen
@@ -214,7 +214,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	 * @return the PriorityQueue storing the Characters to paint
 	 */
 	public PriorityQueue<Rectangle> getCharacterQueue(){
-		return _characterQueue;
+		return _characterTerrainQueue;
 	}
 	
 	
@@ -247,7 +247,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			}
 		}
 		
-		
+		//Add all 
 		
 		// paint all of the bottom images, meaning that they fall behind everything
 		for(Rectangle r : _bottomImages) {
@@ -255,7 +255,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		}
 		
 		// paint all of the characters
-		Rectangle[] paintArray = (Rectangle []) _characterQueue.toArray(new Rectangle[_characterQueue.size()]);
+		Rectangle[] paintArray = (Rectangle []) _characterTerrainQueue.toArray(new Rectangle[_characterTerrainQueue.size()]);
 		Arrays.sort(paintArray);
 		
 		for(int i = 0; i < paintArray.length; i++) {
