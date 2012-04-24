@@ -82,6 +82,7 @@ public class Util {
 	public static Color mixColors(Color first, Color second) {
 		return new Color((first.getRed() + second.getRed())/2,
 							(first.getGreen() + second.getGreen())/2,
-							(first.getBlue() + second.getBlue())/2);
+							(first.getBlue() + second.getBlue())/2,
+							(first.getAlpha() + second.getAlpha())/2);
 	}
 }

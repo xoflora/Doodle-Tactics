@@ -72,8 +72,8 @@ public class CombatOrchestrator extends GameScreenController {
 				release();
 		}
 		else {
-		//	_gameScreen.pushControl(new PlayerSetup(_dt, _gameScreen.getValidSetupTiles(_numUnits)));
-			_gameScreen.pushControl(_p);
+			_gameScreen.pushControl(new PlayerSetup(_dt, _gameScreen.getValidSetupTiles(_numUnits)));
+		//	_gameScreen.pushControl(_p);
 			_setup = true;
 		}
 	}
@@ -104,12 +104,6 @@ public class CombatOrchestrator extends GameScreenController {
 	public void mouseExited(MouseEvent e) { }
 
 	@Override
-	public void mousePressed(MouseEvent e) { }
-
-	@Override
-	public void mouseReleased(MouseEvent e) { }
-
-	@Override
 	public void keyPressed(KeyEvent e) { }
 
 	@Override
@@ -117,9 +111,6 @@ public class CombatOrchestrator extends GameScreenController {
 
 	@Override
 	public void keyTyped(KeyEvent e) { }
-
-	@Override
-	public void mouseDragged(MouseEvent e) { }
 
 	@Override
 	public void mouseMoved(MouseEvent e) { }

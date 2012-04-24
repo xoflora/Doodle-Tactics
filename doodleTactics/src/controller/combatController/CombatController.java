@@ -27,9 +27,6 @@ public abstract class CombatController extends GameScreenController {
 	
 	protected List<CombatController> _enemyAffiliations;
 	
-	private int _draggedx;
-	private int _draggedy;
-	
 	public CombatController(DoodleTactics dt, List<Character> units) {
 		super(dt);
 		
@@ -38,9 +35,6 @@ public abstract class CombatController extends GameScreenController {
 		
 		for (Character c : _units)
 			c.affiliate(this);
-		
-		_draggedx = 0;
-		_draggedy = 0;
 	}
 	
 	/**
@@ -139,30 +133,6 @@ public abstract class CombatController extends GameScreenController {
 	
 	@Override
 	public void keyTyped(KeyEvent e) { }
-	
-	@Override
-	public void mousePressed(MouseEvent e) {
-		_draggedx = e.getX();
-		_draggedy = e.getY();
-	}
-	
-	@Override
-	public void mouseReleased(MouseEvent e) { }
-	
-	@Override
-	/**
-	 * responds to the mouse being dragged to move the camera
-	 */
-	public void mouseDragged(MouseEvent e) {
-		int updatex = (e.getX() - _draggedx)/Tile.TILE_SIZE;
-		int updatey = (e.getY() - _draggedy)/Tile.TILE_SIZE;
-		
-		if (updatex != 0 || updatey != 0) {
-			_gameScreen.mapUpdate(updatex, updatey);
-			_draggedx = e.getX();
-			_draggedy = e.getY();
-		}
-	}
 	
 	@Override
 	/**

@@ -33,6 +33,8 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		_units = _dt.getParty();
 		_toPlace = Util.clone(_units);
 		_inPlace = new ArrayList<Character>();
+
+		_pool = new UnitPool(_dt, _gameScreen, this, _toPlace);
 	}
 
 	@Override
@@ -83,18 +85,6 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		
@@ -108,12 +98,6 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -137,20 +121,17 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 
 	@Override
 	public UnitPool getPool() {
-		// TODO Auto-generated method stub
-		return null;
+		return _pool;
 	}
 
 	@Override
 	public void addCharacterToPool(Character c) {
-		// TODO Auto-generated method stub
-		
+		_pool.addCharacter(c);
 	}
 
 	@Override
 	public void removeUnitFromPool(Character c) {
-		// TODO Auto-generated method stub
-		
+		_pool.removeCharacter(c);
 	}
 
 }
