@@ -38,11 +38,17 @@ public class OverworldController extends GameScreenController {
 		// TODO Auto-generated method stub
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		
-		System.out.println("Mouse pos: " + e.getX() + " " + e.getY());
-		System.out.println("Map pos: " + _gameScreen.getMapX(e.getX()) + " " + _gameScreen.getMapY(e.getY()));
+	//	System.out.println("Mouse pos: " + e.getX() + " " + e.getY());
+	//	System.out.println("Map pos: " + _gameScreen.getMapX(e.getX()) + " " + _gameScreen.getMapY(e.getY()));
 		
-		if (t != null)
-			System.out.println(t.x() + " " + t.y() + " " + (t.getOccupant() == null));
+		if (t != null) {
+			if (e.getButton() == MouseEvent.BUTTON1)
+				t.setInEnemyAttackRange(true);
+			else if (e.getButton() == MouseEvent.BUTTON2)
+				t.setInMovementRange(true);
+			else if (e.getButton() == MouseEvent.BUTTON3)
+				t.setHovered(true);
+		}
 
 	}
 
