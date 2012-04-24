@@ -61,6 +61,20 @@ public abstract class Shape implements Serializable{
 		public double getY() {
 			return _shape.getY();
 		}
+		
+		/**
+		 * @return the center x-coordinate of the shape
+		 */
+		public double getCenterX() {
+			return _shape.getCenterX();
+		}
+		
+		/**
+		 * @return the center y-coordinate of the shape
+		 */
+		public double getCenterY() {
+			return _shape.getCenterY();
+		}
 
 		/** Should return height of shape's bounding box. */
 		public double getHeight() {
@@ -187,7 +201,7 @@ public abstract class Shape implements Serializable{
 				brush.setColor(_fillColor);
 				brush.fill(_shape);
 				brush.rotate(-_rotationAngle, _shape.getCenterX(), _shape.getCenterY());
-				}
+			}
 		}
 
 		/** @param a Graphics brush 

@@ -3,8 +3,11 @@ package main;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -44,12 +47,27 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 //		this.setLayout(new java.awt.BorderLayout());
 		_dt = dt;
 
-		_units = new MenuItem(this, "src/graphics/menu/units.png","src/graphics/menu/units_hovered.png", dt);
-		_map = new MenuItem(this, "src/graphics/menu/map.png","src/graphics/menu/map_hovered.png",dt);
-		_save = new MenuItem(this, "src/graphics/menu/save.png","src/graphics/menu/save_hovered.png",dt);
-		_options = new MenuItem(this, "src/graphics/menu/options.png","src/graphics/menu/options_hovered.png",dt);
-		_quit = new MenuItem(this, "src/graphics/menu/quit_game_menu.png","src/graphics/menu/quit_game_menu_hovered.png",dt);
-		_title = new MenuItem(this, "src/graphics/menu/overlay.png", "src/graphics/menu/overlay.png", dt);
+		try {
+			BufferedImage unitsD = ImageIO.read(new File("src/graphics/menu/units.png"));
+			BufferedImage unitsH = ImageIO.read(new File("src/graphics/menu/units_hovered.png"));
+			BufferedImage mapD = ImageIO.read(new File("src/graphics/menu/map.png"));
+			BufferedImage mapH = ImageIO.read(new File("src/graphics/menu/map_hovered.png"));
+			BufferedImage saveD = ImageIO.read(new File("src/graphics/menu/save.png"));
+			BufferedImage saveH = ImageIO.read(new File("src/graphics/menu/save_hovered.png"));
+			BufferedImage optionsD = ImageIO.read(new File("src/graphics/menu/options.png"));
+			BufferedImage optionsH = ImageIO.read(new File("src/graphics/menu/options_hovered.png"));
+			BufferedImage quitD = ImageIO.read(new File("src/graphics/menu/quit_game_menu.png"));
+			BufferedImage quitH = ImageIO.read(new File("src/graphics/menu/quit_game_menu_hovered.png"));
+			BufferedImage titleD = ImageIO.read(new File("src/graphics/menu/overlay.png"));
+			_units = new MenuItem(this, unitsD,unitsH, dt);
+			_map = new MenuItem(this, mapD,mapH,dt);
+			_save = new MenuItem(this, saveD, saveH,dt);
+			_options = new MenuItem(this, optionsD,optionsH,dt);
+			_quit = new MenuItem(this, quitD, quitH,dt);
+			_title = new MenuItem(this, titleD, titleD, dt);
+		} catch (IOException e) {
+			
+		}
 		
 		int buttonHeight = _units.getCurrentImage().getHeight();
 		int buffer = 5;
@@ -172,8 +190,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			this.setSize(715,150);
 			this.setLocation(15, 15);
 			this.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-			BufferedImage _profilePic = character.getProfileImage();
-			
+			graphics.MenuItem profile = new graphics.MenuItem(_unitsBox, character.getProfileImage(), character.getProfileImage(), _dt);
 		}
 	}
 }

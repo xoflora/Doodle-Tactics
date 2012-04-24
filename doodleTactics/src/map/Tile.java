@@ -1,11 +1,17 @@
 package map;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+
+import util.Util;
 
 import event.Event;
 import character.Character;
@@ -36,6 +42,20 @@ public class Tile extends graphics.Rectangle {
 	private static final char PERMISSION_ESW = 'E';
 	private static final char PERMISSION_ALL = 'F';
 	
+	private static final float DEFAULT_OPACITY = 0;
+	private static final float OVERLAY_OPACITY = .35f;
+	private static final float INTERSECTION_OPACITY = .4f;
+	
+	private static final Color DEFAULT_COLOR = Color.WHITE;
+	private static final Color ATTACK_RANGE_COLOR = Color.RED;
+	private static final Color MOVEMENT_RANGE_COLOR = Color.BLUE;
+	private static final Color MOUSEOVER_COLOR = Color.GREEN;
+	private static final Color MOVEMENT_ATTACK_INTERSECTION_COLOR = Util.mixColors(MOVEMENT_RANGE_COLOR, ATTACK_RANGE_COLOR);
+	private static final Color MOVEMENT_MOUSE_INTERSECTION_COLOR = Util.mixColors(MOVEMENT_RANGE_COLOR, MOUSEOVER_COLOR);
+	private static final Color ATTACK_MOUSE_INTERSECTION_COLOR = Util.mixColors(ATTACK_RANGE_COLOR, MOUSEOVER_COLOR);
+	private static final Color INTERSECTION_COLOR = Color.magenta;
+	
+	
 	private boolean[] _canMove;
 	private int _cost;
 	private int _height;
@@ -43,7 +63,8 @@ public class Tile extends graphics.Rectangle {
 	private int _y;
 	
 	private BufferedImage _image;
-	private int opacity;
+	private float _opacity;
+	private Color _overlay;
 	
 	private Event _event;
 	private Character _character;
@@ -51,6 +72,7 @@ public class Tile extends graphics.Rectangle {
 	
 	private boolean _inMovementRange;
 	private boolean _inAttackRange;
+	private boolean _hovered;
 	
 	/**
 	 * Constructor
@@ -79,6 +101,9 @@ public class Tile extends graphics.Rectangle {
 		_height = height;
 		_x = x;
 		_y = y;
+		
+		_opacity = DEFAULT_OPACITY;
+		_overlay = DEFAULT_COLOR;
 	}
 	
 	/**
@@ -277,6 +302,8 @@ public class Tile extends graphics.Rectangle {
 	 */
 	public void setInMovementRange(boolean b) {
 		_inMovementRange = b;
+		
+		updateOverlay();
 	}
 	
 	/**
@@ -284,6 +311,61 @@ public class Tile extends graphics.Rectangle {
 	 */
 	public void setInEnemyAttackRange(boolean b) {
 		_inAttackRange = b;
+		
+		updateOverlay();
+	}
+	
+	public void setHovered(boolean b) {
+		_hovered = b;
+		
+		updateOverlay();
+	}
+	
+	/**
+	 * updates the opacity and color overlay of the tile
+	 */
+	private void updateOverlay() {
+		if (_inAttackRange) {
+			_opacity = INTERSECTION_OPACITY;
+			if (_inMovementRange) {
+				if (_hovered) {
+					_overlay = INTERSECTION_COLOR;
+				}
+				else {
+					_overlay = MOVEMENT_ATTACK_INTERSECTION_COLOR;
+				}
+			}
+			else {
+				if (_hovered)
+					_overlay = ATTACK_MOUSE_INTERSECTION_COLOR;
+				else {
+					_overlay = ATTACK_RANGE_COLOR;
+					_opacity = OVERLAY_OPACITY;
+				}
+			}
+		}
+		else {
+			if (_inMovementRange) {
+				if (_hovered) {
+					_overlay = MOVEMENT_MOUSE_INTERSECTION_COLOR;
+					_opacity = INTERSECTION_OPACITY;
+				}
+				else {
+					_overlay = MOVEMENT_RANGE_COLOR;
+					_opacity = OVERLAY_OPACITY;
+				}
+			}
+			else {
+				if (_hovered) {
+					_overlay = MOUSEOVER_COLOR;
+					_opacity = OVERLAY_OPACITY;
+				}
+				else {
+					_overlay = DEFAULT_COLOR;
+					_opacity = DEFAULT_OPACITY;
+				}
+			}
+		}
 	}
 	
 	/**
@@ -301,5 +383,37 @@ public class Tile extends graphics.Rectangle {
 	 */
 	public void setOccupant(Character c) {
 		_character = c;
+	}
+	
+	
+	private AlphaComposite makeComposite(float alpha) {
+		return AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
+	}
+	
+	@Override
+	public void paint(Graphics2D brush, BufferedImage img) {
+		super.paint(brush, img);
+		
+		Color store = brush.getColor();
+		
+		brush.rotate(getRotation(), getCenterX(), getCenterY());
+		brush.setColor(_overlay);
+		brush.setComposite(makeComposite(_opacity));
+		
+		brush.fillRect((int)getX(), (int)getY(), (int)getWidth(), (int)getHeight());
+		
+		brush.setComposite(makeComposite(1));
+		brush.setColor(store);
+		brush.rotate(-getRotation(), -getCenterX(), -getCenterY());
+		
+		
+	/*	if (_isVisible) {
+			brush.rotate(_rotationAngle, _shape.getCenterX(), _shape.getCenterY());
+			brush.setColor(_borderColor);
+			brush.draw(_shape);
+			brush.setColor(_fillColor);
+			brush.fill(_shape);
+			brush.rotate(-_rotationAngle, _shape.getCenterX(), _shape.getCenterY());
+		}	*/
 	}
 }

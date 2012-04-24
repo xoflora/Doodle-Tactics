@@ -1,5 +1,6 @@
 package util;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +8,11 @@ import java.util.ListIterator;
 
 import character.Character;
 
+/**
+ * contains utility methods of no particular grouping
+ * @author rroelke
+ *
+ */
 public class Util {
 	
 	/**
@@ -45,5 +51,17 @@ public class Util {
 			newList.add(elt);
 		
 		return newList;
+	}
+	
+	/**
+	 * mixes two colors
+	 * @param first
+	 * @param second
+	 * @return the mixture of the two colors
+	 */
+	public static Color mixColors(Color first, Color second) {
+		return new Color((first.getRed() + second.getRed())/2,
+							(first.getGreen() + second.getGreen())/2,
+							(first.getBlue() + second.getBlue())/2);
 	}
 }
