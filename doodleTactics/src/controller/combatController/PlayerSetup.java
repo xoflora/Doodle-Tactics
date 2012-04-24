@@ -4,6 +4,8 @@ import graphics.Rectangle;
 import graphics.Shape;
 
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.RectangularShape;
@@ -31,42 +33,37 @@ public class PlayerSetup extends GameScreenController {
 	 * @author rroelke
 	 *
 	 */
-	private class CharacterPool extends JFrame {
+	private static class CharacterPool extends JPanel {
 
-		private JPanel _panel;
-		private HashMap<Character, JLabel> _labels;
+		private List<Character> _inPool;
 		
 		public CharacterPool(List<Character> characters) {
 			super();
-			_panel = new JPanel(new FlowLayout());
-			_labels = new HashMap<Character, JLabel>();
-			
-			for (Character c : characters) {
-				JLabel label = new JLabel(new ImageIcon(c.getDownImage()));
-
-				label.setVisible(true);
-				_labels.put(c, label);
-				_panel.add(label);
-				
-				System.out.println("adding lable");
-			}
-			
-			add(_panel);
+			_inPool = Util.clone(characters);
 		}
 		
 		public void removeCharacter(Character c) {
-			_panel.remove(_labels.get(c));
+			_inPool.remove(c);
 		}
 		
 		public void addCharacter(Character c) {
-			_panel.add(_labels.get(c));
+			_inPool.add(c);
 		}
 		
 		@Override
 		public void setVisible(boolean b) {
-			pack();
 			super.setVisible(b);
-			_panel.setVisible(b);
+			
+			repaint();
+		}
+		
+		public void paint(Graphics graphics) {
+			Graphics2D g = (Graphics2D) graphics;
+			
+			int y = 0;
+			for (Character c : _inPool) {
+				c.paint(g);
+			}
 		}
 	}
 	
