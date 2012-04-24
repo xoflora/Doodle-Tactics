@@ -250,7 +250,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		}
 		
 		//Add all Characters and Terrains to PriorityQueue
-		LinkedList<Character> charsToPaint = this.getController().getCharactersToDisplay();
+		List<Character> charsToPaint = this.getController().getCharactersToDisplay();
 		for(Character c : charsToPaint)
 			_characterTerrainQueue.add(c);
 		for(Terrain t : _terrainToPaint){
@@ -262,7 +262,6 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 		// paint all characters and terrains
 		while(!_characterTerrainQueue.isEmpty()){
-			System.out.println("Painting");
 			_characterTerrainQueue.poll().paint((Graphics2D) g);
 		}
 		
