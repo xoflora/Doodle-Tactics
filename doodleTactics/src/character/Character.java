@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import event.DialogueBox;
-import event.InvalidFileException;
+import event.InvalidEventException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -599,7 +599,7 @@ public abstract class Character extends Rectangle{
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvalidFileException e) {
+		} catch (InvalidEventException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {

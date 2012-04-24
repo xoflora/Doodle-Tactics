@@ -54,7 +54,7 @@ public class EventTester {
 			assert(false);
 		} catch(IOException e){
 			assert(false);
-		} catch(InvalidFileException e){
+		} catch(InvalidEventException e){
 			assert(false);
 		}
 		
@@ -73,7 +73,7 @@ public class EventTester {
 			assert(false);
 		} catch(IOException e){
 			assert(false);
-		} catch(InvalidFileException e){
+		} catch(InvalidEventException e){
 			assert(false);
 		}
 
@@ -100,7 +100,7 @@ public class EventTester {
 			assert(false);
 		} catch(IOException e){
 			assert(false);
-		} catch(InvalidFileException e){
+		} catch(InvalidEventException e){
 			assert(false);
 		}
 		
@@ -110,7 +110,7 @@ public class EventTester {
 			assert(false);
 		} catch(FileNotFoundException e){
 			assert(true);
-		} catch (InvalidFileException e) {
+		} catch (InvalidEventException e) {
 			assert(false);
 		} catch (IOException e) {
 			assert(false);
@@ -122,7 +122,7 @@ public class EventTester {
 			assert(false);
 		} catch(FileNotFoundException e){
 			assert(false);
-		} catch (InvalidFileException e) {
+		} catch (InvalidEventException e) {
 			assert(e.getMessage().equals("Character randomCharacter not found (line: randomCharacter, whatever)"));
 		} catch (IOException e) {
 			assert(false);
@@ -134,7 +134,7 @@ public class EventTester {
 			assert(false);
 		} catch(FileNotFoundException e){
 			assert(false);
-		} catch (InvalidFileException e) {
+		} catch (InvalidEventException e) {
 			assert(e.getMessage().equals("\"too, many, commas\" did not parse correctly"));
 		} catch (IOException e) {
 			assert(false);
