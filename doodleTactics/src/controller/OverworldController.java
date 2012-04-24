@@ -41,14 +41,14 @@ public class OverworldController extends GameScreenController {
 	//	System.out.println("Mouse pos: " + e.getX() + " " + e.getY());
 	//	System.out.println("Map pos: " + _gameScreen.getMapX(e.getX()) + " " + _gameScreen.getMapY(e.getY()));
 		
-		if (t != null) {
+	/*	if (t != null) {
 			if (e.getButton() == MouseEvent.BUTTON1)
 				t.setInEnemyAttackRange(true);
 			else if (e.getButton() == MouseEvent.BUTTON2)
 				t.setInMovementRange(true);
 			else if (e.getButton() == MouseEvent.BUTTON3)
 				t.setHovered(true);
-		}
+		}	*/
 
 	}
 

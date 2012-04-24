@@ -20,6 +20,7 @@ import character.Character;
 public class PlayerCombatController extends CombatController {
 	
 	private Tile _selectedTile;
+	private Tile _hoveredTile;
 	private Character _selectedCharacter;
 	private Character _hoveredCharacter;
 	
@@ -32,7 +33,11 @@ public class PlayerCombatController extends CombatController {
 	public PlayerCombatController(DoodleTactics dt) {
 		super(dt, dt.getParty());
 		
+		System.out.println(_gameScreen == _dt.getGameScreen());
+		System.out.println(_gameScreen == null);
+		
 		_selectedTile = null;
+		_hoveredTile = null;
 		_selectedCharacter = null;
 		_hoveredCharacter = null;
 		
@@ -109,12 +114,6 @@ public class PlayerCombatController extends CombatController {
 	public void mouseExited(MouseEvent e) { }
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
@@ -133,24 +132,21 @@ public class PlayerCombatController extends CombatController {
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void mouseMoved(MouseEvent e) {
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		if (t != null) {
+			
+			if (t != _hoveredTile) {
+				if (_hoveredTile != null)
+					_hoveredTile.setHovered(false);
+				_hoveredTile = t;
+				_hoveredTile.setHovered(true);
+				_gameScreen.repaint();
+			}
+			
 			_hoveredCharacter = t.getOccupant();
 			
-			if (t.getOccupant() == null) {
+			if (_hoveredCharacter == null) {
 				if (_selectedTile != null && _selectedCharacter != null) {
 					if (t.isAdjacent(_path.get(_path.size() - 1)) && _pathCost + t.cost() <=
 							_selectedCharacter.getMovementRange()) {

@@ -14,7 +14,7 @@ public abstract class GameScreenController extends Controller {
 	
 	public GameScreenController(DoodleTactics dt) {
 		super(dt);
-		_gameScreen = dt.getGameScreen();
+		_gameScreen = _dt.getGameScreen();
 	}
 	
 	@Override
