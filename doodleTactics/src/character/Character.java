@@ -3,6 +3,7 @@ package character;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,10 +14,9 @@ import event.InvalidEventException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import map.Tile;
-
 import controller.combatController.CombatController;
 
+import map.Tile;
 import graphics.Rectangle;
 import graphics.Shape;
 import items.*;
@@ -58,7 +58,7 @@ public abstract class Character extends Rectangle{
 	protected Cuirass _cuirass;
 	protected Shield _shield;
 	protected Footgear _footgear;
-	protected HashMap<Integer,Item> _inventory; //items not being worn
+	protected ArrayList<Item> _inventory; //items not being worn
 	protected int _capacity; //max number of items the character can carry
 
 	//images
@@ -83,7 +83,7 @@ public abstract class Character extends Rectangle{
 		
 		_name = name;
 		_level = 1;
-		_inventory	= new HashMap<Integer,Item>();
+		_inventory	= new ArrayList<Item>();
 		_capacity = 5;
 		
 		_affiliation = null;
@@ -134,6 +134,10 @@ public abstract class Character extends Rectangle{
 		return _shield;
 	}
 	
+	public Footgear getFootgear(){
+		return _footgear;
+	}
+	
 	@Override
 	public int getPaintPriority(){
 		return (int) this.getY();
@@ -155,15 +159,11 @@ public abstract class Character extends Rectangle{
 	 * @throws ItemException
 	 */
 	public void addToInventory(Item i) throws ItemException{
-		//check if item is already in inventory
-		if(_inventory.containsKey(i))
-			throw new ItemException("Item " + i._id + " already in inventory");
-
 		//check if capacity has been exceeded
 		if(_inventory.size() == _capacity)
 			throw new ItemException("Capacity reached");
 
-		_inventory.put(i._id, i);
+		_inventory.add(i);
 	}
 
 	/**
@@ -427,6 +427,10 @@ public abstract class Character extends Rectangle{
 	public void affiliate(CombatController aff) {
 		_affiliation = aff;
 	}
+	
+	public ArrayList<Item> getInventory() {
+		return _inventory;
+	}
 
 	public void printStats(){
 		System.out.println("---------Character Info----------");
@@ -452,10 +456,10 @@ public abstract class Character extends Rectangle{
 			System.out.println("Shield: " + _shield._id);
 		if(_cuirass != null)
 			System.out.println("Cuirass: " + _cuirass._id);
-		if(_inventory.size() > 0)
-			System.out.println("inventory:");
-		for(Entry<Integer, Item> entry : _inventory.entrySet())
-				System.out.println(entry.getValue()._id);
+//		if(_inventory.size() > 0)
+//			System.out.println("inventory:");
+//		for(Entry<Integer, Item> entry : _inventory.entrySet())
+//				System.out.println(entry.getValue()._id);
 		System.out.println("-------------------");
 
 

@@ -1,8 +1,12 @@
 package main;
 
+import items.Item;
+
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -194,6 +199,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		//represents a box that will display all the characters current stats, items, inventory, etc.
 		public CharInfo(Character chrter) {
 			this.setLayout(new GridBagLayout());
+			GridBagConstraints constraint = new GridBagConstraints();
 			java.awt.Dimension panelSize = new java.awt.Dimension(715,150);
 			this.setPreferredSize(panelSize);
 			this.setSize(715,150);
@@ -204,7 +210,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			profile.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
 			profile.setSize(100, 100);
 			profile.setVisible(true);
-			profile.setLocation(10, 10);
+//			profile.setLocation(10, 10);
 			
 			JLabel name = new JLabel("Name");
 			name.setSize(150, 50);
@@ -218,12 +224,48 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			level.setSize(150, 50);
 			level.setVisible(true);
 			
+			JButton addToPartyButton = new JButton("Add to Party");
+			addToPartyButton.setVisible(true);
+			
 			JPanel col1 = new JPanel();
-			col1.setLayout(new GroupLayout(col1));
+			col1.setLayout(new GridBagLayout());
 			col1.setOpaque(false);
-			col1.add(profile);
-			col1.add(name);
-			this.add(col1);
+			
+			constraint.fill = GridBagConstraints.BOTH;
+			constraint.weighty = 0.5;
+			constraint.gridx = 0;
+			constraint.gridy = 0;
+			col1.add(profile, constraint);
+			
+			constraint.fill = GridBagConstraints.BOTH;
+			constraint.weighty = 0.5;
+			constraint.gridx = 0;
+			constraint.gridy = 1;
+			col1.add(name, constraint);
+			
+			constraint.fill = GridBagConstraints.BOTH;
+			constraint.weighty = 0.5;
+			constraint.gridx = 0;
+			constraint.gridy = 2;
+			col1.add(level, constraint);
+			
+			constraint.fill = GridBagConstraints.BOTH;
+			constraint.weighty = 0.5;
+			constraint.gridx = 0;
+			constraint.gridy = 3;
+			col1.add(exp, constraint);
+			
+			constraint.fill = GridBagConstraints.BOTH;
+			constraint.weighty = 0.5;
+			constraint.gridx = 0;
+			constraint.gridy = 4;
+			col1.add(addToPartyButton, constraint);
+			
+			constraint.fill = GridBagConstraints.BOTH;
+			constraint.weighty = 0.5;
+			constraint.gridx = 0;
+			constraint.gridy = 0;
+			this.add(col1, constraint);
 			
 			JLabel HP = new JLabel("HP : " + chrter.getHP() + "/" + chrter.getBaseStats()[7]);
 			HP.setSize(150, 50);
@@ -268,7 +310,65 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			col2.add(speed);
 			col2.add(skill);
 			col2.add(luck);
-			this.add(col2);
+			constraint.fill = GridBagConstraints.BOTH;
+			constraint.gridx = 1;
+			constraint.gridy = 0;
+			this.add(col2, constraint);
+			
+//			BufferedImage = 
+			
+			JPanel row1 = new JPanel();
+			row1.setLayout(new GridLayout(0, 5, 5, 5));
+			row1.setOpaque(false);
+			
+			for (Item i: chrter.getInventory()) {
+				JLabel item = new JLabel(new ImageIcon(chrter.getProfileImage()));
+				item.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+				item.setSize(75,75);
+				item.setVisible(true);
+				row1.add(item);
+			}
+			
+			for (int i = 0; i<(5-chrter.getInventory().size()); i++) {
+				JLabel item = new JLabel(new ImageIcon(chrter.getProfileImage()));
+				item.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+				item.setSize(75, 75);
+				item.setVisible(true);
+				row1.add(item);
+			}
+			constraint.fill = GridBagConstraints.BOTH;
+			constraint.weighty = 0.5;
+			constraint.gridx = 2;
+			constraint.gridy = 0;
+			this.add(row1, constraint);
+			
+			JPanel row2 = new JPanel();
+			row2.setLayout(new GridLayout(0, 5, 5, 5));
+			row2.setOpaque(false);
+			
+			JLabel weapon = new JLabel(new ImageIcon(chrter.getProfileImage()));
+			weapon.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+			row2.add(weapon);
+			
+//			if (chrter.getCuirass() != null) {
+				JLabel cuirass = new JLabel(new ImageIcon(chrter.getProfileImage()));
+				cuirass.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+				row2.add(cuirass);
+//			}
+			JLabel shield = new JLabel(new ImageIcon(chrter.getProfileImage()));
+			shield.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+			row2.add(shield);
+			
+			JLabel footgear = new JLabel(new ImageIcon(chrter.getProfileImage()));
+			footgear.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+			row2.add(footgear);
+			
+			constraint.fill = GridBagConstraints.BOTH;
+			constraint.weighty = 0.5;
+			constraint.gridx = 2;
+			constraint.gridy = 1;
+			this.add(row2, constraint);
+			
 		}
 	}
 }

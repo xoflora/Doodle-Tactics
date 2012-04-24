@@ -15,9 +15,11 @@ public abstract class Item implements Serializable{
 	private BufferedImage _image;
 	static int  numItems = 0;
 	public final int _id;
+	private String _description;
 		
-	public Item(){
+	public Item(BufferedImage image){
 		//The Id makes each item unique
+		_image = image;
 		_id = numItems;
 		numItems++;
 	}
@@ -29,6 +31,13 @@ public abstract class Item implements Serializable{
 	 */
 	public abstract void exert(Character c);
 	
+	public BufferedImage getImage() {
+		return _image;
+	}
+	
+	public String getDescription() {
+		return _description;
+	}
 	
 	/**
 	 * @author jeshapir
