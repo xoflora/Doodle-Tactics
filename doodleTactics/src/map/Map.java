@@ -23,7 +23,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import main.DoodleTactics;
-
+import character.*;
+import character.Character;
 import util.Heap;
 
 /**
@@ -42,13 +43,17 @@ public class Map implements Serializable{
 	private BufferedImage _overflow;
 	private Tile[][] _map;
 	private LinkedList<Terrain> _terrain;
+	private LinkedList<Tile> _randomBattles;
+	private LinkedList<Character> _activeCharacters;
 	String _name;
 
-	public Map(Tile[][] tiles, String name, BufferedImage overflow, LinkedList<Terrain> terrain) {
+	public Map(Tile[][] tiles, String name, BufferedImage overflow, LinkedList<Terrain> terrain, LinkedList<Tile> randomBattles, LinkedList<Character> chars) {
 		_map = tiles;
 		_overflow = overflow;
 		_name = "";
 		_terrain = terrain;
+		_randomBattles = randomBattles;
+		_activeCharacters = chars;
 	}
 
 	/**
@@ -59,11 +64,12 @@ public class Map implements Serializable{
 	 * Expected file format:
 	 * name,default_path,overflow_path
 	 * numCols,numRows
-	 * x1,y1,permissions,img_path1,height1,cost1
-	 * x2,y2,permissions,img_path2,heigh2,cost2
+	 * x1,y1,permissions,img_path1,height1,cost1,rand_battle
+	 * ...
 	 * img, img_path, x1, y1  
 	 * ...
-	 * 
+	 * char,type,name,avatar_img,profile_img,left_img,right_img,up_img,down_img
+	 *..
 	 * (where x and y are 0-indexed)
 	 * 
 	 * @author czchapma
@@ -71,6 +77,8 @@ public class Map implements Serializable{
 	public static Map map(JPanel container, String path) throws InvalidMapException {
 		int count = 2;
 		LinkedList<Terrain> terrainList = new LinkedList<Terrain>();
+		LinkedList<Tile> randBattle = new LinkedList<Tile>();
+		LinkedList<Character> chars = new LinkedList<Character>();
 		try {
 			//Parse initial data
 			BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
@@ -104,15 +112,23 @@ public class Map implements Serializable{
 					Terrain t = new Terrain(container, img);
 					t.setLocation(Integer.parseInt(splitLine[2]), Integer.parseInt(splitLine[3]));
 					terrainList.add(t);
+					
+					//Character Case
+				} else if(splitLine.length == 9 && splitLine[0].equals("char")){
+					chars.add(parseChar(container,splitLine));
 					//Other case
-				} else if(splitLine.length == 6){
+				}
+					else if(splitLine.length == 7){
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
 					if(tiles[x][y] != null)
 						throw new InvalidMapException("Two tiles at " + x + " and " + y);
 
 					tiles[x][y] = Tile.tile(container, splitLine[3], splitLine[2].charAt(0),x,y,Integer.parseInt(splitLine[4]),Integer.parseInt(splitLine[5]));
-
+					
+					//Check if random battle can occur
+					if(Integer.parseInt(splitLine[6]) == 1)
+						randBattle.add(tiles[x][y]);
 					//Error Case
 				} else
 					throw new InvalidMapException("(line " + count + ") Incorrect amount of data");
@@ -129,7 +145,7 @@ public class Map implements Serializable{
 			}
 			
 			//Create Map
-			return new Map(tiles,name, ImageIO.read(new File(overflowPath)),terrainList);
+			return new Map(tiles,name, ImageIO.read(new File(overflowPath)),terrainList,randBattle,chars);
 
 		} catch(FileNotFoundException e) {
 			throw new InvalidMapException("Error reading map from file located at " + path + ".");
@@ -156,6 +172,21 @@ public class Map implements Serializable{
 			throw new InvalidMapException(msg);
 		}
 
+	}
+	
+	public static Character parseChar(JPanel container, String[] splitLine) throws InvalidMapException{
+		if(splitLine[1].equals("Archer")){
+			return new Archer(container,splitLine[3],splitLine[4],splitLine[5],splitLine[6],splitLine[7],splitLine[8],splitLine[2]);
+		} else if(splitLine[1].equals("Mage")){
+			return new Mage(container,splitLine[3],splitLine[4],splitLine[5],splitLine[6],splitLine[7],splitLine[8],splitLine[2]);
+
+		} else if(splitLine[1].equals("Thief")){
+			return new Thief(container,splitLine[3],splitLine[4],splitLine[5],splitLine[6],splitLine[7],splitLine[8],splitLine[2]);
+
+		} else if(splitLine[1].equals("Warrior")){
+			return new Warrior(container,splitLine[3],splitLine[4],splitLine[5],splitLine[6],splitLine[7],splitLine[8],splitLine[2]);
+		} else
+			throw new InvalidMapException("Invalid Character Type");
 	}
 
 	public String toString() {
@@ -580,5 +611,12 @@ public class Map implements Serializable{
 	 */
 	public LinkedList<Terrain> getTerrain(){
 		return _terrain;
+	}
+	
+	/**
+	 * @return The LinkedList of active Characters
+	 */
+	public LinkedList<Character> getCharactersToDisplay(){
+		return _activeCharacters;
 	}
 }

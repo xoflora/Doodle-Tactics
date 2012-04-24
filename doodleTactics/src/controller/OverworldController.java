@@ -4,6 +4,7 @@ import java.awt.Event;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -139,5 +140,10 @@ public class OverworldController extends GameScreenController {
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		
+	}
+
+	@Override
+	public LinkedList<Character> getCharactersToDisplay() {
+		return _gameScreen.getMap().getCharactersToDisplay();
 	}
 }
