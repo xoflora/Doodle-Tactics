@@ -282,6 +282,8 @@ public class GameScreen extends Screen<GameScreenController> {
 	 * @author rroelke
 	 */
 	public List<Tile> getValidSetupTiles(int num) {
+		System.out.println(_currMap == null);
+		System.out.println(_currMap.getTile(getMapX(getWidth()/2), getMapY(getHeight()/2)));
 		return _currMap.getValidSetupTiles(_currMap.getTile(getMapX(getWidth()/2), getHeight()/2), num);
 	}
 }
