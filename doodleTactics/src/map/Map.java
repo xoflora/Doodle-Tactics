@@ -535,6 +535,8 @@ public class Map implements Serializable{
 			}
 		});
 
+		System.out.println(source == null);
+		
 		distances.put(source, 0);
 		heapPositions.put(source, heap.insert(source));
 
