@@ -49,7 +49,10 @@ public class DoodleTactics extends JFrame {
 		this.setVisible(true);
 		
 		//TESTING HEHE
-		_party.add(new Archer(_game, "graphics.characters.warrior_front.png", "graphics.characters.warrior_front.png", "graphics.characters.warrior_front.png", "graphics.characters.warrior_front.png", "graphics.characters.warrior_front.png", "graphics.characters.warrior_front.png", "graphics.characters.warrior_front.png"));
+		_party.add(new Archer(_game, "src/graphics/characters/warrior_front.png",
+				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png",
+				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png",
+				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png"));
 		System.out.println("Party size: "+ _party.size());
 	}
 	

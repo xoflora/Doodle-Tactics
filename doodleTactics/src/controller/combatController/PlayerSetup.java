@@ -39,11 +39,16 @@ public class PlayerSetup extends GameScreenController {
 		public CharacterPool(List<Character> characters) {
 			super();
 			_panel = new JPanel(new FlowLayout());
+			_labels = new HashMap<Character, JLabel>();
 			
 			for (Character c : characters) {
 				JLabel label = new JLabel(new ImageIcon(c.getDownImage()));
+
+				label.setVisible(true);
 				_labels.put(c, label);
 				_panel.add(label);
+				
+				System.out.println("adding lable");
 			}
 			
 			add(_panel);
@@ -55,6 +60,13 @@ public class PlayerSetup extends GameScreenController {
 		
 		public void addCharacter(Character c) {
 			_panel.add(_labels.get(c));
+		}
+		
+		@Override
+		public void setVisible(boolean b) {
+			pack();
+			super.setVisible(b);
+			_panel.setVisible(b);
 		}
 	}
 	
