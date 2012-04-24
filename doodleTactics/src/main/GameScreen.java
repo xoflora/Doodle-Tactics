@@ -253,12 +253,16 @@ public class GameScreen extends Screen<GameScreenController> {
 		LinkedList<Character> charsToPaint = this.getController().getCharactersToDisplay();
 		for(Character c : charsToPaint)
 			_characterTerrainQueue.add(c);
-		for(Terrain t : _terrainToPaint)
+		for(Terrain t : _terrainToPaint){
+			System.out.println("Adding Terrain");
 			_characterTerrainQueue.add(t);
+				
+		}
 		
 		
 		// paint all characters and terrains
 		while(!_characterTerrainQueue.isEmpty()){
+			System.out.println("Painting");
 			_characterTerrainQueue.poll().paint((Graphics2D) g);
 		}
 		
