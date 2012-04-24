@@ -92,7 +92,7 @@ public class OverworldController extends GameScreenController {
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
+	public void keyTyped(KeyEvent e) { 
 
 	//	System.out.println("isAnimating:" + _gameScreen.isAnimating());
 		

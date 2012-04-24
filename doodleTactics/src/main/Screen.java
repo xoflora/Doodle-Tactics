@@ -23,6 +23,8 @@ public abstract class Screen<T extends Controller> extends JPanel {
 		_dt = dt;
 		_control = new Stack<T>();
 		
+		setDoubleBuffered(true);
+		
 		pushControl(defaultController());
 	}
 	

@@ -143,7 +143,7 @@ public class GameScreen extends Screen<GameScreenController> {
 						repaint();
 					}
 				}
-			System.out.println("cnt: " + _cnt);
+//			System.out.println("cnt: " + _cnt);
 			_cnt+=1;
 			if (_cnt == _numSteps) {
 				_isAnimating = false;
