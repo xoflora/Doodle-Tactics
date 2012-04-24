@@ -49,9 +49,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	private int _yRef;
 	private boolean _isAnimating;
 	private GameMenuController _gameMenuController;
-	private PriorityQueue<Rectangle> _characterQueue; // the list of characters / images to render on the screen
-	private LinkedList<Rectangle> _bottomImages;  
-	private LinkedList<Rectangle> _topImages;
+	private PriorityQueue<Rectangle> _characterTerrainQueue; // the list of characters / images to render on the screen
 	private PriorityQueue<Rectangle> _menuQueue;
 	
 	public GameScreen(DoodleTactics dt) {
@@ -64,8 +62,6 @@ public class GameScreen extends Screen<GameScreenController> {
 		_gameMenuController = _dt.getGameMenuScreen().getController();
 		_characterQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
 		_menuQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
-		_bottomImages = new LinkedList<Rectangle>();
-		_topImages = new LinkedList<Rectangle>();
 		
 		//select a tile to go at the top left of the screen
 		_xRef = DEFAULT_XREF;
@@ -221,21 +217,6 @@ public class GameScreen extends Screen<GameScreenController> {
 		return _characterQueue;
 	}
 	
-	/**
-	 * 
-	 * @return the LinkedList of Rectangles that should be painted before all Characters 
-	 */
-	public LinkedList<Rectangle> getBottomImages(){
-		return _bottomImages;
-	}
-	
-	/**
-	 * 
-	 * @return the LinkedList of Rectangles that should be painted after all Character
-	 */
-	public LinkedList<Rectangle> getTopImages(){
-		return _topImages;
-	}
 	
 	/**
 	 * 
@@ -265,6 +246,8 @@ public class GameScreen extends Screen<GameScreenController> {
 				}
 			}
 		}
+		
+		
 		
 		// paint all of the bottom images, meaning that they fall behind everything
 		for(Rectangle r : _bottomImages) {

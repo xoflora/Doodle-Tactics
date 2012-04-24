@@ -11,9 +11,8 @@ public class Terrain extends Rectangle{
 	private BufferedImage _img;
 	protected DoodleTactics _dt;
 	
-	public Terrain(JPanel container, BufferedImage img,  DoodleTactics dt) {
+	public Terrain(JPanel container, BufferedImage img) {
 		super(container);
-		_dt = dt;
 		_img = img;
 		this.setSize(_img.getWidth(), _img.getHeight());
 	}

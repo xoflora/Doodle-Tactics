@@ -22,6 +22,8 @@ import java.util.LinkedList;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import main.DoodleTactics;
+
 import util.Heap;
 
 /**
@@ -39,17 +41,14 @@ public class Map implements Serializable{
 
 	private BufferedImage _overflow;
 	private Tile[][] _map;
-	private LinkedList<BufferedImage> _topImages;
-	private LinkedList<BufferedImage> _bottomImages;
+	private LinkedList<Terrain> _terrain;
 	String _name;
 
-	public Map(Tile[][] tiles, String name, BufferedImage overflow, 
-			LinkedList<BufferedImage> top, LinkedList<BufferedImage> bottom) {
+	public Map(Tile[][] tiles, String name, BufferedImage overflow, LinkedList<Terrain> terrain) {
 		_map = tiles;
 		_overflow = overflow;
 		_name = "";
-		_topImages = top;
-		_bottomImages = bottom;
+		_terrain = terrain;
 	}
 
 	/**
@@ -62,7 +61,7 @@ public class Map implements Serializable{
 	 * numCols,numRows
 	 * x1,y1,permissions,img_path1,height1,cost1
 	 * x2,y2,permissions,img_path2,heigh2,cost2
-	 * img, img_path, x1, y1, in_front  
+	 * img, img_path, x1, y1  
 	 * ...
 	 * 
 	 * (where x and y are 0-indexed)
@@ -71,8 +70,7 @@ public class Map implements Serializable{
 	 */
 	public static Map map(JPanel container, String path) throws InvalidMapException {
 		int count = 2;
-		LinkedList<BufferedImage> top = new LinkedList<BufferedImage>();
-		LinkedList<BufferedImage> bottom = new LinkedList<BufferedImage>();
+		LinkedList<Terrain> terrainList = new LinkedList<Terrain>();
 		try {
 			//Parse initial data
 			BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
@@ -101,15 +99,11 @@ public class Map implements Serializable{
 				count++;
 				
 				//Image case
-				if(splitLine.length == 5 && splitLine[0].equals("img")){
+				if(splitLine.length == 4 && splitLine[0].equals("img")){
 					BufferedImage img = ImageIO.read(new File(splitLine[1]));
-					if(Integer.parseInt(splitLine[4]) == 1)
-						top.add(img);
-					else if (Integer.parseInt(splitLine[4]) == 0)
-						bottom.add(img);
-					else
-						throw new InvalidMapException("");
-						
+					Terrain t = new Terrain(container, img);
+					t.setLocation(Integer.parseInt(splitLine[2]), Integer.parseInt(splitLine[3]));
+					terrainList.add(t);
 					//Other case
 				} else if(splitLine.length == 6){
 					x = Integer.parseInt(splitLine[0]);
@@ -135,7 +129,7 @@ public class Map implements Serializable{
 			}
 			
 			//Create Map
-			return new Map(tiles,name, ImageIO.read(new File(defaultPath)), top, bottom);
+			return new Map(tiles,name, ImageIO.read(new File(overflowPath)),terrainList);
 
 		} catch(FileNotFoundException e) {
 			throw new InvalidMapException("Error reading map from file located at " + path + ".");
@@ -579,5 +573,12 @@ public class Map implements Serializable{
 		}
 
 		return validTiles;
+	}
+	
+	/**
+	 * @return The LinkedList storing the Terrain info
+	 */
+	public LinkedList<Terrain> getTerrain(){
+		return _terrain;
 	}
 }
