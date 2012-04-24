@@ -134,6 +134,34 @@ public class UtilTester {
 		assert(cmp.contains(9));
 		assert(cmp.contains(25));
 		assert(cmp.contains(49));
+		
+		
+		List<List<Integer>> multiple = new LinkedList<List<Integer>>();
+		assert(Util.union(multiple).isEmpty());
+		
+		multiple.add(test1);
+		assert(Util.union(multiple).containsAll(test1) && test1.containsAll(Util.union(multiple)));
+		
+		multiple.add(test2);
+		assert(Util.union(multiple).containsAll(Util.union(test1, test2)) &&
+				Util.union(test1, test2).containsAll(Util.union(multiple)));
+
+		for (int i = 0; i < 5; i++)
+			multiple.add(new LinkedList<Integer>());
+		assert(Util.union(multiple).containsAll(Util.union(test1, test2)) &&
+				Util.union(test1, test2).containsAll(Util.union(multiple)));
+		
+		List<Integer> test3 = new LinkedList<Integer>();
+		test3.add(97);
+		test3.add(102);
+		test3.add(25);
+		test3.add(20);
+		test3.add(4);
+		multiple.add(test3);
+		assert(Util.union(multiple).size() == test1.size() + test2.size() + test3.size() - 2 - 2 - 4 + 1 &&
+				Util.union(multiple).containsAll(test1) &&
+				Util.union(multiple).containsAll(test2) &&
+				Util.union(multiple).containsAll(test3));
 	}
 	
 	@Test
