@@ -9,8 +9,12 @@ import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import character.Character;
 
 import graphics.MenuItem;
 import graphics.ScreenChangeMenuItem;
@@ -41,10 +45,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		
 		super(dt);
 		this.setBackground(java.awt.Color.DARK_GRAY);
-//		java.awt.Dimension panelSize = new java.awt.Dimension(875,1000);
-//		this.setPreferredSize(panelSize);
-//		this.setSize(panelSize);
-//		this.setLayout(new java.awt.BorderLayout());
+		this.setVisible(true);
 		_dt = dt;
 
 		try {
@@ -87,9 +88,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_quit.setVisible(true);
 		_title.setVisible(true);
 		
-		_charInfoList = new LinkedList<CharInfo>();
+		_charInfoList = new LinkedList<CharInfo>();		
 		
 		_unitsBox = new JPanel();
+		_unitsBox.setVisible(true);
 		_unitsBox.setOpaque(false);
 	}
 	
@@ -105,22 +107,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_quit.paint((Graphics2D) g, _quit.getCurrentImage());
 		_options.paint((Graphics2D) g, _options.getCurrentImage());
 		_map.paint((Graphics2D) g, _map.getCurrentImage());
-		this.removeAll();
-		if (_currClicked == 1) {
-			_unitsBox.removeAll();
-			_unitsBox.setLayout(new GridLayout(_charInfoList.size(), 1, 10, 10));
-			_unitsBox.setSize(735,660);
-			_unitsBox.setLocation(200, 120);
-			for (character.Character character: _dt.getParty()) {
-				CharInfo toAdd = new CharInfo(character);
-				toAdd.setVisible(true);
-				toAdd.revalidate();
-				_unitsBox.add(toAdd);
-				_charInfoList.add(toAdd);
-			}
-			this.add(_unitsBox);
-			this.revalidate();
-		}
+		_unitsBox.setSize(735,660);
+		_unitsBox.setLocation(200, 120);
 	}
 	
 	@Override
@@ -145,13 +133,28 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		MenuItem clicked = null;
 		
 		if(_units.contains(point)) {
+			this.removeAll();
 			this.setDefault();
 			_units.setHovered();
 			clicked = _units;
 			_currClicked = 1;
+			_unitsBox.removeAll();
+			_unitsBox.setLayout(new GridLayout(_dt.getParty().size(), 1, 10, 10));
+			if (_currClicked == 1) {
+				for (Character chrter: _dt.getParty()) {
+					CharInfo toAdd = new CharInfo(chrter);
+					toAdd.setVisible(true);
+					_unitsBox.add(toAdd);
+					_charInfoList.add(toAdd);
+				}
+				_unitsBox.revalidate();
+				this.add(_unitsBox);
+				this.revalidate();
+			}
 		}
 		
 		if(_map.contains(point)) {
+			this.removeAll();
 			this.setDefault();
 			_map.setHovered();
 			clicked = _map;
@@ -159,6 +162,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 		
 		if(_quit.contains(point)) {
+			this.removeAll();
 			this.setDefault();
 			_quit.setHovered();
 			clicked = _quit;
@@ -166,6 +170,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 		
 		if(_options.contains(point)) {
+			this.removeAll();
 			this.setDefault();
 			_options.setHovered();
 			clicked = _options;
@@ -173,6 +178,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 		
 		if(_save.contains(point)) {
+			this.removeAll();
 			this.setDefault();
 			_save.setHovered();
 			clicked = _save;
@@ -184,13 +190,25 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	
 	private class CharInfo extends JPanel {
 		//represents a box that will display all the characters current stats, items, inventory, etc.
-		public CharInfo(character.Character character) {
+		public CharInfo(Character chrter) {
+			this.setLayout(new GridLayout(1, 4));
 			java.awt.Dimension panelSize = new java.awt.Dimension(715,150);
 			this.setPreferredSize(panelSize);
 			this.setSize(715,150);
 			this.setLocation(15, 15);
 			this.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-			graphics.MenuItem profile = new graphics.MenuItem(_unitsBox, character.getProfileImage(), character.getProfileImage(), _dt);
+			this.setBackground(java.awt.Color.MAGENTA);
+//			graphics.MenuItem profile = new graphics.MenuItem(this, chrter.getProfileImage(), chrter.getProfileImage(), _dt);
+//			profile.setLocation(20, 20);
+//			profile.setVisible(true);
+			JLabel profile = new JLabel(new ImageIcon(chrter.getProfileImage()));
+			profile.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+			profile.setSize(chrter.getProfileImage().getWidth(), chrter.getProfileImage().getHeight());
+			profile.setVisible(true);
+//			profile.setLocation(10, 10);
+			JPanel col1 = new JPanel(new GridLayout(2, 1));
+			this.add(col1);
+			col1.add(profile);
 		}
 	}
 }

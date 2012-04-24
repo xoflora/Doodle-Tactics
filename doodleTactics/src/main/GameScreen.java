@@ -272,7 +272,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		}
 		
 		// paint all of the characters
-		Rectangle[] paintArray = (Rectangle []) _characterQueue.toArray();
+		Rectangle[] paintArray = (Rectangle []) _characterQueue.toArray(new Rectangle[_characterQueue.size()]);
 		Arrays.sort(paintArray);
 		
 		for(int i = 0; i < paintArray.length; i++) {
@@ -283,13 +283,12 @@ public class GameScreen extends Screen<GameScreenController> {
 		for(Rectangle r : _topImages) {
 			r.paint((Graphics2D) g);
 		}
-		
 		// finally paint all of the menus
-		Rectangle[] menuArray = (Rectangle []) _menuQueue.toArray();
+		Rectangle[] menuArray = (Rectangle []) _menuQueue.toArray(new Rectangle[_menuQueue.size()]);
 		Arrays.sort(menuArray);
 		
-//		if (_currentCharacter != null)
-//			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getCurrentImage());
+		if (_currentCharacter != null)
+			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getCurrentImage());
 		
 		
 		//System.out.println("--------------------");

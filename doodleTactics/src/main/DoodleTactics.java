@@ -12,6 +12,7 @@ import controller.Controller;
 
 import character.Archer;
 import character.Character;
+import character.Mage;
 
 /**
  * 
@@ -48,12 +49,14 @@ public class DoodleTactics extends JFrame {
 		this.setResizable(false);
 		this.setVisible(true);
 		
-		//TESTING HEHE
-		_party.add(new Archer(_game, "src/graphics/characters/warrior_front.png",
+		_party.add(new Archer(_game, "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png"));
+		_party.add(new Mage(_game, "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png"));
-		System.out.println("Party size: "+ _party.size());
 	}
 	
 	/**
