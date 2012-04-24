@@ -1,5 +1,7 @@
 package controller.combatController;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +27,9 @@ public abstract class CombatController extends GameScreenController {
 	
 	protected List<CombatController> _enemyAffiliations;
 	
+	private int _draggedx;
+	private int _draggedy;
+	
 	public CombatController(DoodleTactics dt, List<Character> units) {
 		super(dt);
 		
@@ -33,6 +38,9 @@ public abstract class CombatController extends GameScreenController {
 		
 		for (Character c : _units)
 			c.affiliate(this);
+		
+		_draggedx = 0;
+		_draggedy = 0;
 	}
 	
 	/**
@@ -119,5 +127,60 @@ public abstract class CombatController extends GameScreenController {
 		}
 		
 		return null;
+	}
+	
+	
+	@Override
+	/**
+	 * reponds to key input to move the camera about the screen
+	 */
+	public void keyTyped(KeyEvent e) {
+		if(!_gameScreen.isAnimating()) {			
+
+			switch(e.getKeyChar()) {
+
+			case 'w':
+				System.out.println("w");
+				_gameScreen.getMainChar().setUp();
+				_gameScreen.mapUpdate(0, -1);
+				break;
+			case 'a':
+				System.out.println("a");
+				_gameScreen.getMainChar().setLeft();
+				_gameScreen.mapUpdate(-1, 0);
+				break;
+			case 's':
+				System.out.println("s");
+				_gameScreen.getMainChar().setDown();
+				_gameScreen.mapUpdate(0, 1);
+				break;
+			case 'd':
+				System.out.println("d");
+				_gameScreen.getMainChar().setRight();
+				_gameScreen.mapUpdate(1, 0);
+				break;
+			}			
+		}
+	}
+	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		_draggedx = e.getX();
+		_draggedy = e.getY();
+	}
+	
+	@Override
+	/**
+	 * responds to the mouse being dragged to move the camera
+	 */
+	public void mouseDragged(MouseEvent e) {
+		int updatex = (e.getX() - _draggedx)/Tile.TILE_SIZE;
+		int updatey = (e.getY() - _draggedy)/Tile.TILE_SIZE;
+		
+		if (updatex != 0 || updatey != 0) {
+			_gameScreen.mapUpdate(updatex, updatey);
+			_draggedx = e.getX();
+			_draggedy = e.getY();
+		}
 	}
 }
