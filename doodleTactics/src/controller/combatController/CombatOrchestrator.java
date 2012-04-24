@@ -59,16 +59,28 @@ public class CombatOrchestrator extends GameScreenController {
 	 * signifies the beginning of combat, or end of a turn
 	 */
 	public void take() {
-		// TODO Auto-generated method stub
-		if (_setup) {
-			
+		if (_setup) {	//swap factions
+			if (_factionCycle.hasNext())
+				_gameScreen.pushControl(_factionCycle.next());
 		}
 		else {
 		//	_gameScreen.pushControl(new PlayerSetup(_dt, _gameScreen.getValidSetupTiles(_numUnits)));
 			_gameScreen.pushControl(_p);
 		}
 	}
+	
+	/**
+	 * @return a list containing all the characters involved in the battle
+	 */
+	public List<Character> getAllCombatants() {
+		return null;
+	}
 
+	
+	/*
+	 * the orchestrator does not respond to user inputs since it just switches between combat controllers 
+	 */
+	
 	@Override
 	public void mouseClicked(MouseEvent e) { }
 
