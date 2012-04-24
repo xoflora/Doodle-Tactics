@@ -1,8 +1,10 @@
 package controller;
 
+import java.util.LinkedList;
+
 import main.DoodleTactics;
 import main.GameScreen;
-
+import character.Character;
 /**
  * 
  * @author rroelke
@@ -21,4 +23,6 @@ public abstract class GameScreenController extends Controller {
 	public GameScreen getScreen() {
 		return _gameScreen;
 	}
+	
+	public abstract LinkedList<Character> getCharactersToDisplay();
 }

@@ -1,5 +1,6 @@
 package main;
 import graphics.Rectangle;
+import graphics.Terrain;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	private GameMenuController _gameMenuController;
 	private PriorityQueue<Rectangle> _characterTerrainQueue; // the list of characters / images to render on the screen
 	private PriorityQueue<Rectangle> _menuQueue;
+	private LinkedList<Terrain> _terrainToPaint;
 	
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
@@ -62,7 +64,6 @@ public class GameScreen extends Screen<GameScreenController> {
 		_gameMenuController = _dt.getGameMenuScreen().getController();
 		_characterTerrainQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
 		_menuQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
-		
 		//select a tile to go at the top left of the screen
 		_xRef = DEFAULT_XREF;
 		_yRef = DEFAULT_YREF;
@@ -83,6 +84,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 		try {
 			setMap(Map.map(this, "src/tests/data/testMapDemo"));
+			_terrainToPaint = _currMap.getTerrain();
 		} catch (InvalidMapException e) {
 			e.printMessage();
 		}
@@ -247,25 +249,19 @@ public class GameScreen extends Screen<GameScreenController> {
 			}
 		}
 		
-		//Add all 
+		//Add all Characters and Terrains to PriorityQueue
+		LinkedList<Character> charsToPaint = this.getController().getCharactersToDisplay();
+		for(Character c : charsToPaint)
+			_characterTerrainQueue.add(c);
+		for(Terrain t : _terrainToPaint)
+			_characterTerrainQueue.add(t);
 		
-		// paint all of the bottom images, meaning that they fall behind everything
-		for(Rectangle r : _bottomImages) {
-			r.paint((Graphics2D) g);
+		
+		// paint all characters and terrains
+		while(!_characterTerrainQueue.isEmpty()){
+			_characterTerrainQueue.poll().paint((Graphics2D) g);
 		}
 		
-		// paint all of the characters
-		Rectangle[] paintArray = (Rectangle []) _characterTerrainQueue.toArray(new Rectangle[_characterTerrainQueue.size()]);
-		Arrays.sort(paintArray);
-		
-		for(int i = 0; i < paintArray.length; i++) {
-			paintArray[i].paint((Graphics2D) g);
-		}
-		
-		// paint all of the top images, meaning that they are in front of everything
-		for(Rectangle r : _topImages) {
-			r.paint((Graphics2D) g);
-		}
 		// finally paint all of the menus
 		Rectangle[] menuArray = (Rectangle []) _menuQueue.toArray(new Rectangle[_menuQueue.size()]);
 		Arrays.sort(menuArray);
