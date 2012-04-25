@@ -115,7 +115,11 @@ public class Map implements Serializable{
 					
 					//Character Case
 				} else if(splitLine.length == 9 && splitLine[0].equals("char")){
-					chars.add(parseChar(container,splitLine));
+					Character c = parseChar(container,splitLine);
+					//TODO remove later
+					c.setVisible(true);
+					chars.add(c);
+					System.out.println("MAGE ADDED");
 					//Other case
 				}
 					else if(splitLine.length == 7){
@@ -617,6 +621,8 @@ public class Map implements Serializable{
 	 * @return The LinkedList of active Characters
 	 */
 	public LinkedList<Character> getCharactersToDisplay(){
+		for(Character c: _activeCharacters)
+			c.setLocation(150,150);
 		return _activeCharacters;
 	}
 }

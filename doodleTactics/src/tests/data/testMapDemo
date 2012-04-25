@@ -123,3 +123,4 @@ DemoMap,src/graphics/tiles/tile.png,src/graphics/tiles/grass.png
 img,src/graphics/terrain/mountains.png,14,14
 img,src/graphics/terrain/mountains.png,14,50
 img,src/graphics/terrain/mountains.png,14,100
+char,Mage,Renoir,src/graphics/characters/mage_left.png,src/graphics/characters/mage_left.png,src/graphics/characters/mage_left.png,src/graphics/characters/mage_right.png,src/graphics/characters/mage_back.png,src/graphics/characters/mage_front.png
