@@ -23,6 +23,8 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import character.Character;
 
@@ -52,7 +54,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private JPanel _unitsBox;
 	private HashMap<JLabel, Character> _labelToCharacter;
 	private HashMap<JLabel, Item> _labelToItem;
-	
+	private JScrollPane _scrollBar;
 	
 	public GameMenuScreen(DoodleTactics dt) {
 		
@@ -60,7 +62,9 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		this.setBackground(java.awt.Color.DARK_GRAY);
 		this.setVisible(true);
 		_dt = dt;
-
+		_labelToCharacter = new HashMap<JLabel, Character>();
+		_labelToItem = new HashMap<JLabel, Item>();
+		
 		try {
 			BufferedImage unitsD = ImageIO.read(new File("src/graphics/menu/units.png"));
 			BufferedImage unitsH = ImageIO.read(new File("src/graphics/menu/units_hovered.png"));
@@ -106,6 +110,9 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_unitsBox = new JPanel();
 		_unitsBox.setVisible(true);
 		_unitsBox.setOpaque(false);
+		
+		_scrollBar = new JScrollPane(_unitsBox, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		_scrollBar.setVisible(true);
 	}
 	
 	protected GameMenuController defaultController() {
@@ -114,14 +121,14 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 	public void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);
+		_unitsBox.setSize(750,_charInfoList.size()*(200+10));
+		_unitsBox.setLocation(200, 120);
 		_title.paint((Graphics2D) g, _title.getImage());
 		_units.paint((Graphics2D) g, _units.getImage());
 		_save.paint((Graphics2D) g, _save.getImage());
 		_quit.paint((Graphics2D) g, _quit.getImage());
 		_options.paint((Graphics2D) g, _options.getImage());
 		_map.paint((Graphics2D) g, _map.getImage());
-		_unitsBox.setSize(750,660);
-		_unitsBox.setLocation(200, 120);
 	}
 	
 	@Override
@@ -155,13 +162,16 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_unitsBox.setLayout(new GridLayout(_dt.getParty().size(), 0, 10, 10));
 			if (_currClicked == 1) {
 				for (Character chrter: _dt.getParty()) {
-					CharInfo toAdd = new CharInfo(chrter);
+					CharInfo toAdd = new CharInfo(this, chrter);
 					toAdd.setVisible(true);
 					_unitsBox.add(toAdd);
 					_charInfoList.add(toAdd);
 				}
 				_unitsBox.revalidate();
+				_scrollBar.revalidate();
+				_scrollBar.getViewport().add(_unitsBox);
 				this.add(_unitsBox);
+				this.add(_scrollBar);
 				this.revalidate();
 			}
 		}
@@ -197,13 +207,19 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			clicked = _save;
 			_currClicked = 5;
 		}
+		
+		for (JLabel label: _labelToCharacter.keySet()) {
+			if (label.contains(point)) {
+				System.out.println("clicked an item");
+			}
+		}
 		this.repaint();
 		return clicked;
 	}
 	
 	private class CharInfo extends JPanel {
 		//represents a box that will display all the characters current stats, items, inventory, etc.
-		public CharInfo(Character chrter) {
+		public CharInfo(Screen screen, Character chrter) {
 			this.setLayout(new GridBagLayout());
 			GridBagConstraints constraint = new GridBagConstraints();
 			java.awt.Dimension panelSize = new java.awt.Dimension(730,200);
@@ -332,9 +348,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			constraint.gridy = 0;
 			row1.add(inventory, constraint);
 			
-			
 			for (int i=0; i<chrter.getInventory().size(); i++) {
-				JLabel item = new JLabel(new ImageIcon(chrter.getDownImage()));
+				JLabel item = new JLabel(new ImageIcon(chrter.getInventory().get(i).getImage()));
 //				item.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
 				item.setSize(75,75);
 				item.setVisible(true);
@@ -344,6 +359,9 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				constraint.gridx = i;
 				constraint.gridy = 1;
 				row1.add(item, constraint);
+				item.addMouseListener(screen.getController());
+				_labelToCharacter.put(item, chrter);
+				_labelToItem.put(item, chrter.getInventory().get(i));
 			}
 			
 			System.out.println(chrter.getInventory().size());
@@ -360,11 +378,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				constraint.gridy = 1;
 				row1.add(item, constraint);
 			}
-//			constraint.fill = GridBagConstraints.BOTH;
-//			constraint.weighty = 0.5;
-//			constraint.insets = inset;
-//			constraint.gridx = 3;
-//			constraint.gridy = 0;
 			
 			JLabel equipped = new JLabel(new ImageIcon(inventoryPic));
 			constraint.fill = GridBagConstraints.BOTH;
@@ -373,7 +386,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			constraint.gridx = 0;
 			constraint.gridy = 2;
 			row1.add(equipped, constraint);
-			
 			
 			JLabel weapon = new JLabel(new ImageIcon(chrter.getDownImage()));
 //			weapon.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));

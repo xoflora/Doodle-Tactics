@@ -6,8 +6,11 @@ import character.Character;
 
 public class HealthPotion extends Item{
 	
-	public HealthPotion(BufferedImage image) {
+	int _HPupdate;
+	
+	public HealthPotion(BufferedImage image, int HPupdate) {
 		super(image);
+		_HPupdate = HPupdate;
 	}
 
 	@Override

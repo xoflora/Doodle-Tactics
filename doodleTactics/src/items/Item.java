@@ -39,6 +39,10 @@ public abstract class Item implements Serializable{
 		return _description;
 	}
 	
+	public void setDescription(String desc) {
+		_description = desc;
+	}
+	
 	/**
 	 * @author jeshapir
 	 */

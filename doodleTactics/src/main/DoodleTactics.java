@@ -1,18 +1,29 @@
 package main;
 
+import items.HealthPotion;
+import items.Item;
+import items.ItemException;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 
 import controller.Controller;
 
 import character.Archer;
 import character.Character;
 import character.Mage;
+import character.Thief;
+import character.Warrior;
 
 /**
  * 
@@ -49,14 +60,36 @@ public class DoodleTactics extends JFrame {
 		this.setResizable(false);
 		this.setVisible(true);
 		
-		_party.add(new Archer(_game, "src/graphics/characters/warrior_back.png",
+		Archer _char1 = new Archer(_game, "src/graphics/characters/pokeball.png",
+				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png"));
-		_party.add(new Mage(_game, "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_front.png",
+				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png");
+		_party.add(_char1);
+		BufferedImage pot;
+		try {
+			pot = ImageIO.read(new File("src/graphics/characters/warrior_left.png"));
+			_char1.addToInventory(new HealthPotion(pot, 10));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ItemException e) {
+			e.printStackTrace();
+		}
+		
+		_party.add(new Mage(_game, "src/graphics/characters/pokeball.png",
+				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png"));
+		
+		_party.add(new Thief(_game, "src/graphics/characters/pokeball.png",
+				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_front.png",
+				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png",
+				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png"));
+		
+		_party.add(new Warrior(_game, "src/graphics/characters/pokeball.png",
+				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_front.png",
+				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png",
+				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png"));
+
 	}
 	
 	/**
