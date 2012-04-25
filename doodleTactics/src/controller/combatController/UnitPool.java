@@ -95,4 +95,10 @@ public class UnitPool extends Rectangle {
 			y += Tile.TILE_SIZE;
 		}
 	}
+
+	@Override
+	public BufferedImage getImage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

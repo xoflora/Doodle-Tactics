@@ -17,6 +17,7 @@ import controller.combatController.CombatOrchestrator;
 import controller.combatController.RandomBattleAI;
 
 import character.Character;
+import character.Mage;
 import character.MainCharacter;
 import graphics.Rectangle;
 
@@ -287,10 +288,10 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 		if (_currentCharacter != null)
 			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getImage());
-		
-		charsToPaint.get(0).paint((Graphics2D) g,charsToPaint.get(0).getImage());
-		
 		//System.out.println("--------------------");
+		
+		Mage m = new Mage(this,"src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_right.png","src/graphics/characters/mage_front.png","src/graphics/characters/mage_back.png","MyMage");
+		m.paint((Graphics2D) g,m.getImage());
 }
 	
 	@Override
