@@ -268,11 +268,11 @@ public class GameScreen extends Screen<GameScreenController> {
 		for(Character c : charsToPaint){
 			_characterTerrainQueue.add(c);
 			c.setVisible(true);
-			c.setDown();
 			c.setFillColor(java.awt.Color.BLACK);
-			c.setSize(65, 50);
-			int overflow = (65-48)/2;
+			c.setSize(c.getImage().getWidth(), c.getImage().getHeight());
+			int overflow = (c.getImage().getWidth()-48)/2;
 			c.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
+			_currentCharacter  = (MainCharacter) c;
 		}
 					
 		for(Terrain t : _terrainToPaint){

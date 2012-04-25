@@ -94,6 +94,7 @@ public abstract class Character extends Rectangle{
 			_right = ImageIO.read(new File(right));
 			_up = ImageIO.read(new File(up));
 			_down = ImageIO.read(new File(down));
+			_currentImage = _down;
 		} catch(IOException e) {
 			System.out.println("Bad file path!");
 		}

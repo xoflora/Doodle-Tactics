@@ -27,9 +27,13 @@ public class Terrain extends Rectangle{
 	}
 	
 	@Override
+	public double getY(){
+		return super.getY() - _img.getHeight();
+	}
+	
+	@Override
 	public void setLocation(double x, double y){
-		super.setLocation(x, y);
+		super.setLocation(x, y - _img.getHeight());
 		this.setPaintPriority((int) y + _img.getHeight());
-		System.out.println("Terrain Location = x:" + x + " y: " + y);
 	}
 }
