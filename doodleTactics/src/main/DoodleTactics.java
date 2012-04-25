@@ -49,12 +49,12 @@ public class DoodleTactics extends JFrame {
 		this.setResizable(false);
 		this.setVisible(true);
 		
-		_party.add(new Archer(_game, "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
+		_party.add(new Archer(_game, "src/graphics/characters/pokeball.png",
+				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png"));
-		_party.add(new Mage(_game, "src/graphics/characters/warrior_front.png",
-				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png",
+		_party.add(new Mage(_game, "src/graphics/characters/pokeball.png",
+				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png"));
 	}
