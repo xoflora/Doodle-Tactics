@@ -254,9 +254,11 @@ public class GameScreen extends Screen<GameScreenController> {
 		//Add all Characters and Terrains to PriorityQueue
 		List<Character> charsToPaint = this.getController().getCharactersToDisplay();
 	
-		for(Character c : charsToPaint){
+		System.out.println("====print characters====");
+		for(Character c : charsToPaint) {
+			System.out.println("name: " + c.getName());
 			_characterTerrainQueue.add(c);
-			int overflow = (c.getImage().getWidth() - Tile.TILE_SIZE)/2;
+			int overflow = (c.getImage().getWidth() - Tile.TILE_SIZE) / 2;
 			c.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
 		}
 					
