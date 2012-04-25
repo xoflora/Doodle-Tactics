@@ -36,7 +36,7 @@ public class MenuItem extends Rectangle {
 	 * accessor for the current image 
 	 * @return the current image of the menu
 	 */
-	public BufferedImage getCurrentImage() {
+	public BufferedImage getImage() {
 		return _current;
 	}
 	

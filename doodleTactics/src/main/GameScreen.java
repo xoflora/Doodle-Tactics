@@ -137,6 +137,12 @@ public class GameScreen extends Screen<GameScreenController> {
 						repaint();
 					}
 				}
+				for(Rectangle r: _terrainToPaint){
+					r.setLocation((r.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), r.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
+					System.out.println("x: " + (r.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)) + " y: " + r.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
+					repaint();
+				}
+				
 //			System.out.println("cnt: " + _cnt);
 			_cnt+=1;
 			if (_cnt == _numSteps) {
@@ -259,9 +265,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			_characterTerrainQueue.add(t);
 			double x = t.getX();
 			double y = t.getY();
-			if((x < _xRef + 22 && x >= _xRef - 1) && (y < (_yRef + 18) && y >= (_yRef - 1))) {
-				t.paint((Graphics2D) g, t.getImage());				
-			}
+			t.paint((Graphics2D) g, t.getImage());				
 		}
 		
 		System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");

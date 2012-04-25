@@ -1,6 +1,7 @@
 package graphics;
 
 import java.awt.geom.RectangularShape;
+import java.awt.image.BufferedImage;
 import java.util.Comparator;
 
 import javax.swing.JPanel;
@@ -10,7 +11,7 @@ import javax.swing.JPanel;
  * @author jeshapir
  */
 
-public class Rectangle extends Shape {
+public abstract class Rectangle extends Shape {
 	
 	/* Comparator for rectangles, which uses the rectangle's priority used
 	 * based on the painting order */
@@ -42,5 +43,9 @@ public class Rectangle extends Shape {
 	public int getPaintPriority() {
 		return _paintPriority;
 	}
+	/**
+	 * @return the image of the Rectangle
+	 */
+	public abstract BufferedImage getImage();
 	
 }

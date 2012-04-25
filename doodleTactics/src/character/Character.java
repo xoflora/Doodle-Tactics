@@ -342,7 +342,7 @@ public abstract class Character extends Rectangle{
 	 * @return the current image on the game map
 	 */
 	
-	public BufferedImage getCurrentImage() {
+	public BufferedImage getImage() {
 		return _currentImage;
 	}
 	
