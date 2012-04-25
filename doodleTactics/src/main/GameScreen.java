@@ -261,6 +261,9 @@ public class GameScreen extends Screen<GameScreenController> {
 		for(Character c : charsToPaint){
 			_characterTerrainQueue.add(c);
 			c.setVisible(true);
+			int overflow = (65-48)/2;
+			c.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
+			c.setLocation(14.0, 52.0);
 		}
 					
 		for(Terrain t : _terrainToPaint){
