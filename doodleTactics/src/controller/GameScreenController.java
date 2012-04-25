@@ -69,7 +69,7 @@ public abstract class GameScreenController extends Controller {
 	public void mouseDragged(MouseEvent e) {
 		int updatex = (e.getX() - _draggedx)/Tile.TILE_SIZE;
 		int updatey = (e.getY() - _draggedy)/Tile.TILE_SIZE;
-		
+				
 		if (updatex != 0 || updatey != 0) {
 			_gameScreen.mapUpdate(-updatex, -updatey);
 			_draggedx = e.getX();

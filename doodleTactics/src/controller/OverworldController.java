@@ -31,7 +31,6 @@ public class OverworldController extends GameScreenController {
 	@Override
 	public void release() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -82,6 +81,15 @@ public class OverworldController extends GameScreenController {
 			}			
 		}
 	}
+	
+	@Override
+	public void mousePressed(MouseEvent e) { }
+	
+	@Override
+	public void mouseDragged(MouseEvent e) { }
+	
+	@Override
+	public void mouseMoved(MouseEvent e) { }
 
 	@Override
 	public LinkedList<Character> getCharactersToDisplay() {
