@@ -11,11 +11,12 @@ public class Terrain extends Rectangle{
 	private BufferedImage _img;
 	protected DoodleTactics _dt;
 	
-	public Terrain(JPanel container, BufferedImage img) {
+	public Terrain(JPanel container, BufferedImage img,int x, int y) {
 		super(container);
 		_img = img;
 		this.setSize(_img.getWidth(), _img.getHeight());
 		this.setVisible(true);
+		setLocation(x, y- _img.getHeight());
 	}
 	
 	/**
@@ -26,14 +27,10 @@ public class Terrain extends Rectangle{
 		return _img;
 	}
 	
-	@Override
-	public double getY(){
-		return super.getY() - _img.getHeight();
-	}
 	
 	@Override
 	public void setLocation(double x, double y){
-		super.setLocation(x, y - _img.getHeight());
+		super.setLocation(x, y);
 		this.setPaintPriority((int) y + _img.getHeight());
 	}
 }

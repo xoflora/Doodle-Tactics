@@ -112,8 +112,7 @@ public class Map implements Serializable{
 				//Image case
 				if(splitLine.length == 4 && splitLine[0].equals("img")){
 					BufferedImage img = ImageIO.read(new File(splitLine[1]));
-					Terrain t = new Terrain(container, img);
-					t.setLocation(Integer.parseInt(splitLine[2]), Integer.parseInt(splitLine[3]));
+					Terrain t = new Terrain(container, img, Integer.parseInt(splitLine[2]),Integer.parseInt(splitLine[3]));
 					terrainList.add(t);
 					
 					//Character Case

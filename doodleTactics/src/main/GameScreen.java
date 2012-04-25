@@ -282,8 +282,7 @@ public class GameScreen extends Screen<GameScreenController> {
 //		if (_currentCharacter != null)
 //			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getImage());
 		//System.out.println("--------------------");
-		
-		
+				
 //		m.setLocation(_currentCharacter.getX(),_currentCharacter.getY());
 //		m.setVisible(true);
 //		m.setDown();
