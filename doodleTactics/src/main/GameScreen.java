@@ -75,23 +75,9 @@ public class GameScreen extends Screen<GameScreenController> {
 		_xRef = DEFAULT_XREF;
 		_yRef = DEFAULT_YREF;
 		_isAnimating = false;
-		
-		_currentCharacter = new MainCharacter(this, "src/graphics/characters/warrior_front.png",
-				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_left.png",
-				"src/graphics/characters/warrior_right.png", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_front.png","test");
-		
-		_currentCharacter.setDown();
-		_currentCharacter.setFillColor(java.awt.Color.BLACK);
-		_currentCharacter.setSize(65, 50);
-		
-		int overflow = (65-48)/2;
-		_currentCharacter.setLocation((10*Tile.TILE_SIZE)-overflow, 8*Tile.TILE_SIZE);
-		_currentCharacter.setVisible(true);
-		
+				
 		try {
 			setMap(Map.map(this, "src/tests/data/testMapDemo"));
-			_terrainToPaint = _currMap.getTerrain();
 		} catch (InvalidMapException e) {
 			e.printMessage();
 		}
@@ -100,6 +86,9 @@ public class GameScreen extends Screen<GameScreenController> {
 	
 	public void setMap(Map m) {
 		_currMap = m;
+		_currentCharacter = _currMap.getMainCharacter();
+		_terrainToPaint = _currMap.getTerrain();
+
 		for (int i = 0; i < m.getWidth(); i++)
 			for (int j = 0; j < m.getHeight(); j++) {
 				m.getTile(i, j).setLocation((i - DEFAULT_XREF)*Tile.TILE_SIZE, (j - DEFAULT_YREF)*Tile.TILE_SIZE);
@@ -267,12 +256,8 @@ public class GameScreen extends Screen<GameScreenController> {
 	
 		for(Character c : charsToPaint){
 			_characterTerrainQueue.add(c);
-			c.setVisible(true);
-			c.setFillColor(java.awt.Color.BLACK);
-			c.setSize(c.getImage().getWidth(), c.getImage().getHeight());
 			int overflow = (c.getImage().getWidth()-48)/2;
 			c.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
-			_currentCharacter  = (MainCharacter) c;
 		}
 					
 		for(Terrain t : _terrainToPaint){
@@ -298,15 +283,6 @@ public class GameScreen extends Screen<GameScreenController> {
 //			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getImage());
 		//System.out.println("--------------------");
 		
-		try {
-			Terrain t = new Terrain(this, ImageIO.read(new File("src/graphics/characters/mage_left.png")));
-			t.setLocation(_currentCharacter.getX(),_currentCharacter.getY());
-			t.setVisible(true);
-		//	t.paint((Graphics2D) g,t.getImage());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 //		m.setLocation(_currentCharacter.getX(),_currentCharacter.getY());
 //		m.setVisible(true);

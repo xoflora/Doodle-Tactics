@@ -124,3 +124,4 @@ img,src/graphics/terrain/mountains.png,48,48
 img,src/graphics/terrain/mountains.png,96,96
 img,src/graphics/terrain/mountains.png,144,144
 char,Main,Renoir,src/graphics/characters/mage_left.png,src/graphics/characters/mage_left.png,src/graphics/characters/mage_left.png,src/graphics/characters/mage_right.png,src/graphics/characters/mage_back.png,src/graphics/characters/mage_front.png
+char,Warrior,Vermeer,src/graphics/characters/pokeball.png,src/graphics/characters/pokeball.png,src/graphics/characters/warrior_left.png,src/graphics/characters/warrior_right.png,src/graphics/characters/warrior_back.png,src/graphics/characters/warrior_front.png

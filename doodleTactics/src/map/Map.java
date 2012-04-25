@@ -45,15 +45,17 @@ public class Map implements Serializable{
 	private LinkedList<Terrain> _terrain;
 	private LinkedList<Tile> _randomBattles;
 	private LinkedList<Character> _activeCharacters;
+	private MainCharacter _mainChar;
 	String _name;
 
-	public Map(Tile[][] tiles, String name, BufferedImage overflow, LinkedList<Terrain> terrain, LinkedList<Tile> randomBattles, LinkedList<Character> chars) {
+	public Map(Tile[][] tiles, String name, BufferedImage overflow, LinkedList<Terrain> terrain, LinkedList<Tile> randomBattles, LinkedList<Character> chars, MainCharacter main) {
 		_map = tiles;
 		_overflow = overflow;
 		_name = "";
 		_terrain = terrain;
 		_randomBattles = randomBattles;
 		_activeCharacters = chars;
+		_mainChar = main;
 	}
 
 	/**
@@ -79,6 +81,7 @@ public class Map implements Serializable{
 		LinkedList<Terrain> terrainList = new LinkedList<Terrain>();
 		LinkedList<Tile> randBattle = new LinkedList<Tile>();
 		LinkedList<Character> chars = new LinkedList<Character>();
+		MainCharacter main = null;
 		try {
 			//Parse initial data
 			BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
@@ -115,14 +118,33 @@ public class Map implements Serializable{
 					
 					//Character Case
 				} else if(splitLine.length == 9 && splitLine[0].equals("char")){
-					Character c = parseChar(container,splitLine);
-					//TODO remove later
-					c.setVisible(true);
-					chars.add(c);
-					System.out.println("MAGE ADDED");
+					//Only add Character to list if NOT main
+					Character toAdd = null;
+					if(splitLine[1].equals("Archer")){
+						toAdd = new Archer(container,splitLine[3],splitLine[4],splitLine[5],splitLine[6],splitLine[7],splitLine[8],splitLine[2]);
+					} else if(splitLine[1].equals("Mage")){
+						toAdd = new Mage(container,splitLine[3],splitLine[4],splitLine[5],splitLine[6],splitLine[7],splitLine[8],splitLine[2]);
+
+					} else if(splitLine[1].equals("Thief")){
+						toAdd = new Thief(container,splitLine[3],splitLine[4],splitLine[5],splitLine[6],splitLine[7],splitLine[8],splitLine[2]);
+
+					} else if(splitLine[1].equals("Warrior")){
+						toAdd = new Warrior(container,splitLine[3],splitLine[4],splitLine[5],splitLine[6],splitLine[7],splitLine[8],splitLine[2]);
+					} else if(splitLine[1].equals("Main")){
+						System.out.println("Main added");
+						main = new MainCharacter(container,splitLine[3],splitLine[4],splitLine[5],splitLine[6],splitLine[7],splitLine[8],splitLine[2]);
+						main.setVisible(true);
+						main.setFillColor(java.awt.Color.BLACK);
+						main.setSize(main.getImage().getWidth(), main.getImage().getHeight());
+						main.setLocation(100,80);
+
+					} else
+						throw new InvalidMapException("Invalid Character Type");
+					if(toAdd != null)
+						chars.add(toAdd);
+						
 					//Other case
-				}
-					else if(splitLine.length == 7){
+				}	else if(splitLine.length == 7){
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
 					if(tiles[x][y] != null)
@@ -149,7 +171,9 @@ public class Map implements Serializable{
 			}
 			
 			//Create Map
-			return new Map(tiles,name, ImageIO.read(new File(overflowPath)),terrainList,randBattle,chars);
+			if(main == null)
+				throw new InvalidMapException("Main Character not specified");
+			return new Map(tiles,name, ImageIO.read(new File(overflowPath)),terrainList,randBattle,chars,main);
 
 		} catch(FileNotFoundException e) {
 			throw new InvalidMapException("Error reading map from file located at " + path + ".");
@@ -178,7 +202,7 @@ public class Map implements Serializable{
 
 	}
 	
-	public static Character parseChar(JPanel container, String[] splitLine) throws InvalidMapException{
+/*	public static Character parseChar(JPanel container, String[] splitLine, Character mainChar) throws InvalidMapException{
 		if(splitLine[1].equals("Archer")){
 			return new Archer(container,splitLine[3],splitLine[4],splitLine[5],splitLine[6],splitLine[7],splitLine[8],splitLine[2]);
 		} else if(splitLine[1].equals("Mage")){
@@ -190,10 +214,12 @@ public class Map implements Serializable{
 		} else if(splitLine[1].equals("Warrior")){
 			return new Warrior(container,splitLine[3],splitLine[4],splitLine[5],splitLine[6],splitLine[7],splitLine[8],splitLine[2]);
 		} else if(splitLine[1].equals("Main")){
-			return new MainCharacter(container,splitLine[3],splitLine[4],splitLine[5],splitLine[6],splitLine[7],splitLine[8],splitLine[2]);
+			System.out.println("Main added");
+			mainChar = new MainCharacter(container,splitLine[3],splitLine[4],splitLine[5],splitLine[6],splitLine[7],splitLine[8],splitLine[2]);
+			return mainChar;
 		} else
 			throw new InvalidMapException("Invalid Character Type");
-	}
+	}*/
 
 	public String toString() {
 		String build = "\t";
@@ -621,10 +647,22 @@ public class Map implements Serializable{
 	
 	/**
 	 * @return The LinkedList of active Characters
+	 * This list includes the main character
 	 */
 	public LinkedList<Character> getCharactersToDisplay(){
-		for(Character c: _activeCharacters)
-			c.setLocation(150,150);
+		for(Character c: _activeCharacters){
+			c.setVisible(true);
+			c.setFillColor(java.awt.Color.BLACK);
+			c.setSize(c.getImage().getWidth(), c.getImage().getHeight());
+			c.setLocation(100,80);
+		}
 		return _activeCharacters;
+	}
+	
+	/**
+	 * @return the main character of the game
+	 */
+	public MainCharacter getMainCharacter(){
+		return _mainChar;
 	}
 }
