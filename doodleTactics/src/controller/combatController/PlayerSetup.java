@@ -62,7 +62,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		
 		_pool.setVisible(true);		*/
 		
-	//	_gameScreen.getMenuQueue().add(_pool);
+		_gameScreen.getMenuQueue().add(_pool);
 	}
 
 	@Override

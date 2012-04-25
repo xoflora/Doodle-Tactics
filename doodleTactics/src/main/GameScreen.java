@@ -256,28 +256,33 @@ public class GameScreen extends Screen<GameScreenController> {
 	
 		for(Character c : charsToPaint){
 			_characterTerrainQueue.add(c);
-			int overflow = (c.getImage().getWidth()-48)/2;
+			int overflow = (c.getImage().getWidth() - Tile.TILE_SIZE)/2;
 			c.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
 		}
 					
 		for(Terrain t : _terrainToPaint){
-			System.out.println("Priority : " + (t.getPaintPriority()));
-			System.out.println("Adding Terrain");
+	//		System.out.println("Priority : " + (t.getPaintPriority()));
+	//		System.out.println("Adding Terrain");
 			_characterTerrainQueue.add(t);
 		}
 		
-		System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
+	//	System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
 
 		// paint all characters and terrains
 		while(!_characterTerrainQueue.isEmpty()){
 			Rectangle toPaint = _characterTerrainQueue.poll();
-			System.out.println("Painted: " + toPaint.getPaintPriority());
+	//		System.out.println("Painted: " + toPaint.getPaintPriority());
 			toPaint.paint((Graphics2D) g, toPaint.getImage());				
 		}
 		
 		// finally paint all of the menus
 		Rectangle[] menuArray = (Rectangle []) _menuQueue.toArray(new Rectangle[_menuQueue.size()]);
 		Arrays.sort(menuArray);
+		
+	/*	for (int i = 0; i < menuArray.length; i++) {
+			Rectangle toPaint = menuArray[i];
+			toPaint.paint((Graphics2D) g, toPaint.getImage());
+		}	*/
 		
 //		if (_currentCharacter != null)
 //			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getImage());

@@ -32,11 +32,7 @@ public class UnitPool extends Rectangle {
 	private static final int CHARACTER_OFFSET_X = Tile.TILE_SIZE/8;
 	private static final int CHARACTER_OFFSET_Y = Tile.TILE_SIZE/8;
 	
-	private static final String IMAGE_PATH = "src/graphics/menu/overlay";
-	
-	private static final Color DEFAULT_COLOR =
-	//	new Color(Color.GRAY.getRed(), Color.GRAY.getGreen(), Color.GRAY.getBlue(), 0.7f);
-		new Color(0, 0, 0, 0.5f);
+	private static final String IMAGE_PATH = "src/graphics/characters/pokeball.png";
 	
 	private class CharacterSelect extends MenuItem {
 		
@@ -80,7 +76,6 @@ public class UnitPool extends Rectangle {
 		
 		setLocation(DEFAULT_X, DEFAULT_Y);
 		setSize(SIDEBAR_WIDTH, SIDEBAR_HEIGHT);
-		setColor(DEFAULT_COLOR);
 	}
 
 	public UnitPool(JPanel container, int priority, List<Character> units) {
@@ -92,26 +87,31 @@ public class UnitPool extends Rectangle {
 	}
 	
 	public void addCharacter(Character c) {
-		System.out.println();
+	/*	System.out.println();
 		System.out.println(c == null);
 		System.out.println(c.getDownImage() == null);
 		System.out.println(c.getRightImage() == null);
-		System.out.println(_dt == null);
+		System.out.println(_dt == null);		*/
 		_unitPool.put(c, new CharacterSelect(_container, c.getDownImage(), c.getRightImage(), _dt, c));
 	}
 	
 	@Override
 	public void paint(Graphics2D brush, BufferedImage img) {
+		System.out.println("PAINTING UNIT POOL");
 		super.paint(brush, img);
 		
 		int x = DEFAULT_X + CHARACTER_OFFSET_X;
 		int y = DEFAULT_Y + CHARACTER_OFFSET_Y;
+		
 		for (Character c : _unitPool.keySet()) {
 			CharacterSelect draw = _unitPool.get(c);
 			draw.setLocation(x, y);
+			System.out.println(draw.getImage());
 			draw.paint(brush, draw.getImage());
 			
 			y += Tile.TILE_SIZE;
+			
+			System.out.println("BLEH");
 		}
 	}
 
