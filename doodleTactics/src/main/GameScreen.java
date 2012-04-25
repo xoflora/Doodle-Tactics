@@ -291,6 +291,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		//System.out.println("--------------------");
 		
 		Mage m = new Mage(this,"src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_right.png","src/graphics/characters/mage_front.png","src/graphics/characters/mage_back.png","MyMage");
+		//m.setLocation()
 		m.paint((Graphics2D) g,m.getImage());
 }
 	
