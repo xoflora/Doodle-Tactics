@@ -45,8 +45,8 @@ public class MainMenuScreen extends Screen<MainMenuController> {
 			
 			_continue = new MenuItem(this, continueD,continueH, dt);
 			_quit = new MenuItem(this, quitD,quitH, dt);
-			_title.setLocation(((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _title.getCurrentImage().getWidth())/2, 50);
-			int offset = ((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _newGame.getCurrentImage().getWidth())/2;
+			_title.setLocation(((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _title.getImage().getWidth())/2, 50);
+			int offset = ((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _newGame.getImage().getWidth())/2;
 		
 		_newGame.setLocation(offset, 250);
 		_continue.setLocation(offset, 400);
@@ -83,10 +83,10 @@ public class MainMenuScreen extends Screen<MainMenuController> {
 	
 	public void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);
-		_title.paint((Graphics2D) g, _title.getCurrentImage());
-		_newGame.paint((Graphics2D) g, _newGame.getCurrentImage());
-		_continue.paint((Graphics2D) g, _continue.getCurrentImage());
-		_quit.paint((Graphics2D) g, _quit.getCurrentImage());
+		_title.paint((Graphics2D) g, _title.getImage());
+		_newGame.paint((Graphics2D) g, _newGame.getImage());
+		_continue.paint((Graphics2D) g, _continue.getImage());
+		_quit.paint((Graphics2D) g, _quit.getImage());
 	}
 	
 	public MenuItem checkContains(java.awt.Point point) {

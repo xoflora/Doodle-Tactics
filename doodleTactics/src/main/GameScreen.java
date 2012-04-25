@@ -280,7 +280,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		Arrays.sort(menuArray);
 		
 		if (_currentCharacter != null)
-			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getCurrentImage());
+			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getImage());
 		
 		
 		//System.out.println("--------------------");

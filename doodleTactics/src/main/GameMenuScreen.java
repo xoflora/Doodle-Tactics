@@ -83,7 +83,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			
 		}
 		
-		int buttonHeight = _units.getCurrentImage().getHeight();
+		int buttonHeight = _units.getImage().getHeight();
 		int buffer = 5;
 		int top = 115;
 		int left = 8;
@@ -114,12 +114,12 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 	public void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);
-		_title.paint((Graphics2D) g, _title.getCurrentImage());
-		_units.paint((Graphics2D) g, _units.getCurrentImage());
-		_save.paint((Graphics2D) g, _save.getCurrentImage());
-		_quit.paint((Graphics2D) g, _quit.getCurrentImage());
-		_options.paint((Graphics2D) g, _options.getCurrentImage());
-		_map.paint((Graphics2D) g, _map.getCurrentImage());
+		_title.paint((Graphics2D) g, _title.getImage());
+		_units.paint((Graphics2D) g, _units.getImage());
+		_save.paint((Graphics2D) g, _save.getImage());
+		_quit.paint((Graphics2D) g, _quit.getImage());
+		_options.paint((Graphics2D) g, _options.getImage());
+		_map.paint((Graphics2D) g, _map.getImage());
 		_unitsBox.setSize(750,660);
 		_unitsBox.setLocation(200, 120);
 	}
