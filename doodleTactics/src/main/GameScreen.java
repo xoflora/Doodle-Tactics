@@ -3,10 +3,14 @@ import graphics.Rectangle;
 import graphics.Terrain;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
 import controller.GameMenuController;
@@ -54,10 +58,12 @@ public class GameScreen extends Screen<GameScreenController> {
 	private PriorityQueue<Rectangle> _characterTerrainQueue; // the list of characters / images to render on the screen
 	private PriorityQueue<Rectangle> _menuQueue;
 	private LinkedList<Terrain> _terrainToPaint;
+	MainCharacter m;
 	
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
-				
+		m = new MainCharacter(this,"src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_right.png","src/graphics/characters/mage_front.png","src/graphics/characters/mage_back.png","MyMage");
+
 		this.setBackground(java.awt.Color.BLACK);
 		MAP_WIDTH = 20;
 		MAP_HEIGHT = 20;
@@ -262,9 +268,11 @@ public class GameScreen extends Screen<GameScreenController> {
 		for(Character c : charsToPaint){
 			_characterTerrainQueue.add(c);
 			c.setVisible(true);
+			c.setDown();
+			c.setFillColor(java.awt.Color.BLACK);
+			c.setSize(65, 50);
 			int overflow = (65-48)/2;
 			c.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
-			c.setLocation(14.0, 52.0);
 		}
 					
 		for(Terrain t : _terrainToPaint){
@@ -286,13 +294,28 @@ public class GameScreen extends Screen<GameScreenController> {
 		Rectangle[] menuArray = (Rectangle []) _menuQueue.toArray(new Rectangle[_menuQueue.size()]);
 		Arrays.sort(menuArray);
 		
-		if (_currentCharacter != null)
-			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getImage());
+//		if (_currentCharacter != null)
+//			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getImage());
 		//System.out.println("--------------------");
 		
-		Mage m = new Mage(this,"src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_right.png","src/graphics/characters/mage_front.png","src/graphics/characters/mage_back.png","MyMage");
-		//m.setLocation()
-		m.paint((Graphics2D) g,m.getImage());
+		try {
+			Terrain t = new Terrain(this, ImageIO.read(new File("src/graphics/characters/mage_left.png")));
+			t.setLocation(_currentCharacter.getX(),_currentCharacter.getY());
+			t.setVisible(true);
+		//	t.paint((Graphics2D) g,t.getImage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+//		m.setLocation(_currentCharacter.getX(),_currentCharacter.getY());
+//		m.setVisible(true);
+//		m.setDown();
+//		m.setFillColor(java.awt.Color.BLACK);
+//		m.setSize(65, 50);
+//		m.paint((Graphics2D) g,m.getImage());
+//		_currentCharacter = m;
+
 }
 	
 	@Override

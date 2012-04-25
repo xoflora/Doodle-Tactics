@@ -189,6 +189,8 @@ public class Map implements Serializable{
 
 		} else if(splitLine[1].equals("Warrior")){
 			return new Warrior(container,splitLine[3],splitLine[4],splitLine[5],splitLine[6],splitLine[7],splitLine[8],splitLine[2]);
+		} else if(splitLine[1].equals("Main")){
+			return new MainCharacter(container,splitLine[3],splitLine[4],splitLine[5],splitLine[6],splitLine[7],splitLine[8],splitLine[2]);
 		} else
 			throw new InvalidMapException("Invalid Character Type");
 	}
