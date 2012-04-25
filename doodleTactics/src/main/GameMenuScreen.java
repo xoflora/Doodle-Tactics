@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -112,7 +113,9 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_unitsBox.setOpaque(false);
 		
 		_scrollBar = new JScrollPane(_unitsBox, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		_scrollBar.setVisible(true);
+//		_scrollBar.setVisible(true);
+		_scrollBar.setSize(new Dimension(752, 662));
+		_scrollBar.setLocation(new Point(200, 120));
 	}
 	
 	protected GameMenuController defaultController() {
@@ -121,8 +124,12 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 	public void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);
-		_unitsBox.setSize(750,_charInfoList.size()*(200+10));
-		_unitsBox.setLocation(200, 120);
+		_scrollBar.setSize(new Dimension(750, 660));
+		_scrollBar.setLocation(new Point(200, 120));
+		_unitsBox.setSize(750,660);
+		_unitsBox.setLocation(1,0);
+//		_scrollBar.setSize(new Dimension(750, 660));
+//		_scrollBar.setLocation(new Point(200, 120));
 		_title.paint((Graphics2D) g, _title.getImage());
 		_units.paint((Graphics2D) g, _units.getImage());
 		_save.paint((Graphics2D) g, _save.getImage());
@@ -159,7 +166,9 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			clicked = _units;
 			_currClicked = 1;
 			_unitsBox.removeAll();
+//			_scrollBar.removeAll();
 			_unitsBox.setLayout(new GridLayout(_dt.getParty().size(), 0, 10, 10));
+//			_scrollBar.setVisible(true);
 			if (_currClicked == 1) {
 				for (Character chrter: _dt.getParty()) {
 					CharInfo toAdd = new CharInfo(this, chrter);
@@ -168,10 +177,11 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 					_charInfoList.add(toAdd);
 				}
 				_unitsBox.revalidate();
-				_scrollBar.revalidate();
-				_scrollBar.getViewport().add(_unitsBox);
-				this.add(_unitsBox);
+//				_scrollBar.getViewport().add(_unitsBox);
+//				this.add(_unitsBox);
+//				_scrollBar.add(_unitsBox);
 				this.add(_scrollBar);
+				_scrollBar.revalidate();
 				this.revalidate();
 			}
 		}
@@ -297,7 +307,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			JLabel speed = new JLabel("SPEED : " + chrter.getBaseStats()[4]);
 			speed.setSize(150, 50);
 			speed.setVisible(true);
-			
+			_scrollBar.setVisible(true);
 			JLabel skill = new JLabel("SKILL : " + chrter.getBaseStats()[5]);
 			skill.setSize(150, 50);
 			skill.setVisible(true);
