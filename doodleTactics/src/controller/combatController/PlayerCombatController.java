@@ -100,30 +100,10 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void mouseMoved(MouseEvent e) {
+		super.mouseMoved(e);
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		if (t != null) {
-			
-			if (t != _hoveredTile) {
-				if (_hoveredTile != null)
-					_hoveredTile.setHovered(false);
-				_hoveredTile = t;
-				_hoveredTile.setHovered(true);
-				_gameScreen.repaint();
-			}
-			
 			_hoveredCharacter = t.getOccupant();
 			
 			if (_hoveredCharacter == null) {

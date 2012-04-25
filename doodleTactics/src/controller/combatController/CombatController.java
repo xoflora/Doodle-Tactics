@@ -32,6 +32,7 @@ public abstract class CombatController extends GameScreenController {
 		
 		_units = units;
 		_enemyAffiliations = new ArrayList<CombatController>();
+		_hoveredTile = null;
 		
 		for (Character c : _units)
 			c.affiliate(this);
@@ -129,22 +130,4 @@ public abstract class CombatController extends GameScreenController {
 		
 		return null;
 	}
-	
-	
-	@Override
-	public void keyTyped(KeyEvent e) { }
-	
-	@Override
-	/**
-	 * does nothing
-	 */
-	public void mouseEntered(MouseEvent e) {
-		
-	}
-
-	@Override
-	/**
-	 * does nothing
-	 */
-	public void mouseExited(MouseEvent e) { }
 }

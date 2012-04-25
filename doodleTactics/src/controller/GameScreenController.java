@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,12 +23,16 @@ public abstract class GameScreenController extends Controller {
 	private int _draggedx;
 	private int _draggedy;
 	
+	protected Tile _hoveredTile;
+	
 	public GameScreenController(DoodleTactics dt) {
 		super(dt);
 		_gameScreen = _dt.getGameScreen();
 		
 		_draggedx = 0;
 		_draggedy = 0;
+		
+		_hoveredTile = null;
 	}
 	
 	@Override
@@ -52,9 +57,7 @@ public abstract class GameScreenController extends Controller {
 		_draggedx = e.getX();
 		_draggedy = e.getY();
 	}
-	
-	@Override
-	public void mouseReleased(MouseEvent e) { }
+
 	
 	@Override
 	/**
@@ -70,4 +73,40 @@ public abstract class GameScreenController extends Controller {
 			_draggedy = e.getY();
 		}
 	}
+	
+	public void mouseMoved(MouseEvent e) {
+		Tile t = _gameScreen.getTile(e.getX(), e.getY());
+		if (t != null) {
+			
+			if (t != _hoveredTile) {
+				if (_hoveredTile != null)
+					_hoveredTile.setHovered(false);
+				_hoveredTile = t;
+				_hoveredTile.setHovered(true);
+				_gameScreen.repaint();
+			}
+		}
+	}
+
+
+	@Override
+	public void mouseClicked(MouseEvent e) { }
+	
+	@Override
+	public void mouseEntered(MouseEvent e) { }
+
+	@Override
+	public void mouseExited(MouseEvent e) { }
+
+	@Override
+	public void keyPressed(KeyEvent e) { }
+
+	@Override
+	public void keyReleased(KeyEvent e) { }
+
+	@Override
+	public void keyTyped(KeyEvent e) { }
+	
+	@Override
+	public void mouseReleased(MouseEvent e) { }
 }
