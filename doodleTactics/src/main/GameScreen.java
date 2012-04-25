@@ -253,16 +253,22 @@ public class GameScreen extends Screen<GameScreenController> {
 		List<Character> charsToPaint = this.getController().getCharactersToDisplay();
 		for(Character c : charsToPaint)
 			_characterTerrainQueue.add(c);
+		
 		for(Terrain t : _terrainToPaint){
 			System.out.println("Adding Terrain");
 			_characterTerrainQueue.add(t);
-				
+			double x = t.getX();
+			double y = t.getY();
+			if((x < _xRef + 22 && x >= _xRef - 1) && (y < (_yRef + 18) && y >= (_yRef - 1))) {
+				t.paint((Graphics2D) g, t.getImage());				
+			}
 		}
 		
-		
+		System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
+
 		// paint all characters and terrains
 		while(!_characterTerrainQueue.isEmpty()){
-			_characterTerrainQueue.poll().paint((Graphics2D) g);
+			Rectangle toPaint = _characterTerrainQueue.poll();
 		}
 		
 		// finally paint all of the menus

@@ -15,6 +15,7 @@ public class Terrain extends Rectangle{
 		super(container);
 		_img = img;
 		this.setSize(_img.getWidth(), _img.getHeight());
+		this.setVisible(true);
 	}
 	
 	/**
@@ -29,5 +30,6 @@ public class Terrain extends Rectangle{
 	public void setLocation(double x, double y){
 		super.setLocation(x, y);
 		this.setPaintPriority((int) y + _img.getHeight());
+		System.out.println("Terrain Location = x:" + x + " y: " + y);
 	}
 }
