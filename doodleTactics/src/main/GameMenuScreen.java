@@ -195,11 +195,12 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 		
 		if(_quit.contains(point)) {
-			this.removeAll();
-			this.setDefault();
-			_quit.setHovered();
-			clicked = _quit;
-			_currClicked = 3;
+//			this.removeAll();
+//			this.setDefault();
+//			_quit.setHovered();
+//			clicked = _quit;
+//			_currClicked = 3;
+			System.exit(0);
 		}
 		
 		if(_options.contains(point)) {
@@ -225,6 +226,15 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 		this.repaint();
 		return clicked;
+	}
+	
+	public JLabel checkItemContains(java.awt.Point point) {
+		for (JLabel label: _labelToCharacter.keySet()) {
+			if (label.contains(point)) {
+				System.out.println("hovered over an item");
+			}
+		}
+		return null;
 	}
 	
 	private class CharInfo extends JPanel {
@@ -343,7 +353,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			BufferedImage inventoryPic = null;
 			
 			try {
-				inventoryPic = ImageIO.read(new File("src/graphics/menu/test_label_game_menu.png"));
+				inventoryPic = ImageIO.read(new File("src/graphics/menu/inventory.png"));
+//				System.out.println("inventory pic size: w: " + inventoryPic.getWidth() + "y: " + inventoryPic.getHeight());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -389,7 +400,16 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				row1.add(item, constraint);
 			}
 			
-			JLabel equipped = new JLabel(new ImageIcon(inventoryPic));
+			BufferedImage equippedPic = null;
+			
+			try {
+				equippedPic = ImageIO.read(new File("src/graphics/menu/equipped.png"));
+//				System.out.println("inventory pic size: w: " + inventoryPic.getWidth() + "y: " + inventoryPic.getHeight());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			JLabel equipped = new JLabel(new ImageIcon(equippedPic));
 			constraint.fill = GridBagConstraints.BOTH;
 			constraint.insets = insetItems;
 			constraint.gridwidth = 5;
