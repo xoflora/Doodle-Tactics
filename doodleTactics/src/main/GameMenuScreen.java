@@ -2,14 +2,17 @@ package main;
 
 import items.Item;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
@@ -47,6 +50,9 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private DoodleTactics _dt;
 	private LinkedList<CharInfo> _charInfoList;
 	private JPanel _unitsBox;
+	private HashMap<JLabel, Character> _labelToCharacter;
+	private HashMap<JLabel, Item> _labelToItem;
+	
 	
 	public GameMenuScreen(DoodleTactics dt) {
 		
@@ -114,7 +120,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_quit.paint((Graphics2D) g, _quit.getCurrentImage());
 		_options.paint((Graphics2D) g, _options.getCurrentImage());
 		_map.paint((Graphics2D) g, _map.getCurrentImage());
-		_unitsBox.setSize(735,660);
+		_unitsBox.setSize(750,660);
 		_unitsBox.setLocation(200, 120);
 	}
 	
@@ -200,72 +206,57 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		public CharInfo(Character chrter) {
 			this.setLayout(new GridBagLayout());
 			GridBagConstraints constraint = new GridBagConstraints();
-			java.awt.Dimension panelSize = new java.awt.Dimension(715,150);
+			java.awt.Dimension panelSize = new java.awt.Dimension(730,200);
 			this.setPreferredSize(panelSize);
-			this.setSize(715,150);
+			this.setSize(730,200);
 			this.setLocation(15, 15);
 			this.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
 			this.setBackground(java.awt.Color.LIGHT_GRAY);
 			JLabel profile = new JLabel(new ImageIcon(chrter.getProfileImage()));
-			profile.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-			profile.setSize(100, 100);
+			profile.setSize(150, 150);
+			profile.setPreferredSize(new Dimension(150,150));
+			profile.setMaximumSize(new Dimension(150, 150));
+//			profile.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
 			profile.setVisible(true);
-//			profile.setLocation(10, 10);
 			
-			JLabel name = new JLabel("Name");
-			name.setSize(150, 50);
+			Insets inset = new Insets(5, 5, 5, 5);
+			
+			JLabel name = new JLabel("Renoir");
+			name.setSize(200, 50);
 			name.setVisible(true);
 			
 			JLabel level = new JLabel("Level : " + chrter.getLevel());
-			level.setSize(150, 50);
+			level.setSize(200, 50);
 			level.setVisible(true);
 			
 			JLabel exp = new JLabel("EXP : " + chrter.getExp());
-			level.setSize(150, 50);
+			level.setSize(200, 50);
 			level.setVisible(true);
-			
-			JButton addToPartyButton = new JButton("Add to Party");
-			addToPartyButton.setVisible(true);
-			
-			JPanel col1 = new JPanel();
-			col1.setLayout(new GridBagLayout());
-			col1.setOpaque(false);
+//			
+//			JPanel col1 = new JPanel();
+//			col1.setLayout(new GridBagLayout());
+//			col1.setOpaque(false);
 			
 			constraint.fill = GridBagConstraints.BOTH;
 			constraint.weighty = 0.5;
+			constraint.insets = inset;
 			constraint.gridx = 0;
 			constraint.gridy = 0;
-			col1.add(profile, constraint);
+			this.add(profile, constraint);
+			
+			JPanel col2 = new JPanel(new GridLayout(3,0));
+			col2.setOpaque(false);
+			
+			col2.add(name, constraint);
+			col2.add(level, constraint);
+			col2.add(exp, constraint);
 			
 			constraint.fill = GridBagConstraints.BOTH;
 			constraint.weighty = 0.5;
-			constraint.gridx = 0;
-			constraint.gridy = 1;
-			col1.add(name, constraint);
-			
-			constraint.fill = GridBagConstraints.BOTH;
-			constraint.weighty = 0.5;
-			constraint.gridx = 0;
-			constraint.gridy = 2;
-			col1.add(level, constraint);
-			
-			constraint.fill = GridBagConstraints.BOTH;
-			constraint.weighty = 0.5;
-			constraint.gridx = 0;
-			constraint.gridy = 3;
-			col1.add(exp, constraint);
-			
-			constraint.fill = GridBagConstraints.BOTH;
-			constraint.weighty = 0.5;
-			constraint.gridx = 0;
-			constraint.gridy = 4;
-			col1.add(addToPartyButton, constraint);
-			
-			constraint.fill = GridBagConstraints.BOTH;
-			constraint.weighty = 0.5;
-			constraint.gridx = 0;
+			constraint.insets = new Insets(15, 15, 15, 15);
+			constraint.gridx = 1;
 			constraint.gridy = 0;
-			this.add(col1, constraint);
+			this.add(col2, constraint);
 			
 			JLabel HP = new JLabel("HP : " + chrter.getHP() + "/" + chrter.getBaseStats()[7]);
 			HP.setSize(150, 50);
@@ -299,75 +290,133 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			luck.setSize(150, 50);
 			luck.setVisible(true);
 			
-			JPanel col2 = new JPanel();
-			col2.setLayout(new GridLayout(8,0, 5, 5));
-			col2.setOpaque(false);
-			col2.add(HP);
-			col2.add(strength);
-			col2.add(defense);
-			col2.add(special);
-			col2.add(resistance);
-			col2.add(speed);
-			col2.add(skill);
-			col2.add(luck);
+			JPanel col3 = new JPanel();
+			col3.setLayout(new GridLayout(8,0, 5, 5));
+			col3.setOpaque(false);
+			col3.add(HP);
+			col3.add(strength);
+			col3.add(defense);
+			col3.add(special);
+			col3.add(resistance);
+			col3.add(speed);
+			col3.add(skill);
+			col3.add(luck);
 			constraint.fill = GridBagConstraints.BOTH;
-			constraint.gridx = 1;
+			constraint.insets = inset;
+			constraint.gridx = 2;
 			constraint.gridy = 0;
-			this.add(col2, constraint);
+			this.add(col3, constraint);
 			
 //			BufferedImage = 
 			
 			JPanel row1 = new JPanel();
-			row1.setLayout(new GridLayout(0, 5, 5, 5));
+			row1.setLayout(new GridBagLayout());
+//			row1.setLayout(new GridLayout(2, 5, 5, 5));
 			row1.setOpaque(false);
 			
-			for (Item i: chrter.getInventory()) {
-				JLabel item = new JLabel(new ImageIcon(chrter.getProfileImage()));
-				item.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+			BufferedImage inventoryPic = null;
+			
+			try {
+				inventoryPic = ImageIO.read(new File("src/graphics/menu/test_label_game_menu.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			Insets insetItems = new Insets(5, 5, 5, 5);
+			
+			JLabel inventory = new JLabel(new ImageIcon(inventoryPic));
+			constraint.fill = GridBagConstraints.BOTH;
+			constraint.insets = insetItems;
+			constraint.gridwidth = 5;
+			constraint.gridx = 0;
+			constraint.gridy = 0;
+			row1.add(inventory, constraint);
+			
+			
+			for (int i=0; i<chrter.getInventory().size(); i++) {
+				JLabel item = new JLabel(new ImageIcon(chrter.getDownImage()));
+//				item.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
 				item.setSize(75,75);
 				item.setVisible(true);
-				row1.add(item);
+				constraint.fill = GridBagConstraints.BOTH;
+				constraint.insets = insetItems;
+				constraint.gridwidth = 1;
+				constraint.gridx = i;
+				constraint.gridy = 1;
+				row1.add(item, constraint);
 			}
+			
+			System.out.println(chrter.getInventory().size());
 			
 			for (int i = 0; i<(5-chrter.getInventory().size()); i++) {
-				JLabel item = new JLabel(new ImageIcon(chrter.getProfileImage()));
-				item.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+				JLabel item = new JLabel(new ImageIcon(chrter.getRightImage()));
+//				item.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
 				item.setSize(75, 75);
 				item.setVisible(true);
-				row1.add(item);
+				constraint.fill = GridBagConstraints.BOTH;
+				constraint.insets = insetItems;
+				constraint.gridwidth = 1;
+				constraint.gridx = i+(chrter.getInventory().size());
+				constraint.gridy = 1;
+				row1.add(item, constraint);
 			}
+//			constraint.fill = GridBagConstraints.BOTH;
+//			constraint.weighty = 0.5;
+//			constraint.insets = inset;
+//			constraint.gridx = 3;
+//			constraint.gridy = 0;
+			
+			JLabel equipped = new JLabel(new ImageIcon(inventoryPic));
 			constraint.fill = GridBagConstraints.BOTH;
-			constraint.weighty = 0.5;
-			constraint.gridx = 2;
-			constraint.gridy = 0;
-			this.add(row1, constraint);
+			constraint.insets = insetItems;
+			constraint.gridwidth = 5;
+			constraint.gridx = 0;
+			constraint.gridy = 2;
+			row1.add(equipped, constraint);
 			
-			JPanel row2 = new JPanel();
-			row2.setLayout(new GridLayout(0, 5, 5, 5));
-			row2.setOpaque(false);
 			
-			JLabel weapon = new JLabel(new ImageIcon(chrter.getProfileImage()));
-			weapon.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-			row2.add(weapon);
+			JLabel weapon = new JLabel(new ImageIcon(chrter.getDownImage()));
+//			weapon.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+			constraint.fill = GridBagConstraints.BOTH;
+			constraint.insets = insetItems;
+			constraint.gridwidth = 1;
+			constraint.gridx = 0;
+			constraint.gridy = 3;
+			row1.add(weapon, constraint);
 			
 //			if (chrter.getCuirass() != null) {
-				JLabel cuirass = new JLabel(new ImageIcon(chrter.getProfileImage()));
-				cuirass.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-				row2.add(cuirass);
+				JLabel cuirass = new JLabel(new ImageIcon(chrter.getDownImage()));
+//				cuirass.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+				constraint.fill = GridBagConstraints.BOTH;
+				constraint.insets = insetItems;
+				constraint.gridx = 1;
+				constraint.gridy = 3;
+				row1.add(cuirass, constraint);
 //			}
-			JLabel shield = new JLabel(new ImageIcon(chrter.getProfileImage()));
-			shield.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-			row2.add(shield);
+			JLabel shield = new JLabel(new ImageIcon(chrter.getDownImage()));
+//			shield.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+			constraint.fill = GridBagConstraints.BOTH;
+			constraint.gridwidth = 1;
+			constraint.insets = insetItems;
+			constraint.gridx = 2;
+			constraint.gridy = 3;
+			row1.add(shield, constraint);
 			
-			JLabel footgear = new JLabel(new ImageIcon(chrter.getProfileImage()));
-			footgear.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-			row2.add(footgear);
+			JLabel footgear = new JLabel(new ImageIcon(chrter.getRightImage()));
+//			footgear.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+			constraint.fill = GridBagConstraints.BOTH;
+			constraint.insets = insetItems;
+			constraint.gridwidth = 1;
+			constraint.gridx = 3;
+			constraint.gridy = 3;
+			row1.add(footgear, constraint);
 			
 			constraint.fill = GridBagConstraints.BOTH;
 			constraint.weighty = 0.5;
-			constraint.gridx = 2;
-			constraint.gridy = 1;
-			this.add(row2, constraint);
+			constraint.insets = inset;
+			constraint.gridx = 3;
+			constraint.gridy = 0;
+			this.add(row1, constraint);
 			
 		}
 	}
