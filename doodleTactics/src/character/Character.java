@@ -94,7 +94,6 @@ public abstract class Character extends Rectangle{
 			_right = ImageIO.read(new File(right));
 			_up = ImageIO.read(new File(up));
 			_down = ImageIO.read(new File(down));
-			_currentImage = _up;
 		} catch(IOException e) {
 			System.out.println("Bad file path!");
 		}
@@ -344,7 +343,7 @@ public abstract class Character extends Rectangle{
 	 */
 	
 	public BufferedImage getImage() {
-		if(_up == null)
+		if(_currentImage == null)
 			System.out.println("NULLLLLLLLL");
 		return _currentImage;
 	}

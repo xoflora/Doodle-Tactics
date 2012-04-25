@@ -88,30 +88,4 @@ public class CombatOrchestrator extends GameScreenController {
 			c.add(faction.getUnits());
 		return Util.union(c);
 	}
-
-	
-	/*
-	 * the orchestrator does not respond to user inputs since it just switches between combat controllers 
-	 */
-	
-	@Override
-	public void mouseClicked(MouseEvent e) { }
-
-	@Override
-	public void mouseEntered(MouseEvent e) { }
-
-	@Override
-	public void mouseExited(MouseEvent e) { }
-
-	@Override
-	public void keyPressed(KeyEvent e) { }
-
-	@Override
-	public void keyReleased(KeyEvent e) { }
-
-	@Override
-	public void keyTyped(KeyEvent e) { }
-
-	@Override
-	public void mouseMoved(MouseEvent e) { }
 }
