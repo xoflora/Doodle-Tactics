@@ -118,6 +118,27 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_scrollBar.setLocation(new Point(200, 120));
 	}
 	
+	/**
+	 * Initialized the screen to be set to the units tab
+	 */
+	
+	public void setDefaultTabToUnits() {
+		_units.setHovered();
+		_currClicked = 1;
+		_unitsBox.removeAll();
+		_unitsBox.setLayout(new GridLayout(_dt.getParty().size(), 0, 10, 10));
+		for (Character chrter: _dt.getParty()) {
+			CharInfo toAdd = new CharInfo(this, chrter);
+			toAdd.setVisible(true);
+			_unitsBox.add(toAdd);
+			_charInfoList.add(toAdd);
+		}
+		_unitsBox.revalidate();
+		this.add(_scrollBar);
+		_scrollBar.revalidate();
+		this.revalidate();
+	}
+	
 	protected GameMenuController defaultController() {
 		return new GameMenuController(_dt, this);
 	}
@@ -236,6 +257,12 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 		return null;
 	}
+	
+	/**
+	 * A char info box represents one character info box in the units tab.
+	 * @author fjin
+	 *
+	 */
 	
 	private class CharInfo extends JPanel {
 		//represents a box that will display all the characters current stats, items, inventory, etc.

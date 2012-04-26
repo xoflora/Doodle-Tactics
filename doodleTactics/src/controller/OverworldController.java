@@ -18,6 +18,7 @@ import map.Tile;
 
 public class OverworldController extends GameScreenController {
 	
+	
 	public OverworldController(DoodleTactics dt, GameScreen game) {
 		super(dt);
 		_gameScreen = game;
@@ -39,6 +40,7 @@ public class OverworldController extends GameScreenController {
 		if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
 			//do stuff
 			_gameScreen.switchToGameMenu();
+			_dt.getGameMenuScreen().setDefaultTabToUnits();
 		}
 		
 		/*	TEST COMBAT CONTROLLER STUFF:
