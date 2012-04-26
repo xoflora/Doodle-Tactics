@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -19,10 +18,7 @@ import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -31,10 +27,7 @@ import javax.swing.ScrollPaneConstants;
 import character.Character;
 
 import graphics.MenuItem;
-import graphics.ScreenChangeMenuItem;
-import controller.Controller;
 import controller.GameMenuController;
-import controller.OverworldController;
 
 /** 
  * 
@@ -53,10 +46,11 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private int _currClicked = 0;
 	private DoodleTactics _dt;
 	private LinkedList<CharInfo> _charInfoList;
-	private JPanel _unitsBox;
+	private JPanel _unitsBox, _itemInfoBox;
 	private HashMap<JLabel, Character> _labelToCharacter;
 	private HashMap<JLabel, Item> _labelToItem;
 	private JScrollPane _scrollBar;
+	public boolean _beingHovered = false;
 	
 	public GameMenuScreen(DoodleTactics dt) {
 		
@@ -111,12 +105,25 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		
 		_unitsBox = new JPanel();
 		_unitsBox.setVisible(true);
-		_unitsBox.setOpaque(false);
+		_unitsBox.setBackground(java.awt.Color.DARK_GRAY);
+		
+		_unitsBox.setSize(750,660);
+		_unitsBox.setLocation(1,0);
+		
+		_itemInfoBox = new JPanel();
+		_itemInfoBox.setVisible(true);
+		_itemInfoBox.setBackground(java.awt.Color.DARK_GRAY);
 		
 		_scrollBar = new JScrollPane(_unitsBox, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 //		_scrollBar.setVisible(true);
+		_scrollBar.setBackground(java.awt.Color.DARK_GRAY);
 		_scrollBar.setSize(new Dimension(752, 662));
 		_scrollBar.setLocation(new Point(200, 120));
+		
+//		_scrollBar.setSize(new Dimension(750, 660));
+//		_scrollBar.setLocation(new Point(200, 120));
+//		_unitsBox.setSize(750,660);
+//		_unitsBox.setLocation(1,0);
 	}
 	
 	/**
@@ -128,6 +135,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_currClicked = 1;
 		_unitsBox.removeAll();
 		_unitsBox.setLayout(new GridLayout(_dt.getParty().size(), 0, 10, 10));
+		_unitsBox.addMouseMotionListener(this.getController());
 		for (Character chrter: _dt.getParty()) {
 			CharInfo toAdd = new CharInfo(this, chrter);
 			toAdd.setVisible(true);
@@ -146,12 +154,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 	public void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);
-		_scrollBar.setSize(new Dimension(750, 660));
+		_scrollBar.setSize(new Dimension(748, 660));
 		_scrollBar.setLocation(new Point(200, 120));
-		_unitsBox.setSize(750,660);
-		_unitsBox.setLocation(1,0);
-//		_scrollBar.setSize(new Dimension(750, 660));
-//		_scrollBar.setLocation(new Point(200, 120));
+//		_unitsBox.setSize(750,660);
+//		_unitsBox.setLocation(1,0);
 		_title.paint((Graphics2D) g, _title.getImage());
 		_units.paint((Graphics2D) g, _units.getImage());
 		_save.paint((Graphics2D) g, _save.getImage());
@@ -188,6 +194,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			clicked = _units;
 			_currClicked = 1;
 			_unitsBox.removeAll();
+			_unitsBox.addMouseMotionListener(this.getController());
 //			_scrollBar.removeAll();
 			_unitsBox.setLayout(new GridLayout(_dt.getParty().size(), 0, 10, 10));
 //			_scrollBar.setVisible(true);
@@ -199,7 +206,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 					_charInfoList.add(toAdd);
 				}
 				_unitsBox.revalidate();
-				_unitsBox.addMouseListener(this.getController());
+//				_unitsBox.addMouseListener(this.getController());
 //				_scrollBar.getViewport().add(_unitsBox);
 //				this.add(_unitsBox);
 //				_scrollBar.add(_unitsBox);
@@ -252,16 +259,50 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	}
 	
 	public MenuItem checkItemContains(java.awt.Point point) {
+		_itemInfoBox.removeAll();
+		this.remove(_itemInfoBox);
+		_itemInfoBox.setVisible(false);
 		for (JLabel label: _labelToCharacter.keySet()) {
 			if (label.contains(point)) {
-				System.out.println("hovered over an item");
+				this.showItemInfo(_labelToItem.get(label));
+				_beingHovered = true;
+				this.repaint();
+				return null;
 			}
 		}
+		_beingHovered = false;
+		this.repaint();
 		return null;
 	}
 	
+	/**
+	 * Displays the item info at the left side of the screen
+	 * @param item- Item that is being hovered
+	 */
+	
+	public void showItemInfo(Item item) {
+		_itemInfoBox.setLocation(15, 460);
+		_itemInfoBox.setSize(144, 340);
+		_itemInfoBox.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		Insets inset = new Insets(5, 5, 5, 5);
+		JLabel profile = new JLabel(new ImageIcon(item.getImage()));
+		profile.setSize(75, 75);
+//		profile.setPreferredSize(new Dimension(150,150));
+//		profile.setMaximumSize(new Dimension(150, 150));
+		profile.setVisible(true);
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 0.5;
+		c.insets = inset;
+		c.gridx = 0;
+		c.gridy = 0;
+		_itemInfoBox.add(profile, c);
+		_itemInfoBox.setVisible(true);
+		this.add(_itemInfoBox);
+	}
+	
 	public void switchToGameScreen() {
-		
+		_dt.changeScreens(_dt.getGameScreen());
 	}
 	
 	/**
