@@ -98,7 +98,7 @@ public class GameMenuController extends Controller {
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
-		JLabel _clickedButton = _gameMenu.checkItemContains(e.getPoint());
+		MenuItem _clickedButton = _gameMenu.checkItemContains(e.getPoint());
 //		if (_clickedButton != null) {
 //			System.out.println("click");
 //			_clickedButton.activate();

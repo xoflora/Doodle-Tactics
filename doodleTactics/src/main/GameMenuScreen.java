@@ -3,6 +3,7 @@ package main;
 import items.Item;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -198,6 +199,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 					_charInfoList.add(toAdd);
 				}
 				_unitsBox.revalidate();
+				_unitsBox.addMouseListener(this.getController());
 //				_scrollBar.getViewport().add(_unitsBox);
 //				this.add(_unitsBox);
 //				_scrollBar.add(_unitsBox);
@@ -249,13 +251,17 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		return clicked;
 	}
 	
-	public JLabel checkItemContains(java.awt.Point point) {
+	public MenuItem checkItemContains(java.awt.Point point) {
 		for (JLabel label: _labelToCharacter.keySet()) {
 			if (label.contains(point)) {
 				System.out.println("hovered over an item");
 			}
 		}
 		return null;
+	}
+	
+	public void switchToGameScreen() {
+		
 	}
 	
 	/**
@@ -322,6 +328,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			this.add(col2, constraint);
 			
 			JLabel HP = new JLabel("HP : " + chrter.getHP() + "/" + chrter.getBaseStats()[7]);
+			HP.setFont(new Font("Myriad Pro", 12, 1));
 			HP.setSize(150, 50);
 			HP.setVisible(true);
 
@@ -387,7 +394,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			}
 			
 			Insets insetItems = new Insets(5, 5, 5, 5);
-			
+						
 			JLabel inventory = new JLabel(new ImageIcon(inventoryPic));
 			constraint.fill = GridBagConstraints.BOTH;
 			constraint.insets = insetItems;
@@ -399,6 +406,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			for (int i=0; i<chrter.getInventory().size(); i++) {
 				JLabel item = new JLabel(new ImageIcon(chrter.getInventory().get(i).getImage()));
 //				item.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+				item.addMouseMotionListener(GameMenuScreen.this.getController());
 				item.setSize(75,75);
 				item.setVisible(true);
 				constraint.fill = GridBagConstraints.BOTH;
