@@ -135,7 +135,6 @@ public class Map implements Serializable{
 						main.setVisible(true);
 						main.setFillColor(java.awt.Color.BLACK);
 						main.setSize(main.getImage().getWidth(), main.getImage().getHeight());
-						main.setLocation(100,80);
 
 					} else
 						throw new InvalidMapException("Invalid Character Type");
@@ -653,7 +652,6 @@ public class Map implements Serializable{
 			c.setVisible(true);
 			c.setFillColor(java.awt.Color.BLACK);
 			c.setSize(c.getImage().getWidth(), c.getImage().getHeight());
-			c.setLocation(100,80);
 		}
 		return _activeCharacters;
 	}
