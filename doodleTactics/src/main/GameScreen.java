@@ -58,7 +58,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	private GameMenuController _gameMenuController;
 	private PriorityQueue<Rectangle> _characterTerrainQueue; // the list of characters / images to render on the screen
 	private PriorityQueue<Rectangle> _menuQueue;
-	private LinkedList<Terrain> _terrainToPaint;
+	private List<Terrain> _terrainToPaint;
 	
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
@@ -145,7 +145,7 @@ public class GameScreen extends Screen<GameScreenController> {
 					repaint();
 				}
 				
-				LinkedList <Character> charsToPaint = (LinkedList<Character>) getController().getCharactersToDisplay();
+				List <Character> charsToPaint = getController().getCharactersToDisplay();
 				for(Character c : charsToPaint) {
 					System.out.println("BEFORE update character x: " + c.getX() + ", y:" + c.getY());
 					c.setLocation((c.getX() + (-_deltaX*Tile	.TILE_SIZE / _numSteps)), c.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
