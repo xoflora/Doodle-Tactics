@@ -62,9 +62,9 @@ public class GameScreen extends Screen<GameScreenController> {
 	
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
-		_currentCharacter = new MainCharacter(this,"src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_right.png","src/graphics/characters/mage_front.png","src/graphics/characters/mage_back.png","MyMage");
-		int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
-		_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
+//		_currentCharacter = new MainCharacter(this,"src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_right.png","src/graphics/characters/mage_front.png","src/graphics/characters/mage_back.png","MyMage");
+//		int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
+//		_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
 		
 		this.setBackground(java.awt.Color.BLACK);
 		MAP_WIDTH = 20;
@@ -359,5 +359,21 @@ public class GameScreen extends Screen<GameScreenController> {
 		System.out.println(_currMap == null);
 		System.out.println(_currMap.getTile(getMapX(getWidth()/2), getMapY(getHeight()/2)));
 		return _currMap.getValidSetupTiles(_currMap.getTile(getMapX(getWidth()/2), getMapY(getHeight()/2)), num);
+	}
+	
+	/**
+	 * Accessor method used by Overworld Controller to deal with tile permissions
+	 * @return the XRef
+	 */
+	public int getXRef(){
+		return this._xRef;
+	}
+	
+	/**
+	 * Accessor method used by Overworld Controller to deal with tile permissions
+	 * @return the YRef
+	 */
+	public int getYRef(){
+		return this._yRef;
 	}
 }
