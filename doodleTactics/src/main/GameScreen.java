@@ -58,13 +58,13 @@ public class GameScreen extends Screen<GameScreenController> {
 	private GameMenuController _gameMenuController;
 	private PriorityQueue<Rectangle> _characterTerrainQueue; // the list of characters / images to render on the screen
 	private PriorityQueue<Rectangle> _menuQueue;
-	private LinkedList<Terrain> _terrainToPaint;
+	private List<Terrain> _terrainToPaint;
 	
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
-		_currentCharacter = new MainCharacter(this,"src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_right.png","src/graphics/characters/mage_front.png","src/graphics/characters/mage_back.png","MyMage");
-		int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
-		_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
+//		_currentCharacter = new MainCharacter(this,"src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_right.png","src/graphics/characters/mage_front.png","src/graphics/characters/mage_back.png","MyMage");
+//		int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
+//		_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
 		
 		this.setBackground(java.awt.Color.BLACK);
 		MAP_WIDTH = 20;
@@ -87,6 +87,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	}
 	
 	public void setMap(Map m) {
+		
 		_currMap = m;
 		_currentCharacter = _currMap.getMainCharacter();
 		_terrainToPaint = _currMap.getTerrain();
@@ -97,7 +98,6 @@ public class GameScreen extends Screen<GameScreenController> {
 				m.getTile(i, j).setVisible(true);
 			}
 		}
-		
 	}
 	
 	@Override
@@ -145,7 +145,7 @@ public class GameScreen extends Screen<GameScreenController> {
 					repaint();
 				}
 				
-				LinkedList <Character> charsToPaint = (LinkedList<Character>) getController().getCharactersToDisplay();
+				List <Character> charsToPaint = getController().getCharactersToDisplay();
 				for(Character c : charsToPaint) {
 					System.out.println("BEFORE update character x: " + c.getX() + ", y:" + c.getY());
 					c.setLocation((c.getX() + (-_deltaX*Tile	.TILE_SIZE / _numSteps)), c.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
@@ -359,5 +359,21 @@ public class GameScreen extends Screen<GameScreenController> {
 		System.out.println(_currMap == null);
 		System.out.println(_currMap.getTile(getMapX(getWidth()/2), getMapY(getHeight()/2)));
 		return _currMap.getValidSetupTiles(_currMap.getTile(getMapX(getWidth()/2), getMapY(getHeight()/2)), num);
+	}
+	
+	/**
+	 * Accessor method used by Overworld Controller to deal with tile permissions
+	 * @return the XRef
+	 */
+	public int getXRef(){
+		return this._xRef;
+	}
+	
+	/**
+	 * Accessor method used by Overworld Controller to deal with tile permissions
+	 * @return the YRef
+	 */
+	public int getYRef(){
+		return this._yRef;
 	}
 }

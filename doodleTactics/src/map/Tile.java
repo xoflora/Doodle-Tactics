@@ -55,7 +55,6 @@ public class Tile extends graphics.Rectangle {
 	private static final Color ATTACK_MOUSE_INTERSECTION_COLOR = Util.mixColors(ATTACK_RANGE_COLOR, MOUSEOVER_COLOR);
 	private static final Color INTERSECTION_COLOR = Color.magenta;
 	
-	
 	private boolean[] _canMove;
 	private int _cost;
 	private int _height;
@@ -238,6 +237,8 @@ public class Tile extends graphics.Rectangle {
 			int x, int y, int height, int cost) throws InvalidTileException {
 		Tile t = new Tile(container, path, x, y,height,cost);
 		t.setTilePermissions(permissions);
+		if(permissions != Tile.PERMISSION_ALL)
+			System.out.println("DIFFERENT PERMISSIONS!!!!");
 		return t;
 	}
 	
@@ -383,6 +384,14 @@ public class Tile extends graphics.Rectangle {
 	 */
 	public void setOccupant(Character c) {
 		_character = c;
+	}
+	
+	/**
+	 * removes the character contained within this tile to the given character
+	 * (called when the character moves out of the tile) 
+	 */
+	public void removeOccupant(){
+		_character = null;
 	}
 	
 	

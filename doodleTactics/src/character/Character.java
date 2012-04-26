@@ -52,6 +52,7 @@ public abstract class Character extends Rectangle{
 
 	//misc. character info
 	protected int _level, _exp, _currentHP;
+	protected double _tileX,_tileY;
 
 	//items
 	protected Weapon _equipped;
@@ -70,9 +71,10 @@ public abstract class Character extends Rectangle{
 	private BufferedImage _up;
 	private BufferedImage _down;
 
+
 	private CombatController _affiliation; //player/AI etc
 
-	public Character(JPanel container, String avatar, String profile, String left, String right, String up, String down, String name){
+	public Character(JPanel container, String avatar, String profile, String left, String right, String up, String down, String name,double x, double y){
 		super(container);
 		_BASE_STATS = new int[NUM_STATS];
 		_currentStats = new int[NUM_STATS];
@@ -100,7 +102,7 @@ public abstract class Character extends Rectangle{
 		}
 		
 		this.setSize(_down.getWidth(), _down.getHeight());
-		this.setLocation(0,0);
+		this.setLocation(x,y);
 	}
 	
 	/**
@@ -146,7 +148,7 @@ public abstract class Character extends Rectangle{
 	public int getPaintPriority(){
 		return (int) this.getY();
 	}
-	
+
 	/**
 	 * Initializes Current Stats to Base Stats
 	 */
@@ -473,6 +475,11 @@ public abstract class Character extends Rectangle{
 		System.out.println("-------------------");
 
 
+	}
+	@Override
+	public void setLocation(double x, double y){
+		super.setLocation(x, y);
+		System.out.println("***********************X: " + x + " Y: " + y);
 	}
 
 /*	public static void testPreSerialize(){
