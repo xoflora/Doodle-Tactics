@@ -98,6 +98,9 @@ public abstract class Character extends Rectangle{
 		} catch(IOException e) {
 			System.out.println("Bad file path!");
 		}
+		
+		this.setSize(_down.getWidth(), _down.getHeight());
+		this.setLocation(0,0);
 	}
 	
 	/**

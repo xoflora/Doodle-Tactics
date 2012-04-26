@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -58,12 +59,13 @@ public class GameScreen extends Screen<GameScreenController> {
 	private PriorityQueue<Rectangle> _characterTerrainQueue; // the list of characters / images to render on the screen
 	private PriorityQueue<Rectangle> _menuQueue;
 	private LinkedList<Terrain> _terrainToPaint;
-	MainCharacter m;
 	
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
-		m = new MainCharacter(this,"src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_right.png","src/graphics/characters/mage_front.png","src/graphics/characters/mage_back.png","MyMage");
-
+		_currentCharacter = new MainCharacter(this,"src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_right.png","src/graphics/characters/mage_front.png","src/graphics/characters/mage_back.png","MyMage");
+		int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
+		_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
+		
 		this.setBackground(java.awt.Color.BLACK);
 		MAP_WIDTH = 20;
 		MAP_HEIGHT = 20;
@@ -75,7 +77,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		_xRef = DEFAULT_XREF;
 		_yRef = DEFAULT_YREF;
 		_isAnimating = false;
-				
+		
 		try {
 			setMap(Map.map(this, "src/tests/data/testMapDemo"));
 		} catch (InvalidMapException e) {
@@ -89,11 +91,13 @@ public class GameScreen extends Screen<GameScreenController> {
 		_currentCharacter = _currMap.getMainCharacter();
 		_terrainToPaint = _currMap.getTerrain();
 
-		for (int i = 0; i < m.getWidth(); i++)
+		for (int i = 0; i < m.getWidth(); i++) {
 			for (int j = 0; j < m.getHeight(); j++) {
 				m.getTile(i, j).setLocation((i - DEFAULT_XREF)*Tile.TILE_SIZE, (j - DEFAULT_YREF)*Tile.TILE_SIZE);
 				m.getTile(i, j).setVisible(true);
 			}
+		}
+		
 	}
 	
 	@Override
@@ -133,13 +137,22 @@ public class GameScreen extends Screen<GameScreenController> {
 						repaint();
 					}
 				}
+				
 				for(Rectangle r: _terrainToPaint){
+					System.out.println("BEFORE update terrain x: " + r.getX() + ", y:" + r.getY());
 					r.setLocation((r.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), r.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
-					System.out.println("x: " + (r.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)) + " y: " + r.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
+					System.out.println("AFTER update terrain x: " + r.getX() + ", y:" + r.getY());
 					repaint();
 				}
 				
-//			System.out.println("cnt: " + _cnt);
+				LinkedList <Character> charsToPaint = (LinkedList<Character>) getController().getCharactersToDisplay();
+				for(Character c : charsToPaint) {
+					System.out.println("BEFORE update character x: " + c.getX() + ", y:" + c.getY());
+					c.setLocation((c.getX() + (-_deltaX*Tile	.TILE_SIZE / _numSteps)), c.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
+					System.out.println("AFTER update character x: " + c.getX() + ", y:" + c.getY()); 
+					repaint();
+				}
+				
 			_cnt+=1;
 			if (_cnt == _numSteps) {
 				_isAnimating = false;
@@ -258,8 +271,8 @@ public class GameScreen extends Screen<GameScreenController> {
 		for(Character c : charsToPaint) {
 			System.out.println("name: " + c.getName());
 			_characterTerrainQueue.add(c);
-			int overflow = (c.getImage().getWidth() - Tile.TILE_SIZE) / 2;
-			c.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
+			//int overflow = (c.getImage().getWidth() - Tile.TILE_SIZE) / 2;
+			//c.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
 		}
 					
 		for(Terrain t : _terrainToPaint){
@@ -271,7 +284,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	//	System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
 
 		// paint all characters and terrains
-		while(!_characterTerrainQueue.isEmpty()){
+		while(!_characterTerrainQueue.isEmpty()) {
 			Rectangle toPaint = _characterTerrainQueue.poll();
 	//		System.out.println("Painted: " + toPaint.getPaintPriority());
 			toPaint.paint((Graphics2D) g, toPaint.getImage());				
@@ -286,8 +299,12 @@ public class GameScreen extends Screen<GameScreenController> {
 			toPaint.paint((Graphics2D) g, toPaint.getImage());
 		}	*/
 		
-//		if (_currentCharacter != null)
-//			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getImage());
+		if (_currentCharacter != null) {
+			int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
+			_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
+			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getImage());
+		}
+		
 		//System.out.println("--------------------");
 				
 //		m.setLocation(_currentCharacter.getX(),_currentCharacter.getY());
