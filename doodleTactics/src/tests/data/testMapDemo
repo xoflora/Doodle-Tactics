@@ -120,6 +120,7 @@ DemoMap,src/graphics/tiles/tile.png,src/graphics/tiles/grass.png
 5,4,F,src/graphics/tiles/grass.png,0,1,0
 5,5,F,src/graphics/tiles/grass.png,0,1,0
 4,5,F,src/graphics/tiles/grass.png,0,1,0
+6,5,0,src/graphics/tiles/grass.png,0,1,0
 img,src/graphics/terrain/mountains.png,48,48
 img,src/graphics/terrain/mountains.png,96,96
 img,src/graphics/terrain/mountains.png,144,144

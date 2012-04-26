@@ -175,9 +175,9 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 		/* if in the bounds of the map, specifically in relation to the main character,
 		 * update the screen reference points and animate the map */
-/*		System.out.println("--------MAP UPDATE---------");
+		/*System.out.println("--------MAP UPDATE---------");
 		System.out.println("xRef: " + _xRef);
-		System.out.println("YRef: " + _yRef);		*/
+		System.out.println("YRef: " + _yRef);	*/
 		
 		if((_xRef + x + 11) <= MAP_WIDTH && (_xRef + x + 11) > 0 && (_yRef + y + 9) <= MAP_HEIGHT && (_yRef + y + 9) > 0) {
 			
