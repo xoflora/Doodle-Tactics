@@ -17,6 +17,8 @@ public class Terrain extends Rectangle{
 		this.setSize(_img.getWidth(), _img.getHeight());
 		this.setVisible(true);
 		setLocation(x, y - _img.getHeight());
+		System.out.println("------NEW TERRAIN-------");
+		System.out.println("X: " + this.getX() + ", Y:" + this.getY());
 	}
 	
 	/**
