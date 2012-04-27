@@ -225,7 +225,7 @@ public class Map implements Serializable {
 					System.out.println("parsed to here - c");
 
 
-					MapCharacter current = new MapCharacter(dt,tiles,x,y,splitLine[7],profImg,mapImg);
+					//MapCharacter current = new MapCharacter(dt,tiles,x,y,splitLine[7],profImg,mapImg);
 				}
 
 				// Tile case
@@ -294,9 +294,9 @@ public class Map implements Serializable {
 			if (count > 2)
 				msg = "(line " + count + ") " + msg;
 			throw new InvalidMapException(msg);
-		} catch (InvalidEventException e) {
+		}/* catch (InvalidEventException e) {
 			throw new InvalidMapException("(line " + count + ") Invalid Event Specified");
-		}
+		}*/
 
 	}
 

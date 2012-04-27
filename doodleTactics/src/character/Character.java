@@ -72,7 +72,7 @@ public abstract class Character extends Rectangle{
 
 	private CombatController _affiliation; //player/AI etc
 
-	public Character(JPanel container, String profile, String left, String right, String up, String down, String name,double x, double y, String dialoguePath){
+	public Character(JPanel container, String profile, String left, String right, String up, String down, String name,double x, double y){
 		super(container);
 		_BASE_STATS = new int[NUM_STATS];
 		_currentStats = new int[NUM_STATS];
@@ -87,7 +87,7 @@ public abstract class Character extends Rectangle{
 		_capacity = 5;
 		
 		_affiliation = null;
-		_dialogue = null;
+
 		try {
 			_profile = ImageIO.read(new File(profile));
 			_left = ImageIO.read(new File(left));
