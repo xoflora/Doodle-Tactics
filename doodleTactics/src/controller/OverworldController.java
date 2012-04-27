@@ -60,8 +60,7 @@ public class OverworldController extends GameScreenController {
 		if(!_gameScreen.isAnimating()) {	
 			
 			int currentX = _gameScreen.getMapX(_gameScreen.getX()) + 10;
-			int currentY = _gameScreen.getMapY(_gameScreen.getY()) + 8;;
-			System.out.println("CurX: " + currentX + "CurY: " + currentY);
+			int currentY = _gameScreen.getMapY(_gameScreen.getY()) + 8;
 			Tile oldTile = _gameScreen.getMap().getTile(currentX, currentY);
 			Tile newTile;
 			
