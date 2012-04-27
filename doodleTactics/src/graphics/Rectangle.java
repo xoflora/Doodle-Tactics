@@ -19,6 +19,8 @@ public abstract class Rectangle extends Shape {
 
 		@Override
 		public int compare(Rectangle r1, Rectangle r2) {
+			if(r1.getPaintPriority() == r2.getPaintPriority())
+				return (int)( r1.getX() - r2.getX());
 			return r1.getPaintPriority() - r2.getPaintPriority();
 		}
 	}
