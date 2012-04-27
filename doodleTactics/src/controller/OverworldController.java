@@ -70,7 +70,7 @@ public class OverworldController extends GameScreenController {
 				System.out.println("w");
 				newTile = _gameScreen.getMap().getTile(currentX, currentY - 1);
 				_gameScreen.getMainChar().setUp();
-				if(newTile != null && newTile.canMove(Map.SOUTH) && !newTile.isOccupied()){			
+				if(newTile != null && newTile.canMove(Map.SOUTH)){			
 					if(newTile.canWarp()){
 						newTile.removeOccupant();
 						_gameScreen.setMap(newTile.getWarpPath());
@@ -86,7 +86,7 @@ public class OverworldController extends GameScreenController {
 				newTile = _gameScreen.getMap().getTile(currentX - 1, currentY);
 				_gameScreen.getMainChar().setLeft();
 				
-				if(newTile != null && newTile.canMove(Map.EAST) && !newTile.isOccupied()){			
+				if(newTile != null && newTile.canMove(Map.EAST)){			
 					if(newTile.canWarp()){
 						newTile.removeOccupant();
 						_gameScreen.setMap(newTile.getWarpPath());
@@ -102,7 +102,7 @@ public class OverworldController extends GameScreenController {
 				System.out.println("s");
 				newTile = _gameScreen.getMap().getTile(currentX, currentY + 1);
 				_gameScreen.getMainChar().setDown();
-				if(newTile != null && newTile.canMove(Map.NORTH) && !newTile.isOccupied()){			
+				if(newTile != null && newTile.canMove(Map.NORTH)){			
 					if(newTile.canWarp()){
 						System.out.println("Made it");
 						while(_gameScreen.isAnimating()){
@@ -123,7 +123,7 @@ public class OverworldController extends GameScreenController {
 				System.out.println("d");
 				newTile = _gameScreen.getMap().getTile(currentX + 1,  currentY);
 				_gameScreen.getMainChar().setRight();
-				if(newTile != null && newTile.canMove(Map.WEST) && !newTile.isOccupied()){
+				if(newTile != null && newTile.canMove(Map.WEST)){
 					if(newTile.canWarp()){
 						newTile.removeOccupant();
 						_gameScreen.setMap(newTile.getWarpPath());

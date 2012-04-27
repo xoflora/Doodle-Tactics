@@ -338,6 +338,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		while(!_characterTerrainQueue.isEmpty()) {
 			Rectangle toPaint = _characterTerrainQueue.poll();
 	//		System.out.println("Painted: " + toPaint.getPaintPriority());
+			toPaint.setVisible(true);
 			toPaint.paint(g, toPaint.getImage());				
 		}
 		
@@ -449,5 +450,14 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 		repaint();
 		return toReturn;
+	}
+	
+	/**
+	 * adds a character to the gamescreen
+	 */
+	public void addCharacter(Character c) {
+		_characterTerrainQueue.add(c);
+		_currMap.getCharactersToDisplay().add(c);
+		System.out.println("Character added " + c);
 	}
 }

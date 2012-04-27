@@ -132,9 +132,7 @@ public class DoodleTactics extends JFrame {
 		remove(screen);
 		screen.setVisible(false);
 		screen.setFocusable(false);
-		
-		System.out.println("hello " + (screen == _game));
-		
+				
 		repaint();
 	}
 	
@@ -155,9 +153,7 @@ public class DoodleTactics extends JFrame {
 		screen.setVisible(true);
 		this.repaint();
 		screen.grabFocus();
-		
-		System.out.println("wertwer " + (screen == _game));
-				
+						
 		repaint();
 	}
 	

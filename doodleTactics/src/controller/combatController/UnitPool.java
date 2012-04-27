@@ -45,7 +45,7 @@ public class UnitPool extends MenuItem {
 	public static final int DONE_BUTTON_PRIORITY = 2;
 	
 	public static final int SELECT_BUTTON = MouseEvent.BUTTON1;
-	public static final int SWAP_BUTTON = MouseEvent.BUTTON3;
+	public static final int ALT_BUTTON = MouseEvent.BUTTON3;
 	
 	private static final String IMAGE_PATH = "src/graphics/menu/sidebar.png";
 	private static final String DONE_DEFAULT_IMG = "src/graphics/menu/done.png";
@@ -64,13 +64,15 @@ public class UnitPool extends MenuItem {
 				BufferedImage hoveredPath, DoodleTactics dt, Character c) {
 			super(container, defltPath, hoveredPath, dt, CHARACTER_SELECT_PRIORITY);
 			setVisible(true);
+			_c = c;
 		}
 		
 		@Override
 		public void activate(int type) {
+		//	System.out.println("activating on character " + _c);
 			if (type == SELECT_BUTTON)
 				_source.getCharacterFromPool(_c);
-			else if (type == SWAP_BUTTON)
+			else if (type == ALT_BUTTON)
 				_source.alternateAction(_c);
 		}
 	}
@@ -115,6 +117,7 @@ public class UnitPool extends MenuItem {
 						ImageIO.read(new File(DONE_HOVER_IMG)), _dt);
 			_done.setLocation(DONE_X, DONE_Y);
 			_done.setVisible(true);
+			
 		} catch(IOException e) {
 			
 		}

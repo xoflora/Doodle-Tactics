@@ -754,4 +754,18 @@ public class Map implements Serializable {
 	public MainCharacter getMainCharacter() {
 		return _mainChar;
 	}
+	
+	/**
+	 * adds a character to the map
+	 * @param x the x-coordinate to add the character to
+	 * @param y the y-coordinate to add the character to
+	 */
+	public void addCharacter(int x, int y, Character c) {
+		try {
+			Tile t = _map[x][y];
+			t.setOccupant(c);
+			c.setLocation(t.getX(), t.getY());
+			c.setVisible(true);
+		} catch(ArrayIndexOutOfBoundsException e) { }
+	}
 }
