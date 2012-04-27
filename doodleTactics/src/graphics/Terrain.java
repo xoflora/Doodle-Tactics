@@ -17,7 +17,9 @@ public class Terrain extends Rectangle{
 		_img = img;
 		this.setSize(_img.getWidth(), _img.getHeight());
 		this.setVisible(true);
-		int overflow = (_img.getWidth() - Tile.TILE_SIZE) / 2;
+		int overflow = 0;
+		if(_img.getWidth() - Tile.TILE_SIZE <= 25.0)
+			overflow = (_img.getWidth() - Tile.TILE_SIZE) / 2;
 		setLocation(x - overflow, y - _img.getHeight());
 	}
 	
