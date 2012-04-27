@@ -255,16 +255,39 @@ public class GameScreen extends Screen<GameScreenController> {
 		return _characterTerrainQueue;
 	}
 	
-	/**
+/*	/**
 	 * 
 	 * @return The PriorityQueue storing the Menu items to paint
 	 */
-	public PriorityQueue<MenuItem> getMenuQueue(){
+/*	public PriorityQueue<MenuItem> getMenuQueue(){
 		return _menuQueue;
+	}	*/
+	
+	/**
+	 * adds a menu item for drawing
+	 * @param m the menu item to add
+	 */
+	public void addMenuItem(MenuItem m) {
+		synchronized(_menuQueue) {
+			_menuQueue.add(m);
+		}
+	}
+	
+	/**
+	 * removes a menu item
+	 * @param m the item to remove
+	 * @return whether or not removing was successful
+	 */
+	public boolean removeMenuItem(MenuItem m) {
+		boolean b;
+		synchronized(_menuQueue) {
+			b = _menuQueue.remove(m);
+		}
+		return b;
 	}
 	 
-	public void paintComponent(java.awt.Graphics g) {
-		
+	public void paintComponent(java.awt.Graphics graphics) {
+		Graphics2D g = (Graphics2D) graphics;
 	/*	System.out.println("-------PAINT--------");
 		System.out.println("xMin: " + (_xRef - 1));
 		System.out.println("xMax: " + (_xRef + 22));
@@ -279,7 +302,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			for(int j = 0; j < MAP_HEIGHT; j++) {
 				// check that the given tile is within the bounds before painting it 
 				if((i < _xRef + 22 && i >= _xRef - 1) && (j < (_yRef + 18) && j >= (_yRef - 1))) {
-					_currMap.getTile(i,j).paint((Graphics2D) g, _currMap.getTile(i,j).getImage());
+					_currMap.getTile(i,j).paint(g, _currMap.getTile(i,j).getImage());
 				}
 			}
 		}
@@ -287,9 +310,9 @@ public class GameScreen extends Screen<GameScreenController> {
 		// add all Characters to PriorityQueue
 		List<Character> charsToPaint = this.getController().getCharactersToDisplay();
 	
-		System.out.println("====print characters====");
+	//	System.out.println("====print characters====");
 		for(Character c : charsToPaint) {
-			System.out.println("name: " + c.getName());
+	//		System.out.println("name: " + c.getName());
 			_characterTerrainQueue.add(c);
 			//int overflow = (c.getImage().getWidth() - Tile.TILE_SIZE) / 2;
 			//c.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
@@ -307,22 +330,28 @@ public class GameScreen extends Screen<GameScreenController> {
 		_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
 		_characterTerrainQueue.add(_currentCharacter);
 		
-		System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
+	//	System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
 
 		// paint all characters and terrains
 		while(!_characterTerrainQueue.isEmpty()) {
 			Rectangle toPaint = _characterTerrainQueue.poll();
 	//		System.out.println("Painted: " + toPaint.getPaintPriority());
-			toPaint.paint((Graphics2D) g, toPaint.getImage());				
+			toPaint.paint(g, toPaint.getImage());				
 		}
 		
-		// finally paint all of the menus
-		Rectangle[] menuArray = (Rectangle []) _menuQueue.toArray(new Rectangle[_menuQueue.size()]);
-		Arrays.sort(menuArray);
+
 		
-		for (int i = 0; i < menuArray.length; i++) {
-			Rectangle toPaint = menuArray[i];
-			toPaint.paint((Graphics2D) g, toPaint.getImage());
+		//print all the menu items
+		List<MenuItem> items = new LinkedList<MenuItem>();
+		synchronized (_menuQueue) {
+			while (!_menuQueue.isEmpty()) {
+				items.add(_menuQueue.poll());
+			}
+			
+			for (MenuItem m : items) {
+				m.paint(g, m.getImage());
+				_menuQueue.add(m);
+			}
 		}
 		
 //		if (_currentCharacter != null) {

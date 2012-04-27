@@ -7,11 +7,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import main.DoodleTactics;
+import main.GameScreen;
 import map.Tile;
 
 import graphics.MenuItem;
@@ -27,17 +29,23 @@ public class UnitPool extends MenuItem {
 	
 	private static final int SIDEBAR_WIDTH = Tile.TILE_SIZE;
 	private static final int SIDEBAR_HEIGHT = 160;
-	private static final int CHARACTER_OFFSET_X = Tile.TILE_SIZE/8;
-	private static final int CHARACTER_OFFSET_Y = Tile.TILE_SIZE/8;
+	
+	private static final int CHARACTER_OFFSET_X = 40;
+	private static final int CHARACTER_OFFSET_Y = 120;
+	private static final int OFFSET_BETWEEN_CHARACTERS = Tile.TILE_SIZE + 4;
 	
 	private static final int DEFAULT_X = 0;
 	private static final int DEFAULT_Y = 0;
-	private static final int DONE_X = 0;
-	private static final int DONE_Y = 160;
+	private static final int DONE_X = 11;
+	private static final int DONE_Y = 746;
 	
-	private static final String IMAGE_PATH = "src/graphics/characters/pokeball.png";
-	private static final String DONE_DEFAULT_IMG = "src/graphics/characters/pokeball.png";
-	private static final String DONE_HOVER_IMG = "src/graphics/characters/pokeball.png";
+	public static final int SIDEBAR_PRIORITY = 1;
+	public static final int CHARACTER_SELECT_PRIORITY = 2;
+	public static final int DONE_BUTTON_PRIORITY = 2;
+	
+	private static final String IMAGE_PATH = "src/graphics/menu/sidebar.png";
+	private static final String DONE_DEFAULT_IMG = "src/graphics/menu/done.png";
+	private static final String DONE_HOVER_IMG = "src/graphics/menu/done_hovered.png";
 	
 	/**
 	 * corresponds to a character button in the unit pool
@@ -50,7 +58,7 @@ public class UnitPool extends MenuItem {
 		
 		public CharacterSelect(JPanel container, BufferedImage defltPath,
 				BufferedImage hoveredPath, DoodleTactics dt, Character c) {
-			super(container, defltPath, hoveredPath, dt);
+			super(container, defltPath, hoveredPath, dt, CHARACTER_SELECT_PRIORITY);
 			setVisible(true);
 		}
 		
@@ -63,12 +71,11 @@ public class UnitPool extends MenuItem {
 	/**
 	 * menu item indicating that the unit pool is no longer required
 	 * @author rroelke
-	 *
 	 */
 	private class DoneButton extends MenuItem {
 		public DoneButton(JPanel container, BufferedImage defltPath,
 				BufferedImage hoveredPath, DoodleTactics dt) {
-			super(container, defltPath, hoveredPath, dt);
+			super(container, defltPath, hoveredPath, dt, DONE_BUTTON_PRIORITY);
 			setVisible(true);
 		}
 		
@@ -81,45 +88,62 @@ public class UnitPool extends MenuItem {
 	
 	private PoolDependent _source;
 	private HashMap<Character, CharacterSelect> _unitPool;
-	private JPanel _container;
 	private DoneButton _done;
+	private GameScreen _gameScreen;
 	
-	public UnitPool(DoodleTactics dt, JPanel container, PoolDependent source, List<Character> units) 
+	private boolean _inUse;
+	
+	public UnitPool(DoodleTactics dt, GameScreen screen, PoolDependent source, List<Character> units) 
 			throws IOException {
-		super(container, ImageIO.read(new File(IMAGE_PATH)), ImageIO.read(new File(IMAGE_PATH)), dt);
+		super(screen, ImageIO.read(new File(IMAGE_PATH)), ImageIO.read(new File(IMAGE_PATH)), dt, SIDEBAR_PRIORITY);
 		
 		_dt = dt;
 		_source = source;
 		_unitPool = new HashMap<Character, CharacterSelect>();
-		_container = container;
+		_gameScreen = screen;
 		
 		for (Character unit : units)
 			addCharacter(unit);
-		
-		_done.setLocation(DONE_X, DONE_Y);
-		_done.setVisible(true);
+		try {
+			_done = new DoneButton(_gameScreen, ImageIO.read(new File(DONE_DEFAULT_IMG)),
+						ImageIO.read(new File(DONE_HOVER_IMG)), _dt);
+			_done.setLocation(DONE_X, DONE_Y);
+			_done.setVisible(true);
+		} catch(IOException e) {
+			
+		}
 		
 		setLocation(DEFAULT_X, DEFAULT_Y);
 		
-		setVisible(true);
+		_inUse = false;
 	}
 	
-	public void removeCharacter(Character c) {
-		_unitPool.remove(c);
+	/**
+	 * removes a unit from the unit pool
+	 * @param c the unit to remove
+	 * @return whether or not the unit was successfully removed
+	 */
+	public boolean removeCharacter(Character c) {
+		CharacterSelect s = _unitPool.remove(c);
+		if (_inUse && s != null)
+			return _gameScreen.removeMenuItem(s);
+		return s != null;
 	}
 	
+	/**
+	 * adds a unit to the unit pool
+	 * @param c the unit to add
+	 */
 	public void addCharacter(Character c) {
-	/*	System.out.println();
-		System.out.println(c == null);
-		System.out.println(c.getDownImage() == null);
-		System.out.println(c.getRightImage() == null);
-		System.out.println(_dt == null);		*/
-		_unitPool.put(c, new CharacterSelect(_container, c.getDownImage(), c.getRightImage(), _dt, c));
+		CharacterSelect s = new CharacterSelect(_gameScreen, c.getDownImage(), c.getRightImage(), _dt, c);
+		_unitPool.put(c, s);
+		
+		if (_inUse)
+			_gameScreen.addMenuItem(s);
 	}
 	
 	@Override
 	public void paint(Graphics2D brush, BufferedImage img) {
-		System.out.println("PAINTING UNIT POOL");
 		super.paint(brush, img);
 		
 		_done.paint(brush, _done.getImage());
@@ -133,9 +157,32 @@ public class UnitPool extends MenuItem {
 			System.out.println(draw.getImage());
 			draw.paint(brush, draw.getImage());
 			
-			y += Tile.TILE_SIZE;
+			y += OFFSET_BETWEEN_CHARACTERS;
+		}
+	}
+	
+	/**
+	 * sets whether or not the pool should be used
+	 * @param b whether or not the pool should be used
+	 */
+	public void setInUse(boolean b) {
+		if (b && !_inUse) {
+			_gameScreen.addMenuItem(this);
+			_gameScreen.addMenuItem(_done);
+			for (Character c : _unitPool.keySet())
+				_gameScreen.addMenuItem(_unitPool.get(c));
 			
-			System.out.println("BLEH");
+			_inUse = true;
+			setVisible(true);
+		}
+		else if (!b && _inUse){
+			for (Character c : _unitPool.keySet())
+				_gameScreen.removeMenuItem(_unitPool.get(c));
+			_gameScreen.removeMenuItem(_done);
+			_gameScreen.removeMenuItem(this);
+			
+			_inUse = false;
+			setVisible(false);
 		}
 	}
 }

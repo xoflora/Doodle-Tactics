@@ -165,6 +165,11 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	}
 	
 	@Override
+	public void initialize() {
+		
+	}
+	
+	@Override
 	public void finalize() {
 		
 	}
