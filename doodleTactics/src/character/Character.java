@@ -476,6 +476,11 @@ public abstract class Character extends Rectangle{
 
 
 	}
+	
+	public int getCapacity() {
+		return _capacity;
+	}
+	
 	@Override
 	public void setLocation(double x, double y){
 		super.setLocation(x, y);

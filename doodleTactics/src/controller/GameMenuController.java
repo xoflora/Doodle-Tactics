@@ -2,6 +2,8 @@ package controller;
 
 import graphics.MenuItem;
 
+import items.Item;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
@@ -44,7 +46,7 @@ public class GameMenuController extends Controller {
 		MenuItem _clickedButton = _gameMenu.checkContains(e.getPoint());
 		if (_clickedButton != null) {
 			System.out.println("click");
-			_clickedButton.activate();
+//			_clickedButton.activate();
 		}
 	}
 
@@ -101,14 +103,6 @@ public class GameMenuController extends Controller {
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
-		MenuItem _clickedButton = _gameMenu.checkItemContains(e.getPoint());
-		if (!_gameMenu._beingHovered) {
-			
-		}
-//		if (_clickedButton != null) {
-//			System.out.println("click");
-//			_clickedButton.activate();
-//		}
 	}
 
 }
