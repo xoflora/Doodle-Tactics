@@ -283,7 +283,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			}
 		}
 		
-		//Add all Characters and Terrain to PriorityQueue
+		// add all Characters to PriorityQueue
 		List<Character> charsToPaint = this.getController().getCharactersToDisplay();
 	
 		System.out.println("====print characters====");
@@ -293,7 +293,8 @@ public class GameScreen extends Screen<GameScreenController> {
 			//int overflow = (c.getImage().getWidth() - Tile.TILE_SIZE) / 2;
 			//c.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
 		}
-					
+		
+		// add all Terrain to PriorityQueue
 		for(Terrain t : _terrainToPaint){
 	//		System.out.println("Priority : " + (t.getPaintPriority()));
 	//		System.out.println("Adding Terrain");
