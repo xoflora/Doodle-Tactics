@@ -114,18 +114,6 @@ public class Map implements Serializable {
 				}
 			}
 			
-//			// parse the starting locations of the map
-//			splitLine = reader.readLine().split(",");
-//			
-//			if(splitLine.length < 1) {
-//				throw new InvalidMapException("(line 3) Incorrect amount of data");
-//			}
-//			
-//			for(int i = 0; i < splitLine.length; i++) {
-//				String[] split = splitLine[i].split("/");
-//				tiles[Integer.parseInt(split[0])][Integer.parseInt(split[1])] = ;
-//			}
-			
 			// Read and parse tiles from file
 			String line = reader.readLine();
 			int x, y;
@@ -199,8 +187,8 @@ public class Map implements Serializable {
 
 				}
 
-				// tile case
-				else if (splitLine.length == 7) {
+				// Tile case
+				else if (splitLine.length == 8) {
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
 
@@ -212,6 +200,12 @@ public class Map implements Serializable {
 					// Check if random battle can occur
 					if (Integer.parseInt(splitLine[6]) == 1)
 						randBattle.add(tiles[x][y]);
+					
+					// Check if warp exists
+					if(!splitLine[7].equals("none")) {
+						tiles[x][y].setWarpMap(splitLine[7]);
+					}
+					
 					// Error Case
 				} else
 					throw new InvalidMapException("(line " + count

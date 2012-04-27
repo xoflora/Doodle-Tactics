@@ -68,6 +68,7 @@ public class Tile extends graphics.Rectangle {
 	private Event _event;
 	private Character _character;
 	private String _path;
+	private String _warpMap;
 	
 	private boolean _inMovementRange;
 	private boolean _inAttackRange;
@@ -95,6 +96,7 @@ public class Tile extends graphics.Rectangle {
 			throw new InvalidTileException();
 		}
 		
+		_warpMap = null;
 		_canMove = new boolean[4];
 		_cost = cost;
 		_height = height;
@@ -252,6 +254,15 @@ public class Tile extends graphics.Rectangle {
 	
 	public boolean isOccupied() {
 		return !(_character == null);
+	}
+	
+	/**
+	 * sets the name of the warp map of a given tile to the given string
+	 * @param mapName to warp to upon standing on the given tile
+	 */
+	
+	public void setWarpMap(String mapName) {
+		
 	}
 	
 	/**
