@@ -94,11 +94,11 @@ public class GameScreen extends Screen<GameScreenController> {
 		Map map = null;
 		
 		try {
-		
-			// if the map is already if the cache
+			// if the map is already in the cache, just retrieve it from there
 			if(_mapCache.get(mapPath) != null) {
 				map = _mapCache.get(mapPath);
 			} else {
+				// otherwise, read the map from that file and put it in the cache
 				map = Map.map(this, mapPath);
 				_mapCache.put(mapPath, map);
 			}
@@ -107,6 +107,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			_currentCharacter = _currMap.getMainCharacter();
 			_terrainToPaint = _currMap.getTerrain();
 	
+			// set all of the locations of the tiles relative to xref and yref
 			for (int i = 0; i < map.getWidth(); i++) {
 				for (int j = 0; j < map.getHeight(); j++) {
 					map.getTile(i, j).setLocation((i - DEFAULT_XREF)*Tile.TILE_SIZE, (j - DEFAULT_YREF)*Tile.TILE_SIZE);
@@ -298,6 +299,11 @@ public class GameScreen extends Screen<GameScreenController> {
 	//		System.out.println("Adding Terrain");
 			_characterTerrainQueue.add(t);
 		}
+
+		// add the main character to the queue
+		int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
+		_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
+		_characterTerrainQueue.add(_currentCharacter);
 		
 		System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
 
@@ -317,11 +323,11 @@ public class GameScreen extends Screen<GameScreenController> {
 			toPaint.paint((Graphics2D) g, toPaint.getImage());
 		}	*/
 		
-		if (_currentCharacter != null) {
-			int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
-			_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
-			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getImage());
-		}
+//		if (_currentCharacter != null) {
+//			int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
+//			_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
+//			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getImage());
+//		}
 		
 		//System.out.println("--------------------");
 				
