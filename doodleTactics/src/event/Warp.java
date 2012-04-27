@@ -18,7 +18,7 @@ public class Warp extends Event {
 	@Override
 	public void take() {
 		System.out.println("Event Path:" + _tile.getEventPath());
-		_dt.getGameScreen().setMap(_tile.getEventPath());
+		_gameScreen.setMap(_tile.getEventPath());
 		_tile.removeOccupant();
 	}
 	
