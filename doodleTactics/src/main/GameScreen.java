@@ -95,6 +95,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 		try {
 		
+			// if the map is already if the cache
 			if(_mapCache.get(mapPath) != null) {
 				map = _mapCache.get(mapPath);
 			} else {
