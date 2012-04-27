@@ -31,7 +31,7 @@ public interface PoolDependent {
 	 * adds a unit to the character pool
 	 * @param c the unit to add
 	 */
-	public void addCharacterToPool(Character c);
+	public void addUnitToPool(Character c);
 	
 	/**
 	 * begins use of the unit pool 
