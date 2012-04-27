@@ -69,8 +69,8 @@ public class Map implements Serializable {
 	 * 
 	 *         Expected file format: name,default_path,overflow_path
 	 *         numCols,numRows
-	 *         x1,y1,permissions,img_path1,height1,cost1,rand_battle ... img,
-	 *         img_path, x1, y1 ...
+	 *         x1,y1,permissions,img_path1,cost1,rand_battle,warp_to_path_specified
+	 *         img,img_path, x1, y1,tile_permissions ...
 	 *         char,type,name,avatar_img,profile_img,left_img
 	 *         ,right_img,up_img,down_img, x, y .. (where x and y are 0-indexed)
 
@@ -121,14 +121,16 @@ public class Map implements Serializable {
 				splitLine = line.split(",");
 				count++;
 
-				// Terrain case
-				if (splitLine.length == 4 && splitLine[0].equals("img")) {
+				// Terrain (Image)  case
+				if (splitLine.length == 5 && splitLine[0].equals("img")) {
 					if(main == null)
 						throw new InvalidMapException("(line " + count + ") Main Character must be parsed before images");
 					BufferedImage img = ImageIO.read(new File(splitLine[1]));
-					double xLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[2])  - main.getTileX());
-					double yLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[3]) - main.getTileY());
-
+					int xTile = Integer.parseInt(splitLine[2]);
+					int yTile = Integer.parseInt(splitLine[3]);
+					double xLoc = Tile.TILE_SIZE * (xTile  - main.getTileX());
+					double yLoc = Tile.TILE_SIZE * (yTile - main.getTileY());
+					tiles[xTile][yTile].setTilePermissions((splitLine[4]).charAt(0));
 					Terrain t = new Terrain(container, img, xLoc, yLoc);
 					terrainList.add(t);
 
@@ -188,14 +190,13 @@ public class Map implements Serializable {
 				}
 
 				// Tile case
-				else if (splitLine.length == 8) {
+				else if (splitLine.length == 7) {
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
 
 					tiles[x][y] = Tile.tile(container, splitLine[3],
 							splitLine[2].charAt(0), x, y, Integer
-							.parseInt(splitLine[4]), Integer
-							.parseInt(splitLine[5]));
+							.parseInt(splitLine[4]));
 
 					// Check if random battle can occur
 					if (Integer.parseInt(splitLine[6]) == 1)

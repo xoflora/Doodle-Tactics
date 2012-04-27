@@ -20,7 +20,8 @@ public class Terrain extends Rectangle{
 		int overflow = 0;
 		if(_img.getWidth() - Tile.TILE_SIZE <= 25.0)
 			overflow = (_img.getWidth() - Tile.TILE_SIZE) / 2;
-		setLocation(x - overflow, y - _img.getHeight());
+		System.out.println("X LOC: " + x + " Y LOC: " + y); 
+		setLocation(x - overflow, y - _img.getHeight() + Tile.TILE_SIZE);
 	}
 	
 	/**
@@ -30,6 +31,7 @@ public class Terrain extends Rectangle{
 	public BufferedImage getImage() {
 		return _img;
 	}
+	
 	
 	@Override
 	public void setLocation(double x, double y) {
