@@ -327,7 +327,7 @@ public class GameScreen extends Screen<GameScreenController> {
 
 		// add the main character to the queue
 		int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
-		_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
+		_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE - _currentCharacter.getImage().getHeight() + Tile.TILE_SIZE);
 		_characterTerrainQueue.add(_currentCharacter);
 		
 	//	System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
