@@ -71,7 +71,6 @@ public abstract class Character extends Rectangle{
 	private BufferedImage _up;
 	private BufferedImage _down;
 
-
 	private CombatController _affiliation; //player/AI etc
 
 	public Character(JPanel container, String avatar, String profile, String left, String right, String up, String down, String name,double x, double y){

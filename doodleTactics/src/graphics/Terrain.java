@@ -31,7 +31,6 @@ public class Terrain extends Rectangle{
 		return _img;
 	}
 	
-	
 	@Override
 	public void setLocation(double x, double y) {
 		super.setLocation(x, y);
