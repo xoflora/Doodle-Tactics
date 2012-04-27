@@ -70,7 +70,7 @@ public class OverworldController extends GameScreenController {
 				System.out.println("w");
 				newTile = _gameScreen.getMap().getTile(currentX, currentY - 1);
 				_gameScreen.getMainChar().setUp();
-				if(newTile != null && newTile.canMove(Map.SOUTH) && !newTile.isOccupied()){			
+				if(newTile != null && newTile.canMove(Map.SOUTH) && !newTile.isOccupied() && ){			
 					_gameScreen.mapUpdate(0, -1);
 					oldTile.removeOccupant();
 					newTile.setOccupant(_gameScreen.getMainChar());
