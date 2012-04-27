@@ -48,6 +48,17 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 			
 		}
 	}
+	
+	/**
+	 * clears all selections of the map
+	 */
+	private void clearSelection() {
+		if (_selectedTile != null)
+			_selectedTile.setInEnemyAttackRange(false);
+		_selectedTile = null;
+		_selectedCharacter = null;
+		_selectedFromPool = false;
+	}
 
 	@Override
 	public void release() {
@@ -114,12 +125,8 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		/*	else if (m != null) {
 				System.out.println("currently selected: " + _selectedCharacter);
 			}	*/
-			else if (m == null) {
-				if (_selectedTile != null)
-					_selectedTile.setInEnemyAttackRange(false);
-				_selectedTile = null;
-				_selectedFromPool = false;
-			}
+			else if (m == null)
+				clearSelection();
 		}
 		else if (e.getButton() == UnitPool.ALT_BUTTON) {	//swap characters
 			System.out.println("selected character: " + _selectedCharacter);
@@ -131,26 +138,22 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 					
 					if (_selectedCharacter != null) {
 						_gameScreen.addCharacter(_selectedCharacter);
-						_selectedCharacter.setLocation(t.getX(), t.getY());
 						_pool.removeCharacter(_selectedCharacter);
+						_selectedCharacter.setLocation(t.getX(), t.getY());
 					}
 					if (c != null) {
 						_gameScreen.getCharacterQueue().remove(c);
 						_pool.addCharacter(c);
 					}
 				}
-				else if (_selectedTile != null) {
+				else if (_selectedCharacter != null) {
 					_selectedTile.setOccupant(t.getOccupant());
 					t.setOccupant(_selectedCharacter);
+					_selectedCharacter.setLocation(t.getX(), t.getY());
 				}
 			}
-			else if (m == null) {
-				if (_selectedTile != null)
-					_selectedTile.setInEnemyAttackRange(false);
-				_selectedTile = null;
-				_selectedCharacter = null;
-				_selectedFromPool = false;
-			}
+			else if (m == null)
+				clearSelection();
 			
 			_selectedCharacter = null;
 			_selectedFromPool = false;
@@ -206,6 +209,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	//	System.out.println(c);
 		if (!_selectedFromPool && _selectedTile != null && _selectedTile != null) {
 			_selectedTile.setOccupant(c);
+			c.setLocation(_selectedTile.getX(), _selectedTile.getY());
 			removeUnitFromPool(c);
 			
 			if (_selectedCharacter != null) {
@@ -213,7 +217,8 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 				_gameScreen.getCharacterQueue().remove(_selectedCharacter);
 			}
 			
-			_gameScreen.getCharacterQueue().add(c);
+			System.out.println("curnch");
+			_gameScreen.addCharacter(c);
 		}
 	}
 
