@@ -63,7 +63,7 @@ public class DoodleTactics extends JFrame {
 		Archer _char1 = new Archer(_game, 
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png", 10, 10);
+				"src/graphics/characters/warrior_back.png", "Dude", 10, 10);
 		_party.add(_char1);
 		BufferedImage pot;
 		try {
@@ -78,17 +78,17 @@ public class DoodleTactics extends JFrame {
 		_party.add(new Mage(_game,
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_left.png",
 				"src/graphics/characters/warrior_right.png", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png", 5, 5));
+				"src/graphics/characters/warrior_front.png", "Whee", 5, 5));
 		
 		_party.add(new Thief(_game, 
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/mage_left.png",
 				"src/graphics/characters/mage_right.png", "src/graphics/characters/mage_back.png",
-				"src/graphics/characters/mage_back.png", "src/graphics/characters/warrior_front.png", 15, 15));
+				"src/graphics/characters/mage_back.png", "Shirley", 15, 15));
 		
 		_party.add(new Warrior(_game, 
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png",
-				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png", 20, 10));
+				"src/graphics/characters/warrior_front.png", "Bob", 20, 10));
 
 	}
 	

@@ -55,6 +55,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private JScrollPane _scrollBar;
 	public boolean _beingHovered = false;
 	private itemListener _itemListener;
+	private unitsBoxListener _unitsBoxListener;
 	
 	public GameMenuScreen(DoodleTactics dt) {
 		
@@ -131,10 +132,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		
 		_itemOptionsBox = new JPanel();
 		_itemOptionsBox.setBackground(java.awt.Color.WHITE);
-//		_itemOptionsBox.setLocation(0,0);
-//		_itemOptionsBox.setSize(5, 5);
+		_itemOptionsBox.setLocation(0,0);
+		_itemOptionsBox.setSize(5, 5);
 		_itemListener = new itemListener();
-		
+		_unitsBoxListener = new unitsBoxListener();
 	}
 	
 	/**
@@ -146,7 +147,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_currClicked = 1;
 		_unitsBox.removeAll();
 		_unitsBox.setLayout(new GridLayout(_dt.getParty().size(), 0, 10, 10));
-		_unitsBox.addMouseMotionListener(_itemListener);
+		_unitsBox.addMouseMotionListener(_unitsBoxListener);
 		for (Character chrter: _dt.getParty()) {
 			CharInfo toAdd = new CharInfo(this, chrter);
 			toAdd.setVisible(true);
@@ -278,6 +279,17 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		return null;
 	}
 	
+	public void checkStopHovering(java.awt.Point point) {
+		for (JLabel label: _labelToCharacter.keySet()) {
+			if (label.contains(point)) {
+				return;
+			}
+		}
+		this.remove(_itemInfoBox);
+		_beingHovered = false;
+		this.repaint();
+	}
+	
 	/**
 	 * Displays the item info at the left side of the screen
 	 * @param item- Item that is being hovered
@@ -308,8 +320,11 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		for (JLabel label: _labelToCharacter.keySet()) {
 			if (label.contains(point)) {
 				this.displayItemOptions(label);
+//				this.repaint();
+				return;
 			}
 		}
+		this.remove(_itemOptionsBox);
 	}
 	
 	public void displayItemOptions(JLabel label) {
@@ -345,7 +360,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			}
 		}
 		else {
-			JLabel _use = new JLabel("Use this item on " + character.getName());
+			JLabel _use = new JLabel("Use on " + character.getName());
 			_use.setSize(labelWidth, labelHeight);
 			_use.setVisible(true);
 			_itemOptionsBox.add(_use);
@@ -390,8 +405,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_itemOptionsBox.setSize(labelWidth, labelHeight*numOptions);
 		_itemOptionsBox.setVisible(true);
 		this.add(_itemOptionsBox);
-		this.revalidate();
-		this.repaint();
+		_itemOptionsBox.repaint();
 	}
 	
 	public void switchToGameScreen() {
@@ -672,6 +686,18 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			if (_currClicked == 1) {
 				Item clickedItem = GameMenuScreen.this.checkItemContains(e.getPoint());
 			}
+		}
+	}
+	
+	private class unitsBoxListener implements MouseMotionListener {
+
+		public void mouseDragged(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void mouseMoved(MouseEvent e) {
+			GameMenuScreen.this.checkStopHovering(e.getPoint());
 		}
 	}
 }
