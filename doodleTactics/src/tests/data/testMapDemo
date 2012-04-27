@@ -166,3 +166,4 @@ img,src/graphics/terrain/pen_pillar.png,17,0,A
 img,src/graphics/terrain/pen_pillar.png,18,0,A
 img,src/graphics/terrain/pen_pillar.png,19,0,A
 char,Main,Renoir,src/graphics/characters/mage_left.png,src/graphics/characters/mage_left.png,src/graphics/characters/mage_left.png,src/graphics/characters/mage_right.png,src/graphics/characters/mage_back.png,src/graphics/characters/mage_front.png
+char,Warrior,Renoir,src/graphics/characters/mage_left.png,src/graphics/characters/mage_left.png,src/graphics/characters/mage_left.png,src/graphics/characters/mage_right.png,src/graphics/characters/mage_back.png,src/graphics/characters/mage_front.png,14,14

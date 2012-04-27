@@ -101,7 +101,7 @@ public abstract class Character extends Rectangle{
 		}
 		
 		this.setSize(_down.getWidth(), _down.getHeight());
-		this.setLocation(x,y);
+		this.setLocation(x,y - _down.getHeight());
 	}
 	
 	/**
