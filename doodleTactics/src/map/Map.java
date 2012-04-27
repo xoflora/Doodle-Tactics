@@ -123,10 +123,13 @@ public class Map implements Serializable {
 
 				// Terrain case
 				if (splitLine.length == 4 && splitLine[0].equals("img")) {
+					if(main == null)
+						throw new InvalidMapException("(line " + count + ") Main Character must be parsed before images");
 					BufferedImage img = ImageIO.read(new File(splitLine[1]));
-					Terrain t = new Terrain(container, img, Integer
-							.parseInt(splitLine[2]), Integer
-							.parseInt(splitLine[3]));
+					double xLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[2])  - main.getTileX());
+					double yLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[3]) - main.getTileY());
+
+					Terrain t = new Terrain(container, img, xLoc, yLoc);
 					terrainList.add(t);
 
 					// Character Case
