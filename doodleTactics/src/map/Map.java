@@ -110,7 +110,7 @@ public class Map implements Serializable {
 				for (int y = 0; y < numY; y++) {
 					if (tiles[x][y] == null)
 						tiles[x][y] = Tile.tile(container, defaultPath, 'F', x,
-								y, 0, 0);
+								y, 1);
 				}
 			}
 			
@@ -199,11 +199,11 @@ public class Map implements Serializable {
 							.parseInt(splitLine[4]));
 
 					// Check if random battle can occur
-					if (Integer.parseInt(splitLine[6]) == 1)
+					if (Integer.parseInt(splitLine[5]) == 1)
 						randBattle.add(tiles[x][y]);
 					
 					// Check if warp exists
-					if(!splitLine[7].equals("none")) {
+					if(!splitLine[6].equals("none")) {
 						tiles[x][y].setWarpMap(splitLine[7]);
 					}
 					

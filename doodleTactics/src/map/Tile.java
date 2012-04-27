@@ -82,7 +82,7 @@ public class Tile extends graphics.Rectangle {
 	 * @param height
 	 * @param cost
 	 */
-	public Tile(JPanel container, String path, int x, int y, int height, int cost) 
+	public Tile(JPanel container, String path, int x, int y, int cost) 
 			throws InvalidTileException {
 		super(container);
 		_path = path;
@@ -234,8 +234,8 @@ public class Tile extends graphics.Rectangle {
 	 * @return a new tile given by the string
 	 */
 	public static Tile tile(JPanel container, String path, char permissions,
-			int x, int y, int height, int cost) throws InvalidTileException {
-		Tile t = new Tile(container, path, x, y,height,cost);
+			int x, int y, int cost) throws InvalidTileException {
+		Tile t = new Tile(container, path, x, y,cost);
 		t.setTilePermissions(permissions);
 		if(permissions != Tile.PERMISSION_ALL)
 			System.out.println("DIFFERENT PERMISSIONS!!!!");

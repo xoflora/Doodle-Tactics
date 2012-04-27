@@ -145,7 +145,7 @@ char,Main,Renoir,src/graphics/characters/mage_left.png,src/graphics/characters/m
 0,15,F,src/graphics/tiles/left.png,1,0,none
 0,16,F,src/graphics/tiles/left.png,1,0,none
 0,17,0,src/graphics/tiles/left.png,1,0,none
-img,src/graphics/terrain/pen_pillar.png,0,A
+img,src/graphics/terrain/pen_pillar.png,0,0,A
 img,src/graphics/terrain/pen_pillar.png,1,0,A
 img,src/graphics/terrain/pen_pillar.png,2,0,A
 img,src/graphics/terrain/pen_pillar.png,3,0,A
