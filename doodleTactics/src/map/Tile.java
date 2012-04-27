@@ -101,6 +101,7 @@ public class Tile extends graphics.Rectangle {
 		
 		_opacity = DEFAULT_OPACITY;
 		_overlay = DEFAULT_COLOR;
+		
 	}
 	
 	/**

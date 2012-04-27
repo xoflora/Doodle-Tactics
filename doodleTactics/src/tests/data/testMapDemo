@@ -96,7 +96,7 @@ char,Main,Renoir,src/graphics/characters/pokeball.png,src/graphics/characters/th
 11,18,0,src/graphics/tiles/top_upper_right.png,1,0,none
 11,17,0,src/graphics/tiles/right.png,1,0,none
 11,16,0,src/graphics/tiles/right.png,1,0,none
-10,16,F,src/graphics/tiles/stairs.png,1,0,none
+10,16,F,src/graphics/tiles/stairs.png,1,0,src/tests/data/WarpMap
 9,16,0,src/graphics/tiles/left.png,1,0,none
 9,17,0,src/graphics/tiles/left.png,1,0,none
 9,18,0,src/graphics/tiles/top_upper_left.png,1,0,none

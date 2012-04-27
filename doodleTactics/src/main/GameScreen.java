@@ -107,7 +107,9 @@ public class GameScreen extends Screen<GameScreenController> {
 			_currMap = map;
 			_currentCharacter = _currMap.getMainCharacter();
 			_terrainToPaint = _currMap.getTerrain();
-	
+			//reset xref and yref
+			_xRef = DEFAULT_XREF;
+			_yRef = DEFAULT_YREF;
 			// set all of the locations of the tiles relative to xref and yref
 			for (int i = 0; i < map.getWidth(); i++) {
 				for (int j = 0; j < map.getHeight(); j++) {
