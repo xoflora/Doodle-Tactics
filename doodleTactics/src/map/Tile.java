@@ -57,7 +57,6 @@ public class Tile extends graphics.Rectangle {
 	
 	private boolean[] _canMove;
 	private int _cost;
-	private int _height;
 	private int _x;
 	private int _y;
 	
@@ -99,7 +98,6 @@ public class Tile extends graphics.Rectangle {
 		_warpMap = null;
 		_canMove = new boolean[4];
 		_cost = cost;
-		_height = height;
 		_x = x;
 		_y = y;
 		

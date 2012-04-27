@@ -2,6 +2,7 @@ package controller.combatController;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,13 +35,19 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		_toPlace = Util.clone(_units);
 		_inPlace = new ArrayList<Character>();
 
-		_pool = new UnitPool(_dt, _gameScreen, this, _toPlace);
+		try {
+			_pool = new UnitPool(_dt, _gameScreen, this, _toPlace);
+		} catch(IOException e) {
+			
+		}
 	}
 
 	@Override
 	public void release() {
 		// TODO Auto-generated method stub
-		
+		for (Tile t : _validTiles) {
+			t.setInMovementRange(false);
+		}
 	}
 
 	@Override
@@ -62,11 +69,16 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		
 		_pool.setVisible(true);		*/
 		
-		_gameScreen.getMenuQueue().add(_pool);
+	//	_gameScreen.getMenuQueue().add(_pool);
+		
+		for (Tile t : _validTiles) {
+			t.setInMovementRange(true);
+		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		super.mouseClicked(e);
 		// TODO Auto-generated method stub
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		if (_validTiles.contains(t)) {
@@ -101,4 +113,8 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		_pool.removeCharacter(c);
 	}
 
+	@Override
+	public void finalize() {
+		
+	}
 }

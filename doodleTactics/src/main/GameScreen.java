@@ -1,4 +1,5 @@
 package main;
+import graphics.MenuItem;
 import graphics.Rectangle;
 import graphics.Terrain;
 
@@ -59,7 +60,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	private boolean _isAnimating;
 	private GameMenuController _gameMenuController;
 	private PriorityQueue<Rectangle> _characterTerrainQueue; // the list of characters / images to render on the screen
-	private PriorityQueue<Rectangle> _menuQueue;
+	private PriorityQueue<MenuItem> _menuQueue;
 	private List<Terrain> _terrainToPaint;
 	private HashMap<String, Map> _mapCache; // a hash map representing the cache of all of the maps in the game, maps file paths to maps
 	
@@ -72,7 +73,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 		_gameMenuController = _dt.getGameMenuScreen().getController();
 		_characterTerrainQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
-		_menuQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
+		_menuQueue = new PriorityQueue<MenuItem>(5, new Rectangle.RectangleComparator());
 		//select a tile to go at the top left of the screen
 		_xRef = DEFAULT_XREF;
 		_yRef = DEFAULT_YREF;
@@ -258,7 +259,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	 * 
 	 * @return The PriorityQueue storing the Menu items to paint
 	 */
-	public PriorityQueue<Rectangle> getMenuQueue(){
+	public PriorityQueue<MenuItem> getMenuQueue(){
 		return _menuQueue;
 	}
 	 
@@ -319,10 +320,10 @@ public class GameScreen extends Screen<GameScreenController> {
 		Rectangle[] menuArray = (Rectangle []) _menuQueue.toArray(new Rectangle[_menuQueue.size()]);
 		Arrays.sort(menuArray);
 		
-	/*	for (int i = 0; i < menuArray.length; i++) {
+		for (int i = 0; i < menuArray.length; i++) {
 			Rectangle toPaint = menuArray[i];
 			toPaint.paint((Graphics2D) g, toPaint.getImage());
-		}	*/
+		}
 		
 //		if (_currentCharacter != null) {
 //			int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
@@ -400,5 +401,24 @@ public class GameScreen extends Screen<GameScreenController> {
 	 */
 	public int getYRef(){
 		return this._yRef;
+	}
+	
+	/**
+	 * @param point the location of the screen to check
+	 * @return the menu element of the screen that contains the given point, null if none exists
+	 */
+	public MenuItem checkContains(java.awt.Point point) {
+		
+		MenuItem toReturn = null;
+		for (MenuItem r : _menuQueue) {
+			r.setDefault();
+			if (r.contains(point)) {
+				r.setHovered();
+				toReturn = r;
+			}
+		}
+		
+		repaint();
+		return toReturn;
 	}
 }
