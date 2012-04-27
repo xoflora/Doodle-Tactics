@@ -44,7 +44,6 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
 		for (Tile t : _validTiles) {
 			t.setInMovementRange(false);
 		}
@@ -52,24 +51,8 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 
 	@Override
 	public void take() {
-	/*	_pool = new CharacterPool(_units);
 		
-		ListIterator<Character> _unitCycle = _units.listIterator();
-		Character c;
-		for (Tile t : _validTiles) {
-			if (_unitCycle.hasNext()) {
-				c = _unitCycle.next();
-				t.setOccupant(c);
-				_toPlace.remove(c);
-				_pool.removeCharacter(c);
-			}
-			else
-				break;
-		}
-		
-		_pool.setVisible(true);		*/
-		
-	//	_gameScreen.getMenuQueue().add(_pool);
+		initialize();
 		
 		for (Tile t : _validTiles) {
 			t.setInMovementRange(true);
@@ -79,7 +62,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
-		// TODO Auto-generated method stub
+
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		if (_validTiles.contains(t)) {
 			_selectedTile = t;
@@ -112,9 +95,15 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	public void removeUnitFromPool(Character c) {
 		_pool.removeCharacter(c);
 	}
+	
+	@Override
+	public void initialize() {
+		_pool.setInUse(true);
+	}
 
 	@Override
 	public void finalize() {
-		
+		_pool.setInUse(false);
+		release();
 	}
 }
