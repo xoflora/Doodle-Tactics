@@ -479,6 +479,7 @@ public abstract class Character extends Rectangle{
 	@Override
 	public void setLocation(double x, double y){
 		super.setLocation(x, y);
+		this.setPaintPriority((int) y + _down.getHeight());
 		System.out.println("***********************X: " + x + " Y: " + y);
 	}
 

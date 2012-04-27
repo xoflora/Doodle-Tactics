@@ -48,6 +48,8 @@ public class GameScreen extends Screen<GameScreenController> {
 	
 	private static final int DEFAULT_XREF = 5;
 	private static final int DEFAULT_YREF = 5;
+	
+	private static final int MAP_CACHE_SIZE = 5;
 
 	private static int MAP_WIDTH, MAP_HEIGHT;
 	private MainCharacter _currentCharacter;
@@ -59,12 +61,10 @@ public class GameScreen extends Screen<GameScreenController> {
 	private PriorityQueue<Rectangle> _characterTerrainQueue; // the list of characters / images to render on the screen
 	private PriorityQueue<Rectangle> _menuQueue;
 	private List<Terrain> _terrainToPaint;
+	private HashMap<String, Map> _mapCache; // a hash map representing the cache of all of the maps in the game, maps file paths to maps
 	
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
-//		_currentCharacter = new MainCharacter(this,"src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_left.png","src/graphics/characters/mage_right.png","src/graphics/characters/mage_front.png","src/graphics/characters/mage_back.png","MyMage");
-//		int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
-//		_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
 		
 		this.setBackground(java.awt.Color.BLACK);
 		MAP_WIDTH = 20;
@@ -77,26 +77,44 @@ public class GameScreen extends Screen<GameScreenController> {
 		_xRef = DEFAULT_XREF;
 		_yRef = DEFAULT_YREF;
 		_isAnimating = false;
+		_mapCache = new HashMap<String, Map>();
 		
-		try {
-			setMap(Map.map(this, "src/tests/data/testMapDemo"));
-		} catch (InvalidMapException e) {
-			e.printMessage();
-		}
+		setMap("src/tests/data/testMapDemo");
 		this.repaint();
 	}
 	
-	public void setMap(Map m) {
+	/**
+	 * sets the current map of the game screen to the map specified by the path.
+	 * if the path was already in the cache, it loads the map from there, otherwise
+	 * parses the map from the file at that path  
+	 * @param mapPath is the path to the map to set
+	 */
+	public void setMap(String mapPath) {
 		
-		_currMap = m;
-		_currentCharacter = _currMap.getMainCharacter();
-		_terrainToPaint = _currMap.getTerrain();
-
-		for (int i = 0; i < m.getWidth(); i++) {
-			for (int j = 0; j < m.getHeight(); j++) {
-				m.getTile(i, j).setLocation((i - DEFAULT_XREF)*Tile.TILE_SIZE, (j - DEFAULT_YREF)*Tile.TILE_SIZE);
-				m.getTile(i, j).setVisible(true);
+		Map map = null;
+		
+		try {
+		
+			if(_mapCache.get(mapPath) != null) {
+				map = _mapCache.get(mapPath);
+			} else {
+				map = Map.map(this, mapPath);
+				_mapCache.put(mapPath, map);
 			}
+			
+			_currMap = map;
+			_currentCharacter = _currMap.getMainCharacter();
+			_terrainToPaint = _currMap.getTerrain();
+	
+			for (int i = 0; i < map.getWidth(); i++) {
+				for (int j = 0; j < map.getHeight(); j++) {
+					map.getTile(i, j).setLocation((i - DEFAULT_XREF)*Tile.TILE_SIZE, (j - DEFAULT_YREF)*Tile.TILE_SIZE);
+					map.getTile(i, j).setVisible(true);
+				}
+			}
+		
+		} catch (InvalidMapException e) {
+			e.printMessage();
 		}
 	}
 	
@@ -234,7 +252,6 @@ public class GameScreen extends Screen<GameScreenController> {
 		return _characterTerrainQueue;
 	}
 	
-	
 	/**
 	 * 
 	 * @return The PriorityQueue storing the Menu items to paint
@@ -264,7 +281,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			}
 		}
 		
-		//Add all Characters and Terrains to PriorityQueue
+		//Add all Characters and Terrain to PriorityQueue
 		List<Character> charsToPaint = this.getController().getCharactersToDisplay();
 	
 		System.out.println("====print characters====");
@@ -281,7 +298,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			_characterTerrainQueue.add(t);
 		}
 		
-	//	System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
+		System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
 
 		// paint all characters and terrains
 		while(!_characterTerrainQueue.isEmpty()) {

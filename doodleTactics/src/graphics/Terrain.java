@@ -31,7 +31,7 @@ public class Terrain extends Rectangle{
 	
 	
 	@Override
-	public void setLocation(double x, double y){
+	public void setLocation(double x, double y) {
 		super.setLocation(x, y);
 		this.setPaintPriority((int) y + _img.getHeight());
 	}

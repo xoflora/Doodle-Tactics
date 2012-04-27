@@ -26,7 +26,8 @@ public class OverworldController extends GameScreenController {
 
 	@Override
 	public void take() {
-		// TODO
+		// TODO : center the map around the main character
+		
 	}
 
 	@Override
