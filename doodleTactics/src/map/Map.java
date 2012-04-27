@@ -15,6 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.LinkedList;
@@ -84,6 +85,7 @@ public class Map implements Serializable {
 		LinkedList<Tile> randBattle = new LinkedList<Tile>();
 		LinkedList<Character> chars = new LinkedList<Character>();
 		MainCharacter main = null;
+		HashMap<String,BufferedImage> images = new HashMap<String,BufferedImage>();
 		try {
 			// Parse initial data
 			BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
@@ -94,7 +96,7 @@ public class Map implements Serializable {
 				"(line 1) Incorrect amount of data");
 
 			String name = splitLine[0];
-			String defaultPath = splitLine[1];
+			BufferedImage defaultImage = ImageIO.read(new File(splitLine[1]));
 			String overflowPath = splitLine[2];
 
 			// parse the dimensions of the map
@@ -109,7 +111,7 @@ public class Map implements Serializable {
 			for (int x = 0; x < numX; x++) {
 				for (int y = 0; y < numY; y++) {
 					if (tiles[x][y] == null)
-						tiles[x][y] = Tile.tile(container, defaultPath, 'F', x,
+						tiles[x][y] = Tile.tile(container, defaultImage, 'F', x,
 								y, 1);
 				}
 			}
@@ -125,7 +127,17 @@ public class Map implements Serializable {
 				if (splitLine.length == 5 && splitLine[0].equals("img")) {
 					if(main == null)
 						throw new InvalidMapException("(line " + count + ") Main Character must be parsed before images");
-					BufferedImage img = ImageIO.read(new File(splitLine[1]));
+					BufferedImage img;
+					String imgPath = splitLine[1];
+					
+					//If image has already been imported, retrieve it
+					if(images.containsKey(imgPath))
+						img = images.get(imgPath);
+					else{
+						img = ImageIO.read(new File(imgPath));
+						images.put(imgPath, img);
+					}
+					
 					int xTile = Integer.parseInt(splitLine[2]);
 					int yTile = Integer.parseInt(splitLine[3]);
 					double xLoc = Tile.TILE_SIZE * (xTile  - main.getTileX());
@@ -178,7 +190,6 @@ public class Map implements Serializable {
 					
 					// Main character case
 				} else if(splitLine.length == 9 && splitLine[1].equals("Main")){
-					System.out.println("Main added");
 					main = new MainCharacter(container, splitLine[3],
 							splitLine[4], splitLine[5], splitLine[6],
 							splitLine[7], splitLine[8], splitLine[2],5,5);
@@ -193,8 +204,19 @@ public class Map implements Serializable {
 				else if (splitLine.length == 7) {
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
+					
+					BufferedImage img;
+					String imgPath = splitLine[3];
+					//If image has already been imported, retrieve it
+					if(images.containsKey(imgPath))
+						img = images.get(imgPath);
+					else{
+						img = ImageIO.read(new File(imgPath));
+						images.put(imgPath, img);
+					}
 
-					tiles[x][y] = Tile.tile(container, splitLine[3],
+					
+					tiles[x][y] = Tile.tile(container, img,
 							splitLine[2].charAt(0), x, y, Integer
 							.parseInt(splitLine[4]));
 
@@ -204,7 +226,7 @@ public class Map implements Serializable {
 					
 					// Check if warp exists
 					if(!splitLine[6].equals("none")) {
-						tiles[x][y].setWarpMap(splitLine[7]);
+						tiles[x][y].setWarpMap(splitLine[6]);
 					}
 					
 					// Error Case
