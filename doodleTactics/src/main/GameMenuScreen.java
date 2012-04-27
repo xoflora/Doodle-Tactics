@@ -10,6 +10,9 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -46,11 +49,13 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private int _currClicked = 0;
 	private DoodleTactics _dt;
 	private LinkedList<CharInfo> _charInfoList;
-	private JPanel _unitsBox, _itemInfoBox;
+	private JPanel _unitsBox, _itemInfoBox, _itemOptionsBox;
 	private HashMap<JLabel, Character> _labelToCharacter;
 	private HashMap<JLabel, Item> _labelToItem;
 	private JScrollPane _scrollBar;
 	public boolean _beingHovered = false;
+	private itemListener _itemListener;
+	private unitsBoxListener _unitsBoxListener;
 	
 	public GameMenuScreen(DoodleTactics dt) {
 		
@@ -124,6 +129,13 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 //		_scrollBar.setLocation(new Point(200, 120));
 //		_unitsBox.setSize(750,660);
 //		_unitsBox.setLocation(1,0);
+		
+		_itemOptionsBox = new JPanel();
+		_itemOptionsBox.setBackground(java.awt.Color.WHITE);
+		_itemOptionsBox.setLocation(0,0);
+		_itemOptionsBox.setSize(5, 5);
+		_itemListener = new itemListener();
+		_unitsBoxListener = new unitsBoxListener();
 	}
 	
 	/**
@@ -135,7 +147,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_currClicked = 1;
 		_unitsBox.removeAll();
 		_unitsBox.setLayout(new GridLayout(_dt.getParty().size(), 0, 10, 10));
-		_unitsBox.addMouseMotionListener(this.getController());
+		_unitsBox.addMouseMotionListener(_unitsBoxListener);
 		for (Character chrter: _dt.getParty()) {
 			CharInfo toAdd = new CharInfo(this, chrter);
 			toAdd.setVisible(true);
@@ -156,8 +168,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		super.paintComponent(g);
 		_scrollBar.setSize(new Dimension(748, 660));
 		_scrollBar.setLocation(new Point(200, 120));
-//		_unitsBox.setSize(750,660);
-//		_unitsBox.setLocation(1,0);
 		_title.paint((Graphics2D) g, _title.getImage());
 		_units.paint((Graphics2D) g, _units.getImage());
 		_save.paint((Graphics2D) g, _save.getImage());
@@ -194,7 +204,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			clicked = _units;
 			_currClicked = 1;
 			_unitsBox.removeAll();
-			_unitsBox.addMouseMotionListener(this.getController());
+			_unitsBox.addMouseMotionListener(_itemListener);
 //			_scrollBar.removeAll();
 			_unitsBox.setLayout(new GridLayout(_dt.getParty().size(), 0, 10, 10));
 //			_scrollBar.setVisible(true);
@@ -248,17 +258,11 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			clicked = _save;
 			_currClicked = 5;
 		}
-		
-		for (JLabel label: _labelToCharacter.keySet()) {
-			if (label.contains(point)) {
-				System.out.println("clicked an item");
-			}
-		}
 		this.repaint();
 		return clicked;
 	}
 	
-	public MenuItem checkItemContains(java.awt.Point point) {
+	public Item checkItemContains(java.awt.Point point) {
 		_itemInfoBox.removeAll();
 		this.remove(_itemInfoBox);
 		_itemInfoBox.setVisible(false);
@@ -267,12 +271,23 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				this.showItemInfo(_labelToItem.get(label));
 				_beingHovered = true;
 				this.repaint();
-				return null;
+				return _labelToItem.get(label);
 			}
 		}
 		_beingHovered = false;
 		this.repaint();
 		return null;
+	}
+	
+	public void checkStopHovering(java.awt.Point point) {
+		for (JLabel label: _labelToCharacter.keySet()) {
+			if (label.contains(point)) {
+				return;
+			}
+		}
+		this.remove(_itemInfoBox);
+		_beingHovered = false;
+		this.repaint();
 	}
 	
 	/**
@@ -299,6 +314,98 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_itemInfoBox.add(profile, c);
 		_itemInfoBox.setVisible(true);
 		this.add(_itemInfoBox);
+	}
+	
+	public void checkItemClicked(java.awt.Point point) {
+		for (JLabel label: _labelToCharacter.keySet()) {
+			if (label.contains(point)) {
+				this.displayItemOptions(label);
+//				this.repaint();
+				return;
+			}
+		}
+		this.remove(_itemOptionsBox);
+	}
+	
+	public void displayItemOptions(JLabel label) {
+				
+		/**
+		 * number of options is set by the #of people in the party -1, plus 3 options for each item
+		 */
+		
+		Item item = _labelToItem.get(label);
+		Character character = _labelToCharacter.get(label);
+		
+		int labelWidth = 200;
+		int labelHeight = 15;
+		
+		this.remove(_itemOptionsBox);
+		_itemOptionsBox.removeAll();
+		int numOptions = _dt.getParty().size()+2;
+		_itemOptionsBox.setLayout(new GridLayout(numOptions, 0));
+		if (_labelToItem.get(label).isEquip()) {
+			for (int i=0; i<character.getInventory().size(); i++) {
+				if (character.getInventory().get(i).equals(item)) {
+					JLabel _unequip = new JLabel("Unequip from " + character.getName());
+					_unequip.setSize(labelWidth, labelHeight);
+					_unequip.setVisible(true);
+					_itemOptionsBox.add(_unequip);
+					break;
+				}
+				if (i==character.getInventory().size()) {
+					JLabel _equip = new JLabel("Equip to " + character.getName());
+					_equip.setSize(labelWidth, labelHeight);
+					_equip.setVisible(true);
+				}
+			}
+		}
+		else {
+			JLabel _use = new JLabel("Use on " + character.getName());
+			_use.setSize(labelWidth, labelHeight);
+			_use.setVisible(true);
+			_itemOptionsBox.add(_use);
+		}
+		if (_dt.getParty().size() > 0) {
+			for (int i=0; i<_dt.getParty().size()-1; i++) {
+				if (_dt.getParty().get(i).getInventory().size() != _dt.getParty().get(i).getCapacity()) {
+					JLabel _giveToChar = new JLabel("Give to " + _dt.getParty().get(i).getName());
+					_giveToChar.setSize(labelWidth, labelHeight);
+					_giveToChar.setVisible(true);
+					_itemOptionsBox.add(_giveToChar);
+				}
+			}
+		}
+		
+		boolean canPutRight;
+		boolean canPutDown;
+		
+		if (label.getLocationOnScreen().getX()+labelWidth < 800) {
+			canPutRight = true;
+		}
+		else {
+			canPutRight = false;
+		}
+		if (label.getLocationOnScreen().getY()+(labelHeight*numOptions) < 700) {
+			canPutDown = true;
+		}
+		else {
+			canPutDown = false;
+		}
+		
+		int xPos = (int) label.getLocationOnScreen().getX();
+		int yPos = (int) label.getLocationOnScreen().getY();
+		if (!canPutRight) {
+			xPos = xPos-labelWidth;
+		}
+		if (!canPutDown) {
+			yPos = yPos-labelHeight;
+		}
+		System.out.println("X Pos: " + xPos + "; Y Pos: " + yPos);
+		_itemOptionsBox.setLocation(xPos, yPos);
+		_itemOptionsBox.setSize(labelWidth, labelHeight*numOptions);
+		_itemOptionsBox.setVisible(true);
+		this.add(_itemOptionsBox);
+		_itemOptionsBox.repaint();
 	}
 	
 	public void switchToGameScreen() {
@@ -447,7 +554,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			for (int i=0; i<chrter.getInventory().size(); i++) {
 				JLabel item = new JLabel(new ImageIcon(chrter.getInventory().get(i).getImage()));
 //				item.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-				item.addMouseMotionListener(GameMenuScreen.this.getController());
+				item.addMouseMotionListener(_itemListener);
 				item.setSize(75,75);
 				item.setVisible(true);
 				constraint.fill = GridBagConstraints.BOTH;
@@ -456,13 +563,11 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				constraint.gridx = i;
 				constraint.gridy = 1;
 				row1.add(item, constraint);
-				item.addMouseListener(screen.getController());
+				item.addMouseListener(_itemListener);
 				_labelToCharacter.put(item, chrter);
 				_labelToItem.put(item, chrter.getInventory().get(i));
 			}
-			
-			System.out.println(chrter.getInventory().size());
-			
+						
 			for (int i = 0; i<(5-chrter.getInventory().size()); i++) {
 				JLabel item = new JLabel(new ImageIcon(chrter.getRightImage()));
 //				item.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
@@ -536,6 +641,63 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			constraint.gridy = 0;
 			this.add(row1, constraint);
 			
+		}
+	}
+	
+	private class itemListener implements MouseListener, MouseMotionListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			GameMenuScreen.this.checkItemClicked(e.getPoint());
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			if (_currClicked == 1) {
+				Item clickedItem = GameMenuScreen.this.checkItemContains(e.getPoint());
+			}
+		}
+	}
+	
+	private class unitsBoxListener implements MouseMotionListener {
+
+		public void mouseDragged(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void mouseMoved(MouseEvent e) {
+			GameMenuScreen.this.checkStopHovering(e.getPoint());
 		}
 	}
 }

@@ -16,6 +16,7 @@ public abstract class Item implements Serializable{
 	static int  numItems = 0;
 	public final int _id;
 	private String _description;
+	private boolean _isEquip = false;
 		
 	public Item(BufferedImage image){
 		//The Id makes each item unique
@@ -41,6 +42,14 @@ public abstract class Item implements Serializable{
 	
 	public void setDescription(String desc) {
 		_description = desc;
+	}
+	
+	public void setAsEquip(boolean bool) {
+		_isEquip = bool;
+	}
+	
+	public boolean isEquip() {
+		return _isEquip;
 	}
 	
 	/**
