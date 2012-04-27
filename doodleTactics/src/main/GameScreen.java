@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
 import controller.GameMenuController;
@@ -74,6 +73,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		_gameMenuController = _dt.getGameMenuScreen().getController();
 		_characterTerrainQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
 		_menuQueue = new PriorityQueue<MenuItem>(5, new Rectangle.RectangleComparator());
+		
 		//select a tile to go at the top left of the screen
 		_xRef = DEFAULT_XREF;
 		_yRef = DEFAULT_YREF;
@@ -160,17 +160,17 @@ public class GameScreen extends Screen<GameScreenController> {
 				}
 				
 				for(Rectangle r: _terrainToPaint){
-					System.out.println("BEFORE update terrain x: " + r.getX() + ", y:" + r.getY());
+				//	System.out.println("BEFORE update terrain x: " + r.getX() + ", y:" + r.getY());
 					r.setLocation((r.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), r.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
-					System.out.println("AFTER update terrain x: " + r.getX() + ", y:" + r.getY());
+				//	System.out.println("AFTER update terrain x: " + r.getX() + ", y:" + r.getY());
 					repaint();
 				}
 				
 				List <Character> charsToPaint = getController().getCharactersToDisplay();
 				for(Character c : charsToPaint) {
-					System.out.println("BEFORE update character x: " + c.getX() + ", y:" + c.getY());
+				//	System.out.println("BEFORE update character x: " + c.getX() + ", y:" + c.getY());
 					c.setLocation((c.getX() + (-_deltaX*Tile	.TILE_SIZE / _numSteps)), c.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
-					System.out.println("AFTER update character x: " + c.getX() + ", y:" + c.getY()); 
+				//	System.out.println("AFTER update character x: " + c.getX() + ", y:" + c.getY()); 
 					repaint();
 				}
 				
@@ -211,7 +211,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			_yRef += y;
 		}
 		
-		System.out.println("--------------------------");
+	//	System.out.println("--------------------------");
 	}
 	
 	public Map getMap() {
@@ -411,8 +411,6 @@ public class GameScreen extends Screen<GameScreenController> {
 	 * @author rroelke
 	 */
 	public List<Tile> getValidSetupTiles(int num) {
-		System.out.println(_currMap == null);
-		System.out.println(_currMap.getTile(getMapX(getWidth()/2), getMapY(getHeight()/2)));
 		return _currMap.getValidSetupTiles(_currMap.getTile(getMapX(getWidth()/2), getMapY(getHeight()/2)), num);
 	}
 	

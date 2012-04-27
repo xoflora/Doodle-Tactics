@@ -82,7 +82,6 @@ public class UnitPool extends MenuItem {
 		@Override
 		public void activate() {
 			_source.finalize();
-			System.out.println("hi");
 		}
 	}
 	
@@ -154,7 +153,6 @@ public class UnitPool extends MenuItem {
 		for (Character c : _unitPool.keySet()) {
 			CharacterSelect draw = _unitPool.get(c);
 			draw.setLocation(x, y);
-			System.out.println(draw.getImage());
 			draw.paint(brush, draw.getImage());
 			
 			y += OFFSET_BETWEEN_CHARACTERS;
