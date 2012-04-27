@@ -87,6 +87,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	}
 	
 	public void setMap(Map m) {
+		
 		_currMap = m;
 		_currentCharacter = _currMap.getMainCharacter();
 		_terrainToPaint = _currMap.getTerrain();
@@ -97,7 +98,6 @@ public class GameScreen extends Screen<GameScreenController> {
 				m.getTile(i, j).setVisible(true);
 			}
 		}
-		
 	}
 	
 	@Override

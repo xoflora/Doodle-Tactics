@@ -86,8 +86,7 @@ public class Map implements Serializable {
 		MainCharacter main = null;
 		try {
 			// Parse initial data
-			BufferedReader reader = new BufferedReader(new FileReader(new File(
-					path)));
+			BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
 			String[] splitLine = reader.readLine().split(",");
 
 			if (splitLine.length != 3)
@@ -98,13 +97,13 @@ public class Map implements Serializable {
 			String defaultPath = splitLine[1];
 			String overflowPath = splitLine[2];
 
+			// parse the dimensions of the map
 			splitLine = reader.readLine().split(",");
 			if (splitLine.length != 2)
-				throw new InvalidMapException(
-				"(line 2) Incorrect amount of data");
+				throw new InvalidMapException("(line 2) Incorrect amount of data");
 			int numX = Integer.parseInt(splitLine[0]);
 			int numY = Integer.parseInt(splitLine[1]);
-
+			
 			Tile[][] tiles = new Tile[numY][numX];
 			// Set all currently null tiles to default
 			for (int x = 0; x < numX; x++) {
@@ -115,6 +114,17 @@ public class Map implements Serializable {
 				}
 			}
 			
+//			// parse the starting locations of the map
+//			splitLine = reader.readLine().split(",");
+//			
+//			if(splitLine.length < 1) {
+//				throw new InvalidMapException("(line 3) Incorrect amount of data");
+//			}
+//			
+//			for(int i = 0; i < splitLine.length; i++) {
+//				String[] split = splitLine[i].split("/");
+//				tiles[Integer.parseInt(split[0])][Integer.parseInt(split[1])] = ;
+//			}
 			
 			// Read and parse tiles from file
 			String line = reader.readLine();
@@ -123,7 +133,7 @@ public class Map implements Serializable {
 				splitLine = line.split(",");
 				count++;
 
-				// Image case
+				// Terrain case
 				if (splitLine.length == 4 && splitLine[0].equals("img")) {
 					if(main == null)
 						throw new InvalidMapException("(line " + count + ") Main Character must be parsed before images");
@@ -136,17 +146,23 @@ public class Map implements Serializable {
 
 					// Character Case
 				} else if (splitLine.length == 11 && splitLine[0].equals("char")) {
+					
 					if(main == null)
 						throw new InvalidMapException("(line " + count + ") Main Character must be parsed before other Characters");
+					
 					Character toAdd = null;
 					Tile target = tiles[Integer.parseInt(splitLine[9])][Integer.parseInt(splitLine[10])]; 
 					System.out.println("TARGET: " + target.x() + "," + target.y());
+					
 					double xLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[9])  - main.getTileX());
 					double yLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[10]) - main.getTileY());
-					if (splitLine[1].equals("Archer")) {
+					
+					// check which type of character toAdd is
+					if (splitLine[1].equals("Archer")) { 
 						toAdd = new Archer(container, splitLine[3],
 								splitLine[4], splitLine[5], splitLine[6],
 								splitLine[7], splitLine[8], splitLine[2], xLoc,yLoc);
+						
 					} else if (splitLine[1].equals("Mage")) {
 						toAdd = new Mage(container, splitLine[3], splitLine[4],
 								splitLine[5], splitLine[6], splitLine[7],
@@ -163,11 +179,14 @@ public class Map implements Serializable {
 								splitLine[7], splitLine[8], splitLine[2], xLoc,yLoc);
 					} else
 						throw new InvalidMapException("Invalid Character Type");
-					if (toAdd != null){
+					
+					// set the tile's occupant to the character we just parsed
+					if (toAdd != null) { 
 						chars.add(toAdd);
 						target.setOccupant(toAdd);
 					}
-					// Other case
+					
+					// Main character case
 				} else if(splitLine.length == 9 && splitLine[1].equals("Main")){
 					System.out.println("Main added");
 					main = new MainCharacter(container, splitLine[3],
@@ -180,6 +199,7 @@ public class Map implements Serializable {
 
 				}
 
+				// tile case
 				else if (splitLine.length == 7) {
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);

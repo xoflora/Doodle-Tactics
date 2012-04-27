@@ -19,7 +19,6 @@ import map.Tile;
 
 public class OverworldController extends GameScreenController {
 
-
 	public OverworldController(DoodleTactics dt, GameScreen game) {
 		super(dt);
 		_gameScreen = game;
@@ -57,19 +56,24 @@ public class OverworldController extends GameScreenController {
 
 		//	System.out.println("isAnimating:" + _gameScreen.isAnimating());
 
-		if(!_gameScreen.isAnimating()) {			
+		if(!_gameScreen.isAnimating()) {	
+			
 			int currentX = _gameScreen.getMapX(_gameScreen.getX()) + 10;
 			int currentY = _gameScreen.getMapY(_gameScreen.getY()) + 8;;
 			System.out.println("CurX: " + currentX + "CurY: " + currentY);
+			Tile oldTile = _gameScreen.getMap().getTile(currentX, currentY);
 			Tile newTile;
+			
 			switch(e.getKeyChar()) {
 
 			case 'w':
 				System.out.println("w");
 				newTile = _gameScreen.getMap().getTile(currentX, currentY - 1);
 				_gameScreen.getMainChar().setUp();
-				if(newTile != null && newTile.canMove(Map.SOUTH)){			
+				if(newTile != null && newTile.canMove(Map.SOUTH) && !newTile.isOccupied()){			
 					_gameScreen.mapUpdate(0, -1);
+					oldTile.removeOccupant();
+					newTile.setOccupant(_gameScreen.getMainChar());
 				}
 				break;
 			case 'a':
@@ -77,24 +81,30 @@ public class OverworldController extends GameScreenController {
 				newTile = _gameScreen.getMap().getTile(currentX - 1, currentY);
 				_gameScreen.getMainChar().setLeft();
 
-				if(newTile != null && newTile.canMove(Map.EAST)){			
+				if(newTile != null && newTile.canMove(Map.EAST) && !newTile.isOccupied()){			
 					_gameScreen.mapUpdate(-1, 0);
+					oldTile.removeOccupant();
+					newTile.setOccupant(_gameScreen.getMainChar());
 				}
 				break;
 			case 's':
 				System.out.println("s");
 				newTile = _gameScreen.getMap().getTile(currentX, currentY + 1);
 				_gameScreen.getMainChar().setDown();
-				if(newTile != null && newTile.canMove(Map.NORTH)){			
+				if(newTile != null && newTile.canMove(Map.NORTH) && !newTile.isOccupied()){			
 					_gameScreen.mapUpdate(0, 1);
+					oldTile.removeOccupant();
+					newTile.setOccupant(_gameScreen.getMainChar());
 				}
 				break;
 			case 'd':
 				System.out.println("d");
 				newTile = _gameScreen.getMap().getTile(currentX + 1,  currentY);
 				_gameScreen.getMainChar().setRight();
-				if(newTile != null && newTile.canMove(Map.WEST)){
+				if(newTile != null && newTile.canMove(Map.WEST) && !newTile.isOccupied()){
 					_gameScreen.mapUpdate(1, 0);
+					oldTile.removeOccupant();
+					newTile.setOccupant(_gameScreen.getMainChar());
 				}
 				break;
 			}			

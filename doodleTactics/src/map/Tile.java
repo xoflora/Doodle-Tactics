@@ -55,7 +55,6 @@ public class Tile extends graphics.Rectangle {
 	private static final Color ATTACK_MOUSE_INTERSECTION_COLOR = Util.mixColors(ATTACK_RANGE_COLOR, MOUSEOVER_COLOR);
 	private static final Color INTERSECTION_COLOR = Color.magenta;
 	
-	
 	private boolean[] _canMove;
 	private int _cost;
 	private int _height;
