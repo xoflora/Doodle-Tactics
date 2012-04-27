@@ -1,6 +1,13 @@
 package character;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import javax.swing.JPanel;
+
+import event.InvalidEventException;
+
+import main.DoodleTactics;
 
 public class Archer extends Character{
 

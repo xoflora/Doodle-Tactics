@@ -2,6 +2,8 @@ package character;
 
 import javax.swing.JPanel;
 
+import main.DoodleTactics;
+
 @SuppressWarnings("serial")
 public class MainCharacter extends Character{
 	

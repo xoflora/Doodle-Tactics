@@ -2,6 +2,8 @@ package character;
 
 import javax.swing.JPanel;
 
+import main.DoodleTactics;
+
 public class Warrior extends Character{
 
 	public Warrior(JPanel container,  String profile, String left, String right, String up, String down, String name, double x, double y){

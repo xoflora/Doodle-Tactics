@@ -27,7 +27,7 @@ public class OverworldController extends GameScreenController {
 	@Override
 	public void take() {
 		// TODO : center the map around the main character
-		
+
 	}
 
 	@Override
@@ -58,12 +58,12 @@ public class OverworldController extends GameScreenController {
 		//	System.out.println("isAnimating:" + _gameScreen.isAnimating());
 
 		if(!_gameScreen.isAnimating()) {	
-			
+
 			int currentX = _gameScreen.getMapX(_gameScreen.getX()) + 10;
 			int currentY = _gameScreen.getMapY(_gameScreen.getY()) + 8;
 			Tile oldTile = _gameScreen.getMap().getTile(currentX, currentY);
 			Tile newTile;
-			
+
 			switch(e.getKeyChar()) {
 
 			case 'w':
@@ -71,31 +71,29 @@ public class OverworldController extends GameScreenController {
 				newTile = _gameScreen.getMap().getTile(currentX, currentY - 1);
 				_gameScreen.getMainChar().setUp();
 				if(newTile != null && newTile.canMove(Map.SOUTH)){			
-					if(newTile.canWarp()){
-						newTile.removeOccupant();
-						_gameScreen.setMap(newTile.getWarpPath());
-					} else{
+					if(newTile.hasEvent()){
+						_gameScreen.pushControl(newTile.getEvent());
+				}
+					else{
 						newTile.setOccupant(_gameScreen.getMainChar());
 					}
-						_gameScreen.mapUpdate(0, -1);
-						oldTile.removeOccupant();
+					_gameScreen.mapUpdate(0, -1);
+					oldTile.removeOccupant();
 				}
 				break;
 			case 'a':
 				System.out.println("a");
 				newTile = _gameScreen.getMap().getTile(currentX - 1, currentY);
 				_gameScreen.getMainChar().setLeft();
-				
+
 				if(newTile != null && newTile.canMove(Map.EAST)){			
-					if(newTile.canWarp()){
-						newTile.removeOccupant();
-						_gameScreen.setMap(newTile.getWarpPath());
-						
-					} else{
+					if(newTile.hasEvent())
+						_gameScreen.pushControl(newTile.getEvent());
+					else{
 						newTile.setOccupant(_gameScreen.getMainChar());
 					}
-						_gameScreen.mapUpdate(-1, 0);
-						oldTile.removeOccupant();
+					_gameScreen.mapUpdate(-1, 0);
+					oldTile.removeOccupant();
 				}
 				break;
 			case 's':
@@ -104,19 +102,13 @@ public class OverworldController extends GameScreenController {
 				_gameScreen.getMainChar().setDown();
 
 				if(newTile != null && newTile.canMove(Map.NORTH)){			
-					if(newTile.canWarp()){
-						System.out.println("Made it");
-						while(_gameScreen.isAnimating()){
-							System.out.println("Waiting");
-							//waiting
-						}
-						newTile.removeOccupant();
-						_gameScreen.setMap(newTile.getWarpPath());
+					if(newTile.hasEvent()){
+						_gameScreen.pushControl(newTile.getEvent());
 					}
 					else{
 						newTile.setOccupant(_gameScreen.getMainChar());
 					}
-					
+
 					_gameScreen.mapUpdate(0, 1);
 					oldTile.removeOccupant();
 				}
@@ -126,29 +118,29 @@ public class OverworldController extends GameScreenController {
 				newTile = _gameScreen.getMap().getTile(currentX + 1,  currentY);
 				_gameScreen.getMainChar().setRight();
 				if(newTile != null && newTile.canMove(Map.WEST)){
-					if(newTile.canWarp()){
-						newTile.removeOccupant();
-						_gameScreen.setMap(newTile.getWarpPath());
-					} else{
+					if(newTile.hasEvent())
+						_gameScreen.pushControl(newTile.getEvent());
+
+					else{
 						newTile.setOccupant(_gameScreen.getMainChar());
 					}
-						_gameScreen.mapUpdate(1, 0);
-						oldTile.removeOccupant();
-			}
+					_gameScreen.mapUpdate(1, 0);
+					oldTile.removeOccupant();
+				}
 				break;
 			}			
 		}
 		_gameScreen.repaint();
 	}
-	
 
-/*	@Override
+
+	/*	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 	//	if (_validTiles.contains(t)) {
 		//	_selectedTile = t;
-		
+
 			System.out.println(t.getOccupant());
 	//	}
 	}	*/

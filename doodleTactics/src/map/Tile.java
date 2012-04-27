@@ -67,7 +67,7 @@ public class Tile extends graphics.Rectangle {
 	
 	private Event _event;
 	private Character _character;
-	private String _warpMap;
+	private String _eventFilePath;
 	
 	private boolean _inMovementRange;
 	private boolean _inAttackRange;
@@ -82,19 +82,13 @@ public class Tile extends graphics.Rectangle {
 	 * @param height
 	 * @param cost
 	 */
-	public Tile(JPanel container, BufferedImage img, int x, int y, int cost, boolean randBattle, String warpPath) 
+	public Tile(JPanel container, BufferedImage img, int x, int y, int cost, boolean randBattle) 
 			throws InvalidTileException {
 		super(container);
 		this.setSize(TILE_SIZE,TILE_SIZE);
 		
 		_image = img;
-		
-		
-		if(!warpPath.equalsIgnoreCase("none"))
-			_warpMap = warpPath;
-		else
-			_warpMap = null;
-		
+				
 		_canMove = new boolean[4];
 		_cost = cost;
 		_x = x;
@@ -236,8 +230,8 @@ public class Tile extends graphics.Rectangle {
 	 * @return a new tile given by the string
 	 */
 	public static Tile tile(JPanel container,BufferedImage img, char permissions,
-			int x, int y, int cost, boolean randBattle,String warpPath) throws InvalidTileException {
-		Tile t = new Tile(container, img, x, y,cost,randBattle,warpPath);
+			int x, int y, int cost, boolean randBattle) throws InvalidTileException {
+		Tile t = new Tile(container, img, x, y,cost,randBattle);
 		t.setTilePermissions(permissions);
 		return t;
 	}
@@ -254,19 +248,28 @@ public class Tile extends graphics.Rectangle {
 		return !(_character == null);
 	}
 	
-	
-	/**
-	 * Called from a MapCharacter if this tile starts a dialogue event
-	 */
-	public void setTriggersDialogue(Dialogue d){
-		_event = d;
-	}
-	
+
 	/**
 	 * @return true if this tile triggers an event and false otherwise
 	 */
-	public boolean triggersDialogue(){
-		return _event == null;
+	public boolean hasEvent(){
+		return _event != null;
+	}
+	
+	/**
+	 * Returns the event associated with this tile (Dialogue or Warp)
+	 * Only guaranteed to be non-null if the tile canStartEvent()
+	 */
+	public Event getEvent(){
+		return _event;
+	}
+	
+	/**
+	 * Sets the Tile's event, called from Map
+	 */
+	public void setEvent(Event e,String filePath){
+		_event = e;
+		_eventFilePath = filePath;
 	}
 
 	/**
@@ -291,20 +294,13 @@ public class Tile extends graphics.Rectangle {
 		return _y;
 	}
 	
-	/**
-	 * 
-	 * @return true if the tile warps to another map
-	 */
-	public boolean canWarp(){
-		return _warpMap != null;
-	}
-	
+
 	/**
 	 * Pre-condition: canWarp() returns true (there exists a map)
 	 * @return the path of the map to warp to
 	 */
-	public String getWarpPath(){
-		return _warpMap;
+	public String getEventPath(){
+		return _eventFilePath;
 	}
 	
 	/** 

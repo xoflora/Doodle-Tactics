@@ -2,6 +2,8 @@ package character;
 
 import javax.swing.JPanel;
 
+import main.DoodleTactics;
+
 public class Thief extends Character{
 	 
 

@@ -1,6 +1,7 @@
 package map;
 
 import event.InvalidEventException;
+import event.Warp;
 import graphics.Rectangle;
 import graphics.Terrain;
 
@@ -112,7 +113,7 @@ public class Map implements Serializable {
 				for (int y = 0; y < numY; y++) {
 					if (tiles[x][y] == null)
 						tiles[x][y] = Tile.tile(container, defaultImage, 'F', x,
-								y, 1,false,"none");
+								y, 1,false);
 				}
 			}
 			
@@ -188,7 +189,7 @@ public class Map implements Serializable {
 						target.setOccupant(toAdd);
 					}
 					
-					// Main character case
+				// Main character case
 				} else if(splitLine.length == 8 && splitLine[1].equals("Main")){
 					main = new MainCharacter(container, splitLine[3],
 							splitLine[4], splitLine[5], splitLine[6],
@@ -198,7 +199,7 @@ public class Map implements Serializable {
 					main.setSize(main.getImage().getWidth(), main
 							.getImage().getHeight());
 					
-					//Map Character Case
+				//Map Character Case
 				} else if((splitLine.length == 8) && splitLine[1].equals("Map")){
 					x = Integer.parseInt(splitLine[5]);
 					y = Integer.parseInt(splitLine[6]);
@@ -251,8 +252,11 @@ public class Map implements Serializable {
 					else throw new InvalidMapException("(line " + count + ") Expected 0 or 1 for randBattle");
 					tiles[x][y] = Tile.tile(container, img,
 							splitLine[2].charAt(0), x, y, Integer
-							.parseInt(splitLine[4]),randBattle,splitLine[6]);
-
+							.parseInt(splitLine[4]),randBattle);
+					
+					//Set Warp Event
+					if(!splitLine[6].equals("none"))
+						tiles[x][y].setEvent(new Warp(dt,tiles[x][y]),splitLine[6]);
 					
 					// Error Case
 				} else

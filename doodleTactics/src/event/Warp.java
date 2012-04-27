@@ -4,16 +4,22 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import main.DoodleTactics;
+import map.Tile;
 
 public class Warp extends Event {
 	
-	public Warp(DoodleTactics dt) {
+	private Tile _tile;
+	
+	public Warp(DoodleTactics dt, Tile tile) {
 		super(dt);
+		_tile = tile;
 	}
 
 	@Override
 	public void take() {
-		
+		System.out.println("Event Path:" + _tile.getEventPath());
+		_dt.getGameScreen().setMap(_tile.getEventPath());
+		_tile.removeOccupant();
 	}
 	
 	@Override

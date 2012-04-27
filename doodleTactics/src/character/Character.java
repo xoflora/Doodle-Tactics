@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 
 import controller.combatController.CombatController;
 
+import main.DoodleTactics;
 import map.Tile;
 import graphics.Rectangle;
 import graphics.Shape;
@@ -71,8 +72,10 @@ public abstract class Character extends Rectangle{
 	private BufferedImage _down;
 
 	private CombatController _affiliation; //player/AI etc
-
-	public Character(JPanel container, String profile, String left, String right, String up, String down, String name,double x, double y){
+	
+	public Character(JPanel container, String profile, String left, String right,
+			String up, String down, String name,double x, double y) {
+		
 		super(container);
 		_BASE_STATS = new int[NUM_STATS];
 		_currentStats = new int[NUM_STATS];
@@ -87,7 +90,8 @@ public abstract class Character extends Rectangle{
 		_capacity = 5;
 		
 		_affiliation = null;
-
+		
+		
 		try {
 			_profile = ImageIO.read(new File(profile));
 			_left = ImageIO.read(new File(left));
@@ -149,7 +153,22 @@ public abstract class Character extends Rectangle{
 	public int getPaintPriority(){
 		return (int) this.getY();
 	}
-
+	
+	/**
+	 * @return whether or not the Character has dialogue
+	 */
+/*	public boolean canConverse(){
+		return _dialogue == null;
+	}*/
+	
+	/**
+	 * @return the Dialogue Event for the Character
+	 * Guaranteed to be non-null ONLY if canConverse() returns true
+	 */
+//	public Dialogue converse(){
+//		return _dialogue;
+//	}
+	
 	/**
 	 * Initializes Current Stats to Base Stats
 	 */

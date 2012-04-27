@@ -99,7 +99,7 @@ public class Dialogue extends Event {
 
 	@Override
 	public void take() {
-		
+		System.out.println("Start Dialogue!");
 		//display Dialogue box and start 		
 	}
 
