@@ -4,8 +4,8 @@ import javax.swing.JPanel;
 
 public class Mage extends Character{
 	
-	public Mage(JPanel container, String avatar, String profile, String left, String right, String up, String down, String name,double x, double y){
-		super(container, avatar, profile, left, right, up, down, name,x,y);
+	public Mage(JPanel container, String profile, String left, String right, String up, String down, String name,double x, double y){
+		super(container, profile, left, right, up, down, name,x,y);
 		
 		//set base stats
 		_BASE_STATS[STRENGTH] = 4;

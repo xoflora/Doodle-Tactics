@@ -57,7 +57,6 @@ public class Tile extends graphics.Rectangle {
 	
 	private boolean[] _canMove;
 	private int _cost;
-	private int _height;
 	private int _x;
 	private int _y;
 	
@@ -67,7 +66,6 @@ public class Tile extends graphics.Rectangle {
 	
 	private Event _event;
 	private Character _character;
-	private String _path;
 	private String _warpMap;
 	
 	private boolean _inMovementRange;
@@ -83,23 +81,16 @@ public class Tile extends graphics.Rectangle {
 	 * @param height
 	 * @param cost
 	 */
-	public Tile(JPanel container, String path, int x, int y, int height, int cost) 
+	public Tile(JPanel container, BufferedImage img, int x, int y, int cost) 
 			throws InvalidTileException {
 		super(container);
-		_path = path;
 		this.setSize(TILE_SIZE,TILE_SIZE);
 		
-		try {
-			_image = ImageIO.read(new File(path));
-		//	System.out.println(path);
-		} catch(IOException e) {
-			throw new InvalidTileException();
-		}
+		_image = img;
 		
 		_warpMap = null;
 		_canMove = new boolean[4];
 		_cost = cost;
-		_height = height;
 		_x = x;
 		_y = y;
 		
@@ -235,12 +226,10 @@ public class Tile extends graphics.Rectangle {
 	 * @param tileString the string representing the tile
 	 * @return a new tile given by the string
 	 */
-	public static Tile tile(JPanel container, String path, char permissions,
-			int x, int y, int height, int cost) throws InvalidTileException {
-		Tile t = new Tile(container, path, x, y,height,cost);
+	public static Tile tile(JPanel container,BufferedImage img, char permissions,
+			int x, int y, int cost) throws InvalidTileException {
+		Tile t = new Tile(container, img, x, y,cost);
 		t.setTilePermissions(permissions);
-		if(permissions != Tile.PERMISSION_ALL)
-			System.out.println("DIFFERENT PERMISSIONS!!!!");
 		return t;
 	}
 	

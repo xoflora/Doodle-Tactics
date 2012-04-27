@@ -15,6 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.LinkedList;
@@ -69,10 +70,10 @@ public class Map implements Serializable {
 	 * 
 	 *         Expected file format: name,default_path,overflow_path
 	 *         numCols,numRows
-	 *         x1,y1,permissions,img_path1,height1,cost1,rand_battle ... img,
-	 *         img_path, x1, y1 ...
-	 *         char,type,name,avatar_img,profile_img,left_img
-	 *         ,right_img,up_img,down_img, x, y .. (where x and y are 0-indexed)
+	 *         x1,y1,permissions,img_path1,cost1,rand_battle,warp_to_path_specified
+	 *         img,img_path, x1, y1,tile_permissions ...
+	 *         char,type,name,profile_img,left_img,right_img,up_img,down_img, x, y .. 
+	 *         (where x and y are 0-indexed)
 
 	 * 	NOTE: All Tiles must be defined before characters
 	 * @author czchapma
@@ -84,6 +85,7 @@ public class Map implements Serializable {
 		LinkedList<Tile> randBattle = new LinkedList<Tile>();
 		LinkedList<Character> chars = new LinkedList<Character>();
 		MainCharacter main = null;
+		HashMap<String,BufferedImage> images = new HashMap<String,BufferedImage>();
 		try {
 			// Parse initial data
 			BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
@@ -94,7 +96,7 @@ public class Map implements Serializable {
 				"(line 1) Incorrect amount of data");
 
 			String name = splitLine[0];
-			String defaultPath = splitLine[1];
+			BufferedImage defaultImage = ImageIO.read(new File(splitLine[1]));
 			String overflowPath = splitLine[2];
 
 			// parse the dimensions of the map
@@ -109,8 +111,8 @@ public class Map implements Serializable {
 			for (int x = 0; x < numX; x++) {
 				for (int y = 0; y < numY; y++) {
 					if (tiles[x][y] == null)
-						tiles[x][y] = Tile.tile(container, defaultPath, 'F', x,
-								y, 0, 0);
+						tiles[x][y] = Tile.tile(container, defaultImage, 'F', x,
+								y, 1);
 				}
 			}
 			
@@ -121,50 +123,62 @@ public class Map implements Serializable {
 				splitLine = line.split(",");
 				count++;
 
-				// Terrain case
-				if (splitLine.length == 4 && splitLine[0].equals("img")) {
+				// Terrain (Image)  case
+				if (splitLine.length == 5 && splitLine[0].equals("img")) {
 					if(main == null)
 						throw new InvalidMapException("(line " + count + ") Main Character must be parsed before images");
-					BufferedImage img = ImageIO.read(new File(splitLine[1]));
-					double xLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[2])  - main.getTileX());
-					double yLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[3]) - main.getTileY());
-
+					BufferedImage img;
+					String imgPath = splitLine[1];
+					
+					//If image has already been imported, retrieve it
+					if(images.containsKey(imgPath))
+						img = images.get(imgPath);
+					else{
+						img = ImageIO.read(new File(imgPath));
+						images.put(imgPath, img);
+					}
+					
+					int xTile = Integer.parseInt(splitLine[2]);
+					int yTile = Integer.parseInt(splitLine[3]);
+					double xLoc = Tile.TILE_SIZE * (xTile  - main.getTileX());
+					double yLoc = Tile.TILE_SIZE * (yTile - main.getTileY());
+					tiles[xTile][yTile].setTilePermissions((splitLine[4]).charAt(0));
 					Terrain t = new Terrain(container, img, xLoc, yLoc);
 					terrainList.add(t);
 
 					// Character Case
-				} else if (splitLine.length == 11 && splitLine[0].equals("char")) {
+				} else if (splitLine.length == 10 && splitLine[0].equals("char")) {
 					
 					if(main == null)
 						throw new InvalidMapException("(line " + count + ") Main Character must be parsed before other Characters");
 					
 					Character toAdd = null;
-					Tile target = tiles[Integer.parseInt(splitLine[9])][Integer.parseInt(splitLine[10])]; 
+					Tile target = tiles[Integer.parseInt(splitLine[8])][Integer.parseInt(splitLine[9])]; 
 					System.out.println("TARGET: " + target.x() + "," + target.y());
 					
-					double xLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[9])  - main.getTileX());
-					double yLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[10]) - main.getTileY());
+					double xLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[8])  - main.getTileX());
+					double yLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[9]) - main.getTileY());
 					
 					// check which type of character toAdd is
 					if (splitLine[1].equals("Archer")) { 
 						toAdd = new Archer(container, splitLine[3],
 								splitLine[4], splitLine[5], splitLine[6],
-								splitLine[7], splitLine[8], splitLine[2], xLoc,yLoc);
+								splitLine[7], splitLine[2], xLoc,yLoc);
 						
 					} else if (splitLine[1].equals("Mage")) {
 						toAdd = new Mage(container, splitLine[3], splitLine[4],
 								splitLine[5], splitLine[6], splitLine[7],
-								splitLine[8], splitLine[2], xLoc,yLoc);
+								 splitLine[2], xLoc,yLoc);
 
 					} else if (splitLine[1].equals("Thief")) {
 						toAdd = new Thief(container, splitLine[3],
 								splitLine[4], splitLine[5], splitLine[6],
-								splitLine[7], splitLine[8], splitLine[2], xLoc,yLoc);
+								splitLine[7], splitLine[2], xLoc,yLoc);
 
 					} else if (splitLine[1].equals("Warrior")) {
 						toAdd = new Warrior(container, splitLine[3],
 								splitLine[4], splitLine[5], splitLine[6],
-								splitLine[7], splitLine[8], splitLine[2], xLoc,yLoc);
+								splitLine[7],  splitLine[2], xLoc,yLoc);
 					} else
 						throw new InvalidMapException("Invalid Character Type");
 					
@@ -175,11 +189,10 @@ public class Map implements Serializable {
 					}
 					
 					// Main character case
-				} else if(splitLine.length == 9 && splitLine[1].equals("Main")){
-					System.out.println("Main added");
+				} else if(splitLine.length == 8 && splitLine[1].equals("Main")){
 					main = new MainCharacter(container, splitLine[3],
 							splitLine[4], splitLine[5], splitLine[6],
-							splitLine[7], splitLine[8], splitLine[2],5,5);
+							splitLine[7],splitLine[2],5,5);
 					main.setVisible(true);
 					main.setFillColor(java.awt.Color.BLACK);
 					main.setSize(main.getImage().getWidth(), main
@@ -188,22 +201,32 @@ public class Map implements Serializable {
 				}
 
 				// Tile case
-				else if (splitLine.length == 8) {
+				else if (splitLine.length == 7) {
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
+					
+					BufferedImage img;
+					String imgPath = splitLine[3];
+					//If image has already been imported, retrieve it
+					if(images.containsKey(imgPath))
+						img = images.get(imgPath);
+					else{
+						img = ImageIO.read(new File(imgPath));
+						images.put(imgPath, img);
+					}
 
-					tiles[x][y] = Tile.tile(container, splitLine[3],
+					
+					tiles[x][y] = Tile.tile(container, img,
 							splitLine[2].charAt(0), x, y, Integer
-							.parseInt(splitLine[4]), Integer
-							.parseInt(splitLine[5]));
+							.parseInt(splitLine[4]));
 
 					// Check if random battle can occur
-					if (Integer.parseInt(splitLine[6]) == 1)
+					if (Integer.parseInt(splitLine[5]) == 1)
 						randBattle.add(tiles[x][y]);
 					
 					// Check if warp exists
-					if(!splitLine[7].equals("none")) {
-						tiles[x][y].setWarpMap(splitLine[7]);
+					if(!splitLine[6].equals("none")) {
+						tiles[x][y].setWarpMap(splitLine[6]);
 					}
 					
 					// Error Case

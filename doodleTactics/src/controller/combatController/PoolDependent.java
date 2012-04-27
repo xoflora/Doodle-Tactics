@@ -33,4 +33,13 @@ public interface PoolDependent {
 	 */
 	public void addCharacterToPool(Character c);
 	
+	/**
+	 * begins use of the unit pool 
+	 */
+	public void initialize();
+	
+	/**
+	 * finalizes actions with the unit pool to indicate that it is no longer needed
+	 */
+	public void finalize();
 }

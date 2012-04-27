@@ -60,8 +60,7 @@ public class OverworldController extends GameScreenController {
 		if(!_gameScreen.isAnimating()) {	
 			
 			int currentX = _gameScreen.getMapX(_gameScreen.getX()) + 10;
-			int currentY = _gameScreen.getMapY(_gameScreen.getY()) + 8;;
-			System.out.println("CurX: " + currentX + "CurY: " + currentY);
+			int currentY = _gameScreen.getMapY(_gameScreen.getY()) + 8;
 			Tile oldTile = _gameScreen.getMap().getTile(currentX, currentY);
 			Tile newTile;
 			
@@ -112,6 +111,18 @@ public class OverworldController extends GameScreenController {
 		}
 		_gameScreen.repaint();
 	}
+	
+
+/*	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		Tile t = _gameScreen.getTile(e.getX(), e.getY());
+	//	if (_validTiles.contains(t)) {
+		//	_selectedTile = t;
+		
+			System.out.println(t.getOccupant());
+	//	}
+	}	*/
 
 	@Override
 	public void mousePressed(MouseEvent e) { }

@@ -1,5 +1,7 @@
 package controller;
 
+import graphics.MenuItem;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
@@ -77,6 +79,9 @@ public abstract class GameScreenController extends Controller {
 		}
 	}
 	
+	/**
+	 * updates the hovered tile and emphasizes menu buttons
+	 */
 	public void mouseMoved(MouseEvent e) {
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		if (t != null) {
@@ -89,11 +94,20 @@ public abstract class GameScreenController extends Controller {
 				_gameScreen.repaint();
 			}
 		}
+		
+		_gameScreen.checkContains(e.getPoint());
 	}
 
-
 	@Override
-	public void mouseClicked(MouseEvent e) { }
+	/**
+	 * clicks on a menu element of the game screen
+	 */
+	public void mouseClicked(MouseEvent e) {
+		MenuItem _clickedButton = _gameScreen.checkContains(e.getPoint());
+		if (_clickedButton != null) {
+			_clickedButton.activate();
+		}
+	}
 	
 	@Override
 	public void mouseEntered(MouseEvent e) { }

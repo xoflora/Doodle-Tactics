@@ -163,4 +163,14 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void initialize() {
+		
+	}
+	
+	@Override
+	public void finalize() {
+		
+	}
 }

@@ -1,7 +1,11 @@
 package tests;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import org.junit.*;
 
@@ -26,9 +30,11 @@ public class MapTester {
 		try {
 			JPanel panel = new JPanel();
 			Tile[][] tiles = new Tile[36][40];
+			
+			BufferedImage img =ImageIO.read(new File("src/graphics/tiles/tile.png"));
 			for (int i = 0; i < tiles.length; i++)
 				for (int j = 0; j < tiles[i].length; j++)
-					tiles[i][j] = Tile.tile(panel, "src/graphics/tiles/tile.png", 'F', i, j, 1, 1);
+					tiles[i][j] = Tile.tile(panel, img, 'F', i, j, 1);
 			_test = new Map(tiles, "TestMap", null, null, null, null, null);
 
 			_test.getTile(7, 7).setCost(5);

@@ -72,7 +72,7 @@ public class CombatOrchestrator extends GameScreenController {
 				release();
 		}
 		else {
-			_gameScreen.pushControl(new PlayerSetup(_dt, _gameScreen.getValidSetupTiles(_numUnits)));
+			_gameScreen.pushControl(new PlayerSetup(_dt, _gameScreen.getValidSetupTiles(_numUnits + 5)));
 		//	_gameScreen.pushControl(_p);
 			_setup = true;
 		}

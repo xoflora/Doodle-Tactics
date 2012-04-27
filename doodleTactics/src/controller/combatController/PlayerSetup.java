@@ -2,6 +2,7 @@ package controller.combatController;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,40 +35,34 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		_toPlace = Util.clone(_units);
 		_inPlace = new ArrayList<Character>();
 
-		_pool = new UnitPool(_dt, _gameScreen, this, _toPlace);
+		try {
+			_pool = new UnitPool(_dt, _gameScreen, this, _toPlace);
+		} catch(IOException e) {
+			
+		}
 	}
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
-		
+		for (Tile t : _validTiles) {
+			t.setInMovementRange(false);
+		}
 	}
 
 	@Override
 	public void take() {
-	/*	_pool = new CharacterPool(_units);
 		
-		ListIterator<Character> _unitCycle = _units.listIterator();
-		Character c;
+		initialize();
+		
 		for (Tile t : _validTiles) {
-			if (_unitCycle.hasNext()) {
-				c = _unitCycle.next();
-				t.setOccupant(c);
-				_toPlace.remove(c);
-				_pool.removeCharacter(c);
-			}
-			else
-				break;
+			t.setInMovementRange(true);
 		}
-		
-		_pool.setVisible(true);		*/
-		
-		_gameScreen.getMenuQueue().add(_pool);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+		super.mouseClicked(e);
+
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		if (_validTiles.contains(t)) {
 			_selectedTile = t;
@@ -100,5 +95,15 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	public void removeUnitFromPool(Character c) {
 		_pool.removeCharacter(c);
 	}
+	
+	@Override
+	public void initialize() {
+		_pool.setInUse(true);
+	}
 
+	@Override
+	public void finalize() {
+		_pool.setInUse(false);
+		release();
+	}
 }
