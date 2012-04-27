@@ -61,7 +61,7 @@ public class MenuItem extends Rectangle {
 		_current = _hovered;
 	}
 	
-	public void activate() {
+	public void activate(int type) {
 		
 	}
 

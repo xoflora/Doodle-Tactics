@@ -24,7 +24,7 @@ public class GameMenuItem extends MenuItem {
 		 * overrides method in MenuItem
 		 */
 		@Override
-		public void activate() {
+		public void activate(int type) {
 			//_dt.pushController(_control);
 		}
 	}

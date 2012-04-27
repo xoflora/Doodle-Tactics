@@ -63,7 +63,7 @@ public class UnitPool extends MenuItem {
 		}
 		
 		@Override
-		public void activate() {
+		public void activate(int type) {
 			_source.getCharacterFromPool(_c);
 		}
 	}
@@ -80,7 +80,7 @@ public class UnitPool extends MenuItem {
 		}
 		
 		@Override
-		public void activate() {
+		public void activate(int type) {
 			_source.finalize();
 		}
 	}

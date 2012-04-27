@@ -38,7 +38,7 @@ public class MainMenuController extends Controller {
 		MenuItem _clickedButton = _mainMenu.checkContains(e.getPoint());
 		if (_clickedButton != null) {
 			System.out.println("click");
-			_clickedButton.activate();
+			_clickedButton.activate(e.getButton());
 		}
 	}
 

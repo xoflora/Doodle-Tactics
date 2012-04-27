@@ -21,7 +21,7 @@ public class ScreenChangeMenuItem extends MenuItem {
 	}
 
 	@Override
-	public void activate() {		
+	public void activate(int type) {		
 		_dt.changeScreens(_nextScreen);
 	}
 }
