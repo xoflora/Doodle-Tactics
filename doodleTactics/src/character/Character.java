@@ -99,7 +99,10 @@ public abstract class Character extends Rectangle{
 		}
 		
 		this.setSize(_down.getWidth(), _down.getHeight());
-		this.setLocation(x,y - _down.getHeight() + Tile.TILE_SIZE);
+		int overflow = 0;
+		if(_down.getWidth() - Tile.TILE_SIZE <= 25.0)
+			overflow = (_down.getWidth() - Tile.TILE_SIZE) / 2;
+		this.setLocation(x - overflow,y - _down.getHeight() + Tile.TILE_SIZE);
 	}
 	
 	/**

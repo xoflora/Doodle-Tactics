@@ -81,14 +81,19 @@ public class Tile extends graphics.Rectangle {
 	 * @param height
 	 * @param cost
 	 */
-	public Tile(JPanel container, BufferedImage img, int x, int y, int cost) 
+	public Tile(JPanel container, BufferedImage img, int x, int y, int cost, boolean randBattle, String warpPath) 
 			throws InvalidTileException {
 		super(container);
 		this.setSize(TILE_SIZE,TILE_SIZE);
 		
 		_image = img;
 		
-		_warpMap = null;
+		
+		if(!warpPath.equalsIgnoreCase("none"))
+			_warpMap = warpPath;
+		else
+			_warpMap = null;
+		
 		_canMove = new boolean[4];
 		_cost = cost;
 		_x = x;
@@ -227,8 +232,8 @@ public class Tile extends graphics.Rectangle {
 	 * @return a new tile given by the string
 	 */
 	public static Tile tile(JPanel container,BufferedImage img, char permissions,
-			int x, int y, int cost) throws InvalidTileException {
-		Tile t = new Tile(container, img, x, y,cost);
+			int x, int y, int cost, boolean randBattle,String warpPath) throws InvalidTileException {
+		Tile t = new Tile(container, img, x, y,cost,randBattle,warpPath);
 		t.setTilePermissions(permissions);
 		return t;
 	}
@@ -245,15 +250,7 @@ public class Tile extends graphics.Rectangle {
 		return !(_character == null);
 	}
 	
-	/**
-	 * sets the name of the warp map of a given tile to the given string
-	 * @param mapName to warp to upon standing on the given tile
-	 */
-	
-	public void setWarpMap(String mapName) {
-		
-	}
-	
+
 	/**
 	 * @return the movement cost of moving into this tile
 	 */
@@ -274,6 +271,22 @@ public class Tile extends graphics.Rectangle {
 	}
 	public int y() {
 		return _y;
+	}
+	
+	/**
+	 * 
+	 * @return true if the tile warps to another map
+	 */
+	public boolean canWarp(){
+		return _warpMap != null;
+	}
+	
+	/**
+	 * Pre-condition: canWarp() returns true (there exists a map)
+	 * @return the path of the map to warp to
+	 */
+	public String getWarpPath(){
+		return _warpMap;
 	}
 	
 	/** 

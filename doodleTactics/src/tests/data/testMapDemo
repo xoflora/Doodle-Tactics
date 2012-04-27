@@ -165,5 +165,5 @@ img,src/graphics/terrain/pen_pillar.png,16,0,A
 img,src/graphics/terrain/pen_pillar.png,17,0,A
 img,src/graphics/terrain/pen_pillar.png,18,0,A
 img,src/graphics/terrain/pen_pillar.png,19,0,A
-char,Mage,Renoir,src/graphics/characters/warrior_left.png,src/graphics/characters/warrior_left.png,src/graphics/characters/warrior_right.png,src/graphics/characters/warrior_back.png,src/graphics/characters/warrior_front.png,5,5
+char,Mage,Renoir,src/graphics/characters/pokeball.png,src/graphics/characters/warrior_left_color.png,src/graphics/characters/warrior_right_color.png,src/graphics/characters/warrior_back_color.png,src/graphics/characters/warrior_front_color.png,5,5
 char,Warrior,Renoir,src/graphics/characters/pokeball.png,src/graphics/characters/knight_left.png,src/graphics/characters/knight_right.png,src/graphics/characters/knight_back.png,src/graphics/characters/knight_front.png,14,14

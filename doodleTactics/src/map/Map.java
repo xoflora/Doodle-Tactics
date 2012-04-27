@@ -44,19 +44,17 @@ public class Map implements Serializable {
 	private BufferedImage _overflow;
 	private Tile[][] _map;
 	private LinkedList<Terrain> _terrain;
-	private LinkedList<Tile> _randomBattles;
 	private LinkedList<Character> _activeCharacters;
 	private MainCharacter _mainChar;
 	String _name;
 
 	public Map(Tile[][] tiles, String name, BufferedImage overflow,
-			LinkedList<Terrain> terrain, LinkedList<Tile> randomBattles,
+			LinkedList<Terrain> terrain,
 			LinkedList<Character> chars, MainCharacter main) {
 		_map = tiles;
 		_overflow = overflow;
 		_name = "";
 		_terrain = terrain;
-		_randomBattles = randomBattles;
 		_activeCharacters = chars;
 		_mainChar = main;
 	}
@@ -82,7 +80,6 @@ public class Map implements Serializable {
 	throws InvalidMapException {
 		int count = 2;
 		LinkedList<Terrain> terrainList = new LinkedList<Terrain>();
-		LinkedList<Tile> randBattle = new LinkedList<Tile>();
 		LinkedList<Character> chars = new LinkedList<Character>();
 		MainCharacter main = null;
 		HashMap<String,BufferedImage> images = new HashMap<String,BufferedImage>();
@@ -112,7 +109,7 @@ public class Map implements Serializable {
 				for (int y = 0; y < numY; y++) {
 					if (tiles[x][y] == null)
 						tiles[x][y] = Tile.tile(container, defaultImage, 'F', x,
-								y, 1);
+								y, 1,false,"none");
 				}
 			}
 			
@@ -215,19 +212,16 @@ public class Map implements Serializable {
 						images.put(imgPath, img);
 					}
 
-					
+					boolean randBattle;
+					if(splitLine[5].equals("0"))
+						randBattle = false;
+					else if(splitLine[5].equals("1"))
+						randBattle = true;
+					else throw new InvalidMapException("(line " + count + ") Expected 0 or 1 for randBattle");
 					tiles[x][y] = Tile.tile(container, img,
 							splitLine[2].charAt(0), x, y, Integer
-							.parseInt(splitLine[4]));
+							.parseInt(splitLine[4]),randBattle,splitLine[6]);
 
-					// Check if random battle can occur
-					if (Integer.parseInt(splitLine[5]) == 1)
-						randBattle.add(tiles[x][y]);
-					
-					// Check if warp exists
-					if(!splitLine[6].equals("none")) {
-						tiles[x][y].setWarpMap(splitLine[6]);
-					}
 					
 					// Error Case
 				} else
@@ -242,7 +236,7 @@ public class Map implements Serializable {
 			if (main == null)
 				throw new InvalidMapException("Main Character not specified");
 			return new Map(tiles, name, ImageIO.read(new File(overflowPath)),
-					terrainList, randBattle, chars, main);
+					terrainList, chars, main);
 
 		} catch (FileNotFoundException e) {
 			throw new InvalidMapException(
