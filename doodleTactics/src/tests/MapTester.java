@@ -86,11 +86,11 @@ public class MapTester {
     public void tearDown() {
     }
     
-    @Test
+/*    @Test
     /**
      * @author czchapma
      * Tests parsing in a map file
-     */
+     
     public void testParseMap(){
     	//Test error maps
     	JPanel panel = new JPanel();
@@ -168,7 +168,7 @@ public class MapTester {
 		} catch(InvalidMapException e){
 			assert(false);
 		}
-    }
+    }	*/
     
   
     @Test

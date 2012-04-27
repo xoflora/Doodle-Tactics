@@ -798,6 +798,7 @@ public class Map implements Serializable {
 			Tile t = _map[x][y];
 			t.setOccupant(c);
 			c.setLocation(t.getX(), t.getY());
+			System.out.println(t.getX() + " " + t.getY());
 			c.setVisible(true);
 		} catch(ArrayIndexOutOfBoundsException e) { }
 	}
