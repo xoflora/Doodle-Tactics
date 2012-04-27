@@ -60,7 +60,7 @@ public class DoodleTactics extends JFrame {
 		this.setResizable(false);
 		this.setVisible(true);
 		
-		Archer _char1 = new Archer(_game, "src/graphics/characters/pokeball.png",
+		Archer _char1 = new Archer(_game, 
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png", 10, 10);
@@ -75,17 +75,17 @@ public class DoodleTactics extends JFrame {
 			e.printStackTrace();
 		}
 		
-		_party.add(new Mage(_game, "src/graphics/characters/pokeball.png",
+		_party.add(new Mage(_game,
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_left.png",
 				"src/graphics/characters/warrior_right.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png", 5, 5));
 		
-		_party.add(new Thief(_game, "src/graphics/characters/pokeball.png",
+		_party.add(new Thief(_game, 
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/mage_left.png",
 				"src/graphics/characters/mage_right.png", "src/graphics/characters/mage_back.png",
 				"src/graphics/characters/mage_back.png", "src/graphics/characters/warrior_front.png", 15, 15));
 		
-		_party.add(new Warrior(_game, "src/graphics/characters/pokeball.png",
+		_party.add(new Warrior(_game, 
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png", 20, 10));

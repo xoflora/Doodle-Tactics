@@ -63,7 +63,6 @@ public abstract class Character extends Rectangle{
 	protected int _capacity; //max number of items the character can carry
 
 	//images
-	private BufferedImage _avatar;
 	private BufferedImage _profile;
 	private BufferedImage _currentImage;
 	private BufferedImage _left;
@@ -73,7 +72,7 @@ public abstract class Character extends Rectangle{
 
 	private CombatController _affiliation; //player/AI etc
 
-	public Character(JPanel container, String avatar, String profile, String left, String right, String up, String down, String name,double x, double y){
+	public Character(JPanel container, String profile, String left, String right, String up, String down, String name,double x, double y){
 		super(container);
 		_BASE_STATS = new int[NUM_STATS];
 		_currentStats = new int[NUM_STATS];
@@ -89,7 +88,6 @@ public abstract class Character extends Rectangle{
 		
 		_affiliation = null;
 		try {
-			_avatar = ImageIO.read(new File(avatar));
 			_profile = ImageIO.read(new File(profile));
 			_left = ImageIO.read(new File(left));
 			_right = ImageIO.read(new File(right));
@@ -479,7 +477,6 @@ public abstract class Character extends Rectangle{
 	public void setLocation(double x, double y){
 		super.setLocation(x, y);
 		this.setPaintPriority((int) y + _down.getHeight());
-		System.out.println("***********************X: " + x + " Y: " + y);
 	}
 
 /*	public static void testPreSerialize(){

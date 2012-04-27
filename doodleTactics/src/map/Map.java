@@ -72,8 +72,8 @@ public class Map implements Serializable {
 	 *         numCols,numRows
 	 *         x1,y1,permissions,img_path1,cost1,rand_battle,warp_to_path_specified
 	 *         img,img_path, x1, y1,tile_permissions ...
-	 *         char,type,name,avatar_img,profile_img,left_img
-	 *         ,right_img,up_img,down_img, x, y .. (where x and y are 0-indexed)
+	 *         char,type,name,profile_img,left_img,right_img,up_img,down_img, x, y .. 
+	 *         (where x and y are 0-indexed)
 
 	 * 	NOTE: All Tiles must be defined before characters
 	 * @author czchapma
@@ -147,38 +147,38 @@ public class Map implements Serializable {
 					terrainList.add(t);
 
 					// Character Case
-				} else if (splitLine.length == 11 && splitLine[0].equals("char")) {
+				} else if (splitLine.length == 10 && splitLine[0].equals("char")) {
 					
 					if(main == null)
 						throw new InvalidMapException("(line " + count + ") Main Character must be parsed before other Characters");
 					
 					Character toAdd = null;
-					Tile target = tiles[Integer.parseInt(splitLine[9])][Integer.parseInt(splitLine[10])]; 
+					Tile target = tiles[Integer.parseInt(splitLine[8])][Integer.parseInt(splitLine[9])]; 
 					System.out.println("TARGET: " + target.x() + "," + target.y());
 					
-					double xLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[9])  - main.getTileX());
-					double yLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[10]) - main.getTileY());
+					double xLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[8])  - main.getTileX());
+					double yLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[9]) - main.getTileY());
 					
 					// check which type of character toAdd is
 					if (splitLine[1].equals("Archer")) { 
 						toAdd = new Archer(container, splitLine[3],
 								splitLine[4], splitLine[5], splitLine[6],
-								splitLine[7], splitLine[8], splitLine[2], xLoc,yLoc);
+								splitLine[7], splitLine[2], xLoc,yLoc);
 						
 					} else if (splitLine[1].equals("Mage")) {
 						toAdd = new Mage(container, splitLine[3], splitLine[4],
 								splitLine[5], splitLine[6], splitLine[7],
-								splitLine[8], splitLine[2], xLoc,yLoc);
+								 splitLine[2], xLoc,yLoc);
 
 					} else if (splitLine[1].equals("Thief")) {
 						toAdd = new Thief(container, splitLine[3],
 								splitLine[4], splitLine[5], splitLine[6],
-								splitLine[7], splitLine[8], splitLine[2], xLoc,yLoc);
+								splitLine[7], splitLine[2], xLoc,yLoc);
 
 					} else if (splitLine[1].equals("Warrior")) {
 						toAdd = new Warrior(container, splitLine[3],
 								splitLine[4], splitLine[5], splitLine[6],
-								splitLine[7], splitLine[8], splitLine[2], xLoc,yLoc);
+								splitLine[7],  splitLine[2], xLoc,yLoc);
 					} else
 						throw new InvalidMapException("Invalid Character Type");
 					
@@ -189,10 +189,10 @@ public class Map implements Serializable {
 					}
 					
 					// Main character case
-				} else if(splitLine.length == 9 && splitLine[1].equals("Main")){
+				} else if(splitLine.length == 8 && splitLine[1].equals("Main")){
 					main = new MainCharacter(container, splitLine[3],
 							splitLine[4], splitLine[5], splitLine[6],
-							splitLine[7], splitLine[8], splitLine[2],5,5);
+							splitLine[7],splitLine[2],5,5);
 					main.setVisible(true);
 					main.setFillColor(java.awt.Color.BLACK);
 					main.setSize(main.getImage().getWidth(), main

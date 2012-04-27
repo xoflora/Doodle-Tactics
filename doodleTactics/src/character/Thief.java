@@ -5,8 +5,8 @@ import javax.swing.JPanel;
 public class Thief extends Character{
 	 
 
-	public Thief(JPanel container, String avatar, String profile, String left, String right, String up, String down, String name, double x, double y){
-		super(container, avatar, profile, left, right, up, down, name,x, y);
+	public Thief(JPanel container, String profile, String left, String right, String up, String down, String name, double x, double y){
+		super(container, profile, left, right, up, down, name,x, y);
 		
 		//set base stats
 		_BASE_STATS[STRENGTH] = 6;
