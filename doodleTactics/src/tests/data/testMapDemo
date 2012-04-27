@@ -131,6 +131,8 @@ char,Main,Renoir,src/graphics/characters/mage_left.png,src/graphics/characters/m
 19,19,F,src/graphics/tiles/dark_blue.png,1,0,none
 18,18,F,src/graphics/tiles/dark_blue.png,1,0,none
 19,18,F,src/graphics/tiles/dark_blue.png,1,0,none
+10,17,F,src/graphics/tiles/dark_blue.png,1,0,none
+10,18,F,src/graphics/tiles/dark_blue.png,1,0,none
 1,17,0,src/graphics/tiles/blue.png,1,0,none
 1,16,0,src/graphics/tiles/blue.png,1,0,none
 1,15,0,src/graphics/tiles/blue.png,1,0,none
