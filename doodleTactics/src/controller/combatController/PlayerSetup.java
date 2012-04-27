@@ -131,6 +131,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 					
 					if (_selectedCharacter != null) {
 						_gameScreen.addCharacter(_selectedCharacter);
+						_selectedCharacter.setLocation(t.getX(), t.getY());
 						_pool.removeCharacter(_selectedCharacter);
 					}
 					if (c != null) {

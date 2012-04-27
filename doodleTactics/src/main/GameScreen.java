@@ -62,10 +62,8 @@ public class GameScreen extends Screen<GameScreenController> {
 	private PriorityQueue<MenuItem> _menuQueue;
 	private List<Terrain> _terrainToPaint;
 	private HashMap<String, Map> _mapCache; // a hash map representing the cache of all of the maps in the game, maps file paths to maps
-	
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
-		
 		this.setBackground(java.awt.Color.BLACK);
 		MAP_WIDTH = 20;
 		MAP_HEIGHT = 20;
@@ -100,7 +98,7 @@ public class GameScreen extends Screen<GameScreenController> {
 				map = _mapCache.get(mapPath);
 			} else {
 				// otherwise, read the map from that file and put it in the cache
-				map = Map.map(this, mapPath);
+				map = Map.map(_dt,this, mapPath);
 				_mapCache.put(mapPath, map);
 			}
 			
@@ -120,6 +118,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 		} catch (InvalidMapException e) {
 			e.printMessage();
+			System.exit(0);
 		}
 	}
 	
@@ -456,7 +455,6 @@ public class GameScreen extends Screen<GameScreenController> {
 	 * adds a character to the gamescreen
 	 */
 	public void addCharacter(Character c) {
-		_characterTerrainQueue.add(c);
 		_currMap.getCharactersToDisplay().add(c);
 		System.out.println("Character added " + c);
 	}

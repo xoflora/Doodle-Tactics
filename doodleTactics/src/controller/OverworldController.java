@@ -102,6 +102,7 @@ public class OverworldController extends GameScreenController {
 				System.out.println("s");
 				newTile = _gameScreen.getMap().getTile(currentX, currentY + 1);
 				_gameScreen.getMainChar().setDown();
+
 				if(newTile != null && newTile.canMove(Map.NORTH)){			
 					if(newTile.canWarp()){
 						System.out.println("Made it");
@@ -115,8 +116,9 @@ public class OverworldController extends GameScreenController {
 					else{
 						newTile.setOccupant(_gameScreen.getMainChar());
 					}
-						_gameScreen.mapUpdate(0, 1);
-						oldTile.removeOccupant();
+					
+					_gameScreen.mapUpdate(0, 1);
+					oldTile.removeOccupant();
 				}
 				break;
 			case 'd':

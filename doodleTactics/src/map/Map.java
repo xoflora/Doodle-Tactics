@@ -1,5 +1,6 @@
 package map;
 
+import event.InvalidEventException;
 import graphics.Rectangle;
 import graphics.Terrain;
 
@@ -72,11 +73,13 @@ public class Map implements Serializable {
 	 *         img,img_path, x1, y1,tile_permissions ...
 	 *         char,type,name,profile_img,left_img,right_img,up_img,down_img, x, y .. 
 	 *         (where x and y are 0-indexed)
-
+	 *         char,Main,name,profile_img,left_img,right_img,up_img,down_img
+	 *		   char,Map,name,profile_img,down_img, x, y,dialogue_file .. 
+	 *         (where x and y are 0-indexed)
 	 * 	NOTE: All Tiles must be defined before characters
 	 * @author czchapma
 	 */
-	public static Map map(JPanel container, String path)
+	public static Map map(DoodleTactics dt, JPanel container, String path)
 	throws InvalidMapException {
 		int count = 2;
 		LinkedList<Terrain> terrainList = new LinkedList<Terrain>();
@@ -194,7 +197,35 @@ public class Map implements Serializable {
 					main.setFillColor(java.awt.Color.BLACK);
 					main.setSize(main.getImage().getWidth(), main
 							.getImage().getHeight());
+					
+					//Map Character Case
+				} else if((splitLine.length == 8) && splitLine[1].equals("Map")){
+					x = Integer.parseInt(splitLine[5]);
+					y = Integer.parseInt(splitLine[6]);
+					String profPath = splitLine[3];
+					String mapPath = splitLine[4];
+					System.out.println("parsed to here - a");
+					BufferedImage profImg,mapImg;
+					//If image has already been imported, retrieve it
+					if(images.containsKey(profPath))
+						profImg = images.get(profPath);
+					else{
+						profImg = ImageIO.read(new File(profPath));
+						images.put(profPath, profImg);
+					}
+					System.out.println("parsed to here - b");
 
+					//If image has already been imported, retrieve it
+					if(images.containsKey(mapPath))
+						mapImg = images.get(mapPath);
+					else{
+						mapImg = ImageIO.read(new File(mapPath));
+						images.put(mapPath, mapImg);
+					}
+					System.out.println("parsed to here - c");
+
+
+					MapCharacter current = new MapCharacter(dt,tiles,x,y,splitLine[7],profImg,mapImg);
 				}
 
 				// Tile case
@@ -243,7 +274,7 @@ public class Map implements Serializable {
 					"Error reading map from file located at " + path + ".");
 		} catch (IOException e) {
 			throw new InvalidMapException(
-			"Something went wrong while reading the file.");
+			"(line " + count + ") Something went wrong while reading the file.");
 		} catch (NumberFormatException e) {
 			String msg = "Expected int";
 			if (count > 2)
@@ -263,6 +294,8 @@ public class Map implements Serializable {
 			if (count > 2)
 				msg = "(line " + count + ") " + msg;
 			throw new InvalidMapException(msg);
+		} catch (InvalidEventException e) {
+			throw new InvalidMapException("(line " + count + ") Invalid Event Specified");
 		}
 
 	}

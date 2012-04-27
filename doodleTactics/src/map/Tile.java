@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import util.Util;
 
+import event.Dialogue;
 import event.Event;
 import character.Character;
 
@@ -101,6 +102,8 @@ public class Tile extends graphics.Rectangle {
 		
 		_opacity = DEFAULT_OPACITY;
 		_overlay = DEFAULT_COLOR;
+		
+		_event  = null;
 		
 	}
 	
@@ -251,6 +254,20 @@ public class Tile extends graphics.Rectangle {
 		return !(_character == null);
 	}
 	
+	
+	/**
+	 * Called from a MapCharacter if this tile starts a dialogue event
+	 */
+	public void setTriggersDialogue(Dialogue d){
+		_event = d;
+	}
+	
+	/**
+	 * @return true if this tile triggers an event and false otherwise
+	 */
+	public boolean triggersDialogue(){
+		return _event == null;
+	}
 
 	/**
 	 * @return the movement cost of moving into this tile

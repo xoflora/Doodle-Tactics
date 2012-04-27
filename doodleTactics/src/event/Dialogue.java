@@ -35,7 +35,8 @@ public class Dialogue extends Event {
 	 * @throws InvalidFileException --if something goes wrong during csv file parsing
 	 * @throws IOException, FileNotFoundException 
 	 */
-	public Dialogue(DoodleTactics dt, String filename, HashMap<String,Character> allChars) throws InvalidEventException, IOException, FileNotFoundException{
+	public Dialogue(DoodleTactics dt, String filename, HashMap<String,Character> allChars)
+			throws InvalidEventException, IOException, FileNotFoundException{
 		super(dt);
 		BufferedReader br = new BufferedReader(new FileReader(filename));
 		_phrases = new LinkedList<String>();
@@ -46,7 +47,6 @@ public class Dialogue extends Event {
 			split = line.split(",");
 			if(split.length != 2)
 				throw new InvalidEventException(line);
-
 			Character c = allChars.get(split[0].trim());
 			//throw error if Character not found
 			if(c == null)
