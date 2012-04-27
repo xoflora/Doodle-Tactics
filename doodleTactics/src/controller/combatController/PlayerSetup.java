@@ -74,7 +74,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		MenuItem m = _gameScreen.checkContains(e.getPoint());
 		boolean valid = _validTiles.contains(t);
 		
-		if (_validTiles.contains(t)) {
+	/*	if (_validTiles.contains(t)) {
 			_selectedTile = t;
 			
 			System.out.println(e.getButton());
@@ -96,26 +96,35 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 				_selectedCharacter = null;
 				_selectedFromPool = false;
 			}
-		}
+		}	*/
 		
-		if (e.getButton() == MouseEvent.BUTTON1) {
-			if (valid) {
+		if (e.getButton() == UnitPool.SELECT_BUTTON) {
+			if (valid && m == null) {
 				_selectedTile = t;
-				
-				System.out.println(e.getButton());
 				Character occupant = t.getOccupant();
-			}
-			else if (m != null) {
 				
+				if (occupant != null) {
+					_selectedCharacter = occupant;
+					_selectedFromPool = false;
+				}
 			}
+		/*	else if (m != null) {
+				
+			}	*/
 		}
-		else if (e.getButton() == MouseEvent.BUTTON3) {	//swap characters
-			if (valid) {
-				
+		else if (e.getButton() == UnitPool.SWAP_BUTTON) {	//swap characters
+			if (valid && m == null) {
+				if (_selectedFromPool) {
+					
+				}
+				else if (_selectedTile != null) {
+					_selectedTile.setOccupant(t.getOccupant());
+					t.setOccupant(_selectedCharacter);
+				}
 			}
-			else if (m != null) {	//swap into the unit pool
-				
-			}
+			
+			_selectedCharacter = null;
+			_selectedFromPool = false;
 		}
 	}
 	
@@ -153,6 +162,25 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	@Override
 	public void addUnitToPool(Character c) {
 		_pool.addCharacter(c);
+	}
+	
+	@Override
+	/**
+	 * swaps a character into or out of the unit pool
+	 * @param c the character to swap
+	 */
+	public void alternateAction(Character c) {
+		if (!_selectedFromPool && _selectedTile != null) {
+			_selectedTile.setOccupant(c);
+			removeUnitFromPool(c);
+			
+			if (_selectedCharacter != null) {
+				addUnitToPool(_selectedCharacter);
+				_gameScreen.getCharacterQueue().remove(_selectedCharacter);
+			}
+			
+			_gameScreen.getCharacterQueue().add(c);
+		}
 	}
 
 	@Override

@@ -157,6 +157,11 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void alternateAction(Character c) {
+		
+	}
 
 	@Override
 	public void removeUnitFromPool(Character c) {

@@ -5,7 +5,7 @@ import java.util.List;
 import character.Character;
 
 /**
- * implemented by combat controllers that rely on a UnitPool
+ * implemented by controllers that rely on a UnitPool
  * @author rroelke
  *
  */
@@ -32,6 +32,11 @@ public interface PoolDependent {
 	 * @param c the unit to add
 	 */
 	public void addUnitToPool(Character c);
+	
+	/**
+	 * performs an alternate action given a character
+	 */
+	public void alternateAction(Character c);
 	
 	/**
 	 * begins use of the unit pool 

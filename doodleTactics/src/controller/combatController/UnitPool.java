@@ -2,6 +2,7 @@ package controller.combatController;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +44,9 @@ public class UnitPool extends MenuItem {
 	public static final int CHARACTER_SELECT_PRIORITY = 2;
 	public static final int DONE_BUTTON_PRIORITY = 2;
 	
+	public static final int SELECT_BUTTON = MouseEvent.BUTTON1;
+	public static final int SWAP_BUTTON = MouseEvent.BUTTON3;
+	
 	private static final String IMAGE_PATH = "src/graphics/menu/sidebar.png";
 	private static final String DONE_DEFAULT_IMG = "src/graphics/menu/done.png";
 	private static final String DONE_HOVER_IMG = "src/graphics/menu/done_hovered.png";
@@ -64,7 +68,10 @@ public class UnitPool extends MenuItem {
 		
 		@Override
 		public void activate(int type) {
-			_source.getCharacterFromPool(_c);
+			if (type == SELECT_BUTTON)
+				_source.getCharacterFromPool(_c);
+			else if (type == SWAP_BUTTON)
+				_source.alternateAction(_c);
 		}
 	}
 	
