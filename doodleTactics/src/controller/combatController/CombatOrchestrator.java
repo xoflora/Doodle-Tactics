@@ -45,7 +45,7 @@ public class CombatOrchestrator extends GameScreenController {
 		System.out.println();
 		
 		_numUnits = numUnits;
-		_factionCycle = _factions.listIterator(); 
+		_factionCycle = _factions.listIterator();
 	}
 
 	@Override

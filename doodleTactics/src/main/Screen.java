@@ -52,7 +52,7 @@ public abstract class Screen<T extends Controller> extends JPanel {
 		if (getController() != null)
 			removeController(getController());
 		
-		System.out.println("pushing " + controller.getClass());
+	//	System.out.println("pushing " + controller.getClass());
 		_control.push(controller);
 		addController(controller);
 		
@@ -67,8 +67,10 @@ public abstract class Screen<T extends Controller> extends JPanel {
 		T toReturn = _control.pop();
 		
 		removeController(toReturn);
+		
+		//System.out.println("popping" + toReturn.getClass());
 		addController(_control.peek());
-		System.out.println("popping" + toReturn.getClass());
+		
 		
 		return toReturn;
 	}
