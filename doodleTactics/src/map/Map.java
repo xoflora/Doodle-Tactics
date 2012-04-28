@@ -209,8 +209,8 @@ public class Map implements Serializable {
 				}	
 
 				// Tile case
-				// 7 if no event speciifed, 8 otherwise
-				else if ((splitLine.length == 7) || splitLine.length == 8) {
+				// 7 if no event specified, 8 otherwise
+				else if (((splitLine.length == 7) && Integer.parseInt(splitLine[6]) == NO_EVENT) || splitLine.length == 8) {
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
 					
@@ -235,10 +235,15 @@ public class Map implements Serializable {
 							.parseInt(splitLine[4]),randBattle);
 					
 					//Handle Events
-			/*		if(Integer.parseInt(splitLine[6]) == DIALOGUE){
+					if(Integer.parseInt(splitLine[6]) == DIALOGUE){
 						tiles[x][y].setEvent(new Dialogue(dt,splitLine[7]));
-					} else if(!splitLine[6].equals("none"))
-						tiles[x][y].setEvent(new Warp(dt,tiles[x][y],splitLine[7]));*/
+						tiles[x][y].setInteractible();
+					} else if(Integer.parseInt(splitLine[6]) == WARP){
+						tiles[x][y].setEvent(new Warp(dt,tiles[x][y],splitLine[7]));
+						tiles[x][y].setEnterEvent();
+					}
+					//add others in the future perhaps
+					
 					
 					// Error Case
 				} else
@@ -280,9 +285,9 @@ public class Map implements Serializable {
 			if (count > 2)
 				msg = "(line " + count + ") " + msg;
 			throw new InvalidMapException(msg);
-		}/*catch (InvalidEventException e) {
+		}catch (InvalidEventException e) {
 			throw new InvalidMapException("(line " + count + ") Invalid Event Specified");
-		}*/
+		}
 
 	}
 

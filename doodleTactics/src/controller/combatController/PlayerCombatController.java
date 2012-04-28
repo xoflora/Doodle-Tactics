@@ -19,6 +19,13 @@ import character.Character;
  */
 public class PlayerCombatController extends CombatController implements PoolDependent {
 	
+	private enum State {
+		START,
+		CHARACTER_SELECTED,
+		CHARACTER_MOVING,
+		CHARACTER_OPTION_MENU
+	}
+	
 	private Tile _selectedTile;
 	private Tile _hoveredTile;
 	private Character _selectedCharacter;
@@ -30,11 +37,10 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	private List<Tile> _path;
 	private int _pathCost;
 	
+	private State state;
+	
 	public PlayerCombatController(DoodleTactics dt) {
 		super(dt, dt.getParty());
-		
-		System.out.println(_gameScreen == _dt.getGameScreen());
-		System.out.println(_gameScreen == null);
 		
 		_selectedTile = null;
 		_hoveredTile = null;
@@ -57,6 +63,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			t.setInMovementRange(false);
 		for (Tile t : _enemyAttackRange)
 			t.setInEnemyAttackRange(false);
+		for (Tile t : _path)
+			t.setInMovementPath(false);
 		
 		_selectedTile = null;
 		_selectedCharacter = null;
@@ -66,38 +74,54 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		
 		_path = new ArrayList<Tile>();
 		_pathCost = 0;
+		
+		state = State.START;
 	}
-	
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
-		
-		Tile t = _gameScreen.getTile(e.getX(), e.getY());
-		System.out.println("Tile: " + t);
-		if (t != null) {
-			Character c = t.getOccupant();
-			System.out.println("Occupant: " + c);
-			if (c != null) {
-				if (c.getAffiliation() == this && !hasMoved(c)) {
-					_selectedTile = t;
-					_selectedMovementRange = _map.getMovementRange(t, c.getMovementRange());
 
-					//set paint properties the movement range
-					for (Tile paint : _selectedMovementRange)
-						paint.setInMovementRange(true);
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			Tile t = _gameScreen.getTile(e.getX(), e.getY());
+			if (t != null && t.isOccupied()) {
+				Character c = t.getOccupant();
+				if (state == State.START) {
+					if (c.getAffiliation() == this) {
+						_selectedTile = t;
+						_selectedMovementRange = _gameScreen.getMap().getMovementRange(t, c.getMovementRange());
+						_selectedCharacter = c;
+						for (Tile toPaint : _selectedMovementRange)
+							toPaint.setInMovementRange(true);
+						state = State.CHARACTER_SELECTED;
+					}
+					else if (_enemyAffiliations.contains(c.getAffiliation())) {
+						_enemyAttackRange = Util.union(_enemyAttackRange,
+								_gameScreen.getMap().getAttackRange(t, c.getMovementRange(),
+										c.getMinAttackRange(), c.getMaxAttackRange()));
+					}
 				}
-				else if (_enemyAffiliations.contains(c.getAffiliation())) {
-					_enemyAttackRange = Util.union(_enemyAttackRange,
-							_map.getAttackRange(t, c.getMovementRange(),
-									c.getMinAttackRange(), c.getMaxAttackRange()));
+				else if (state == State.CHARACTER_SELECTED) {
+					
+				}
+				else if (state == State.CHARACTER_MOVING) {
 
-					//set paint properties all tiles in that range.
-					for (Tile paint : _enemyAttackRange)
-						paint.setInEnemyAttackRange(true);
+				}
+				else if (state == State.CHARACTER_OPTION_MENU) {
+
 				}
 			}
-			else if (_selectedMovementRange.contains(t)) {
-				
+		}
+		else if (e.getButton() == MouseEvent.BUTTON3) {
+			if (state == State.START)
+				clear();
+			else if (state == State.CHARACTER_SELECTED)
+				clear();
+			else if (state == State.CHARACTER_MOVING) {
+
+			}
+			else if (state == State.CHARACTER_OPTION_MENU) {
+
 			}
 		}
 	}
@@ -107,7 +131,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		super.mouseMoved(e);
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		if (t != null) {
-			_hoveredCharacter = t.getOccupant();
+		/*	_hoveredCharacter = t.getOccupant();
 			
 			if (_hoveredCharacter == null) {
 				if (_selectedTile != null && _selectedCharacter != null) {
@@ -117,8 +141,32 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						_path.add(t);
 					}
 					else if (_selectedMovementRange.contains(t)) {
-						_path = _map.getPath(_selectedTile, t);
+						_path = _gameScreen.getMap().getPath(_selectedTile, t);
 						_pathCost = _selectedCharacter.getMovementRange();
+					}
+				}
+			}*/
+			
+			if (state == State.CHARACTER_SELECTED) {	//selected character and tile are not null
+				if (_selectedMovementRange.contains(t)) {
+					if (_path.isEmpty()) {
+						if (t.isAdjacent(_selectedTile)) {
+							_path.add(t);
+							_pathCost += t.cost();
+							t.setInEnemyAttackRange(true);
+						}
+					}
+					else {
+						if (t.isAdjacent(_path.get(_path.size() - 1)) && _pathCost + t.cost() <=
+								_selectedCharacter.getMovementRange()) {
+							_path.add(t);
+							_pathCost += t.cost();
+							t.setInMovementPath(true);
+						}
+						else {
+							for (Tile u : _path)
+								u.setInMovementPath(false);
+						}
 					}
 				}
 			}

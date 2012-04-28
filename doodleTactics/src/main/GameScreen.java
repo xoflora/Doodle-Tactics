@@ -473,13 +473,9 @@ public class GameScreen extends Screen<GameScreenController> {
 	}
 	
 	/**
-	 * adds a character to the gamescreen
+	 * adds a character to the gamescreen for display
 	 */
 	public void addCharacter(Character c) {
-		System.out.println("LOEWJROEWIROEWIREW");
 		_currMap.getCharactersToDisplay().add(c);
-		for (Character d : _currMap.getCharactersToDisplay())
-			System.out.println("character in chraacteer display list: " + d);
-		System.out.println("Character added " + c);
 	}
 }

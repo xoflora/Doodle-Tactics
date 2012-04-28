@@ -1,8 +1,12 @@
 package event;
 
+import graphics.MenuItem;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,6 +15,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
+import character.Archer;
 import character.Character;
 
 import main.DoodleTactics;
@@ -44,13 +51,28 @@ public class Dialogue extends Event {
 		String line = br.readLine();
 		String[] split;
 		HashMap<String,Character> allChars = dt.getCharacterMap();
+		
+		//REMOVE LATER:
+		allChars.put("Thighs",new Archer(dt.getGameScreen(), 
+				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/warrior_back.png", "Dude", 10, 10));
+		allChars.put("Renoir", new Archer(dt.getGameScreen(), 
+				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/warrior_back.png", "Dude", 10, 10));
+		
 		while(line != null){
 			split = line.split(",");
-			if(split.length != 2)
-				throw new InvalidEventException(line);
-			Character c = allChars.get(split[0].trim());
-			//throw error if Character not found
-			if(c == null)
+			if(split.length != 2){
+				throw new InvalidEventException(line);	
+			}
+			Character c;
+			//Retrieve character from Hashmap
+			if(allChars.containsKey(split[0].trim()))
+				c = allChars.get(split[0].trim());
+			else
+				//throw error if Character not found
 				throw new InvalidEventException(split[0], line);
 			_characters.add(c);
 
@@ -101,6 +123,19 @@ public class Dialogue extends Event {
 	@Override
 	public void take() {
 		System.out.println("Start Dialogue!");
+		BufferedImage img;
+		try {
+			img = ImageIO.read(new File("src/graphics/menu/dialogue_box.jpg"));
+			MenuItem dialogueBox = new MenuItem(_gameScreen,img,img,_dt,5);
+			dialogueBox.setVisible(true);
+			dialogueBox.setSize(525, 200);
+			dialogueBox.setLocation(350,620);
+			_gameScreen.addMenuItem(dialogueBox);
+		} catch (IOException e) {
+			System.out.println("Invalid Dialogue Box file");
+		}
+		
+//		_gameScreen.popControl();
 		//display Dialogue box and start 		
 	}
 

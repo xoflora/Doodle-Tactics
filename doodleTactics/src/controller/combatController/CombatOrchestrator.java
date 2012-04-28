@@ -29,12 +29,11 @@ public class CombatOrchestrator extends GameScreenController {
 		_factions = new ArrayList<CombatController>();
 		_setup = false;
 		
-		PlayerCombatController player = new PlayerCombatController(dt);
-		_p = player;
+		_p = _dt.getCombatControl();
 
 		if (partners == null)
 			partners = new ArrayList<CombatController>();
-		partners.add(player);
+		partners.add(_p);
 		
 		for (CombatController p : partners)
 			p.setEnemyAffiliations(enemies);
