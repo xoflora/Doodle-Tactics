@@ -241,7 +241,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			
 			_isAnimating = true;
 			
-			MapMoveTimer timer = new MapMoveTimer(x,y, true);
+			MapMoveTimer timer = new MapMoveTimer(x,y, false);
 			timer.start();
 			
 			_xRef += x;
