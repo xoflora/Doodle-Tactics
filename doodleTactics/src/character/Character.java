@@ -14,6 +14,7 @@ import event.InvalidEventException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import controller.combatController.CombatController;
 
@@ -74,6 +75,8 @@ public abstract class Character extends Rectangle{
 
 	private CombatController _affiliation; //player/AI etc
 	
+	private FloatTimer _floatTimer; // internal timer used to animate floating
+	
 	public static enum CharacterDirection{
 		LEFT,RIGHT,UP,DOWN
 	}
@@ -96,7 +99,6 @@ public abstract class Character extends Rectangle{
 		
 		_affiliation = null;
 		
-		
 		try {
 			_profile = ImageIO.read(new File(profile));
 			_left = ImageIO.read(new File(left));
@@ -113,7 +115,86 @@ public abstract class Character extends Rectangle{
 		if(_down.getWidth() - Tile.TILE_SIZE <= 25.0)
 			overflow = (_down.getWidth() - Tile.TILE_SIZE) / 2;
 		this.setLocation(x - overflow,y - _down.getHeight() + Tile.TILE_SIZE);
+		_floatTimer = new FloatTimer(container);
+		this.startHovering();
+	}
+	
+	private class FloatTimer extends Timer {
+		
+		private FloatListener _listener;
+		
+		public FloatTimer(JPanel container) {
+			super(75, null);
+			_listener = new FloatListener(this, container);
+			this.addActionListener(_listener);
+		}
+		
+		public void reset() {
+			Character.this.setLocation(Character.this.getX(), Character.this.getY() - _listener.getOffset());
+		}
 
+		private class FloatListener implements java.awt.event.ActionListener {
+			
+			private Timer _timer;
+			private int _cnt;
+			private JPanel _container;
+			private float _offset;
+
+			public FloatListener (Timer t, JPanel container) {
+				_container = container;
+				_timer = t;
+				_cnt = 0;
+				_offset = 0;
+			}
+			
+			public float getOffset() {
+				_cnt = 0;
+				return _offset;
+			}
+
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				
+				_cnt = (_cnt + 1) % 8;
+				
+				switch(_cnt) {
+				
+					case 0:
+						Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1.5);
+						_offset += 1.5;
+						break;
+					case 1:
+						Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1);
+						_offset += 1;
+						break;
+					case 2:
+						Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1);
+						_offset += 1;
+						break;
+					case 3:
+						Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1);
+						_offset += 1;
+						break;
+					case 4:
+						Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1);
+						_offset -= 1;
+						break;
+					case 5:
+						Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1);
+						_offset -= 1;
+						break;
+					case 6:
+						Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1);
+						_offset -= 1;
+						break;
+					case 7:
+						Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1.5);
+						_offset -= 1.5;
+						break;
+				}
+				
+				_container.repaint();
+			}
+		}
 	}
 	
 	/**
@@ -360,6 +441,21 @@ public abstract class Character extends Rectangle{
 	}
 
 	/**
+	 * tells the character to start hovering by starting its internal timer
+	 */
+	public void startHovering() {
+		_floatTimer.start();
+	}
+	
+	/**
+	 * tells the character to stop hovering by stopping its internal timer
+	 */
+	public void stopHovering() {
+		_floatTimer.stop();
+		_floatTimer.reset();
+	}
+	
+	/**
 	 * paintProfile
 	 * @author jeshapir
 	 */
@@ -538,7 +634,6 @@ public abstract class Character extends Rectangle{
 //		for(Entry<Integer, Item> entry : _inventory.entrySet())
 //				System.out.println(entry.getValue()._id);
 		System.out.println("-------------------");
-
 
 	}
 	
