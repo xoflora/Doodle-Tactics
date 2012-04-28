@@ -41,6 +41,36 @@ public class Util {
 	}
 	
 	/**
+	 * returns the intersection of two lists
+	 * @param <T> the type of data of the lists
+	 * @param a the first list
+	 * @param b the second list
+	 * @return the intersection of the two lists
+	 */
+	public static <T> List<T> intersection(List<T> a, List<T> b) {
+		List<T> acc = new ArrayList<T>();
+		for (T t : a)
+			if (b.contains(t))
+				acc.add(t);
+		return acc;
+	}
+	
+	/**
+	 * returns the set difference of two lists
+	 * @param <T> the type of data of the lists
+	 * @param a the subtrahend
+	 * @param b the minuend
+	 * @return the difference of the subtrahend and minuend
+	 */
+	public static <T> List<T> difference(List<T> a, List<T> b) {
+		List<T> acc = new ArrayList<T>();
+		for (T t : a)
+			if (!b.contains(t))
+				acc.add(t);
+		return acc;
+	}
+	
+	/**
 	 * performs the union of an arbitrary number of lists
 	 * @param <T> the parameterized type of the lists
 	 * @param collections the list of lists to union

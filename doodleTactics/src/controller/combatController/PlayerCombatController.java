@@ -32,6 +32,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	
 	private List<Tile> _selectedMovementRange;
 	private List<Tile> _enemyAttackRange;
+	private List<Tile> _characterAttackRange;
 	
 	private List<Tile> _path;
 	private int _pathCost;
@@ -47,6 +48,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		
 		_selectedMovementRange = new ArrayList<Tile>();
 		_enemyAttackRange = new ArrayList<Tile>();
+		_characterAttackRange = new ArrayList<Tile>();
 		_path = new ArrayList<Tile>();
 		_pathCost = 0;
 		
@@ -76,6 +78,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_selectedCharacter = null;
 		_selectedMovementRange = new ArrayList<Tile>();
 		_enemyAttackRange = new ArrayList<Tile>();
+		_characterAttackRange = new ArrayList<Tile>();
 		
 		clearPath();
 		
