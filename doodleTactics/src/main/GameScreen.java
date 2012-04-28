@@ -4,6 +4,7 @@ import graphics.Rectangle;
 import graphics.Terrain;
 
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -174,9 +175,31 @@ public class GameScreen extends Screen<GameScreenController> {
 					repaint();
 				}
 				
+				switch(_cnt) {
+					case 0:
+						_currentCharacter.setRotation(-10);
+						break;
+					case 1:
+						_currentCharacter.setRotation(-5);
+						break;
+					case 2:
+						_currentCharacter.setRotation(0);
+						break;
+					case 3:
+						_currentCharacter.setRotation(5);
+						break;
+					case 4:
+						_currentCharacter.setRotation(10);
+						break;
+					case 5:
+						_currentCharacter.setRotation(0);
+						break;
+				}
+				
 			_cnt+=1;
 			if (_cnt == _numSteps) {
 				_isAnimating = false;
+				System.out.println("end");
 				_timer.stop();
 			}
 		}
@@ -289,6 +312,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	 
 	public void paintComponent(java.awt.Graphics graphics) {
 		Graphics2D g = (Graphics2D) graphics;
+		
 	/*	System.out.println("-------PAINT--------");
 		System.out.println("xMin: " + (_xRef - 1));
 		System.out.println("xMax: " + (_xRef + 22));
@@ -340,8 +364,6 @@ public class GameScreen extends Screen<GameScreenController> {
 			toPaint.setVisible(true);
 			toPaint.paint(g, toPaint.getImage());				
 		}
-		
-
 		
 		//print all the menu items
 		List<MenuItem> items = new LinkedList<MenuItem>();
