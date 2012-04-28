@@ -179,7 +179,7 @@ public class GameScreen extends Screen<GameScreenController> {
 				}
 				
 				for(Character c : charsToPaint) {
-					c.setLocation((c.getX() + (-_deltaX*Tile	.TILE_SIZE / _numSteps)), c.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
+					c.setLocation((c.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), c.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
 					repaint();
 				}
 				
@@ -241,7 +241,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			
 			_isAnimating = true;
 			
-			MapMoveTimer timer = new MapMoveTimer(x,y, false);
+			MapMoveTimer timer = new MapMoveTimer(x,y, true);
 			timer.start();
 			
 			_xRef += x;
@@ -379,8 +379,6 @@ public class GameScreen extends Screen<GameScreenController> {
 		}
 
 		// add the main character to the queue
-		int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
-		_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE - _currentCharacter.getImage().getHeight() + Tile.TILE_SIZE);
 		_characterTerrainQueue.add(_currentCharacter);
 		
 	//	System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");

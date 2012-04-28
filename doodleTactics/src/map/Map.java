@@ -206,6 +206,8 @@ public class Map implements Serializable {
 					main.setFillColor(java.awt.Color.BLACK);
 					main.setSize(main.getImage().getWidth(), main
 							.getImage().getHeight());
+					int overflow = (main.getImage().getWidth() - Tile.TILE_SIZE) / 2;
+					main.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE - main.getImage().getHeight() + Tile.TILE_SIZE);
 				}	
 
 				// Tile case

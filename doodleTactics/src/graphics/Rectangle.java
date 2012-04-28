@@ -6,6 +6,8 @@ import java.util.Comparator;
 
 import javax.swing.JPanel;
 
+import map.Tile;
+
 /**
  * subclass of shape, simply passes the constructor a swing Rectangle 
  * @author jeshapir
@@ -19,10 +21,18 @@ public abstract class Rectangle extends Shape {
 
 		@Override
 		public int compare(Rectangle r1, Rectangle r2) {
+			
+			int xDiff = (int)( r1.getX() - r2.getX());
+			
+			// use the x as the priority in the case that the paint priority is equal
 			if(r1.getPaintPriority() == r2.getPaintPriority()) {
-				return (int)( r1.getX() - r2.getX());
+				return xDiff;
 			} else {
-				return r1.getPaintPriority() - r2.getPaintPriority();
+				
+				int yDiff = r1.getPaintPriority() - r2.getPaintPriority();
+				
+				// check that the difference is at least the size of a tile
+				return (yDiff >= Tile.TILE_SIZE/2) ? yDiff : xDiff; 
 			}
 		}
 	}
