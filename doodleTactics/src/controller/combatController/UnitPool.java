@@ -41,8 +41,8 @@ public class UnitPool extends MenuItem {
 	private static final int DONE_Y = 746;
 	
 	public static final int SIDEBAR_PRIORITY = 1;
-	public static final int CHARACTER_SELECT_PRIORITY = 2;
-	public static final int DONE_BUTTON_PRIORITY = 2;
+	public static final int CHARACTER_SELECT_PRIORITY = 0;
+	public static final int DONE_BUTTON_PRIORITY = 0;
 	
 	public static final int SELECT_BUTTON = MouseEvent.BUTTON1;
 	public static final int ALT_BUTTON = MouseEvent.BUTTON3;
