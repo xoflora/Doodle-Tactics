@@ -73,9 +73,10 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		super.mouseClicked(e);
 		
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
+		System.out.println("Tile: " + t);
 		if (t != null) {
 			Character c = t.getOccupant();
-			
+			System.out.println("Occupant: " + c);
 			if (c != null) {
 				if (c.getAffiliation() == this && !hasMoved(c)) {
 					_selectedTile = t;

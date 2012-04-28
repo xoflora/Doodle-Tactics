@@ -322,20 +322,39 @@ public abstract class Character extends Rectangle{
 	 * @return
 	 */
 	public int getMovementRange(){
-		//TODO
-		return -1;
+		if (_currentStats[SPEED] <= 6)
+			return 3;
+		else if (_currentStats[SPEED] <= 13)
+			return 4;
+		else if (_currentStats[SPEED] <= 21)
+			return 5;
+		else if (_currentStats[SPEED] <= 30)
+			return 6;
+		else if (_currentStats[SPEED] <= 40)
+			return 7;
+		else if (_currentStats[SPEED] <= 51)
+			return 8;
+		else if(_currentStats[SPEED] <= 62)
+			return 9;
+		else
+			return 10;
 	}
 
 	/** 
 	 * computes the attack range of the Character
 	 */
-	public int getMinAttackRange(){
-		//TODO Ryan fills in
-		return 0;
+	public int getMinAttackRange() {
+		if (_equipped != null)
+			return _equipped.getMinAttackRange();
+		else
+			return 1;
 	}
 	
 	public int getMaxAttackRange() {
-		return 1;
+		if (_equipped != null)
+			return _equipped.getMaxAttackRange();
+		else
+			return 1;
 	}
 
 	/**
