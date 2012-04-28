@@ -2,6 +2,9 @@ package event;
 
 import graphics.MenuItem;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -16,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 
 import character.Archer;
 import character.Character;
@@ -33,9 +37,42 @@ public class Dialogue extends Event {
 	private String _filename;
 	private List<String> _phrases;
 	private List<Character> _characters;
-	private MenuItem _dialogueBox;
+	private MenuItem _background;
+	private DialogueBox _db;
 	private MenuItem _profile;
 	private int _currIndex;
+	
+	/**
+	 * Inner class used to paint a DialogueBox
+	 */
+	private class DialogueBox extends MenuItem{
+
+		public DialogueBox(JPanel container, BufferedImage img,
+				BufferedImage other, DoodleTactics dt) {
+			super(container, img, other, dt);
+			System.out.println("INIT DIALOGUE");
+				_background = new MenuItem(_gameScreen,img,img,_dt,0);
+				_background.setVisible(true);
+				_background.setSize(700, 200);
+				_background.setLocation(185,620);
+				_gameScreen.addMenuItem(_background);
+				_gameScreen.repaint();
+
+		}
+		
+		@Override
+		public void paint(java.awt.Graphics2D brush,BufferedImage img) {
+			super.paint(brush, img);
+			paintNext(brush);
+			brush.setFont(new Font("SanSerif",Font.BOLD,25));
+			brush.setColor(new Color(0,0,1));
+			brush.drawString("DoodleTactics", 350,650);
+		}
+
+	}
+	
+	
+	
 	/**
 	 * Creates a DialogueBox by parsing a dialogue csv file in the following format
 	 * name, phrase 1
@@ -70,36 +107,25 @@ public class Dialogue extends Event {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()){
-		case KeyEvent.VK_UP:
-			//handle up
-			System.out.println("UP");
-			break;
 		case KeyEvent.VK_DOWN:
 			//handle down
-			System.out.println("DOWN");
 			_currIndex++;
-			if(_currIndex >= _characters.size())
-				_gameScreen.popControl();
-			else
-				paintNext();
 			break;
 		}
 	}
 	
-	public void paintNext(){
+	public void paintNext(Graphics2D brush){
 		if(_profile != null){
 			_gameScreen.removeMenuItem(_profile);
 			_profile.setVisible(false);
 		}
-
+		System.out.println(_currIndex);
 		BufferedImage profileImg = _characters.get(_currIndex).getProfileImage();
 		_profile = new MenuItem(_gameScreen, profileImg,profileImg,_dt,5);
 		_profile.setVisible(true);
 		_profile.setSize(150, 150);
 		_profile.setLocation(230,635);
-		_gameScreen.addMenuItem(_profile);
-		_gameScreen.repaint();
-
+		_profile.paint(brush,profileImg);
 	}
 
 
@@ -108,7 +134,7 @@ public class Dialogue extends Event {
 		if(_profile != null)
 			_gameScreen.removeMenuItem(_profile);
 
-		_gameScreen.removeMenuItem(_dialogueBox);
+		_gameScreen.removeMenuItem(_background);
 	}
 
 	@Override
@@ -118,15 +144,10 @@ public class Dialogue extends Event {
 			if(_phrases == null)
 				parseMap();
 			System.out.println("Start Dialogue!");
-			BufferedImage img;
+			BufferedImage img = ImageIO.read(new File("src/graphics/menu/dialogue_box.jpg"));
 
-			img = ImageIO.read(new File("src/graphics/menu/dialogue_box.jpg"));
-			_dialogueBox = new MenuItem(_gameScreen,img,img,_dt,0);
-			_dialogueBox.setVisible(true);
-			_dialogueBox.setSize(700, 200);
-			_dialogueBox.setLocation(185,620);
-			_gameScreen.addMenuItem(_dialogueBox);
-			paintNext();
+			_db = new DialogueBox(_gameScreen, img,img,_dt);
+			_gameScreen.addMenuItem(_db);
 			
 		} catch (IOException e) {
 			System.out.println("Invalid Dialogue Box file");
@@ -146,20 +167,6 @@ public class Dialogue extends Event {
 		String line = br.readLine();
 		String[] split;
 		HashMap<String,Character> allChars = _dt.getCharacterMap();
-		System.out.println("ALL CHARS");
-		for(String s : allChars.keySet()){
-			System.out.println(s);
-		}
-		
-		//REMOVE LATER:
-	/*\	allChars.put("Thighs",new Archer(dt.getGameScreen(), 
-				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_back.png", "Dude", 10, 10));
-		allChars.put("Renoir", new Archer(dt.getGameScreen(), 
-				"src/graphics/characters/sampleProfile.gif", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_back.png", "Dude", 10, 10));*/
 		
 		while(line != null){
 			split = line.split(",");

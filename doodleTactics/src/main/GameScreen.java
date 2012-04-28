@@ -3,8 +3,11 @@ import graphics.MenuItem;
 import graphics.Rectangle;
 import graphics.Terrain;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -404,6 +407,8 @@ public class GameScreen extends Screen<GameScreenController> {
 				_menuQueue.add(m);
 			}
 		}
+
+		
 		
 //		if (_currentCharacter != null) {
 //			int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
