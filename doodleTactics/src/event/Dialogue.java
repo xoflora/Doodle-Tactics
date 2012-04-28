@@ -29,7 +29,8 @@ import main.DoodleTactics;
  * a dialogue instance controls a dialogue between characters
  */
 public class Dialogue extends Event {
-
+	
+	private String _filename;
 	private List<String> _phrases;
 	private List<Character> _characters;
 	private MenuItem _dialogueBox;
@@ -48,40 +49,7 @@ public class Dialogue extends Event {
 	public Dialogue(DoodleTactics dt,  String filename)
 			throws InvalidEventException, IOException, FileNotFoundException{
 		super(dt);
-		BufferedReader br = new BufferedReader(new FileReader(filename));
-		_phrases = new LinkedList<String>();
-		_characters = new LinkedList<Character>();
-		String line = br.readLine();
-		String[] split;
-		HashMap<String,Character> allChars = dt.getCharacterMap();
-		
-		//REMOVE LATER:
-		allChars.put("Thighs",new Archer(dt.getGameScreen(), 
-				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_back.png", "Dude", 10, 10));
-		allChars.put("Renoir", new Archer(dt.getGameScreen(), 
-				"src/graphics/characters/sampleProfile.gif", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_back.png", "Dude", 10, 10));
-		
-		while(line != null){
-			split = line.split(",");
-			if(split.length != 2){
-				throw new InvalidEventException(line);	
-			}
-			Character c;
-			//Retrieve character from Hashmap
-			if(allChars.containsKey(split[0].trim()))
-				c = allChars.get(split[0].trim());
-			else
-				//throw error if Character not found
-				throw new InvalidEventException(split[0], line);
-			_characters.add(c);
-
-			_phrases.add(split[1].trim());
-			line = br.readLine();
-		}
+		_filename = filename;
 	}
 
 	public void print(){
@@ -145,10 +113,13 @@ public class Dialogue extends Event {
 
 	@Override
 	public void take() {
-		System.out.println("Start Dialogue!");
-		BufferedImage img;
 		_currIndex = 0;
 		try {
+			if(_phrases == null)
+				parseMap();
+			System.out.println("Start Dialogue!");
+			BufferedImage img;
+
 			img = ImageIO.read(new File("src/graphics/menu/dialogue_box.jpg"));
 			_dialogueBox = new MenuItem(_gameScreen,img,img,_dt,0);
 			_dialogueBox.setVisible(true);
@@ -159,10 +130,55 @@ public class Dialogue extends Event {
 			
 		} catch (IOException e) {
 			System.out.println("Invalid Dialogue Box file");
+		} catch (InvalidEventException e) {
+			System.out.println("Invalid Event");
 		}
 		
 //		_gameScreen.popControl();
 		//display Dialogue box and start 		
+	}
+	
+	public void parseMap() throws InvalidEventException,IOException{
+		_phrases = new LinkedList<String>();
+		_characters = new LinkedList<Character>();
+
+		BufferedReader br = new BufferedReader(new FileReader(_filename));
+		String line = br.readLine();
+		String[] split;
+		HashMap<String,Character> allChars = _dt.getCharacterMap();
+		System.out.println("ALL CHARS");
+		for(String s : allChars.keySet()){
+			System.out.println(s);
+		}
+		
+		//REMOVE LATER:
+	/*\	allChars.put("Thighs",new Archer(dt.getGameScreen(), 
+				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/warrior_back.png", "Dude", 10, 10));
+		allChars.put("Renoir", new Archer(dt.getGameScreen(), 
+				"src/graphics/characters/sampleProfile.gif", "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/warrior_back.png", "Dude", 10, 10));*/
+		
+		while(line != null){
+			split = line.split(",");
+			if(split.length != 2){
+				throw new InvalidEventException(line);	
+			}
+			Character c;
+			//Retrieve character from Hashmap
+			if(allChars.containsKey(split[0].trim()))
+				c = allChars.get(split[0].trim());
+			else
+				//throw error if Character not found
+				throw new InvalidEventException(split[0], line);
+			_characters.add(c);
+
+			_phrases.add(split[1].trim());
+			line = br.readLine();
+		}
+
 	}
 
 
