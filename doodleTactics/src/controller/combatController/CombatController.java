@@ -29,6 +29,7 @@ public abstract class CombatController extends GameScreenController {
 		super(dt);
 		
 		_units = units;
+		
 		_enemyAffiliations = new ArrayList<CombatController>();
 		_hoveredTile = null;
 		_hasMoved = new HashMap<Character, Boolean>();

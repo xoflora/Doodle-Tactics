@@ -18,10 +18,14 @@ public class RandomBattleAI extends CombatController {
 	
 
 	@Override
-	public void release() { }
+	public void release() {
+		super.release();
+	}
 
 	@Override
-	public void take() { }
+	public void take() {
+		super.take();
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) { }

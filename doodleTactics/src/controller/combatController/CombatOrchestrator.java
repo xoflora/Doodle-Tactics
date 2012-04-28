@@ -75,9 +75,7 @@ public class CombatOrchestrator extends GameScreenController {
 	public void take() {
 		super.take();
 		if (_setup) {	//swap factions
-			System.out.println("orchestrator taking control; " + _factions.isEmpty());
 			if (_factionCycle.hasNext()) {
-				System.out.println("YYAAAYYY");
 				_gameScreen.pushControl(_factionCycle.next());
 			}
 			else if (!_factions.isEmpty()) {	//INCORRECT CONDITION - swap for not win/loss condition
@@ -89,7 +87,6 @@ public class CombatOrchestrator extends GameScreenController {
 		}
 		else {
 			_gameScreen.pushControl(new PlayerSetup(_dt, _gameScreen.getValidSetupTiles(_numUnits + NUM_EXTRA_SETUP_SPACES)));
-		//	_gameScreen.pushControl(_p);
 			_setup = true;
 			System.out.println("hi" + _setup);
 		}

@@ -68,12 +68,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_cacheMovementRange = null;
 		_cacheAttackRange = null;
 		
-		try {
-			_pool = new UnitPool(_dt, _gameScreen, this, _units);
-			_finalized = false;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		_pool = null;
 		
 		clear();
 	}
@@ -310,8 +305,12 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * begins the player's turn
 	 */
 	public void take() {
-		// TODO Auto-generated method stub
 		super.take();
+		_units = _dt.getParty();
+		for (Character c : _units) {
+			c.setAffiliation(this);
+			System.out.println(c);
+		}
 		System.out.println("Player phase!");
 		
 		initialize();
@@ -362,7 +361,12 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * 
 	 */
 	public void initialize() {
-		_pool.setInUse(true);
+		try {
+			_pool = new UnitPool(_dt, _gameScreen, this, _units);
+			_pool.setInUse(true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
