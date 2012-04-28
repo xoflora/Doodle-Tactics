@@ -154,7 +154,7 @@ public class OverworldController extends GameScreenController {
 				break;
 			case 'f':
 				try {
-					Process foodler = Runtime.getRuntime().exec("google-chrome www.foodler.com");
+					Runtime.getRuntime().exec("google-chrome www.foodler.com");
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}

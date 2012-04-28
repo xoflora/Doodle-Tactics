@@ -2,10 +2,8 @@ package controller.combatController;
 
 import graphics.MenuItem;
 
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import util.Util;
@@ -25,7 +23,6 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	private List<Tile> _validTiles;
 	private List<Character> _units;
 	private List<Character> _toPlace;
-	private List<Character> _inPlace;
 	private Tile _selectedTile;
 	private UnitPool _pool;
 	private boolean _finalized;
@@ -37,8 +34,8 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		super(dt);
 		_validTiles = validTiles;
 		_units = _dt.getParty();
+		
 		_toPlace = Util.clone(_units);
-		_inPlace = new ArrayList<Character>();
 		
 		_selectedCharacter = null;
 		_selectedFromPool = false;
@@ -90,30 +87,6 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		MenuItem m = _gameScreen.checkContains(e.getPoint());
 		boolean valid = _validTiles.contains(t);
-		
-	/*	if (_validTiles.contains(t)) {
-			_selectedTile = t;
-			
-			System.out.println(e.getButton());
-			Character occupant = t.getOccupant();
-			if (e.getButton() == MouseEvent.BUTTON1) {	//select the character
-				
-			}
-			else if (e.getButton() == MouseEvent.BUTTON3) {	//swap characters
-				if (_selectedFromPool) {
-					removeUnitFromPool(_selectedCharacter);
-					if (occupant != null)
-						addUnitToPool(occupant);
-				}
-				else {
-					_selectedTile.setOccupant(occupant);
-					t.setOccupant(_selectedCharacter);
-				}
-				
-				_selectedCharacter = null;
-				_selectedFromPool = false;
-			}
-		}	*/
 		
 		if (e.getButton() == UnitPool.SELECT_BUTTON) {
 			if (valid && m == null) {
