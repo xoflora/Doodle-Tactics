@@ -128,8 +128,8 @@ public class Dialogue extends Event {
 			img = ImageIO.read(new File("src/graphics/menu/dialogue_box.jpg"));
 			MenuItem dialogueBox = new MenuItem(_gameScreen,img,img,_dt,5);
 			dialogueBox.setVisible(true);
-			dialogueBox.setSize(525, 200);
-			dialogueBox.setLocation(350,620);
+			dialogueBox.setSize(700, 200);
+			dialogueBox.setLocation(185,620);
 			_gameScreen.addMenuItem(dialogueBox);
 		} catch (IOException e) {
 			System.out.println("Invalid Dialogue Box file");
