@@ -756,7 +756,8 @@ public class Map implements Serializable {
 			heapPositions.put(consider, -1);
 
 			if (validTiles.size() < num) {
-				validTiles.add(consider);
+				if (consider != source)
+					validTiles.add(consider);
 				searchTile(consider, heap, distances, heapPositions, previous,
 						true, true);
 			}

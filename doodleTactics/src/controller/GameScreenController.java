@@ -38,6 +38,17 @@ public abstract class GameScreenController extends Controller {
 	}
 	
 	@Override
+	public void take() {
+		_gameScreen.repaint();
+	}
+	
+	@Override
+	public void release() {
+		if (_hoveredTile != null)
+			_hoveredTile.setHovered(false);
+	}
+	
+	@Override
 	public GameScreen getScreen() {
 		return _gameScreen;
 	}

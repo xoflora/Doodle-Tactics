@@ -82,15 +82,22 @@ public class UnitPool extends MenuItem {
 	 * @author rroelke
 	 */
 	private class DoneButton extends MenuItem {
+		
+		private boolean _complete;
+		
 		public DoneButton(JPanel container, BufferedImage defltPath,
 				BufferedImage hoveredPath, DoodleTactics dt) {
 			super(container, defltPath, hoveredPath, dt, DONE_BUTTON_PRIORITY);
+			_complete = false;
 			setVisible(true);
 		}
 		
 		@Override
 		public void activate(int type) {
-			_source.finalize();
+			if (!_complete) {
+				_complete = true;
+				_source.finalize();
+			}
 		}
 	}
 	
@@ -155,7 +162,7 @@ public class UnitPool extends MenuItem {
 	public void paint(Graphics2D brush, BufferedImage img) {
 		super.paint(brush, img);
 		
-		_done.paint(brush, _done.getImage());
+	//	_done.paint(brush, _done.getImage());
 		
 		int x = DEFAULT_X + CHARACTER_OFFSET_X;
 		int y = DEFAULT_Y + CHARACTER_OFFSET_Y;
@@ -163,7 +170,7 @@ public class UnitPool extends MenuItem {
 		for (Character c : _unitPool.keySet()) {
 			CharacterSelect draw = _unitPool.get(c);
 			draw.setLocation(x, y);
-			draw.paint(brush, draw.getImage());
+		//	draw.paint(brush, draw.getImage());
 			
 			y += OFFSET_BETWEEN_CHARACTERS;
 		}

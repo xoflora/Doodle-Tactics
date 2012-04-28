@@ -18,6 +18,7 @@ public class CombatOrchestrator extends GameScreenController {
 	private boolean _setup;
 	
 	private int _numUnits;
+	private static final int NUM_EXTRA_SETUP_SPACES = 0;
 	
 	private PlayerCombatController _p;
 	
@@ -41,6 +42,8 @@ public class CombatOrchestrator extends GameScreenController {
 		for (CombatController e : enemies)
 			e.setEnemyAffiliations(partners);
 		
+		System.out.println();
+		
 		_numUnits = numUnits;
 		_factionCycle = _factions.listIterator(); 
 	}
@@ -53,6 +56,8 @@ public class CombatOrchestrator extends GameScreenController {
 	public void release() {
 		// TODO determine whether the combat is a win or a loss and act accordingly
 		//	if combat is a loss, swap screens for the "game over" screen
+		System.out.println("Orchestrator releasing for some reason");
+		super.release();
 	}
 
 	@Override
@@ -61,20 +66,25 @@ public class CombatOrchestrator extends GameScreenController {
 	 * signifies the beginning of combat, or end of a turn
 	 */
 	public void take() {
+		super.take();
 		if (_setup) {	//swap factions
-			if (_factionCycle.hasNext())
+			System.out.println("orchestrator taking control");
+			if (_factionCycle.hasNext()) {
+				System.out.println("YYAAAYYY");
 				_gameScreen.pushControl(_factionCycle.next());
+			}
 			else if (!_factions.isEmpty()) {	//INCORRECT CONDITION - swap for not win/loss condition
 				_factionCycle = _factions.listIterator();
 				take();
 			}
-			else	//combat has ended - win/loss condition
-				release();
+	//		else	//combat has ended - win/loss condition
+	//			_gameScreen.popControl();
 		}
 		else {
-			_gameScreen.pushControl(new PlayerSetup(_dt, _gameScreen.getValidSetupTiles(_numUnits + 5)));
+			_gameScreen.pushControl(new PlayerSetup(_dt, _gameScreen.getValidSetupTiles(_numUnits + NUM_EXTRA_SETUP_SPACES)));
 		//	_gameScreen.pushControl(_p);
 			_setup = true;
+			System.out.println("hi" + _setup);
 		}
 	}
 	

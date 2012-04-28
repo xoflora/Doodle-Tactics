@@ -57,7 +57,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	private int _xRef;
 	private int _yRef;
 	private boolean _isAnimating;
-	private GameMenuController _gameMenuController;
+//	private GameMenuController _gameMenuController;
 	private PriorityQueue<Rectangle> _characterTerrainQueue; // the list of characters / images to render on the screen
 	private PriorityQueue<MenuItem> _menuQueue;
 	private List<Terrain> _terrainToPaint;
@@ -68,7 +68,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		MAP_WIDTH = 20;
 		MAP_HEIGHT = 20;
 		
-		_gameMenuController = _dt.getGameMenuScreen().getController();
+	//	_gameMenuController = _dt.getGameMenuScreen().getController();
 		_characterTerrainQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
 		_menuQueue = new PriorityQueue<MenuItem>(5, new Rectangle.RectangleComparator());
 		
@@ -283,6 +283,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		boolean b;
 		synchronized(_menuQueue) {
 			b = _menuQueue.remove(m);
+			m.setVisible(true);
 		}
 		return b;
 	}

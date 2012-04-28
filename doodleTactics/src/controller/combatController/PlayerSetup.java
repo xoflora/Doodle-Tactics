@@ -65,6 +65,8 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		for (Tile t : _validTiles) {
 			t.setInMovementRange(false);
 		}
+		System.out.println("setup released");
+		super.release();
 	}
 
 	@Override
@@ -75,6 +77,8 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		for (Tile t : _validTiles) {
 			t.setInMovementRange(true);
 		}
+		
+		super.take();
 	}
 
 	@Override
@@ -147,16 +151,16 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 					}
 				}
 				else if (_selectedCharacter != null) {
-					_selectedTile.setOccupant(t.getOccupant());
+					Character c = t.getOccupant();
+					_selectedTile.setOccupant(c);
 					t.setOccupant(_selectedCharacter);
 					_selectedCharacter.setLocation(t.getX(), t.getY());
+					if (c != null)
+						c.setLocation(_selectedTile.getX(), _selectedTile.getY());
 				}
 			}
-			else if (m == null)
-				clearSelection();
 			
-			_selectedCharacter = null;
-			_selectedFromPool = false;
+			clearSelection();
 			
 			System.out.println(_selectedCharacter + " " + _selectedFromPool);
 		}
@@ -234,7 +238,8 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 
 	@Override
 	public void finalize() {
+		System.out.println("LOL");
 		_pool.setInUse(false);
-		release();
+		_gameScreen.popControl();
 	}
 }
