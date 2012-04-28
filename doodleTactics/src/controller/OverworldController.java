@@ -139,10 +139,10 @@ public class OverworldController extends GameScreenController {
 					newTile = _gameScreen.getMap().getTile(currentX + 1, currentY);
 					break;
 				case UP:
-					newTile = _gameScreen.getMap().getTile(currentX, currentY + 1);
+					newTile = _gameScreen.getMap().getTile(currentX, currentY - 1);
 					break;
 				case DOWN:
-					newTile = _gameScreen.getMap().getTile(currentX, currentY - 1);
+					newTile = _gameScreen.getMap().getTile(currentX, currentY + 1);
 					break;
 				}
 				

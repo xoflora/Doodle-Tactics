@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import character.Archer;
 import character.Character;
 
 import main.DoodleTactics;
@@ -44,6 +45,17 @@ public class Dialogue extends Event {
 		String line = br.readLine();
 		String[] split;
 		HashMap<String,Character> allChars = dt.getCharacterMap();
+		
+		//REMOVE LATER:
+		allChars.put("Thighs",new Archer(dt.getGameScreen(), 
+				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/warrior_back.png", "Dude", 10, 10));
+		allChars.put("Renoir", new Archer(dt.getGameScreen(), 
+				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/warrior_back.png", "Dude", 10, 10));
+		
 		while(line != null){
 			split = line.split(",");
 			if(split.length != 2){
@@ -105,6 +117,9 @@ public class Dialogue extends Event {
 	@Override
 	public void take() {
 		System.out.println("Start Dialogue!");
+		
+		
+		_gameScreen.popControl();
 		//display Dialogue box and start 		
 	}
 
