@@ -46,11 +46,15 @@ public class Dialogue extends Event {
 		HashMap<String,Character> allChars = dt.getCharacterMap();
 		while(line != null){
 			split = line.split(",");
-			if(split.length != 2)
-				throw new InvalidEventException(line);
-			Character c = allChars.get(split[0].trim());
-			//throw error if Character not found
-			if(c == null)
+			if(split.length != 2){
+				throw new InvalidEventException(line);	
+			}
+			Character c;
+			//Retrieve character from Hashmap
+			if(allChars.containsKey(split[0].trim()))
+				c = allChars.get(split[0].trim());
+			else
+				//throw error if Character not found
 				throw new InvalidEventException(split[0], line);
 			_characters.add(c);
 

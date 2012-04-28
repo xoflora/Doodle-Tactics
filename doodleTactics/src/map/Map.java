@@ -209,8 +209,8 @@ public class Map implements Serializable {
 				}	
 
 				// Tile case
-				// 7 if no event speciifed, 8 otherwise
-				else if ((splitLine.length == 7) || splitLine.length == 8) {
+				// 7 if no event specified, 8 otherwise
+				else if (((splitLine.length == 7) && Integer.parseInt(splitLine[6]) == NO_EVENT) || splitLine.length == 8) {
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
 					

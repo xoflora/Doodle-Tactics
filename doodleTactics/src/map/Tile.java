@@ -101,7 +101,7 @@ public class Tile extends graphics.Rectangle {
 		
 		_event  = null;
 		_interactible = false;
-		_enterEvent = true;
+		_enterEvent = false;
 		
 	}
 	
