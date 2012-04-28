@@ -1,6 +1,7 @@
 package character;
 
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
@@ -112,6 +113,7 @@ public abstract class Character extends Rectangle{
 		if(_down.getWidth() - Tile.TILE_SIZE <= 25.0)
 			overflow = (_down.getWidth() - Tile.TILE_SIZE) / 2;
 		this.setLocation(x - overflow,y - _down.getHeight() + Tile.TILE_SIZE);
+
 	}
 	
 	/**
@@ -478,6 +480,13 @@ public abstract class Character extends Rectangle{
 			return false;
 
 		return true;
+	}
+	
+	@Override 
+	public void paint(java.awt.Graphics2D brush, BufferedImage img) {
+		brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		super.paint(brush,img);
+		brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 	}
 	
 	/**
