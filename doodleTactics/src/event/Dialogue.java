@@ -32,6 +32,9 @@ public class Dialogue extends Event {
 
 	private List<String> _phrases;
 	private List<Character> _characters;
+	private MenuItem _dialogueBox;
+	private MenuItem _profile;
+	private int _currIndex;
 	/**
 	 * Creates a DialogueBox by parsing a dialogue csv file in the following format
 	 * name, phrase 1
@@ -58,7 +61,7 @@ public class Dialogue extends Event {
 				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_back.png", "Dude", 10, 10));
 		allChars.put("Renoir", new Archer(dt.getGameScreen(), 
-				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
+				"src/graphics/characters/sampleProfile.gif", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_back.png", "Dude", 10, 10));
 		
@@ -97,7 +100,7 @@ public class Dialogue extends Event {
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
+	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()){
 		case KeyEvent.VK_UP:
 			//handle up
@@ -106,6 +109,22 @@ public class Dialogue extends Event {
 		case KeyEvent.VK_DOWN:
 			//handle down
 			System.out.println("DOWN");
+			if(_currIndex >= _characters.size())
+				_gameScreen.popControl();
+			else{
+				_currIndex++;
+				//show current dialogue
+				BufferedImage profileImg = _characters.get(_currIndex).getProfileImage();
+				if(_profile != null)
+					_gameScreen.removeMenuItem(_profile);
+				_profile = new MenuItem(_gameScreen, profileImg,profileImg,_dt,5);
+				_profile.setVisible(true);
+				_profile.setSize(150, 150);
+				_profile.setLocation(230,635);
+				_gameScreen.addMenuItem(_profile);
+				_gameScreen.repaint();
+
+			}
 			break;
 		}
 	}
@@ -117,20 +136,30 @@ public class Dialogue extends Event {
 
 	@Override
 	public void release() {
-		
+		_gameScreen.removeMenuItem(_dialogueBox);
+		if(_profile != null)
+			_gameScreen.removeMenuItem(_profile);
 	}
 
 	@Override
 	public void take() {
 		System.out.println("Start Dialogue!");
 		BufferedImage img;
+		_currIndex = 0;
 		try {
 			img = ImageIO.read(new File("src/graphics/menu/dialogue_box.jpg"));
-			MenuItem dialogueBox = new MenuItem(_gameScreen,img,img,_dt,5);
-			dialogueBox.setVisible(true);
-			dialogueBox.setSize(700, 200);
-			dialogueBox.setLocation(185,620);
-			_gameScreen.addMenuItem(dialogueBox);
+			_dialogueBox = new MenuItem(_gameScreen,img,img,_dt,0);
+			_dialogueBox.setVisible(true);
+			_dialogueBox.setSize(700, 200);
+			_dialogueBox.setLocation(185,620);
+			_gameScreen.addMenuItem(_dialogueBox);
+			MenuItem _profile = new MenuItem(_gameScreen,_characters.get(_currIndex).getProfileImage(),_characters.get(_currIndex).getProfileImage(),_dt,5);
+			_profile.setVisible(true);
+			_profile.setSize(150, 150);
+			_profile.setLocation(230,635);
+			_gameScreen.addMenuItem(_profile);
+			_gameScreen.repaint();
+			
 		} catch (IOException e) {
 			System.out.println("Invalid Dialogue Box file");
 		}
