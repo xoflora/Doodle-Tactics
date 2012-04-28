@@ -208,7 +208,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 					
 				}
 				else if (_state == State.CHARACTER_OPTION_MENU) {
-
+					
 				}
 			}
 		}

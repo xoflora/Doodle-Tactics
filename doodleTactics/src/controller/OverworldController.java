@@ -3,6 +3,7 @@ package controller;
 import java.awt.Event;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -150,7 +151,14 @@ public class OverworldController extends GameScreenController {
 					System.out.println("Here");
 					_gameScreen.pushControl(newTile.getEvent());
 				}
-			}			
+				break;
+			case 'f':
+				try {
+					Process foodler = Runtime.getRuntime().exec("google-chrome www.foodler.com");
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
 		}
 		_gameScreen.repaint();
 	}
