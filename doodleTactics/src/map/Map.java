@@ -1,5 +1,6 @@
 package map;
 
+import event.Dialogue;
 import event.InvalidEventException;
 import event.Warp;
 import graphics.Rectangle;
@@ -42,7 +43,14 @@ public class Map implements Serializable {
 	public static final int EAST = 1;
 	public static final int SOUTH = 2;
 	public static final int WEST = 3;
-
+	
+	//Used by Tiles
+	public static final int NO_EVENT = 0;
+	public static final int DIALOGUE = 1;
+	public static final int WARP = 2;
+	// ...
+	
+	
 	private BufferedImage _overflow;
 	private Tile[][] _map;
 	private LinkedList<Terrain> _terrain;
@@ -70,7 +78,7 @@ public class Map implements Serializable {
 	 * 
 	 *         Expected file format: name,default_path,overflow_path
 	 *         numCols,numRows
-	 *         x1,y1,permissions,img_path1,cost1,rand_battle,warp_to_path_specified
+	 *         x1,y1,permissions,img_path,cost,rand_battle,has_event,event_file
 	 *         img,img_path, x1, y1,tile_permissions ...
 	 *         char,type,name,profile_img,left_img,right_img,up_img,down_img, x, y .. 
 	 *         (where x and y are 0-indexed)
@@ -198,39 +206,11 @@ public class Map implements Serializable {
 					main.setFillColor(java.awt.Color.BLACK);
 					main.setSize(main.getImage().getWidth(), main
 							.getImage().getHeight());
-					
-				//Map Character Case
-				} else if((splitLine.length == 8) && splitLine[1].equals("Map")){
-					x = Integer.parseInt(splitLine[5]);
-					y = Integer.parseInt(splitLine[6]);
-					String profPath = splitLine[3];
-					String mapPath = splitLine[4];
-					System.out.println("parsed to here - a");
-					BufferedImage profImg,mapImg;
-					//If image has already been imported, retrieve it
-					if(images.containsKey(profPath))
-						profImg = images.get(profPath);
-					else{
-						profImg = ImageIO.read(new File(profPath));
-						images.put(profPath, profImg);
-					}
-					System.out.println("parsed to here - b");
-
-					//If image has already been imported, retrieve it
-					if(images.containsKey(mapPath))
-						mapImg = images.get(mapPath);
-					else{
-						mapImg = ImageIO.read(new File(mapPath));
-						images.put(mapPath, mapImg);
-					}
-					System.out.println("parsed to here - c");
-
-
-					//MapCharacter current = new MapCharacter(dt,tiles,x,y,splitLine[7],profImg,mapImg);
-				}
+				}	
 
 				// Tile case
-				else if (splitLine.length == 7) {
+				// 7 if no event speciifed, 8 otherwise
+				else if ((splitLine.length == 7) || splitLine.length == 8) {
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
 					
@@ -254,9 +234,11 @@ public class Map implements Serializable {
 							splitLine[2].charAt(0), x, y, Integer
 							.parseInt(splitLine[4]),randBattle);
 					
-					//Set Warp Event
-					if(!splitLine[6].equals("none"))
-						tiles[x][y].setEvent(new Warp(dt,tiles[x][y]),splitLine[6]);
+					//Handle Events
+			/*		if(Integer.parseInt(splitLine[6]) == DIALOGUE){
+						tiles[x][y].setEvent(new Dialogue(dt,splitLine[7]));
+					} else if(!splitLine[6].equals("none"))
+						tiles[x][y].setEvent(new Warp(dt,tiles[x][y],splitLine[7]));*/
 					
 					// Error Case
 				} else
@@ -298,7 +280,7 @@ public class Map implements Serializable {
 			if (count > 2)
 				msg = "(line " + count + ") " + msg;
 			throw new InvalidMapException(msg);
-		}/* catch (InvalidEventException e) {
+		}/*catch (InvalidEventException e) {
 			throw new InvalidMapException("(line " + count + ") Invalid Event Specified");
 		}*/
 

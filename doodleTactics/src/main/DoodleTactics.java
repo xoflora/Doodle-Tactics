@@ -51,6 +51,7 @@ public class DoodleTactics extends JFrame {
 
 		_gameMenu = new GameMenuScreen(this);
 		_game = new GameScreen(this);
+		_game.setMap("src/tests/data/testMapDemo");
 		_mainMenu = new MainMenuScreen(this);
 		
 		_screens = new Stack<Screen<?>>();
@@ -59,6 +60,7 @@ public class DoodleTactics extends JFrame {
 		this.setFocusable(false);
 		this.setResizable(false);
 		this.setVisible(true);
+
 		
 		Archer _char1 = new Archer(_game, 
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
