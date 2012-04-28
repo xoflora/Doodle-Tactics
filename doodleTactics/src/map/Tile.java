@@ -48,13 +48,15 @@ public class Tile extends graphics.Rectangle {
 	private static final float INTERSECTION_OPACITY = .4f;
 	
 	private static final Color DEFAULT_COLOR = Color.WHITE;
-	private static final Color ATTACK_RANGE_COLOR = Color.RED;
+	private static final Color ENEMY_ATTACK_RANGE_COLOR = Color.RED;
 	private static final Color MOVEMENT_RANGE_COLOR = Color.BLUE;
 	private static final Color MOUSEOVER_COLOR = Color.GREEN;
 	private static final Color MOVEMENT_PATH_COLOR = Color.PINK;
-	private static final Color MOVEMENT_ATTACK_INTERSECTION_COLOR = Util.mixColors(MOVEMENT_RANGE_COLOR, ATTACK_RANGE_COLOR);
+	private static final Color PLAYER_ATTACK_RANGE_COLOR = Util.mixColors(Color.ORANGE, Color.RED);
+	private static final Color MOVEMENT_ATTACK_INTERSECTION_COLOR = Util.mixColors(MOVEMENT_RANGE_COLOR, ENEMY_ATTACK_RANGE_COLOR);
 	private static final Color MOVEMENT_MOUSE_INTERSECTION_COLOR = Util.mixColors(MOVEMENT_RANGE_COLOR, MOUSEOVER_COLOR);
-	private static final Color ATTACK_MOUSE_INTERSECTION_COLOR = Util.mixColors(ATTACK_RANGE_COLOR, MOUSEOVER_COLOR);
+	private static final Color ATTACK_MOUSE_INTERSECTION_COLOR = Util.mixColors(ENEMY_ATTACK_RANGE_COLOR, MOUSEOVER_COLOR);
+	private static final Color ATTACK_INTERSECTION_COLOR = Color.BLACK;
 	private static final Color INTERSECTION_COLOR = Color.MAGENTA;
 	
 	private boolean[] _canMove;
@@ -74,6 +76,7 @@ public class Tile extends graphics.Rectangle {
 	private boolean _inAttackRange;
 	private boolean _hovered;
 	private boolean _inMovementPath;
+	private boolean _inPlayerAttackRange;
 	
 	private boolean _interactible;
 	private boolean _enterEvent;
@@ -99,9 +102,15 @@ public class Tile extends graphics.Rectangle {
 		_x = x;
 		_y = y;
 		
+		_inMovementRange = false;
+		_inAttackRange = false;
+		_hovered = false;
+		_inMovementPath = false;
+		_inPlayerAttackRange = false;
+
 		_opacity = DEFAULT_OPACITY;
 		_overlay = DEFAULT_COLOR;
-		
+
 		_event  = null;
 		_interactible = false;
 		_enterEvent = false;
@@ -372,6 +381,12 @@ public class Tile extends graphics.Rectangle {
 		updateOverlay();
 	}
 	
+	public void setInPlayerAttackRange(boolean b) {
+		_inPlayerAttackRange = b;
+		
+		updateOverlay();
+	}
+	
 	/**
 	 * updates the opacity and color overlay of the tile
 	 */
@@ -422,8 +437,8 @@ public class Tile extends graphics.Rectangle {
 				}
 			}
 		}	*/
-		
-		
+		else if (_inPlayerAttackRange && _inAttackRange)
+			_overlay = ATTACK_INTERSECTION_COLOR;
 		else if (_hovered && _inMovementRange && _inAttackRange)
 			_overlay = INTERSECTION_COLOR;
 		else if (_hovered && _inMovementRange)
@@ -435,12 +450,14 @@ public class Tile extends graphics.Rectangle {
 		else {
 			_opacity = OVERLAY_OPACITY;
 			if (_inAttackRange)
-				_overlay = ATTACK_RANGE_COLOR;
+				_overlay = ENEMY_ATTACK_RANGE_COLOR;
 			else if (_inMovementRange)
 				_overlay = MOVEMENT_RANGE_COLOR;
 			else if (_hovered) {
 				_overlay = MOUSEOVER_COLOR;
 			}
+			else if (_inPlayerAttackRange)
+				_overlay = PLAYER_ATTACK_RANGE_COLOR;
 			else {
 				_overlay = DEFAULT_COLOR;
 				_opacity = DEFAULT_OPACITY;
