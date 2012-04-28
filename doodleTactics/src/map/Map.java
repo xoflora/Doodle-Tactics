@@ -195,6 +195,8 @@ public class Map implements Serializable {
 					if (toAdd != null) { 
 						chars.add(toAdd);
 						target.setOccupant(toAdd);
+						System.out.println("Adding Character: " + splitLine[2]);
+						dt.addCharacterToMap(toAdd, splitLine[2]);
 					}
 					
 				// Main character case
@@ -206,6 +208,8 @@ public class Map implements Serializable {
 					main.setFillColor(java.awt.Color.BLACK);
 					main.setSize(main.getImage().getWidth(), main
 							.getImage().getHeight());
+					dt.addCharacterToMap(main, splitLine[2]);
+
 				}	
 
 				// Tile case

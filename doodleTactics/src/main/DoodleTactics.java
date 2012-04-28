@@ -199,6 +199,14 @@ public class DoodleTactics extends JFrame {
 		return _allChars;
 	}
 	
+	/**
+	 * 
+	 * Adds a Name/Character pair to the Character Map
+	 */
+	public void addCharacterToMap(Character c, String name){
+		_allChars.put(name, c);
+	}
+	
 	public GameScreen getGameScreen() {
 		return _game;
 	}
