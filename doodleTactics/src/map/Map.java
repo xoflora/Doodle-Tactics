@@ -235,10 +235,15 @@ public class Map implements Serializable {
 							.parseInt(splitLine[4]),randBattle);
 					
 					//Handle Events
-			/*		if(Integer.parseInt(splitLine[6]) == DIALOGUE){
+					if(Integer.parseInt(splitLine[6]) == DIALOGUE){
 						tiles[x][y].setEvent(new Dialogue(dt,splitLine[7]));
-					} else if(!splitLine[6].equals("none"))
-						tiles[x][y].setEvent(new Warp(dt,tiles[x][y],splitLine[7]));*/
+						tiles[x][y].setInteractible();
+					} else if(Integer.parseInt(splitLine[6]) == WARP){
+						tiles[x][y].setEvent(new Warp(dt,tiles[x][y],splitLine[7]));
+						tiles[x][y].setTriggersEvent();
+					}
+					//add others in the future perhaps
+					
 					
 					// Error Case
 				} else
@@ -280,9 +285,9 @@ public class Map implements Serializable {
 			if (count > 2)
 				msg = "(line " + count + ") " + msg;
 			throw new InvalidMapException(msg);
-		}/*catch (InvalidEventException e) {
+		}catch (InvalidEventException e) {
 			throw new InvalidMapException("(line " + count + ") Invalid Event Specified");
-		}*/
+		}
 
 	}
 

@@ -65,7 +65,7 @@ public class Tile extends graphics.Rectangle {
 	private float _opacity;
 	private Color _overlay;
 	
-	private Event _warpEvent;
+	private Event _event;
 	private Character _character;
 	private String _warpFilePath;
 	
@@ -73,6 +73,7 @@ public class Tile extends graphics.Rectangle {
 	private boolean _inAttackRange;
 	private boolean _hovered;
 	private boolean _interactible;
+	private boolean _enterEvent;
 	
 	/**
 	 * Constructor
@@ -98,7 +99,9 @@ public class Tile extends graphics.Rectangle {
 		_opacity = DEFAULT_OPACITY;
 		_overlay = DEFAULT_COLOR;
 		
-		_warpEvent  = null;
+		_event  = null;
+		_interactible = false;
+		_enterEvent = true;
 		
 	}
 	
@@ -250,13 +253,18 @@ public class Tile extends graphics.Rectangle {
 	}
 	
 
-	/**
-	 * @return true if this tile triggers an event and false otherwise
-	 */
-	public boolean hasEvent(){
-		return _warpEvent != null;
+	public void setEnterEvent(){
+		_enterEvent = true;
 	}
 	
+	public void setInteractible(){
+		_interactible = true;
+	}
+	
+	public boolean hasEnterEvent(){
+		return _enterEvent;
+	}
+		
 	/**
 	 * @return true if the tile is interactible (Dialogue of some form starts upon hitting space)
 	 */
@@ -269,14 +277,14 @@ public class Tile extends graphics.Rectangle {
 	 * Only guaranteed to be non-null if the tile canStartEvent()
 	 */
 	public Event getEvent(){
-		return _warpEvent;
+		return _event;
 	}
 	
 	/**
 	 * Sets the Tile's event, called from Map
 	 */
 	public void setEvent(Event e){
-		_warpEvent = e;
+		_event = e;
 	}
 
 	/**
