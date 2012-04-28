@@ -53,6 +53,11 @@ public class Dialogue extends Event {
 				BufferedImage other, DoodleTactics dt,int priority) {
 			super(container, img, other, dt,priority);
 			System.out.println("INIT DIALOGUE");
+			_background = new MenuItem(_gameScreen,img,img,_dt,10);
+			_background.setVisible(true);
+			_background.setSize(700, 200);
+			_background.setLocation(185,620);
+
 			_gameScreen.repaint();
 
 		}
@@ -60,11 +65,7 @@ public class Dialogue extends Event {
 		@Override
 		public void paint(java.awt.Graphics2D brush,BufferedImage img) {
 			super.paint(brush, img);
-			
-			_background = new MenuItem(_gameScreen,img,img,_dt,10);
-			_background.setVisible(true);
-			_background.setSize(700, 200);
-			_background.setLocation(185,620);
+
 			_background.paint(brush,img);
 			paintNext(brush);
 
@@ -105,18 +106,12 @@ public class Dialogue extends Event {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
-		switch (e.getKeyCode()){
-		case KeyEvent.VK_DOWN:
-			//handle down
-			synchronized(_currIndex) {
-				_currIndex++;
-			}
-			
-			if(_currIndex >= _characters.size())
-				_gameScreen.popControl();
-			break;
-		}
+	public void mouseClicked(MouseEvent e) {
+		_currIndex++;
+
+		if(_currIndex >= _characters.size())
+			_gameScreen.popControl();
+
 	}
 
 	public void paintNext(Graphics2D brush) {
@@ -128,8 +123,8 @@ public class Dialogue extends Event {
 		_profile.paint(brush,profileImg);
 
 		brush.setRenderingHint(
-		        RenderingHints.KEY_TEXT_ANTIALIASING,
-		        RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+				RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 		brush.setFont(new Font("M",Font.BOLD,25));
 		brush.setColor(new Color(0,0,1));
 		brush.drawString(_phrases.get(_currIndex), 350,675);
