@@ -70,6 +70,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		super.mouseClicked(e);
+		
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		if (t != null) {
 			Character c = t.getOccupant();
@@ -137,7 +139,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 */
 	public void take() {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Player phase!");
 	}
 
 	@Override
