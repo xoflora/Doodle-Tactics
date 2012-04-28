@@ -23,8 +23,6 @@ public abstract class CombatController extends GameScreenController {
 	private ListIterator<Character> _unitCycle;
 	protected HashMap<Character, Boolean> _hasMoved;
 	
-	protected Map _map;
-	
 	protected List<CombatController> _enemyAffiliations;
 	
 	public CombatController(DoodleTactics dt, List<Character> units) {
@@ -33,6 +31,7 @@ public abstract class CombatController extends GameScreenController {
 		_units = units;
 		_enemyAffiliations = new ArrayList<CombatController>();
 		_hoveredTile = null;
+		_hasMoved = new HashMap<Character, Boolean>();
 		
 		for (Character c : _units)
 			c.affiliate(this);
