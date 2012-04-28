@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Stack;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -50,12 +51,18 @@ public class Map implements Serializable {
 	public static final int WARP = 2;
 	// ...
 	
+	private static final int DEFAULT_XREF = 5;
+	private static final int DEFAULT_YREF = 5;
+
+	
 	
 	private BufferedImage _overflow;
 	private Tile[][] _map;
 	private LinkedList<Terrain> _terrain;
 	private LinkedList<Character> _activeCharacters;
 	private MainCharacter _mainChar;
+	private Stack<Integer> _prevXRef;
+	private Stack<Integer> _prevYRef;
 	String _name;
 
 	public Map(Tile[][] tiles, String name, BufferedImage overflow,
@@ -67,6 +74,10 @@ public class Map implements Serializable {
 		_terrain = terrain;
 		_activeCharacters = chars;
 		_mainChar = main;
+		_prevXRef = new Stack<Integer>();
+		_prevYRef = new Stack<Integer>();
+		_prevXRef.push(DEFAULT_XREF);
+		_prevYRef.push(DEFAULT_YREF);
 	}
 
 	/**
@@ -799,5 +810,27 @@ public class Map implements Serializable {
 			System.out.println(t.getX() + " " + t.getY());
 			c.setVisible(true);
 		} catch(ArrayIndexOutOfBoundsException e) { }
+	}
+	
+	/**
+	 * Getters for PrevX and Y ref
+	 */
+	public int getPrevXRef(){
+		return _prevXRef.pop();
+	}
+	
+	public int getPrevYRef(){
+		return _prevYRef.pop();
+	}
+	
+	/**
+	 * Setters for PrevX and YRef
+	 */
+	public void setPrevXRef(int x){
+		_prevXRef.push(x);
+	}
+	
+	public void setPrevYRef(int y){
+		_prevYRef.push(y);
 	}
 }

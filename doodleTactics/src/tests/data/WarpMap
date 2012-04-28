@@ -81,7 +81,6 @@ char,Main,Mage,src/graphics/characters/pokeball.png,src/graphics/characters/warr
 14,11,F,src/graphics/tiles/grass.png,0,1,0
 12,12,F,src/graphics/tiles/grass.png,0,1,0
 12,13,F,src/graphics/tiles/grass.png,0,1,0
-13,14,F,src/graphics/tiles/grass.png,0,1,0
 14,14,F,src/graphics/tiles/grass.png,0,1,0
 15,13,F,src/graphics/tiles/grass.png,0,1,0
 15,12,F,src/graphics/tiles/grass.png,0,1,0
@@ -98,3 +97,5 @@ char,Main,Mage,src/graphics/characters/pokeball.png,src/graphics/characters/warr
 5,5,F,src/graphics/tiles/grass.png,0,1,0
 4,5,F,src/graphics/tiles/grass.png,0,1,0
 6,5,0,src/graphics/tiles/grass.png,0,1,0
+14,14,F,src/graphics/tiles/door.jpg,1,0,2,src/tests/data/testMapDemo
+char,Thief,Thighs,src/graphics/characters/sampleProfile.gif,src/graphics/characters/thief_left.png,src/graphics/characters/thief_right.png,src/graphics/characters/thief_back.png,src/graphics/characters/thief_front.png,8,1

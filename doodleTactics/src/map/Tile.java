@@ -392,7 +392,11 @@ public class Tile extends graphics.Rectangle {
 	 */
 	private void updateOverlay() {
 		_opacity = INTERSECTION_OPACITY;
-		if (_inMovementPath) {
+		if (_inPlayerAttackRange && !_inAttackRange) {
+			_overlay = PLAYER_ATTACK_RANGE_COLOR;
+			_opacity = OVERLAY_OPACITY;
+		}
+		else if (_inMovementPath) {
 			_overlay = MOVEMENT_PATH_COLOR;
 			_opacity = OVERLAY_OPACITY;
 		}
@@ -456,8 +460,6 @@ public class Tile extends graphics.Rectangle {
 			else if (_hovered) {
 				_overlay = MOUSEOVER_COLOR;
 			}
-			else if (_inPlayerAttackRange)
-				_overlay = PLAYER_ATTACK_RANGE_COLOR;
 			else {
 				_overlay = DEFAULT_COLOR;
 				_opacity = DEFAULT_OPACITY;
