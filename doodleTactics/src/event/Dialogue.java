@@ -1,10 +1,12 @@
 package event;
 
 import graphics.MenuItem;
+import graphics.Rectangle;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -40,7 +42,7 @@ public class Dialogue extends Event {
 	private MenuItem _background;
 	private DialogueBox _db;
 	private MenuItem _profile;
-	private int _currIndex;
+	private Integer _currIndex;
 
 	/**
 	 * Inner class used to paint a DialogueBox
@@ -48,14 +50,9 @@ public class Dialogue extends Event {
 	private class DialogueBox extends MenuItem{
 
 		public DialogueBox(JPanel container, BufferedImage img,
-				BufferedImage other, DoodleTactics dt) {
-			super(container, img, other, dt);
+				BufferedImage other, DoodleTactics dt,int priority) {
+			super(container, img, other, dt,priority);
 			System.out.println("INIT DIALOGUE");
-			_background = new MenuItem(_gameScreen,img,img,_dt,0);
-			_background.setVisible(true);
-			_background.setSize(700, 200);
-			_background.setLocation(185,620);
-			_gameScreen.addMenuItem(_background);
 			_gameScreen.repaint();
 
 		}
@@ -63,12 +60,14 @@ public class Dialogue extends Event {
 		@Override
 		public void paint(java.awt.Graphics2D brush,BufferedImage img) {
 			super.paint(brush, img);
-
+			
+			_background = new MenuItem(_gameScreen,img,img,_dt,10);
+			_background.setVisible(true);
+			_background.setSize(700, 200);
+			_background.setLocation(185,620);
+			_background.paint(brush,img);
 			paintNext(brush);
 
-			brush.setFont(new Font("SanSerif",Font.BOLD,25));
-			brush.setColor(new Color(0,0,1));
-			brush.drawString("DoodleTactics", 350,650);
 		}
 	}
 
@@ -110,32 +109,36 @@ public class Dialogue extends Event {
 		switch (e.getKeyCode()){
 		case KeyEvent.VK_DOWN:
 			//handle down
-			_currIndex++;
+			synchronized(_currIndex) {
+				_currIndex++;
+			}
+			
 			if(_currIndex >= _characters.size())
 				_gameScreen.popControl();
 			break;
 		}
 	}
 
-	public void paintNext(Graphics2D brush){
-		if(_profile != null){
-			_gameScreen.removeMenuItem(_profile);
-			_profile.setVisible(false);
-		}
-		System.out.println(_currIndex);
+	public void paintNext(Graphics2D brush) {
 		BufferedImage profileImg = _characters.get(_currIndex).getProfileImage();
 		_profile = new MenuItem(_gameScreen, profileImg,profileImg,_dt,5);
 		_profile.setVisible(true);
 		_profile.setSize(150, 150);
 		_profile.setLocation(230,635);
 		_profile.paint(brush,profileImg);
-	}
 
+		brush.setRenderingHint(
+		        RenderingHints.KEY_TEXT_ANTIALIASING,
+		        RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+		brush.setFont(new Font("M",Font.BOLD,25));
+		brush.setColor(new Color(0,0,1));
+		brush.drawString(_phrases.get(_currIndex), 350,675);
+	}
 
 	@Override
 	public void release() {
-		if(_profile != null)
-			_gameScreen.removeMenuItem(_profile);
+		if(_db != null)
+			_gameScreen.removeMenuItem(_db);
 
 		_gameScreen.removeMenuItem(_background);
 	}
@@ -149,7 +152,7 @@ public class Dialogue extends Event {
 			System.out.println("Start Dialogue!");
 			BufferedImage img = ImageIO.read(new File("src/graphics/menu/dialogue_box.jpg"));
 
-			_db = new DialogueBox(_gameScreen, img,img,_dt);
+			_db = new DialogueBox(_gameScreen, img,img,_dt,5);
 			_gameScreen.addMenuItem(_db);
 
 		} catch (IOException e) {

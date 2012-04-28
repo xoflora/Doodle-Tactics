@@ -102,6 +102,7 @@ public class GameScreen extends Screen<GameScreenController> {
 				double x = 10*Tile.TILE_SIZE-overflow;
 				double y=  8*Tile.TILE_SIZE - main.getImage().getHeight() + Tile.TILE_SIZE;
 				main.setLocation(x, y);
+				main.setAffiliation(_dt.getCombatControl());
 				return main;
 			}
 		} catch (FileNotFoundException e) {
