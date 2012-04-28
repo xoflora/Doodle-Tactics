@@ -32,7 +32,7 @@ public abstract class Rectangle extends Shape {
 				int yDiff = r1.getPaintPriority() - r2.getPaintPriority();
 				
 				// check that the difference is at least the size of a tile
-				return (yDiff >= Tile.TILE_SIZE/2) ? yDiff : xDiff; 
+				return (Math.abs(yDiff) >= Tile.TILE_SIZE) ? yDiff : xDiff;
 			}
 		}
 	}

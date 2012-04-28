@@ -175,10 +175,11 @@ public class GameScreen extends Screen<GameScreenController> {
 				/* if the camera is panning, then all of the characters including
 				 * the character in control should move */
 				if(_isPan) {
-					charsToPaint.add(_currentCharacter);
+					_currentCharacter.setLocation((_currentCharacter.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), _currentCharacter.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
 				}
 				
 				for(Character c : charsToPaint) {
+					System.out.println("character: " + c.getName());
 					c.setLocation((c.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), c.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
 					repaint();
 				}
@@ -241,7 +242,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			
 			_isAnimating = true;
 			
-			MapMoveTimer timer = new MapMoveTimer(x,y, true);
+			MapMoveTimer timer = new MapMoveTimer(x,y, false);
 			timer.start();
 			
 			_xRef += x;
