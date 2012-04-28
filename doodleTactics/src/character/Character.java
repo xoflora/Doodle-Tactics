@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import controller.combatController.CombatController;
+import controller.combatController.PlayerCombatController;
 
 import main.DoodleTactics;
 import map.Tile;
@@ -550,6 +551,10 @@ public abstract class Character extends Rectangle{
 	public void setLocation(double x, double y){
 		super.setLocation(x, y);
 		this.setPaintPriority((int) y + _down.getHeight());
+	}
+
+	public void setAffiliation(CombatController combatControl) {
+		_affiliation = combatControl;
 	}
 
 /*	public static void testPreSerialize(){

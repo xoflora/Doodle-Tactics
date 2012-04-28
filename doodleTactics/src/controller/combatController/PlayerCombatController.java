@@ -33,9 +33,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public PlayerCombatController(DoodleTactics dt) {
 		super(dt, dt.getParty());
 		
-		System.out.println(_gameScreen == _dt.getGameScreen());
-		System.out.println(_gameScreen == null);
-		
 		_selectedTile = null;
 		_hoveredTile = null;
 		_selectedCharacter = null;

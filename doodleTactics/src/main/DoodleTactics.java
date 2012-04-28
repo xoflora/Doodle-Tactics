@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
 import controller.Controller;
+import controller.combatController.PlayerCombatController;
 
 import character.Archer;
 import character.Character;
@@ -43,6 +44,8 @@ public class DoodleTactics extends JFrame {
 	private HashMap<String, Character> _allChars;
 	private List<Character> _party;
 	
+	private PlayerCombatController _combatControl;
+	
 	public DoodleTactics() {
 		super("Doodle Tactics");
 		this.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
@@ -66,7 +69,7 @@ public class DoodleTactics extends JFrame {
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_back.png", "Dude", 10, 10);
-		_party.add(_char1);
+		addCharacterToParty(_char1);
 		BufferedImage pot;
 		try {
 			pot = ImageIO.read(new File("src/graphics/characters/warrior_left.png"));
@@ -77,17 +80,19 @@ public class DoodleTactics extends JFrame {
 			e.printStackTrace();
 		}
 		
-		_party.add(new Mage(_game,
+		_combatControl = new PlayerCombatController(this);
+		
+		addCharacterToParty(new Mage(_game,
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_left.png",
 				"src/graphics/characters/warrior_right.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_front.png", "Whee", 5, 5));
 		
-		_party.add(new Thief(_game, 
+		addCharacterToParty(new Thief(_game, 
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/mage_left.png",
 				"src/graphics/characters/mage_right.png", "src/graphics/characters/mage_back.png",
 				"src/graphics/characters/mage_back.png", "Shirley", 15, 15));
 		
-		_party.add(new Warrior(_game, 
+		addCharacterToParty(new Warrior(_game, 
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "Bob", 20, 10));
@@ -224,9 +229,36 @@ public class DoodleTactics extends JFrame {
 	public List<Character> getParty() {
 		return _party;
 	}
+		
+	/**
+	 * adds a character to the player's party
+	 * @param c the character to add
+	 * @author rroelke
+	 */
+	public void addCharacterToParty(Character c) {
+		_party.add(c);
+		c.setAffiliation(_combatControl);
+	}
+	
+	/**
+	 * removes a character from the player's party
+	 * @param c the character to remove
+	 * @return whether or not the character was removed successfully
+	 * @author rroelke
+	 */
+	public boolean removeCharacterFromParty(Character c) {
+		boolean toReturn = _party.remove(c);
+		if (!toReturn)
+			return false;
+		c.setAffiliation(null);
+		return true;
+	}
+	
+	public PlayerCombatController getCombatControl() {
+		return _combatControl;
+	}
 	
 	public static void main(String[] args) {
 		new DoodleTactics();
 	}
-	
 }
