@@ -263,8 +263,6 @@ public class GameScreen extends Screen<GameScreenController> {
 			_xRef += x;
 			_yRef += y;
 		}
-		
-	//	System.out.println("--------------------------");
 	}
 	
 	public Map getMap() {
@@ -335,7 +333,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		boolean b;
 		synchronized(_menuQueue) {
 			b = _menuQueue.remove(m);
-			m.setVisible(true);
+			m.setVisible(false);
 		}
 		return b;
 	}
