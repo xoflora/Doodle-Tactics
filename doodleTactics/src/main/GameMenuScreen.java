@@ -1,6 +1,7 @@
 package main;
 
 import items.Item;
+import items.ItemException;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -66,6 +67,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private unitsBoxListener _unitsBoxListener;
 	private int _itemOptBoxX, _itemOptBoxY, _numOptions;
 	private Item _selectedItem;
+	private Character _selectedChar;
 	private HashMap<JButton, Character> _buttonToChar;
 	private ArrayList<JButton> _buttonList;
 	
@@ -398,11 +400,15 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 		
 		_buttonList = new ArrayList<JButton>();
+		_buttonToChar = new HashMap<JButton, Character>();
 		
 		_itemOptBoxX = (int) label.getLocationOnScreen().getX();
 		_itemOptBoxY = (int) label.getLocationOnScreen().getY();
 		
 		int numOptionsInserted = 1;
+		
+		_selectedItem = _labelToItem.get(label);
+		_selectedChar = character;
 		
 		_numOptions = _dt.getParty().size()+2;;
 		if (_labelToItem.get(label).isEquip()) {
@@ -813,10 +819,52 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	
 	private class giveToCharListener implements ActionListener {
 
+		JButton _button;
+		
+		public giveToCharListener(JButton button) {
+			_button = button;
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			Character myChar = _buttonToChar.get(_button);
+			try {
+				if (myChar.getInventory().size() != myChar.getCapacity()) {
+					myChar.addToInventory(_selectedItem);
+					_selectedChar.removeFromInventory(_selectedItem);
+					GameMenuScreen.this.setDefaultTabToUnits();
+				}
+			} catch (ItemException e1) {
+				System.out.println("Something bad happened in the Game Menu Screen");
+			}
+		}
+	}
+	
+	private class dropListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			try {
+				_selectedChar.removeFromInventory(_selectedItem);
+				GameMenuScreen.this.setDefaultTabToUnits();
+			} catch (ItemException e1) {
+				System.out.println("Something bad happened in the Game Menu Screen");
+			}
+		}
+	}
+	
+	private class equipListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub	
+		}
+	}
+	
+	private class useListener implements ActionListener {
+
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			
 		}
-		
 	}
 }
