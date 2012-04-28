@@ -240,7 +240,7 @@ public class Map implements Serializable {
 						tiles[x][y].setInteractible();
 					} else if(Integer.parseInt(splitLine[6]) == WARP){
 						tiles[x][y].setEvent(new Warp(dt,tiles[x][y],splitLine[7]));
-						tiles[x][y].setTriggersEvent();
+						tiles[x][y].setEnterEvent();
 					}
 					//add others in the future perhaps
 					

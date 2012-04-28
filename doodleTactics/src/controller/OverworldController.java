@@ -72,7 +72,7 @@ public class OverworldController extends GameScreenController {
 				newTile = _gameScreen.getMap().getTile(currentX, currentY - 1);
 				_gameScreen.getMainChar().setUp();
 				if(newTile != null && newTile.canMove(Map.SOUTH)){			
-					if(newTile.hasEvent()){
+					if(newTile.hasEnterEvent()){
 						_gameScreen.pushControl(newTile.getEvent());
 					}
 					else{
@@ -88,7 +88,7 @@ public class OverworldController extends GameScreenController {
 				_gameScreen.getMainChar().setLeft();
 
 				if(newTile != null && newTile.canMove(Map.EAST)){			
-					if(newTile.hasEvent())
+					if(newTile.hasEnterEvent())
 						_gameScreen.pushControl(newTile.getEvent());
 					else{
 						newTile.setOccupant(_gameScreen.getMainChar());
@@ -103,7 +103,7 @@ public class OverworldController extends GameScreenController {
 				_gameScreen.getMainChar().setDown();
 
 				if(newTile != null && newTile.canMove(Map.NORTH)){			
-					if(newTile.hasEvent()){
+					if(newTile.hasEnterEvent()){
 						_gameScreen.pushControl(newTile.getEvent());
 					}
 					else{
@@ -119,7 +119,7 @@ public class OverworldController extends GameScreenController {
 				newTile = _gameScreen.getMap().getTile(currentX + 1,  currentY);
 				_gameScreen.getMainChar().setRight();
 				if(newTile != null && newTile.canMove(Map.WEST)){
-					if(newTile.hasEvent())
+					if(newTile.hasEnterEvent())
 						_gameScreen.pushControl(newTile.getEvent());
 
 					else{
