@@ -86,14 +86,18 @@ public abstract class CombatController extends GameScreenController {
 	 * takes control of combat
 	 * for this particular controller type, represents the beginning of a new turn
 	 */
-	public abstract void take();
+	public void take() {
+		super.take();
+	}
 	
 	@Override
 	/**
 	 * releases control of combat
 	 * for this particular controller type, represents the end of a turn (cleanup step)
 	 */
-	public abstract void release();
+	public void release() {
+		super.release();
+	}
 	
 	/**
 	 * @param c the character to check

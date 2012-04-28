@@ -2,6 +2,7 @@ package controller.combatController;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,9 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	private List<Tile> _path;
 	private int _pathCost;
 	
-	private State state;
+	private State _state;
+	private UnitPool _pool;
+	private boolean _finalized;
 	
 	public PlayerCombatController(DoodleTactics dt) {
 		super(dt, dt.getParty());
@@ -52,17 +55,41 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_path = new ArrayList<Tile>();
 		_pathCost = 0;
 		
+		try {
+			_pool = new UnitPool(_dt, _gameScreen, this, _units);
+			_finalized = false;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		clear();
 	}
 	
+	/**
+	 * sets the current movement path
+	 * @param source the starting tile
+	 * @param dest the ending tile
+	 */
 	private void setPath(Tile source, Tile dest) {
-		_pathCost = 0;
+		clearPath();
 		_path = _gameScreen.getMap().getPath(source, dest);
 		for (Tile t : _path) {
 			t.setInMovementPath(true);
 			_pathCost += t.cost();
-		}
-		
+		}	
+	}
+	
+	/**
+	 * sets the player attack range
+	 * @param source the source tile
+	 * @param c the character
+	 */
+	private void setPlayerAttackRange(Tile source, Character c) {
+		clearPlayerAttackRange();
+		_characterAttackRange = _gameScreen.getMap().getAttackRange(source, 0,
+				c.getMinAttackRange(), c.getMaxAttackRange());
+		for (Tile t : _characterAttackRange)
+			t.setInPlayerAttackRange(true);
 	}
 	
 	/**
@@ -73,18 +100,22 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			t.setInMovementRange(false);
 		for (Tile t : _enemyAttackRange)
 			t.setInEnemyAttackRange(false);
-		for (Tile t : _characterAttackRange)
-			t.setInPlayerAttackRange(false);
 		
 		_selectedTile = null;
 		_selectedCharacter = null;
 		_selectedMovementRange = new ArrayList<Tile>();
 		_enemyAttackRange = new ArrayList<Tile>();
-		_characterAttackRange = new ArrayList<Tile>();
-		
+
+		clearPlayerAttackRange();
 		clearPath();
 		
-		state = State.START;
+		_state = State.START;
+	}
+	
+	private void clearPlayerAttackRange() {
+		for (Tile t : _characterAttackRange)
+			t.setInPlayerAttackRange(false);
+		_characterAttackRange = new ArrayList<Tile>();
 	}
 	
 	private void clearPath() {
@@ -108,7 +139,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			Tile t = _gameScreen.getTile(e.getX(), e.getY());
 			if (t != null) {
 				Character c = t.getOccupant();
-				if (state == State.START) {
+				if (_state == State.START) {
 					if (t.isOccupied()) {
 						if (c.getAffiliation() == this) {
 							_selectedTile = t;
@@ -126,7 +157,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 							for (Tile toPaint : _characterAttackRange) {
 								toPaint.setInPlayerAttackRange(true);
 							}
-							state = State.CHARACTER_SELECTED;
+							_state = State.CHARACTER_SELECTED;
 						}
 						else if (_enemyAffiliations.contains(c.getAffiliation())) {
 							_enemyAttackRange = Util.union(_enemyAttackRange,
@@ -136,38 +167,48 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 					}
 				}
 				//selected tile and character are not null; selected character is the occupant of the tile
-				else if (state == State.CHARACTER_SELECTED) {
+				else if (_state == State.CHARACTER_SELECTED) {
 					if (_path.contains(t)) {
 						_destTile = t;
-						state = State.CHARACTER_MOVING;
+						_state = State.CHARACTER_MOVING;
 						move(_selectedCharacter, _path);
-						state = State.CHARACTER_OPTION_MENU;
+						_state = State.CHARACTER_OPTION_MENU;
+						
+						setPlayerAttackRange(_destTile, _selectedCharacter);
 					}
 				}
 				//selected tile is the coordinate to move the character to
-				else if (state == State.CHARACTER_MOVING) {
+				else if (_state == State.CHARACTER_MOVING) {
 					
 				}
-				else if (state == State.CHARACTER_OPTION_MENU) {
+				else if (_state == State.CHARACTER_OPTION_MENU) {
 
 				}
 			}
 		}
 		else if (e.getButton() == MouseEvent.BUTTON3) {
-			if (state == State.START)
+			if (_state == State.START)
 				clear();
-			else if (state == State.CHARACTER_SELECTED)
+			else if (_state == State.CHARACTER_SELECTED)
 				clear();
-			else if (state == State.CHARACTER_MOVING) {
+			else if (_state == State.CHARACTER_MOVING) {
 				clearPath();
-				state = State.CHARACTER_SELECTED;
+				_state = State.CHARACTER_SELECTED;
 			}
-			else if (state == State.CHARACTER_OPTION_MENU) {
+			else if (_state == State.CHARACTER_OPTION_MENU) {
 				_destTile.setOccupant(null);
 				_selectedTile.setOccupant(_selectedCharacter);
 				_selectedCharacter.setLocation(_selectedTile.getX(), _selectedTile.getY());
 				clearPath();
-				state = State.CHARACTER_SELECTED;
+				clearPlayerAttackRange();
+				_characterAttackRange = Util.difference(_gameScreen.getMap().
+						getAttackRange(_selectedTile, _selectedCharacter.getMovementRange(),
+								_selectedCharacter.getMinAttackRange(),
+								_selectedCharacter.getMaxAttackRange()),
+						_selectedMovementRange);
+				for (Tile toPaint : _characterAttackRange)
+					toPaint.setInPlayerAttackRange(true);
+				_state = State.CHARACTER_SELECTED;
 			}
 		}
 	}
@@ -178,7 +219,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		if (t != null) {
 			
-			if (state == State.CHARACTER_SELECTED) {	//selected character and tile are not null
+			if (_state == State.CHARACTER_SELECTED) {	//selected character and tile are not null
 				if (_selectedMovementRange.contains(t)) {
 					if (_path.isEmpty()) {
 						if (t.isAdjacent(_selectedTile) && t.cost() <= _selectedCharacter.getMovementRange()) {
@@ -220,7 +261,9 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 */
 	public void release() {
 		// TODO Auto-generated method stub
+		super.release();
 		
+		clear();
 	}
 
 	@Override
@@ -229,45 +272,69 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 */
 	public void take() {
 		// TODO Auto-generated method stub
+		super.take();
 		System.out.println("Player phase!");
+		
+		initialize();
 	}
 
 	@Override
+	/**
+	 * pans the camera to focus on the given character
+	 */
 	public void getCharacterFromPool(Character c) {
 		// TODO Auto-generated method stub
-		
+		double x = c.getX();
+		double y = c.getY();
 	}
 
 	@Override
 	public UnitPool getPool() {
-		// TODO Auto-generated method stub
-		return null;
+		return _pool;
 	}
 
 	@Override
+	/**
+	 * 
+	 */
 	public void addUnitToPool(Character c) {
 		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
+	/**
+	 * pans the map to focus on the given character
+	 */
 	public void alternateAction(Character c) {
-		
+		getCharacterFromPool(c);
 	}
 
 	@Override
+	/**
+	 * 
+	 */
 	public void removeUnitFromPool(Character c) {
-		// TODO Auto-generated method stub
-		
+		_pool.removeCharacter(c);
 	}
 	
 	@Override
+	/**
+	 * 
+	 */
 	public void initialize() {
-		
+		_pool.setInUse(true);
 	}
 	
 	@Override
+	/**
+	 * used at the end of the player's turn
+	 */
 	public void finalize() {
-		
+		if (!_finalized) {
+			_finalized = true;
+			_pool.setInUse(false);
+			_gameScreen.popControl();
+		}
 	}
 }

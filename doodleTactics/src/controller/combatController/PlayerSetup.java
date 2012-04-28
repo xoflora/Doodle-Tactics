@@ -146,6 +146,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 						_gameScreen.addCharacter(_selectedCharacter);
 						_pool.removeCharacter(_selectedCharacter);
 						_selectedCharacter.setLocation(t.getX(), t.getY());
+						_selectedCharacter.setDown();
 					}
 					if (c != null) {
 						_gameScreen.getCharacterQueue().remove(c);
@@ -211,11 +212,10 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	 * @param c the character to swap
 	 */
 	public void alternateAction(Character c) {
-	//	System.out.println("grunt");
-	//	System.out.println(c);
 		if (!_selectedFromPool && _selectedTile != null && _selectedTile != null) {
 			_selectedTile.setOccupant(c);
 			c.setLocation(_selectedTile.getX(), _selectedTile.getY());
+			c.setDown();
 			removeUnitFromPool(c);
 			
 			if (_selectedCharacter != null) {
@@ -223,7 +223,6 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 				_gameScreen.getCharacterQueue().remove(_selectedCharacter);
 			}
 			
-			System.out.println("curnch");
 			_gameScreen.addCharacter(c);
 		}
 	}
@@ -242,11 +241,8 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	public void finalize() {
 		if (!_finalized) {
 			_finalized = true;
-			System.out.println("LOL");
-		//	if (!_finalized) {
-				_pool.setInUse(false);
-				_gameScreen.popControl();
-		//	}
+			_pool.setInUse(false);
+			_gameScreen.popControl();
 		}
 	}
 }
