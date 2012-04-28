@@ -79,6 +79,8 @@ public class GameMenuController extends Controller {
 		// TODO Auto-generated method stub
 		if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
 			//do stuff
+			_gameMenu.setDefault();
+			_gameMenu.removeAll();
 			_gameMenu.switchToGameScreen();
 		}
 	}

@@ -2,6 +2,7 @@ package util;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -72,6 +73,27 @@ public class Util {
 			newList.add(elt);
 		
 		return newList;
+	}
+	
+	/**
+	 * zips a group of lists together, alternating their elements in a new list
+	 * @param <T> the type of list
+	 * @param lists
+	 * @return
+	 */
+	public static <T> List<T> zip(List<List<T>> lists) {
+		List<T> acc = new ArrayList<T>();
+		int max = 0;
+		for (int i = 0; i < lists.size(); i++)
+			if (lists.get(i).size() > max)
+				max = lists.get(i).size();
+		for (int i = 0; i < max; i++) {
+			for (int j = 0; j < lists.size(); j++) {
+				if (i < lists.get(j).size())
+					acc.add(lists.get(j).get(i));
+			}
+		}
+		return acc;
 	}
 	
 	/**

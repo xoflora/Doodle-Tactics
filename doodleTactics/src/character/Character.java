@@ -74,6 +74,10 @@ public abstract class Character extends Rectangle{
 
 	private CombatController _affiliation; //player/AI etc
 	
+	public static enum CharacterDirection{
+		LEFT,RIGHT,UP,DOWN
+	}
+	
 	public Character(JPanel container, String profile, String left, String right,
 			String up, String down, String name,double x, double y) {
 		
@@ -149,6 +153,21 @@ public abstract class Character extends Rectangle{
 	
 	public Footgear getFootgear(){
 		return _footgear;
+	}
+	
+	/**
+	 * 
+	 * @return the Direction that the character is currently facing
+	 */
+	public CharacterDirection getDirection(){
+		if(_currentImage.equals(_left))
+			return CharacterDirection.LEFT;
+		else if(_currentImage.equals(_right))
+			return CharacterDirection.RIGHT;
+		else if(_currentImage.equals(_up))
+			return CharacterDirection.UP;
+		else
+			return CharacterDirection.DOWN;
 	}
 	
 	@Override
@@ -305,20 +324,39 @@ public abstract class Character extends Rectangle{
 	 * @return
 	 */
 	public int getMovementRange(){
-		//TODO
-		return -1;
+		if (_currentStats[SPEED] <= 6)
+			return 3;
+		else if (_currentStats[SPEED] <= 13)
+			return 4;
+		else if (_currentStats[SPEED] <= 21)
+			return 5;
+		else if (_currentStats[SPEED] <= 30)
+			return 6;
+		else if (_currentStats[SPEED] <= 40)
+			return 7;
+		else if (_currentStats[SPEED] <= 51)
+			return 8;
+		else if(_currentStats[SPEED] <= 62)
+			return 9;
+		else
+			return 10;
 	}
 
 	/** 
 	 * computes the attack range of the Character
 	 */
-	public int getMinAttackRange(){
-		//TODO Ryan fills in
-		return 0;
+	public int getMinAttackRange() {
+		if (_equipped != null)
+			return _equipped.getMinAttackRange();
+		else
+			return 1;
 	}
 	
 	public int getMaxAttackRange() {
-		return 1;
+		if (_equipped != null)
+			return _equipped.getMaxAttackRange();
+		else
+			return 1;
 	}
 
 	/**
@@ -371,8 +409,6 @@ public abstract class Character extends Rectangle{
 	 */
 	
 	public BufferedImage getImage() {
-		if(_currentImage == null)
-			System.out.println("NULLLLLLLLL");
 		return _currentImage;
 	}
 	

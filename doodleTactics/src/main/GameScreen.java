@@ -79,7 +79,6 @@ public class GameScreen extends Screen<GameScreenController> {
 		_isAnimating = false;
 		_mapCache = new HashMap<String, Map>();
 		
-		setMap("src/tests/data/testMapDemo");
 		this.repaint();
 	}
 	

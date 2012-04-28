@@ -42,7 +42,15 @@ public class CombatOrchestrator extends GameScreenController {
 		for (CombatController e : enemies)
 			e.setEnemyAffiliations(partners);
 		
-		System.out.println();
+		List<List<CombatController>> zip = new ArrayList<List<CombatController>>();
+		
+		zip.add(partners);
+		if (enemies != null)
+			zip.add(enemies);
+		if (others != null)
+			zip.add(others);
+		
+		_factions = Util.zip(zip);
 		
 		_numUnits = numUnits;
 		_factionCycle = _factions.listIterator();
@@ -68,7 +76,7 @@ public class CombatOrchestrator extends GameScreenController {
 	public void take() {
 		super.take();
 		if (_setup) {	//swap factions
-			System.out.println("orchestrator taking control");
+			System.out.println("orchestrator taking control; " + _factions.isEmpty());
 			if (_factionCycle.hasNext()) {
 				System.out.println("YYAAAYYY");
 				_gameScreen.pushControl(_factionCycle.next());

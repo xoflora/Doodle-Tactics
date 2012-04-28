@@ -116,7 +116,9 @@ public abstract class GameScreenController extends Controller {
 	public void mouseClicked(MouseEvent e) {
 		MenuItem _clickedButton = _gameScreen.checkContains(e.getPoint());
 		if (_clickedButton != null) {
-			_clickedButton.activate(e.getButton());
+			synchronized(_clickedButton) {
+				_clickedButton.activate(e.getButton());
+			}
 		}
 	}
 	

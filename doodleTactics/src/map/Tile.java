@@ -65,13 +65,14 @@ public class Tile extends graphics.Rectangle {
 	private float _opacity;
 	private Color _overlay;
 	
-	private Event _event;
+	private Event _warpEvent;
 	private Character _character;
-	private String _eventFilePath;
+	private String _warpFilePath;
 	
 	private boolean _inMovementRange;
 	private boolean _inAttackRange;
 	private boolean _hovered;
+	private boolean _interactible;
 	
 	/**
 	 * Constructor
@@ -97,7 +98,7 @@ public class Tile extends graphics.Rectangle {
 		_opacity = DEFAULT_OPACITY;
 		_overlay = DEFAULT_COLOR;
 		
-		_event  = null;
+		_warpEvent  = null;
 		
 	}
 	
@@ -253,7 +254,14 @@ public class Tile extends graphics.Rectangle {
 	 * @return true if this tile triggers an event and false otherwise
 	 */
 	public boolean hasEvent(){
-		return _event != null;
+		return _warpEvent != null;
+	}
+	
+	/**
+	 * @return true if the tile is interactible (Dialogue of some form starts upon hitting space)
+	 */
+	public boolean interactible(){
+		return _interactible;
 	}
 	
 	/**
@@ -261,15 +269,14 @@ public class Tile extends graphics.Rectangle {
 	 * Only guaranteed to be non-null if the tile canStartEvent()
 	 */
 	public Event getEvent(){
-		return _event;
+		return _warpEvent;
 	}
 	
 	/**
 	 * Sets the Tile's event, called from Map
 	 */
-	public void setEvent(Event e,String filePath){
-		_event = e;
-		_eventFilePath = filePath;
+	public void setEvent(Event e){
+		_warpEvent = e;
 	}
 
 	/**
@@ -295,13 +302,6 @@ public class Tile extends graphics.Rectangle {
 	}
 	
 
-	/**
-	 * Pre-condition: canWarp() returns true (there exists a map)
-	 * @return the path of the map to warp to
-	 */
-	public String getEventPath(){
-		return _eventFilePath;
-	}
 	
 	/** 
 	 * @returns the String representing the path to the image file

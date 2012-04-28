@@ -28,6 +28,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	private List<Character> _inPlace;
 	private Tile _selectedTile;
 	private UnitPool _pool;
+	private boolean _finalized;
 	
 	private Character _selectedCharacter;
 	private boolean _selectedFromPool;
@@ -47,6 +48,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		} catch(IOException e) {
 			
 		}
+		_finalized = false;
 	}
 	
 	/**
@@ -238,8 +240,13 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 
 	@Override
 	public void finalize() {
-		System.out.println("LOL");
-		_pool.setInUse(false);
-		_gameScreen.popControl();
+		if (!_finalized) {
+			_finalized = true;
+			System.out.println("LOL");
+		//	if (!_finalized) {
+				_pool.setInUse(false);
+				_gameScreen.popControl();
+		//	}
+		}
 	}
 }

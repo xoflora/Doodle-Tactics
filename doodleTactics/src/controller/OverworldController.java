@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 
 import controller.combatController.RandomBattleAI;
 import character.Character;
+import character.Character.CharacterDirection;
 
 import main.DoodleTactics;
 import main.GameScreen;
@@ -47,7 +48,7 @@ public class OverworldController extends GameScreenController {
 		/*	TEST COMBAT CONTROLLER STUFF:
 		 *  REMOVE WHEN DONE WITH ALL THAT
 		 */
-		else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+		else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			_gameScreen.enterCombat((List<Character>)new ArrayList<Character>());
 		}
 	}
@@ -62,7 +63,7 @@ public class OverworldController extends GameScreenController {
 			int currentX = _gameScreen.getMapX(_gameScreen.getX()) + 10;
 			int currentY = _gameScreen.getMapY(_gameScreen.getY()) + 8;
 			Tile oldTile = _gameScreen.getMap().getTile(currentX, currentY);
-			Tile newTile;
+			Tile newTile = null;
 
 			switch(e.getKeyChar()) {
 
@@ -73,7 +74,7 @@ public class OverworldController extends GameScreenController {
 				if(newTile != null && newTile.canMove(Map.SOUTH)){			
 					if(newTile.hasEvent()){
 						_gameScreen.pushControl(newTile.getEvent());
-				}
+					}
 					else{
 						newTile.setOccupant(_gameScreen.getMainChar());
 					}
@@ -128,6 +129,25 @@ public class OverworldController extends GameScreenController {
 					oldTile.removeOccupant();
 				}
 				break;
+			case KeyEvent.VK_SPACE:
+				System.out.println("Space");
+				switch(_gameScreen.getMainChar().getDirection()){
+				case LEFT:
+					newTile = _gameScreen.getMap().getTile(currentX - 1, currentY);
+					break;
+				case RIGHT:
+					newTile = _gameScreen.getMap().getTile(currentX + 1, currentY);
+					break;
+				case UP:
+					newTile = _gameScreen.getMap().getTile(currentX, currentY + 1);
+					break;
+				case DOWN:
+					newTile = _gameScreen.getMap().getTile(currentX, currentY - 1);
+					break;
+				}
+				
+				if(newTile != null && newTile.interactible())
+					_gameScreen.pushControl(newTile.getEvent());
 			}			
 		}
 		_gameScreen.repaint();

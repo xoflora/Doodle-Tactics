@@ -185,4 +185,48 @@ public class UtilTester {
 		for (int i = 0; i < 23; i++)
 			assert(cloned.get(i) == i);
 	}
+	
+	@Test
+	/**
+	 * tests list zipping
+	 */
+	public void testListZip() {
+		List<Integer> test = new LinkedList<Integer>();
+		List<List<Integer>> source = new LinkedList<List<Integer>>();
+		source.add(test);
+		
+		List<Integer> result = Util.zip(source);
+		assert(result.isEmpty());
+		
+		for (int i = 0; i < 6; i++)
+			test.add(i + 5);
+		result = Util.zip(source);
+		assert(result.containsAll(test) && test.containsAll(result) && result.size() == test.size());
+		
+		for (int i = 0; i < 5; i++)
+			source.add(new LinkedList<Integer>());
+		result = Util.zip(source);
+		assert(result.containsAll(test) && test.containsAll(result) && result.size() == test.size());
+		
+		source.get(3).add(86);
+		source.get(3).add(94);
+		int[] cmp = {5, 86, 6, 94, 7, 8, 9, 10};
+		result = Util.zip(source);
+		for (int i = 0; i < cmp.length; i++)
+			assert(result.get(i).equals(cmp[i]));
+		assert(result.size() == cmp.length);
+		
+		source.get(4).add(271);
+		source.get(2).add(189);
+		source.get(2).add(-17);
+		source.get(2).add(-5);
+		source.get(2).add(180);
+		for (int i = 0; i < 7; i++)
+			source.get(3).add(-10*i);
+		int[] cmp2 = {5, 189, 86, 271, 6, -17, 94, 7, -5, 0, 8, 180, -10, 9, -20, 10, -30, -40, -50, -60};
+		result = Util.zip(source);
+		for (int i = 0; i < cmp2.length; i++)
+			assert(result.get(i).equals(cmp2[i]));
+		assert(result.size() == cmp2.length);
+	}
 }
