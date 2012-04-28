@@ -33,7 +33,7 @@ import main.DoodleTactics;
  * a dialogue instance controls a dialogue between characters
  */
 public class Dialogue extends Event {
-	
+
 	private String _filename;
 	private List<String> _phrases;
 	private List<Character> _characters;
@@ -41,7 +41,7 @@ public class Dialogue extends Event {
 	private DialogueBox _db;
 	private MenuItem _profile;
 	private int _currIndex;
-	
+
 	/**
 	 * Inner class used to paint a DialogueBox
 	 */
@@ -51,28 +51,29 @@ public class Dialogue extends Event {
 				BufferedImage other, DoodleTactics dt) {
 			super(container, img, other, dt);
 			System.out.println("INIT DIALOGUE");
-				_background = new MenuItem(_gameScreen,img,img,_dt,0);
-				_background.setVisible(true);
-				_background.setSize(700, 200);
-				_background.setLocation(185,620);
-				_gameScreen.addMenuItem(_background);
-				_gameScreen.repaint();
+			_background = new MenuItem(_gameScreen,img,img,_dt,0);
+			_background.setVisible(true);
+			_background.setSize(700, 200);
+			_background.setLocation(185,620);
+			_gameScreen.addMenuItem(_background);
+			_gameScreen.repaint();
 
 		}
-		
+
 		@Override
 		public void paint(java.awt.Graphics2D brush,BufferedImage img) {
 			super.paint(brush, img);
+
 			paintNext(brush);
+
 			brush.setFont(new Font("SanSerif",Font.BOLD,25));
 			brush.setColor(new Color(0,0,1));
 			brush.drawString("DoodleTactics", 350,650);
 		}
-
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Creates a DialogueBox by parsing a dialogue csv file in the following format
 	 * name, phrase 1
@@ -84,7 +85,7 @@ public class Dialogue extends Event {
 	 * @throws IOException, FileNotFoundException 
 	 */
 	public Dialogue(DoodleTactics dt,  String filename)
-			throws InvalidEventException, IOException, FileNotFoundException{
+	throws InvalidEventException, IOException, FileNotFoundException{
 		super(dt);
 		_filename = filename;
 	}
@@ -110,10 +111,12 @@ public class Dialogue extends Event {
 		case KeyEvent.VK_DOWN:
 			//handle down
 			_currIndex++;
+			if(_currIndex >= _characters.size())
+				_gameScreen.popControl();
 			break;
 		}
 	}
-	
+
 	public void paintNext(Graphics2D brush){
 		if(_profile != null){
 			_gameScreen.removeMenuItem(_profile);
@@ -148,17 +151,17 @@ public class Dialogue extends Event {
 
 			_db = new DialogueBox(_gameScreen, img,img,_dt);
 			_gameScreen.addMenuItem(_db);
-			
+
 		} catch (IOException e) {
 			System.out.println("Invalid Dialogue Box file");
 		} catch (InvalidEventException e) {
 			System.out.println("Invalid Event");
 		}
-		
-//		_gameScreen.popControl();
+
+		//		_gameScreen.popControl();
 		//display Dialogue box and start 		
 	}
-	
+
 	public void parseMap() throws InvalidEventException,IOException{
 		_phrases = new LinkedList<String>();
 		_characters = new LinkedList<Character>();
@@ -167,7 +170,7 @@ public class Dialogue extends Event {
 		String line = br.readLine();
 		String[] split;
 		HashMap<String,Character> allChars = _dt.getCharacterMap();
-		
+
 		while(line != null){
 			split = line.split(",");
 			if(split.length != 2){

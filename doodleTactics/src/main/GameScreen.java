@@ -42,17 +42,15 @@ import java.util.*;
  */
 
 public class GameScreen extends Screen<GameScreenController> {
-	
+
 	private static final int STAT_MENU_PRIORITY = 0;
 	private static final int SETUP_WINDOW_PRIORITY = -10;
 	private static final int DIALOGUE_PRIORITY = 10;
-	
+
 	private static final int NUM_TILES_X = 21;
 	private static final int NUM_TILES_Y = 17;
-	
-	private static final int DEFAULT_XREF = 5;
-	private static final int DEFAULT_YREF = 5;
-	
+
+
 	private static final int MAP_CACHE_SIZE = 5;
 
 	private static int MAP_WIDTH, MAP_HEIGHT;
@@ -61,7 +59,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	private int _xRef;
 	private int _yRef;
 	private boolean _isAnimating;
-//	private GameMenuController _gameMenuController;
+	//	private GameMenuController _gameMenuController;
 	private PriorityQueue<Rectangle> _characterTerrainQueue; // the list of characters / images to render on the screen
 	private PriorityQueue<MenuItem> _menuQueue;
 	private List<Terrain> _terrainToPaint;
@@ -71,20 +69,18 @@ public class GameScreen extends Screen<GameScreenController> {
 		this.setBackground(java.awt.Color.BLACK);
 		MAP_WIDTH = 20;
 		MAP_HEIGHT = 20;
-		
-	//	_gameMenuController = _dt.getGameMenuScreen().getController();
+
+		//	_gameMenuController = _dt.getGameMenuScreen().getController();
 		_characterTerrainQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
 		_menuQueue = new PriorityQueue<MenuItem>(5, new Rectangle.RectangleComparator());
-		
+
 		//select a tile to go at the top left of the screen
-		_xRef = DEFAULT_XREF;
-		_yRef = DEFAULT_YREF;
 		_isAnimating = false;
 		_mapCache = new HashMap<String, Map>();
-		
+
 		this.repaint();
 	}
-	
+
 	/**
 	 * sets the current map of the game screen to the map specified by the path.
 	 * if the path was already in the cache, it loads the map from there, otherwise
@@ -92,9 +88,9 @@ public class GameScreen extends Screen<GameScreenController> {
 	 * @param mapPath is the path to the map to set
 	 */
 	public void setMap(String mapPath) {
-		
+
 		Map map = null;
-		
+
 		try {
 			// if the map is already in the cache, just retrieve it from there
 			if(_mapCache.get(mapPath) != null) {
@@ -104,32 +100,38 @@ public class GameScreen extends Screen<GameScreenController> {
 				map = Map.map(_dt,this, mapPath);
 				_mapCache.put(mapPath, map);
 			}
-			
+
+			//Store XRef and YRef
+			Map prevMap = _currMap;
+			if(prevMap != null){
+				prevMap.setPrevXRef(_xRef);
+				prevMap.setPrevYRef(_yRef);
+			}
 			_currMap = map;
 			_currentCharacter = _currMap.getMainCharacter();
 			_terrainToPaint = _currMap.getTerrain();
-			//reset xref and yref
-			_xRef = DEFAULT_XREF;
-			_yRef = DEFAULT_YREF;
+			//set + reset xref and yref
+			_xRef = _currMap.getPrevXRef();
+			_yRef = _currMap.getPrevYRef();
 			// set all of the locations of the tiles relative to xref and yref
 			for (int i = 0; i < map.getWidth(); i++) {
 				for (int j = 0; j < map.getHeight(); j++) {
-					map.getTile(i, j).setLocation((i - DEFAULT_XREF)*Tile.TILE_SIZE, (j - DEFAULT_YREF)*Tile.TILE_SIZE);
+					map.getTile(i, j).setLocation((i - _xRef)*Tile.TILE_SIZE, (j - _yRef)*Tile.TILE_SIZE);
 					map.getTile(i, j).setVisible(true);
 				}
 			}
-		
+
 		} catch (InvalidMapException e) {
 			e.printMessage();
 			System.exit(0);
 		}
 	}
-	
+
 	@Override
 	protected GameScreenController defaultController() {
 		return new OverworldController(_dt, this);
 	}
-	
+
 	/**
 	 * Timer used for animating the map either for panning or moving in the overworld
 	 * @author jeshapir
@@ -167,60 +169,59 @@ public class GameScreen extends Screen<GameScreenController> {
 						repaint();
 					}
 				}
-				
+
 				for(Rectangle r: _terrainToPaint){
 					r.setLocation((r.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), r.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
 					repaint();
 				}
-				
+
 				List <Character> charsToPaint = getController().getCharactersToDisplay();
-				
+
 				/* if the camera is panning, then all of the characters including
 				 * the character in control should move */
 				if(_isPan) {
 					_currentCharacter.setLocation((_currentCharacter.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), _currentCharacter.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
 				}
-				
+
 				for(Character c : charsToPaint) {
-					System.out.println("character: " + c.getName());
 					c.setLocation((c.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), c.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
 					repaint();
 				}
-				
+
 				/* if the camera is not panning, the main character is walking so do rotations
 				 * for animation appropriately */
 				if(!_isPan) {
 					switch(_cnt) {
-						case 0:
-							_currentCharacter.setRotation(-10);
-							break;
-						case 1:
-							_currentCharacter.setRotation(-5);
-							break;
-						case 2:
-							_currentCharacter.setRotation(0);
-							break;
-						case 3:
-							_currentCharacter.setRotation(5);
-							break;
-						case 4:
-							_currentCharacter.setRotation(10);
-							break;
-						case 5:
-							_currentCharacter.setRotation(0);
-							break;
+					case 0:
+						_currentCharacter.setRotation(-10);
+						break;
+					case 1:
+						_currentCharacter.setRotation(-5);
+						break;
+					case 2:
+						_currentCharacter.setRotation(0);
+						break;
+					case 3:
+						_currentCharacter.setRotation(5);
+						break;
+					case 4:
+						_currentCharacter.setRotation(10);
+						break;
+					case 5:
+						_currentCharacter.setRotation(0);
+						break;
 					}
 				}
-				
-			_cnt+=1;
-			
-			/* if we've incremented numSteps times, then we should stop */
-			/* otherwise, continue incrementing */
-			if (_cnt == _numSteps) {
-				_isAnimating = false;
-				_timer.stop();
+
+				_cnt+=1;
+
+				/* if we've incremented numSteps times, then we should stop */
+				/* otherwise, continue incrementing */
+				if (_cnt == _numSteps) {
+					_isAnimating = false;
+					_timer.stop();
+				}
 			}
-		}
 		}
 	}
 
@@ -232,47 +233,47 @@ public class GameScreen extends Screen<GameScreenController> {
 	public boolean isAnimating() {
 		return _isAnimating;
 	}
-	
+
 	public void mapUpdate(int x, int y) {
-		
+
 		/* if in the bounds of the map, specifically in relation to the main character,
 		 * update the screen reference points and animate the map */
 		/*System.out.println("--------MAP UPDATE---------");
 		System.out.println("xRef: " + _xRef);
 		System.out.println("YRef: " + _yRef);	*/
-		
+
 		if((_xRef + x + 11) <= MAP_WIDTH && (_xRef + x + 11) > 0 && (_yRef + y + 9) <= MAP_HEIGHT && (_yRef + y + 9) > 0) {
-			
+
 			_isAnimating = true;
-			
+
 			MapMoveTimer timer = new MapMoveTimer(x,y, false);
 			timer.start();
-			
+
 			_xRef += x;
 			_yRef += y;
 		}
-		
-	//	System.out.println("--------------------------");
+
+		//	System.out.println("--------------------------");
 	}
-	
+
 	public void pan(int x, int y) {
-		
+
 		if((_xRef + x + 11) <= MAP_WIDTH && (_xRef + x + 11) > 0 && (_yRef + y + 9) <= MAP_HEIGHT && (_yRef + y + 9) > 0) {
-			
+
 			_isAnimating = true;
-			
+
 			MapMoveTimer timer = new MapMoveTimer(x,y, true);
 			timer.start();
-			
+
 			_xRef += x;
 			_yRef += y;
 		}
 	}
-	
+
 	public Map getMap() {
 		return _currMap;
 	}
-	
+
 	/**
 	 * @param x the window x-coordinate
 	 * @param y the window y-coordinate
@@ -282,17 +283,17 @@ public class GameScreen extends Screen<GameScreenController> {
 	public Tile getTile(int x, int y) {
 		return _currMap.getTile(getMapX(x), getMapY(y));
 	}
-	
+
 	/**
 	 * @param x
 	 * @return the x-index of the tile in the map given the x-coordinate in the window
 	 * @author rroelke
 	 */
 	public int getMapX(int x) {
-	//	System.out.print("xRef: " + _xRef);
+		//	System.out.print("xRef: " + _xRef);
 		return (x / Tile.TILE_SIZE) + _xRef;
 	}
-	
+
 	/**
 	 * @param y
 	 * @return the y-index of the tile in the map given the y-coordinate in the window
@@ -301,7 +302,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	public int getMapY(int y) {
 		return (y / Tile.TILE_SIZE) + _yRef;
 	}
-	
+
 	/**
 	 * 
 	 * @return the PriorityQueue storing the Characters to paint
@@ -309,15 +310,15 @@ public class GameScreen extends Screen<GameScreenController> {
 	public PriorityQueue<Rectangle> getCharacterQueue(){
 		return _characterTerrainQueue;
 	}
-	
-/*	/**
+
+	/*	/**
 	 * 
 	 * @return The PriorityQueue storing the Menu items to paint
 	 */
-/*	public PriorityQueue<MenuItem> getMenuQueue(){
+	/*	public PriorityQueue<MenuItem> getMenuQueue(){
 		return _menuQueue;
 	}	*/
-	
+
 	/**
 	 * adds a menu item for drawing
 	 * @param m the menu item to add
@@ -327,7 +328,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			_menuQueue.add(m);
 		}
 	}
-	
+
 	/**
 	 * removes a menu item
 	 * @param m the item to remove
@@ -341,17 +342,17 @@ public class GameScreen extends Screen<GameScreenController> {
 		}
 		return b;
 	}
-	 
+
 	public void paintComponent(java.awt.Graphics graphics) {
 		Graphics2D g = (Graphics2D) graphics;
-		
-	/*	System.out.println("-------PAINT--------");
+
+		/*	System.out.println("-------PAINT--------");
 		System.out.println("xMin: " + (_xRef - 1));
 		System.out.println("xMax: " + (_xRef + 22));
 		System.out.println("yMin: " + (_yRef - 1));
 		System.out.println("yMax: " + (_yRef + 18));
 		System.out.println("--------------------");		*/
-		
+
 		super.paintComponent(g);
 
 		// paint all of the tiles first
@@ -363,81 +364,81 @@ public class GameScreen extends Screen<GameScreenController> {
 				}
 			}
 		}
-		
+
 		// add all Characters to PriorityQueue
 		List<Character> charsToPaint = this.getController().getCharactersToDisplay();
-	
-	//	System.out.println("====print characters====");
+
+		//	System.out.println("====print characters====");
 		for(Character c : charsToPaint) {
-	//		System.out.println("name: " + c.getName());
+			//		System.out.println("name: " + c.getName());
 			_characterTerrainQueue.add(c);
 			//int overflow = (c.getImage().getWidth() - Tile.TILE_SIZE) / 2;
 			//c.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
 		}
-		
+
 		// add all Terrain to PriorityQueue
 		for(Terrain t : _terrainToPaint){
-	//		System.out.println("Priority : " + (t.getPaintPriority()));
-	//		System.out.println("Adding Terrain");
+			//		System.out.println("Priority : " + (t.getPaintPriority()));
+			//		System.out.println("Adding Terrain");
 			_characterTerrainQueue.add(t);
 		}
 
 		// add the main character to the queue
 		_characterTerrainQueue.add(_currentCharacter);
-		
-	//	System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
+
+		//	System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
 
 		// paint all characters and terrains
 		while(!_characterTerrainQueue.isEmpty()) {
 			Rectangle toPaint = _characterTerrainQueue.poll();
-	//		System.out.println("Painted: " + toPaint.getPaintPriority());
+			//		System.out.println("Painted: " + toPaint.getPaintPriority());
 			toPaint.setVisible(true);
 			toPaint.paint(g, toPaint.getImage());				
 		}
-		
+
 		//print all the menu items
 		List<MenuItem> items = new LinkedList<MenuItem>();
 		synchronized (_menuQueue) {
 			while (!_menuQueue.isEmpty()) {
 				items.add(_menuQueue.poll());
 			}
-			
+
 			for (MenuItem m : items) {
 				m.paint(g, m.getImage());
 				_menuQueue.add(m);
 			}
 		}
 
-		
-		
-//		if (_currentCharacter != null) {
-//			int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
-//			_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
-//			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getImage());
-//		}
-		
-		//System.out.println("--------------------");
-				
-//		m.setLocation(_currentCharacter.getX(),_currentCharacter.getY());
-//		m.setVisible(true);
-//		m.setDown();
-//		m.setFillColor(java.awt.Color.BLACK);
-//		m.setSize(65, 50);
-//		m.paint((Graphics2D) g,m.getImage());
-//		_currentCharacter = m;
 
-}
-	
+
+		//		if (_currentCharacter != null) {
+		//			int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
+		//			_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
+		//			_currentCharacter.paint((Graphics2D) g,_currentCharacter.getImage());
+		//		}
+
+		//System.out.println("--------------------");
+
+		//		m.setLocation(_currentCharacter.getX(),_currentCharacter.getY());
+		//		m.setVisible(true);
+		//		m.setDown();
+		//		m.setFillColor(java.awt.Color.BLACK);
+		//		m.setSize(65, 50);
+		//		m.paint((Graphics2D) g,m.getImage());
+		//		_currentCharacter = m;
+
+	}
+
 	@Override
 	public void render() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	public void switchToGameMenu() {
 		_dt.changeScreens(_dt.getGameMenuScreen());
 	}
-	
+
 	/**
 	 * transitions the game to a new combat
 	 * @author rroelke
@@ -445,7 +446,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	public void enterCombat(CombatOrchestrator orch) {
 		pushControl(orch);
 	}
-	
+
 	/**
 	 * transitions the game to a new combat
 	 * used principally for random battles
@@ -458,7 +459,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		e.add(enemy);
 		enterCombat(new CombatOrchestrator(_dt, e, null, null, RandomBattleAI.RANDOM_BATTLE_NUM_UNITS));
 	}
-	
+
 	/**
 	 * @param x the x-coordinate
 	 * @param y the y-coordinate
@@ -469,7 +470,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	public List<Tile> getValidSetupTiles(int num) {
 		return _currMap.getValidSetupTiles(_currMap.getTile(getMapX(getWidth()/2), getMapY(getHeight()/2)), num);
 	}
-	
+
 	/**
 	 * Accessor method used by Overworld Controller to deal with tile permissions
 	 * @return the XRef
@@ -477,7 +478,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	public int getXRef(){
 		return this._xRef;
 	}
-	
+
 	/**
 	 * Accessor method used by Overworld Controller to deal with tile permissions
 	 * @return the YRef
@@ -485,13 +486,13 @@ public class GameScreen extends Screen<GameScreenController> {
 	public int getYRef(){
 		return this._yRef;
 	}
-	
+
 	/**
 	 * @param point the location of the screen to check
 	 * @return the menu element of the screen that contains the given point, null if none exists
 	 */
 	public MenuItem checkContains(java.awt.Point point) {
-		
+
 		MenuItem toReturn = null;
 		for (MenuItem r : _menuQueue) {
 			r.setDefault();
@@ -500,11 +501,11 @@ public class GameScreen extends Screen<GameScreenController> {
 				toReturn = r;
 			}
 		}
-		
+
 		repaint();
 		return toReturn;
 	}
-	
+
 	/**
 	 * adds a character to the gamescreen for display
 	 */
