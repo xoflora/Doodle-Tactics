@@ -35,8 +35,14 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	private List<Tile> _enemyAttackRange;
 	private List<Tile> _characterAttackRange;
 	
+	private List<Tile> _cacheMovementRange;
+	private List<Tile> _cacheAttackRange;
+	
 	private List<Tile> _path;
 	private int _pathCost;
+	private List<Tile> _cachePath;
+	private int _cacheCost;
+	private Tile _cacheDestTile;
 	
 	private State _state;
 	private UnitPool _pool;
@@ -52,8 +58,15 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_selectedMovementRange = new ArrayList<Tile>();
 		_enemyAttackRange = new ArrayList<Tile>();
 		_characterAttackRange = new ArrayList<Tile>();
+		
 		_path = new ArrayList<Tile>();
 		_pathCost = 0;
+		_cachePath = null;
+		_cacheCost = 0;
+		_cacheDestTile = null;
+		
+		_cacheMovementRange = null;
+		_cacheAttackRange = null;
 		
 		try {
 			_pool = new UnitPool(_dt, _gameScreen, this, _units);
@@ -76,7 +89,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		for (Tile t : _path) {
 			t.setInMovementPath(true);
 			_pathCost += t.cost();
-		}	
+		}
 	}
 	
 	/**
@@ -96,20 +109,30 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * resets the player combat controller such that nothing is selected
 	 */
 	private void clear() {
-		for (Tile t : _selectedMovementRange)
-			t.setInMovementRange(false);
 		for (Tile t : _enemyAttackRange)
 			t.setInEnemyAttackRange(false);
 		
 		_selectedTile = null;
 		_selectedCharacter = null;
-		_selectedMovementRange = new ArrayList<Tile>();
 		_enemyAttackRange = new ArrayList<Tile>();
 
+		clearMovementRange();
 		clearPlayerAttackRange();
 		clearPath();
 		
+		_cacheMovementRange = null;
+		_cacheAttackRange = null;
+		_cachePath = null;
+		_cacheCost = 0;
+		_cacheDestTile = null;
+		
 		_state = State.START;
+	}
+	
+	private void clearMovementRange() {
+		for (Tile t : _selectedMovementRange)
+			t.setInMovementRange(false);
+		_selectedMovementRange = new ArrayList<Tile>();
 	}
 	
 	private void clearPlayerAttackRange() {
@@ -123,12 +146,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			t.setInMovementPath(false);
 		_path = new ArrayList<Tile>();
 		_pathCost = 0;
-		_destTile = null;
-		
-		if (_selectedTile != null) {
-			_path.add(_selectedTile);
-			_selectedTile.setInMovementPath(true);
-		}
 	}
 
 	@Override
@@ -174,7 +191,16 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						move(_selectedCharacter, _path);
 						_state = State.CHARACTER_OPTION_MENU;
 						
+						_cacheMovementRange = _selectedMovementRange;
+						clearMovementRange();
+						
+						_cacheAttackRange = _characterAttackRange;
 						setPlayerAttackRange(_destTile, _selectedCharacter);
+						
+						_cachePath = _path;
+						_cacheCost = _pathCost;
+						_cacheDestTile = _destTile;
+						clearPath();
 					}
 				}
 				//selected tile is the coordinate to move the character to
@@ -201,13 +227,26 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				_selectedCharacter.setLocation(_selectedTile.getX(), _selectedTile.getY());
 				clearPath();
 				clearPlayerAttackRange();
-				_characterAttackRange = Util.difference(_gameScreen.getMap().
-						getAttackRange(_selectedTile, _selectedCharacter.getMovementRange(),
-								_selectedCharacter.getMinAttackRange(),
-								_selectedCharacter.getMaxAttackRange()),
-						_selectedMovementRange);
+				
+				_selectedMovementRange = _cacheMovementRange;
+				for (Tile toPaint : _selectedMovementRange)
+					toPaint.setInMovementRange(true);
+				_cacheMovementRange = null;
+				
+				_characterAttackRange = _cacheAttackRange;
 				for (Tile toPaint : _characterAttackRange)
 					toPaint.setInPlayerAttackRange(true);
+				_cacheAttackRange = null;
+				
+				_path = _cachePath;
+				_pathCost = _cacheCost;
+				_destTile = _cacheDestTile;
+				for (Tile toPaint : _path)
+					toPaint.setInMovementPath(true);
+				_cachePath = null;
+				_cacheCost = 0;
+				_cacheDestTile = null;
+				
 				_state = State.CHARACTER_SELECTED;
 			}
 		}
