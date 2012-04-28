@@ -186,7 +186,12 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						}
 					}
 					else {
-						
+						int i = _path.size() - 1;
+						while (_path.get(i) != t && i >= 0) {
+							_path.get(i).setInMovementPath(false);
+							_path.remove(i);
+							i--;
+						}
 					}
 				}
 			}

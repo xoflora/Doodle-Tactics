@@ -592,7 +592,6 @@ public class Map implements Serializable {
 			path.addFirst(previousTile);
 			previousTile = previous.get(previousTile);
 		}
-		path.addFirst(previousTile);
 
 		return path;
 	}
