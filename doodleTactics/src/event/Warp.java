@@ -9,22 +9,20 @@ import map.Tile;
 public class Warp extends Event {
 	
 	private Tile _tile;
+	private String _eventPath;
 	
-	public Warp(DoodleTactics dt, Tile tile) {
+	public Warp(DoodleTactics dt, Tile tile, String eventPath) {
 		super(dt);
 		_tile = tile;
+		_eventPath = eventPath;
 	}
 
 	@Override
 	public void take() {
-		System.out.println("Event Path:" + _tile.getEventPath());
-		_gameScreen.setMap(_tile.getEventPath());
+		super.take();
+		_gameScreen.setMap(_eventPath);
 		_tile.removeOccupant();
-	}
-	
-	@Override
-	public void release() {
-		
+		_gameScreen.popControl();
 	}
 	
 	@Override
