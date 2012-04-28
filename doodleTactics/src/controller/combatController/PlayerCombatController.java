@@ -73,6 +73,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			t.setInMovementRange(false);
 		for (Tile t : _enemyAttackRange)
 			t.setInEnemyAttackRange(false);
+		for (Tile t : _characterAttackRange)
+			t.setInPlayerAttackRange(false);
 		
 		_selectedTile = null;
 		_selectedCharacter = null;
@@ -110,10 +112,20 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 					if (t.isOccupied()) {
 						if (c.getAffiliation() == this) {
 							_selectedTile = t;
-							_selectedMovementRange = _gameScreen.getMap().getMovementRange(t, c.getMovementRange());
 							_selectedCharacter = c;
+							
+							List<Tile> mv = _gameScreen.getMap().getMovementRange(t, c.getMovementRange());
+							List<Tile> atk = _gameScreen.getMap().getAttackRange(t, c.getMovementRange(),
+												c.getMinAttackRange(), c.getMaxAttackRange());
+							
+							_selectedMovementRange = mv;
+							_characterAttackRange = Util.difference(atk, mv);
+							
 							for (Tile toPaint : _selectedMovementRange)
 								toPaint.setInMovementRange(true);
+							for (Tile toPaint : _characterAttackRange) {
+								toPaint.setInPlayerAttackRange(true);
+							}
 							state = State.CHARACTER_SELECTED;
 						}
 						else if (_enemyAffiliations.contains(c.getAffiliation())) {
