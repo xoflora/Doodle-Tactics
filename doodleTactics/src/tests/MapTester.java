@@ -34,7 +34,7 @@ public class MapTester {
 			BufferedImage img =ImageIO.read(new File("src/graphics/tiles/tile.png"));
 			for (int i = 0; i < tiles.length; i++)
 				for (int j = 0; j < tiles[i].length; j++)
-					tiles[i][j] = Tile.tile(panel, img, 'F', i, j, 1, false, null);
+					tiles[i][j] = Tile.tile(panel, img, 'F', i, j, 1, false);
 			_test = new Map(tiles, "TestMap", null, null, null, null);
 
 			_test.getTile(7, 7).setCost(5);

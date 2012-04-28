@@ -195,6 +195,8 @@ public class Map implements Serializable {
 					if (toAdd != null) { 
 						chars.add(toAdd);
 						target.setOccupant(toAdd);
+						System.out.println("Adding Character: " + splitLine[2]);
+						dt.addCharacterToMap(toAdd, splitLine[2]);
 					}
 					
 				// Main character case
@@ -208,6 +210,7 @@ public class Map implements Serializable {
 							.getImage().getHeight());
 					int overflow = (main.getImage().getWidth() - Tile.TILE_SIZE) / 2;
 					main.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE - main.getImage().getHeight() + Tile.TILE_SIZE);
+					dt.addCharacterToMap(main, splitLine[2]);
 				}	
 
 				// Tile case

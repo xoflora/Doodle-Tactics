@@ -229,4 +229,74 @@ public class UtilTester {
 			assert(result.get(i).equals(cmp2[i]));
 		assert(result.size() == cmp2.length);
 	}
+	
+	@Test
+	/**
+	 * tests the list intersection function
+	 */
+	public void testListIntersection() {
+		List<Integer> src1 = new LinkedList<Integer>();
+		List<Integer> src2 = new LinkedList<Integer>();
+		List<Integer> dest = Util.intersection(src1, src1);
+		assert(dest.isEmpty());
+		
+		for (int i = 0; i < 12; i++)
+			src1.add(i);
+		dest = Util.intersection(src1, src2);
+		assert(dest.isEmpty());
+		
+		dest = Util.intersection(src2, src1);
+		assert(dest.isEmpty());
+		
+		dest = Util.intersection(src1, src1);
+		for (int i = 0; i < 12; i++)
+			assert(dest.get(i) == i);
+		
+		for (int i = 5; i >= 0; i--)
+			src2.add(2*i);
+		dest = Util.intersection(src1, src2);
+		for (int i = 0; i < 6; i++)
+			assert(dest.get(i) == 2*i);
+		
+		dest = Util.intersection(src2, src1);
+		for (int i = 5; i >= 0; i--)
+			assert(dest.get(5 - i) == 2*i);
+	}
+	
+	@Test
+	/**
+	 * tests the list difference function
+	 */
+	public void testListDifference() {
+		List<Integer> a = new LinkedList<Integer>();
+		List<Integer> b = new LinkedList<Integer>();
+		List<Integer> dif = Util.difference(a, b);
+		assert(dif.isEmpty());
+		
+		for (int i = 0; i < 6; i++)
+			b.add(i*i);
+		dif = Util.difference(a, b);
+		assert(dif.isEmpty());
+		
+		dif = Util.difference(b, a);
+		for (int i = 0; i < 6; i++)
+			assert(dif.get(i) == i*i);
+		
+		for (int i = 1; i < 8; i++)
+			a.add(7*i);
+		dif = Util.difference(a, b);
+		assert(dif.containsAll(a) && a.containsAll(dif));
+		
+		for (int i = 0; i < 6; i++)
+			a.add(2*i);
+		dif = Util.difference(a, b);
+		int[] cmp = {7, 14, 21, 28, 35, 42, 49, 2, 6, 8, 10};
+		for (int i = 0; i < cmp.length; i++)
+			assert(dif.get(i) == cmp[i]);
+		
+		dif = Util.difference(b, a);
+		int[] t = {1, 9, 16, 25};
+		for (int i = 0; i < t.length; i++)
+		assert(dif.get(i) == t[i]);
+	}
 }

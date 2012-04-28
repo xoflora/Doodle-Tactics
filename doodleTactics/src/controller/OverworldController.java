@@ -146,8 +146,10 @@ public class OverworldController extends GameScreenController {
 					break;
 				}
 				
-				if(newTile != null && newTile.interactible())
+				if(newTile != null && newTile.interactible()){
+					System.out.println("Here");
 					_gameScreen.pushControl(newTile.getEvent());
+				}
 			}			
 		}
 		_gameScreen.repaint();

@@ -26,13 +26,13 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		CHARACTER_OPTION_MENU
 	}
 	
+	private Tile _destTile;
 	private Tile _selectedTile;
-	private Tile _hoveredTile;
 	private Character _selectedCharacter;
-	private Character _hoveredCharacter;
 	
 	private List<Tile> _selectedMovementRange;
 	private List<Tile> _enemyAttackRange;
+	private List<Tile> _characterAttackRange;
 	
 	private List<Tile> _path;
 	private int _pathCost;
@@ -41,14 +41,14 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	
 	public PlayerCombatController(DoodleTactics dt) {
 		super(dt, dt.getParty());
-		
+
+		_destTile = null;
 		_selectedTile = null;
-		_hoveredTile = null;
 		_selectedCharacter = null;
-		_hoveredCharacter = null;
 		
 		_selectedMovementRange = new ArrayList<Tile>();
 		_enemyAttackRange = new ArrayList<Tile>();
+		_characterAttackRange = new ArrayList<Tile>();
 		_path = new ArrayList<Tile>();
 		_pathCost = 0;
 		
@@ -68,24 +68,34 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	/**
 	 * resets the player combat controller such that nothing is selected
 	 */
-	public void clear() {
+	private void clear() {
 		for (Tile t : _selectedMovementRange)
 			t.setInMovementRange(false);
 		for (Tile t : _enemyAttackRange)
 			t.setInEnemyAttackRange(false);
-		for (Tile t : _path)
-			t.setInMovementPath(false);
 		
 		_selectedTile = null;
 		_selectedCharacter = null;
-		_hoveredCharacter = null;
 		_selectedMovementRange = new ArrayList<Tile>();
 		_enemyAttackRange = new ArrayList<Tile>();
+		_characterAttackRange = new ArrayList<Tile>();
 		
-		_path = new ArrayList<Tile>();
-		_pathCost = 0;
+		clearPath();
 		
 		state = State.START;
+	}
+	
+	private void clearPath() {
+		for (Tile t : _path)
+			t.setInMovementPath(false);
+		_path = new ArrayList<Tile>();
+		_pathCost = 0;
+		_destTile = null;
+		
+		if (_selectedTile != null) {
+			_path.add(_selectedTile);
+			_selectedTile.setInMovementPath(true);
+		}
 	}
 
 	@Override
@@ -94,28 +104,37 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			Tile t = _gameScreen.getTile(e.getX(), e.getY());
-			if (t != null && t.isOccupied()) {
+			if (t != null) {
 				Character c = t.getOccupant();
 				if (state == State.START) {
-					if (c.getAffiliation() == this) {
-						_selectedTile = t;
-						_selectedMovementRange = _gameScreen.getMap().getMovementRange(t, c.getMovementRange());
-						_selectedCharacter = c;
-						for (Tile toPaint : _selectedMovementRange)
-							toPaint.setInMovementRange(true);
-						state = State.CHARACTER_SELECTED;
-					}
-					else if (_enemyAffiliations.contains(c.getAffiliation())) {
-						_enemyAttackRange = Util.union(_enemyAttackRange,
-								_gameScreen.getMap().getAttackRange(t, c.getMovementRange(),
-										c.getMinAttackRange(), c.getMaxAttackRange()));
+					if (t.isOccupied()) {
+						if (c.getAffiliation() == this) {
+							_selectedTile = t;
+							_selectedMovementRange = _gameScreen.getMap().getMovementRange(t, c.getMovementRange());
+							_selectedCharacter = c;
+							for (Tile toPaint : _selectedMovementRange)
+								toPaint.setInMovementRange(true);
+							state = State.CHARACTER_SELECTED;
+						}
+						else if (_enemyAffiliations.contains(c.getAffiliation())) {
+							_enemyAttackRange = Util.union(_enemyAttackRange,
+									_gameScreen.getMap().getAttackRange(t, c.getMovementRange(),
+											c.getMinAttackRange(), c.getMaxAttackRange()));
+						}
 					}
 				}
+				//selected tile and character are not null; selected character is the occupant of the tile
 				else if (state == State.CHARACTER_SELECTED) {
-					
+					if (_path.contains(t)) {
+						_destTile = t;
+						state = State.CHARACTER_MOVING;
+						move(_selectedCharacter, _path);
+						state = State.CHARACTER_OPTION_MENU;
+					}
 				}
+				//selected tile is the coordinate to move the character to
 				else if (state == State.CHARACTER_MOVING) {
-
+					
 				}
 				else if (state == State.CHARACTER_OPTION_MENU) {
 
@@ -128,10 +147,15 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			else if (state == State.CHARACTER_SELECTED)
 				clear();
 			else if (state == State.CHARACTER_MOVING) {
-
+				clearPath();
+				state = State.CHARACTER_SELECTED;
 			}
 			else if (state == State.CHARACTER_OPTION_MENU) {
-
+				_destTile.setOccupant(null);
+				_selectedTile.setOccupant(_selectedCharacter);
+				_selectedCharacter.setLocation(_selectedTile.getX(), _selectedTile.getY());
+				clearPath();
+				state = State.CHARACTER_SELECTED;
 			}
 		}
 	}
@@ -141,21 +165,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		super.mouseMoved(e);
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		if (t != null) {
-		/*	_hoveredCharacter = t.getOccupant();
-			
-			if (_hoveredCharacter == null) {
-				if (_selectedTile != null && _selectedCharacter != null) {
-					if (t.isAdjacent(_path.get(_path.size() - 1)) && _pathCost + t.cost() <=
-							_selectedCharacter.getMovementRange()) {
-						_pathCost += t.cost();
-						_path.add(t);
-					}
-					else if (_selectedMovementRange.contains(t)) {
-						_path = _gameScreen.getMap().getPath(_selectedTile, t);
-						_pathCost = _selectedCharacter.getMovementRange();
-					}
-				}
-			}*/
 			
 			if (state == State.CHARACTER_SELECTED) {	//selected character and tile are not null
 				if (_selectedMovementRange.contains(t)) {
@@ -165,6 +174,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 							_pathCost += t.cost();
 							t.setInMovementPath(true);
 						}
+						else
+							setPath(_selectedTile, t);
 					}
 					else if (!_path.contains(t)) {
 						if (t.isAdjacent(_path.get(_path.size() - 1)) && _pathCost + t.cost() <=
@@ -172,20 +183,13 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 							_path.add(t);
 							_pathCost += t.cost();
 							t.setInMovementPath(true);
-							
-							System.out.println("Hello");
 						}
-						else {
-							System.out.println(_pathCost);
-							for (Tile u : _path)
-								u.setInMovementPath(false);
-							_path = new ArrayList<Tile>();
-							_pathCost = 0;
-							
+						else {	//unreachable from current path - change entirely
+							clearPath();
 							setPath(_selectedTile, t);
 						}
 					}
-					else {
+					else {	//backtracing in path
 						int i = _path.size() - 1;
 						while (_path.get(i) != t && i >= 0) {
 							_path.get(i).setInMovementPath(false);

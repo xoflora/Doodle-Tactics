@@ -380,7 +380,6 @@ public class Tile extends graphics.Rectangle {
 		if (_inMovementPath) {
 			_overlay = MOVEMENT_PATH_COLOR;
 			_opacity = OVERLAY_OPACITY;
-			System.out.println("movment path");
 		}
 	/*	if (_inAttackRange) {
 			_opacity = INTERSECTION_OPACITY;
