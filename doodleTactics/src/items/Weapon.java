@@ -22,4 +22,12 @@ public abstract class Weapon extends Equipment{
 	public void exert(Character c){
 		c.changeWeapon(this);
 	}
+	
+	public int getMinAttackRange() {
+		return _minAttackRange;
+	}
+	
+	public int getMaxAttackRange() {
+		return _maxAttackRange;
+	}
 }
