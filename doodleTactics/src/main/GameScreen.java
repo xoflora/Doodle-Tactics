@@ -127,13 +127,18 @@ public class GameScreen extends Screen<GameScreenController> {
 		return new OverworldController(_dt, this);
 	}
 	
+	/**
+	 * Timer used for animating the map either for panning or moving in the overworld
+	 * @author jeshapir
+	 *
+	 */
 	private class MapMoveTimer extends Timer {
 
 		private int _deltaX, _deltaY;
 
-		public MapMoveTimer(int deltaX, int deltaY) {
+		public MapMoveTimer(int deltaX, int deltaY, boolean isPan) {
 			super(50, null);
-			this.addActionListener(new MyMoveListener(this));
+			this.addActionListener(new MyMoveListener(this, isPan));
 			_deltaX = deltaX;
 			_deltaY = deltaY;
 		}
@@ -143,15 +148,15 @@ public class GameScreen extends Screen<GameScreenController> {
 			private Timer _timer;
 			private int _cnt = 0;
 			private final int _numSteps = 6;
+			private boolean _isPan;
 
-			public MyMoveListener (Timer t) {
+			public MyMoveListener (Timer t, boolean isPan) {
 				_timer = t;
+				_isPan = isPan;
 			}
 
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 
-				/* if we've incremented numSteps times, then we should stop */
-				/* otherwise, continue incrementing */
 				for(int i = 0; i < MAP_WIDTH; i++) {
 					for(int j = 0; j < MAP_HEIGHT; j++) {
 						Tile t = _currMap.getTile(i, j);
@@ -161,42 +166,52 @@ public class GameScreen extends Screen<GameScreenController> {
 				}
 				
 				for(Rectangle r: _terrainToPaint){
-				//	System.out.println("BEFORE update terrain x: " + r.getX() + ", y:" + r.getY());
 					r.setLocation((r.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), r.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
-				//	System.out.println("AFTER update terrain x: " + r.getX() + ", y:" + r.getY());
 					repaint();
 				}
 				
 				List <Character> charsToPaint = getController().getCharactersToDisplay();
+				
+				/* if the camera is panning, then all of the characters including
+				 * the character in control should move */
+				if(_isPan) {
+					charsToPaint.add(_currentCharacter);
+				}
+				
 				for(Character c : charsToPaint) {
-				//	System.out.println("BEFORE update character x: " + c.getX() + ", y:" + c.getY());
 					c.setLocation((c.getX() + (-_deltaX*Tile	.TILE_SIZE / _numSteps)), c.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
-				//	System.out.println("AFTER update character x: " + c.getX() + ", y:" + c.getY()); 
 					repaint();
 				}
 				
-				switch(_cnt) {
-					case 0:
-						_currentCharacter.setRotation(-10);
-						break;
-					case 1:
-						_currentCharacter.setRotation(-5);
-						break;
-					case 2:
-						_currentCharacter.setRotation(0);
-						break;
-					case 3:
-						_currentCharacter.setRotation(5);
-						break;
-					case 4:
-						_currentCharacter.setRotation(10);
-						break;
-					case 5:
-						_currentCharacter.setRotation(0);
-						break;
+				/* if the camera is not panning, the main character is walking so do rotations
+				 * for animation appropriately */
+				if(!_isPan) {
+					switch(_cnt) {
+						case 0:
+							_currentCharacter.setRotation(-10);
+							break;
+						case 1:
+							_currentCharacter.setRotation(-5);
+							break;
+						case 2:
+							_currentCharacter.setRotation(0);
+							break;
+						case 3:
+							_currentCharacter.setRotation(5);
+							break;
+						case 4:
+							_currentCharacter.setRotation(10);
+							break;
+						case 5:
+							_currentCharacter.setRotation(0);
+							break;
+					}
 				}
 				
 			_cnt+=1;
+			
+			/* if we've incremented numSteps times, then we should stop */
+			/* otherwise, continue incrementing */
 			if (_cnt == _numSteps) {
 				_isAnimating = false;
 				_timer.stop();
@@ -226,7 +241,23 @@ public class GameScreen extends Screen<GameScreenController> {
 			
 			_isAnimating = true;
 			
-			MapMoveTimer timer = new MapMoveTimer(x,y);
+			MapMoveTimer timer = new MapMoveTimer(x,y, true);
+			timer.start();
+			
+			_xRef += x;
+			_yRef += y;
+		}
+		
+	//	System.out.println("--------------------------");
+	}
+	
+	public void pan(int x, int y) {
+		
+		if((_xRef + x + 11) <= MAP_WIDTH && (_xRef + x + 11) > 0 && (_yRef + y + 9) <= MAP_HEIGHT && (_yRef + y + 9) > 0) {
+			
+			_isAnimating = true;
+			
+			MapMoveTimer timer = new MapMoveTimer(x,y, true);
 			timer.start();
 			
 			_xRef += x;
