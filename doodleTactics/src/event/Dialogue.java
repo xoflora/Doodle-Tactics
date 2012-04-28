@@ -109,36 +109,38 @@ public class Dialogue extends Event {
 		case KeyEvent.VK_DOWN:
 			//handle down
 			System.out.println("DOWN");
+			_currIndex++;
 			if(_currIndex >= _characters.size())
 				_gameScreen.popControl();
-			else{
-				_currIndex++;
-				//show current dialogue
-				BufferedImage profileImg = _characters.get(_currIndex).getProfileImage();
-				if(_profile != null)
-					_gameScreen.removeMenuItem(_profile);
-				_profile = new MenuItem(_gameScreen, profileImg,profileImg,_dt,5);
-				_profile.setVisible(true);
-				_profile.setSize(150, 150);
-				_profile.setLocation(230,635);
-				_gameScreen.addMenuItem(_profile);
-				_gameScreen.repaint();
-
-			}
+			else
+				paintNext();
 			break;
 		}
 	}
+	
+	public void paintNext(){
+		if(_profile != null){
+			_gameScreen.removeMenuItem(_profile);
+			_profile.setVisible(false);
+		}
 
+		BufferedImage profileImg = _characters.get(_currIndex).getProfileImage();
+		_profile = new MenuItem(_gameScreen, profileImg,profileImg,_dt,5);
+		_profile.setVisible(true);
+		_profile.setSize(150, 150);
+		_profile.setLocation(230,635);
+		_gameScreen.addMenuItem(_profile);
+		_gameScreen.repaint();
 
-	public void display() {
-		
 	}
+
 
 	@Override
 	public void release() {
-		_gameScreen.removeMenuItem(_dialogueBox);
 		if(_profile != null)
 			_gameScreen.removeMenuItem(_profile);
+
+		_gameScreen.removeMenuItem(_dialogueBox);
 	}
 
 	@Override
@@ -153,12 +155,7 @@ public class Dialogue extends Event {
 			_dialogueBox.setSize(700, 200);
 			_dialogueBox.setLocation(185,620);
 			_gameScreen.addMenuItem(_dialogueBox);
-			MenuItem _profile = new MenuItem(_gameScreen,_characters.get(_currIndex).getProfileImage(),_characters.get(_currIndex).getProfileImage(),_dt,5);
-			_profile.setVisible(true);
-			_profile.setSize(150, 150);
-			_profile.setLocation(230,635);
-			_gameScreen.addMenuItem(_profile);
-			_gameScreen.repaint();
+			paintNext();
 			
 		} catch (IOException e) {
 			System.out.println("Invalid Dialogue Box file");
