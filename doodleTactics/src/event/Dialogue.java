@@ -1,8 +1,12 @@
 package event;
 
+import graphics.MenuItem;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import character.Archer;
 import character.Character;
@@ -117,9 +123,19 @@ public class Dialogue extends Event {
 	@Override
 	public void take() {
 		System.out.println("Start Dialogue!");
+		BufferedImage img;
+		try {
+			img = ImageIO.read(new File("src/graphics/menu/dialogue_box.jpg"));
+			MenuItem dialogueBox = new MenuItem(_gameScreen,img,img,_dt,5);
+			dialogueBox.setVisible(true);
+			dialogueBox.setSize(525, 200);
+			dialogueBox.setLocation(350,620);
+			_gameScreen.addMenuItem(dialogueBox);
+		} catch (IOException e) {
+			System.out.println("Invalid Dialogue Box file");
+		}
 		
-		
-		_gameScreen.popControl();
+//		_gameScreen.popControl();
 		//display Dialogue box and start 		
 	}
 
