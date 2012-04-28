@@ -396,9 +396,9 @@ public class GameScreen extends Screen<GameScreenController> {
 		for(int i = 0; i < MAP_WIDTH; i++) {
 			for(int j = 0; j < MAP_HEIGHT; j++) {
 				// check that the given tile is within the bounds before painting it 
-				if((i < _xRef + 22 && i >= _xRef - 1) && (j < (_yRef + 18) && j >= (_yRef - 1))) {
+				//if((i < _xRef + 22 && i >= _xRef - 1) && (j < (_yRef + 18) && j >= (_yRef - 1))) {
 					_currMap.getTile(i,j).paint(g, _currMap.getTile(i,j).getImage());
-				}
+				//}
 			}
 		}
 
