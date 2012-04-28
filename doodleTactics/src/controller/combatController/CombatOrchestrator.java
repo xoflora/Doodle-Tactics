@@ -79,6 +79,7 @@ public class CombatOrchestrator extends GameScreenController {
 			}
 	//		else	//combat has ended - win/loss condition
 	//			_gameScreen.popControl();
+			System.out.println("nothing");
 		}
 		else {
 			_gameScreen.pushControl(new PlayerSetup(_dt, _gameScreen.getValidSetupTiles(_numUnits + NUM_EXTRA_SETUP_SPACES)));

@@ -94,9 +94,11 @@ public class UnitPool extends MenuItem {
 		
 		@Override
 		public void activate(int type) {
-			if (!_complete) {
-				_complete = true;
-				_source.finalize();
+			synchronized(this) {
+				if (!_complete) {
+					_complete = true;
+					_source.finalize();
+				}
 			}
 		}
 	}
