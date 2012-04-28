@@ -160,6 +160,7 @@ public class Map implements Serializable {
 					
 					int xTile = Integer.parseInt(splitLine[2]);
 					int yTile = Integer.parseInt(splitLine[3]);
+					System.out.println(main.getTileX() + ": " + main.getTileY());
 					double xLoc = Tile.TILE_SIZE * (xTile  - main.getTileX());
 					double yLoc = Tile.TILE_SIZE * (yTile - main.getTileY());
 					tiles[xTile][yTile].setTilePermissions((splitLine[4]).charAt(0));
