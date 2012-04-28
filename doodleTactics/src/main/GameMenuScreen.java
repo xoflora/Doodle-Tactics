@@ -173,7 +173,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_charInfoList.add(toAdd);
 		}
 		_unitsBox.revalidate();
-		this.add(createLayer(_scrollBar, 3));
+		this.add(_scrollBar);
 		_scrollBar.revalidate();
 		this.revalidate();
 	}
