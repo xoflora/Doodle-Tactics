@@ -51,7 +51,7 @@ public class Tile extends graphics.Rectangle {
 	private static final Color ATTACK_RANGE_COLOR = Color.RED;
 	private static final Color MOVEMENT_RANGE_COLOR = Color.BLUE;
 	private static final Color MOUSEOVER_COLOR = Color.GREEN;
-	private static final Color MOVEMENT_PATH_COLOR = Color.ORANGE;
+	private static final Color MOVEMENT_PATH_COLOR = Color.PINK;
 	private static final Color MOVEMENT_ATTACK_INTERSECTION_COLOR = Util.mixColors(MOVEMENT_RANGE_COLOR, ATTACK_RANGE_COLOR);
 	private static final Color MOVEMENT_MOUSE_INTERSECTION_COLOR = Util.mixColors(MOVEMENT_RANGE_COLOR, MOUSEOVER_COLOR);
 	private static final Color ATTACK_MOUSE_INTERSECTION_COLOR = Util.mixColors(ATTACK_RANGE_COLOR, MOUSEOVER_COLOR);
@@ -376,13 +376,13 @@ public class Tile extends graphics.Rectangle {
 	 * updates the opacity and color overlay of the tile
 	 */
 	private void updateOverlay() {
-	/*	if (_inMovementPath) {
+		_opacity = INTERSECTION_OPACITY;
+		if (_inMovementPath) {
 			_overlay = MOVEMENT_PATH_COLOR;
 			_opacity = OVERLAY_OPACITY;
-			return;
+			System.out.println("movment path");
 		}
-		
-		if (_inAttackRange) {
+	/*	if (_inAttackRange) {
 			_opacity = INTERSECTION_OPACITY;
 			if (_inMovementRange) {
 				if (_hovered) {
@@ -424,11 +424,15 @@ public class Tile extends graphics.Rectangle {
 			}
 		}	*/
 		
-		if ((_hovered && (_inAttackRange || _inMovementRange)) ||
-				(_inAttackRange && _inMovementRange)) {
+		
+		else if (_hovered && _inMovementRange && _inAttackRange)
 			_overlay = INTERSECTION_COLOR;
-			_opacity = INTERSECTION_OPACITY;
-		}
+		else if (_hovered && _inMovementRange)
+			_overlay = MOVEMENT_MOUSE_INTERSECTION_COLOR;
+		else if (_inAttackRange && _inMovementRange)
+			_overlay = MOVEMENT_ATTACK_INTERSECTION_COLOR;
+		else if (_hovered && _inAttackRange)
+			_overlay = ATTACK_MOUSE_INTERSECTION_COLOR;
 		else {
 			_opacity = OVERLAY_OPACITY;
 			if (_inAttackRange)

@@ -55,6 +55,16 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		clear();
 	}
 	
+	private void setPath(Tile source, Tile dest) {
+		_pathCost = 0;
+		_path = _gameScreen.getMap().getPath(source, dest);
+		for (Tile t : _path) {
+			t.setInMovementPath(true);
+			_pathCost += t.cost();
+		}
+		
+	}
+	
 	/**
 	 * resets the player combat controller such that nothing is selected
 	 */
@@ -150,23 +160,33 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			if (state == State.CHARACTER_SELECTED) {	//selected character and tile are not null
 				if (_selectedMovementRange.contains(t)) {
 					if (_path.isEmpty()) {
-						if (t.isAdjacent(_selectedTile)) {
+						if (t.isAdjacent(_selectedTile) && t.cost() <= _selectedCharacter.getMovementRange()) {
 							_path.add(t);
 							_pathCost += t.cost();
-							t.setInEnemyAttackRange(true);
+							t.setInMovementPath(true);
 						}
 					}
-					else {
+					else if (!_path.contains(t)) {
 						if (t.isAdjacent(_path.get(_path.size() - 1)) && _pathCost + t.cost() <=
 								_selectedCharacter.getMovementRange()) {
 							_path.add(t);
 							_pathCost += t.cost();
 							t.setInMovementPath(true);
+							
+							System.out.println("Hello");
 						}
 						else {
+							System.out.println(_pathCost);
 							for (Tile u : _path)
 								u.setInMovementPath(false);
+							_path = new ArrayList<Tile>();
+							_pathCost = 0;
+							
+							setPath(_selectedTile, t);
 						}
+					}
+					else {
+						
 					}
 				}
 			}
