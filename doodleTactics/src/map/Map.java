@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import main.DoodleTactics;
 import character.*;
 import character.Character;
+import character.Character.CharacterDirection;
 import util.Heap;
 
 /**
@@ -39,7 +40,6 @@ import util.Heap;
  *         purposes
  */
 public class Map implements Serializable {
-
 	public static final int NORTH = 0;
 	public static final int EAST = 1;
 	public static final int SOUTH = 2;
@@ -104,7 +104,7 @@ public class Map implements Serializable {
 		int count = 2;
 		LinkedList<Terrain> terrainList = new LinkedList<Terrain>();
 		LinkedList<Character> chars = new LinkedList<Character>();
-		MainCharacter main = null;
+		MainCharacter main = dt.getGameScreen().getMainChar();
 		HashMap<String,BufferedImage> images = new HashMap<String,BufferedImage>();
 		try {
 			// Parse initial data
@@ -211,7 +211,7 @@ public class Map implements Serializable {
 					}
 					
 				// Main character case
-				} else if(splitLine.length == 8 && splitLine[1].equals("Main")){
+				}/* else if(splitLine.length == 8 && splitLine[1].equals("Main")){
 					main = new MainCharacter(container, splitLine[3],
 							splitLine[4], splitLine[5], splitLine[6],
 							splitLine[7],splitLine[2],5,5);
@@ -222,7 +222,7 @@ public class Map implements Serializable {
 					int overflow = (main.getImage().getWidth() - Tile.TILE_SIZE) / 2;
 					main.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE - main.getImage().getHeight() + Tile.TILE_SIZE);
 					dt.addCharacterToMap(main, splitLine[2]);
-				}	
+				}	*/
 
 				// Tile case
 				// 7 if no event specified, 8 otherwise
@@ -821,6 +821,7 @@ public class Map implements Serializable {
 	public int getPrevYRef(){
 		return _prevYRef.pop();
 	}
+
 	
 	/**
 	 * Setters for PrevX and YRef

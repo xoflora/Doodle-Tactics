@@ -9,7 +9,10 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -69,6 +72,9 @@ public class GameScreen extends Screen<GameScreenController> {
 		this.setBackground(java.awt.Color.BLACK);
 		MAP_WIDTH = 20;
 		MAP_HEIGHT = 20;
+		
+		
+		_currentCharacter = parseMainChar("src/tests/data/MainCharacterDemo");
 
 		//	_gameMenuController = _dt.getGameMenuScreen().getController();
 		_characterTerrainQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
@@ -77,10 +83,36 @@ public class GameScreen extends Screen<GameScreenController> {
 		//select a tile to go at the top left of the screen
 		_isAnimating = false;
 		_mapCache = new HashMap<String, Map>();
-
+		
 		this.repaint();
 	}
 
+	/**
+	 * Parses the Main Character from the given file
+	 */
+	public MainCharacter parseMainChar(String filePath){
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(new File(filePath)));
+			String[] split = br.readLine().split(",");
+			if(split.length != 7){
+				System.out.println("Invalid Main Character File");
+			} else{
+				MainCharacter main =  new MainCharacter(this,split[2],split[3],split[4],split[5],split[6],split[2],0,0);
+				int overflow = (main.getImage().getWidth() - Tile.TILE_SIZE) / 2;
+				double x = 10*Tile.TILE_SIZE-overflow;
+				double y=  8*Tile.TILE_SIZE - main.getImage().getHeight() + Tile.TILE_SIZE;
+				main.setLocation(x, y);
+				return main;
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("Invalid Main Character File Path");
+		} catch (IOException e) {
+			System.out.println("Invalid Main Character File");
+		}
+		System.exit(0);
+		return null;
+	}
+	
 	/**
 	 * sets the current map of the game screen to the map specified by the path.
 	 * if the path was already in the cache, it loads the map from there, otherwise
@@ -108,11 +140,16 @@ public class GameScreen extends Screen<GameScreenController> {
 				prevMap.setPrevYRef(_yRef);
 			}
 			_currMap = map;
+			Character prevCharacter = _currentCharacter;
 			_currentCharacter = _currMap.getMainCharacter();
 			_terrainToPaint = _currMap.getTerrain();
 			//set + reset xref and yref
 			_xRef = _currMap.getPrevXRef();
 			_yRef = _currMap.getPrevYRef();
+			if(prevCharacter != null){
+				System.out.println("GO!");
+				_currentCharacter.setDirection(prevCharacter.getDirection());
+			}
 			// set all of the locations of the tiles relative to xref and yref
 			for (int i = 0; i < map.getWidth(); i++) {
 				for (int j = 0; j < map.getHeight(); j++) {

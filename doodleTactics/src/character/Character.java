@@ -252,6 +252,26 @@ public abstract class Character extends Rectangle{
 			return CharacterDirection.DOWN;
 	}
 	
+	/**
+	 * Sets the Character to the input direction
+	 */
+	public void setDirection(CharacterDirection c){
+		switch(c){
+		case LEFT:
+			setLeft();
+			break;
+		case RIGHT:
+			setRight();
+			break;
+		case UP:
+			setUp();
+			break;
+		case DOWN:
+			setDown();
+			break;
+		}
+	}
+	
 	@Override
 	public int getPaintPriority(){
 		return (int) this.getY();
