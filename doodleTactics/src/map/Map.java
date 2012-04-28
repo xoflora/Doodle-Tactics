@@ -211,6 +211,7 @@ public class Map implements Serializable {
 					int overflow = (main.getImage().getWidth() - Tile.TILE_SIZE) / 2;
 					main.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE - main.getImage().getHeight() + Tile.TILE_SIZE);
 					dt.addCharacterToMap(main, splitLine[2]);
+					main.setAffiliation(dt.getCombatControl());
 				}	
 
 				// Tile case
@@ -263,7 +264,7 @@ public class Map implements Serializable {
 			if (main == null)
 				throw new InvalidMapException("Main Character not specified");
 			return new Map(tiles, name, ImageIO.read(new File(overflowPath)),
-					terrainList, chars, main);
+					terrainList, chars, main); 
 
 		} catch (FileNotFoundException e) {
 			throw new InvalidMapException(
