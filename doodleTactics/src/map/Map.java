@@ -529,7 +529,7 @@ public class Map implements Serializable {
 
 			int dist = distances.get(consider);
 			if (dist <= maxRange) {
-				if (minRange <= dist)
+				if (minRange <= dist && consider != source)
 					movementRange.add(consider);
 				searchTile(consider, heap, distances, heapPositions, previous,
 						useCost, usePermissions);
@@ -592,7 +592,6 @@ public class Map implements Serializable {
 			path.addFirst(previousTile);
 			previousTile = previous.get(previousTile);
 		}
-		path.addFirst(previousTile);
 
 		return path;
 	}
