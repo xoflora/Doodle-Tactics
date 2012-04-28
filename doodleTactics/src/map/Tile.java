@@ -51,10 +51,11 @@ public class Tile extends graphics.Rectangle {
 	private static final Color ATTACK_RANGE_COLOR = Color.RED;
 	private static final Color MOVEMENT_RANGE_COLOR = Color.BLUE;
 	private static final Color MOUSEOVER_COLOR = Color.GREEN;
+	private static final Color MOVEMENT_PATH_COLOR = Color.ORANGE;
 	private static final Color MOVEMENT_ATTACK_INTERSECTION_COLOR = Util.mixColors(MOVEMENT_RANGE_COLOR, ATTACK_RANGE_COLOR);
 	private static final Color MOVEMENT_MOUSE_INTERSECTION_COLOR = Util.mixColors(MOVEMENT_RANGE_COLOR, MOUSEOVER_COLOR);
 	private static final Color ATTACK_MOUSE_INTERSECTION_COLOR = Util.mixColors(ATTACK_RANGE_COLOR, MOUSEOVER_COLOR);
-	private static final Color INTERSECTION_COLOR = Color.magenta;
+	private static final Color INTERSECTION_COLOR = Color.MAGENTA;
 	
 	private boolean[] _canMove;
 	private int _cost;
@@ -72,6 +73,8 @@ public class Tile extends graphics.Rectangle {
 	private boolean _inMovementRange;
 	private boolean _inAttackRange;
 	private boolean _hovered;
+	private boolean _inMovementPath;
+	
 	private boolean _interactible;
 	private boolean _enterEvent;
 	
@@ -351,8 +354,20 @@ public class Tile extends graphics.Rectangle {
 		updateOverlay();
 	}
 	
+	/**
+	 * indicates whether the tile is hovered over by the mouse
+	 */
 	public void setHovered(boolean b) {
 		_hovered = b;
+		
+		updateOverlay();
+	}
+	
+	/**
+	 * indicates whether the tile is in the current movement path
+	 */
+	public void setInMovementPath(boolean b) {
+		_inMovementPath = b;
 		
 		updateOverlay();
 	}
@@ -361,6 +376,12 @@ public class Tile extends graphics.Rectangle {
 	 * updates the opacity and color overlay of the tile
 	 */
 	private void updateOverlay() {
+	/*	if (_inMovementPath) {
+			_overlay = MOVEMENT_PATH_COLOR;
+			_opacity = OVERLAY_OPACITY;
+			return;
+		}
+		
 		if (_inAttackRange) {
 			_opacity = INTERSECTION_OPACITY;
 			if (_inMovementRange) {
@@ -400,6 +421,26 @@ public class Tile extends graphics.Rectangle {
 					_overlay = DEFAULT_COLOR;
 					_opacity = DEFAULT_OPACITY;
 				}
+			}
+		}	*/
+		
+		if ((_hovered && (_inAttackRange || _inMovementRange)) ||
+				(_inAttackRange && _inMovementRange)) {
+			_overlay = INTERSECTION_COLOR;
+			_opacity = INTERSECTION_OPACITY;
+		}
+		else {
+			_opacity = OVERLAY_OPACITY;
+			if (_inAttackRange)
+				_overlay = ATTACK_RANGE_COLOR;
+			else if (_inMovementRange)
+				_overlay = MOVEMENT_RANGE_COLOR;
+			else if (_hovered) {
+				_overlay = MOUSEOVER_COLOR;
+			}
+			else {
+				_overlay = DEFAULT_COLOR;
+				_opacity = DEFAULT_OPACITY;
 			}
 		}
 	}
