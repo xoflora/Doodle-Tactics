@@ -57,6 +57,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		super(dt);
 		this.setBackground(java.awt.Color.DARK_GRAY);
 		this.setVisible(true);
+		this.setLayout(null);
 		_dt = dt;
 		_labelToCharacter = new HashMap<JLabel, Character>();
 		_labelToItem = new HashMap<JLabel, Item>();
@@ -65,31 +66,27 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_beingHovered = false;
 		_buttonList = new ArrayList<optionButton>();
 		_buttonToChar = new HashMap<JButton, Character>();
-		try {
-			BufferedImage unitsD = ImageIO.read(new File("src/graphics/menu/units.png"));
-			BufferedImage unitsH = ImageIO.read(new File("src/graphics/menu/units_hovered.png"));
-			BufferedImage mapD = ImageIO.read(new File("src/graphics/menu/map.png"));
-			BufferedImage mapH = ImageIO.read(new File("src/graphics/menu/map_hovered.png"));
-			BufferedImage saveD = ImageIO.read(new File("src/graphics/menu/save.png"));
-			BufferedImage saveH = ImageIO.read(new File("src/graphics/menu/save_hovered.png"));
-			BufferedImage optionsD = ImageIO.read(new File("src/graphics/menu/options.png"));
-			BufferedImage optionsH = ImageIO.read(new File("src/graphics/menu/options_hovered.png"));
-			BufferedImage quitD = ImageIO.read(new File("src/graphics/menu/quit_game_menu.png"));
-			BufferedImage quitH = ImageIO.read(new File("src/graphics/menu/quit_game_menu_hovered.png"));
-			BufferedImage titleD = ImageIO.read(new File("src/graphics/menu/overlay.png"));
-			BufferedImage infoBoxTitle = ImageIO.read(new File("src/graphics/menu/item_info_label.png"));
-			_charBoxImage = ImageIO.read(new File("src/graphics/menu/units_box.png"));
-			_infoBoxImage = ImageIO.read(new File("src/graphics/menu/item_label_box.png"));
-			_units = new MenuItem(this, unitsD,unitsH, dt);
-			_map = new MenuItem(this, mapD,mapH,dt);
-			_save = new MenuItem(this, saveD, saveH,dt);
-			_options = new MenuItem(this, optionsD,optionsH,dt);
-			_quit = new MenuItem(this, quitD, quitH,dt);
-			_title = new MenuItem(this, titleD, titleD, dt);
-			_infoBoxTitle = new MenuItem(this, infoBoxTitle, infoBoxTitle, dt);
-		} catch (IOException e) {
-//			dt.error("Game Menu Screen: One of the file image paths was invalid");
-		}
+		BufferedImage unitsD = _dt.importImage("src/graphics/menu/units.png");
+		BufferedImage unitsH = _dt.importImage("src/graphics/menu/units_hovered.png");
+		BufferedImage mapD = _dt.importImage("src/graphics/menu/map.png");
+		BufferedImage mapH = _dt.importImage("src/graphics/menu/map_hovered.png");
+		BufferedImage saveD = _dt.importImage("src/graphics/menu/save.png");
+		BufferedImage saveH = _dt.importImage("src/graphics/menu/save_hovered.png");
+		BufferedImage optionsD = _dt.importImage("src/graphics/menu/options.png");
+		BufferedImage optionsH = _dt.importImage("src/graphics/menu/options_hovered.png");
+		BufferedImage quitD = _dt.importImage("src/graphics/menu/quit_game_menu.png");
+		BufferedImage quitH = _dt.importImage("src/graphics/menu/quit_game_menu_hovered.png");
+		BufferedImage titleD = _dt.importImage("src/graphics/menu/overlay.png");
+		BufferedImage infoBoxTitle = _dt.importImage("src/graphics/menu/item_info_label.png");
+		_charBoxImage = _dt.importImage("src/graphics/menu/units_box.png");
+		_infoBoxImage = _dt.importImage("src/graphics/menu/item_label_box.png");
+		_units = new MenuItem(this, unitsD,unitsH, dt);
+		_map = new MenuItem(this, mapD,mapH,dt);
+		_save = new MenuItem(this, saveD, saveH,dt);
+		_options = new MenuItem(this, optionsD,optionsH,dt);
+		_quit = new MenuItem(this, quitD, quitH,dt);
+		_title = new MenuItem(this, titleD, titleD, dt);
+		_infoBoxTitle = new MenuItem(this, infoBoxTitle, infoBoxTitle, dt);
 		
 		int buttonHeight = _units.getImage().getHeight();
 		int buffer = 5;
@@ -130,6 +127,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		Dimension d = new Dimension(748, 660);
 		_scrollBar.setSize(d);
 		_scrollBar.setPreferredSize(d);
+		_scrollBar.setMaximumSize(d);
+		_scrollBar.setMinimumSize(d);
 		_scrollBar.setLocation(new Point(200, 120));
 		_scrollBar.setOpaque(false);
 		
@@ -183,7 +182,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 		_itemInfoBox.setLocation(15, 570);
 		_itemInfoBox.setSize(144, 230);
-		_itemInfoBox.revalidate();
+//		_itemInfoBox.revalidate();
 //		_scrollBar.setSize(new Dimension(748, 660));
 		_scrollBar.setLocation(new Point(200, 120));
 		_title.paint((Graphics2D) g, _title.getImage());
@@ -370,7 +369,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		else {
 			JTextArea description = new JTextArea(5, 5);
 			description.setOpaque(false);
-			description.setFont(new Font("Tahoma", Font.BOLD, 14));
+			description.setFont(new Font("Arial", Font.BOLD, 14));
 			description.setForeground(java.awt.Color.BLACK);
 			description.setText(item.getDescription());
 			description.setSize(130, 250);
@@ -390,13 +389,13 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	public void checkItemClicked(java.awt.Point point, JLabel label) {
 		System.out.println("point x: " + point.getX() + "; y: " + point.getY());
 		if (label.contains(point)) {
-			ImageIcon img;
-			try {
-				img = new ImageIcon(ImageIO.read(new File("src/graphics/characters/thief_front.png")));
-				label.setIcon(img);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+//			ImageIcon img;
+//			try {
+//				img = new ImageIcon(ImageIO.read(new File("src/graphics/characters/thief_front.png")));
+//				label.setIcon(img);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 			_showingItemOptions = true;
 			this.displayItemOptions(label);
 			return;
@@ -794,6 +793,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private class itemListener implements MouseListener, MouseMotionListener {
 
 		JLabel _itemPic;
+		boolean showingMenu = false;
 		
 		public itemListener(JLabel itemPic) {
 			_itemPic = itemPic;
@@ -802,7 +802,12 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			System.out.println("clicked in itemListener");
-			GameMenuScreen.this.checkItemClicked(e.getPoint(), _itemPic);
+			if (_currClicked == 1) {
+				showingMenu = true;
+				GameMenuScreen.this.checkItemClicked(e.getPoint(), _itemPic);
+				showingMenu = false;
+				Item clickedItem = GameMenuScreen.this.checkItemContains(e.getPoint());
+			}
 		}
 
 		@Override
@@ -837,10 +842,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			if (_currClicked == 1 && !_showingItemOptions) {
-//				if (!_showingItemOptions) {
+			if (_currClicked == 1 && !_showingItemOptions && !showingMenu) {
 				Item clickedItem = GameMenuScreen.this.checkItemContains(e.getPoint());
-//				}
 			}
 		}
 	}
