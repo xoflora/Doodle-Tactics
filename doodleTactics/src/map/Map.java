@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Stack;
 
 import javax.imageio.ImageIO;
@@ -53,7 +54,9 @@ public class Map implements Serializable {
 	
 	private static final int DEFAULT_XREF = 5;
 	private static final int DEFAULT_YREF = 5;
-
+	
+	//Random Battle
+	private static final int CUTOFF = 50;
 	
 	
 	private BufferedImage _overflow;
@@ -63,6 +66,8 @@ public class Map implements Serializable {
 	private MainCharacter _mainChar;
 	private Stack<Integer> _prevXRef;
 	private Stack<Integer> _prevYRef;
+	private HashMap<Character,LinkedList<Tile>> _enemyToTiles;
+	private HashMap<Tile,Character> _tileToEnemy;
 	String _name;
 
 	public Map(Tile[][] tiles, String name, BufferedImage overflow,
@@ -74,6 +79,12 @@ public class Map implements Serializable {
 		_terrain = terrain;
 		_activeCharacters = chars;
 		_mainChar = main;
+		
+		//Random Battle data structures:
+		_enemyToTiles = new HashMap<Character,LinkedList<Tile>>();
+		_tileToEnemy = new HashMap<Tile,Character>();
+		
+		//Handle restoring XRef and YRef
 		_prevXRef = new Stack<Integer>();
 		_prevYRef = new Stack<Integer>();
 		_prevXRef.push(DEFAULT_XREF);
@@ -93,10 +104,7 @@ public class Map implements Serializable {
 	 *         img,img_path, x1, y1,tile_permissions ...
 	 *         char,type,name,profile_img,left_img,right_img,up_img,down_img, x, y .. 
 	 *         (where x and y are 0-indexed)
-	 *         char,Main,name,profile_img,left_img,right_img,up_img,down_img
-	 *		   char,Map,name,profile_img,down_img, x, y,dialogue_file .. 
-	 *         (where x and y are 0-indexed)
-	 * 	NOTE: All Tiles must be defined before characters
+	 * 	NOTE: ALL Tiles must be defined before characters
 	 * @author czchapma
 	 */
 	public static Map map(DoodleTactics dt, JPanel container, String path)
@@ -104,6 +112,7 @@ public class Map implements Serializable {
 		int count = 2;
 		LinkedList<Terrain> terrainList = new LinkedList<Terrain>();
 		LinkedList<Character> chars = new LinkedList<Character>();
+		LinkedList<Tile> _randBattles = new LinkedList<Tile>();
 		MainCharacter main = dt.getGameScreen().getMainChar();
 		HashMap<String,BufferedImage> images = new HashMap<String,BufferedImage>();
 		try {
@@ -132,7 +141,7 @@ public class Map implements Serializable {
 				for (int y = 0; y < numY; y++) {
 					if (tiles[x][y] == null)
 						tiles[x][y] = Tile.tile(container, defaultImage, 'F', x,
-								y, 1,false);
+								y, 1);
 				}
 			}
 			
@@ -243,15 +252,10 @@ public class Map implements Serializable {
 						images.put(imgPath, img);
 					}
 
-					boolean randBattle;
-					if(splitLine[5].equals("0"))
-						randBattle = false;
-					else if(splitLine[5].equals("1"))
-						randBattle = true;
-					else throw new InvalidMapException("(line " + count + ") Expected 0 or 1 for randBattle");
+
 					tiles[x][y] = Tile.tile(container, img,
 							splitLine[2].charAt(0), x, y, Integer
-							.parseInt(splitLine[4]),randBattle);
+							.parseInt(splitLine[4]));
 					
 					//Handle Events
 					if(Integer.parseInt(splitLine[6]) == DIALOGUE){
@@ -263,6 +267,9 @@ public class Map implements Serializable {
 					}
 					//add others in the future perhaps
 					
+					//Check if tile can generate random battles
+					if(splitLine[5].equals("1"))
+						_randBattles.add(tiles[x][y]);
 					
 					// Error Case
 				} else
@@ -835,5 +842,25 @@ public class Map implements Serializable {
 	
 	public void setPrevYRef(int y){
 		_prevYRef.push(y);
+	}
+	
+	/**
+	 * Assign Random Enemies to Tiles
+	 * @param A list of tiles that can potentially store 
+	 */
+	public void assignRandomEnemies(LinkedList<Tile> potentials){
+		Random r = new Random();
+		
+		for(Tile  t : potentials){
+			if(r.nextInt(100) < CUTOFF){
+				//An enemy will be placed
+				Character enemy = Character.generateRandomCharacter();
+				_tileToEnemy.put(t, enemy);
+				LinkedList<Tile> affectedTiles = new LinkedList<Tile>();
+				
+				_enemyToTiles.put(enemy,affectedTiles);
+			}
+		}
+		
 	}
 }

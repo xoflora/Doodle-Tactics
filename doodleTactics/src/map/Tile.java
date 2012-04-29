@@ -90,7 +90,7 @@ public class Tile extends graphics.Rectangle {
 	 * @param height
 	 * @param cost
 	 */
-	public Tile(JPanel container, BufferedImage img, int x, int y, int cost, boolean randBattle) 
+	public Tile(JPanel container, BufferedImage img, int x, int y, int cost) 
 			throws InvalidTileException {
 		super(container);
 		this.setSize(TILE_SIZE,TILE_SIZE);
@@ -246,8 +246,8 @@ public class Tile extends graphics.Rectangle {
 	 * @return a new tile given by the string
 	 */
 	public static Tile tile(JPanel container,BufferedImage img, char permissions,
-			int x, int y, int cost, boolean randBattle) throws InvalidTileException {
-		Tile t = new Tile(container, img, x, y,cost,randBattle);
+			int x, int y, int cost) throws InvalidTileException {
+		Tile t = new Tile(container, img, x, y,cost);
 		t.setTilePermissions(permissions);
 		return t;
 	}
