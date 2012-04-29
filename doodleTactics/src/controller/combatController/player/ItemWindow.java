@@ -18,7 +18,6 @@ import main.DoodleTactics;
 import main.GameScreen;
 import map.Tile;
 import graphics.MenuItem;
-import graphics.Rectangle;
 
 public class ItemWindow extends MenuItem {
 	
