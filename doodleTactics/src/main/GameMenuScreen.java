@@ -108,7 +108,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_title = new MenuItem(this, titleD, titleD, dt);
 //			_infoBoxTitle = new MenuItem(this, dt);
 		} catch (IOException e) {
-			
+			e.printStackTrace();
 		}
 		
 		int buttonHeight = _units.getImage().getHeight();
