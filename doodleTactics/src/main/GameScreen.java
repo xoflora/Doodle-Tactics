@@ -138,6 +138,9 @@ public class GameScreen extends Screen<GameScreenController> {
 				prevMap.setPrevXRef(_xRef);
 				prevMap.setPrevYRef(_yRef);
 			}
+			
+			//Remove references to randomBattle -- if you reenter the map, new chances!
+			
 			_currMap = map;
 			Character prevCharacter = _currentCharacter;
 			_currentCharacter = _currMap.getMainCharacter();
