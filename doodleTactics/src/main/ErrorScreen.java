@@ -3,6 +3,7 @@ package main;
 import graphics.MenuItem;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -15,10 +16,9 @@ import controller.ErrorScreenController;
 
 public class ErrorScreen extends Screen<ErrorScreenController> {
 	
-	private DoodleTactics _dt;
 	private MenuItem _title;
 	private MenuItem _quit;
-
+	private String _text;
 	
 	
 
@@ -29,7 +29,8 @@ public class ErrorScreen extends Screen<ErrorScreenController> {
 		setBackground(Color.GRAY);
 
 		BufferedImage titleImage = dt.importImage("src/graphics/menu/title.png");
-
+		
+		_text = message;
 		_title = new MenuItem(this, titleImage, titleImage, dt);
 		
 		_quit = new MenuItem(this, dt.importImage("src/graphics/menu/quit.png"),
@@ -50,13 +51,12 @@ public class ErrorScreen extends Screen<ErrorScreenController> {
 
 	}
 	
-	/*private class ErrorMenu extends MenuItem{
+/*	private class ErrorMenu extends MenuItem{
 		private BufferedImage _title,_quit,_quitHovered;
 		public ErrorMenu(DoodleTactics dt,BufferedImage title,BufferedImage quit, BufferedImage quitHovered) {
 			super(dt.getGameScreen(),quit,quitHovered,dt);
 			_title = title;
-			_quit = quit;
-			_quitHovered = quitHovered;
+			_quit =
 		}
 		
 		@Override
@@ -64,6 +64,7 @@ public class ErrorScreen extends Screen<ErrorScreenController> {
 			super.paint(brush, img);
 
 			_title.paint(brush,);
+			paintNext(brush);
 
 		}
 
@@ -105,5 +106,19 @@ public class ErrorScreen extends Screen<ErrorScreenController> {
 
 		_title.paint(g, _title.getImage());
 		_quit.paint(g, _quit.getImage());
+		brush.setFont(new Font("Dialogue",Font.BOLD,40));
+		brush.setColor(new Color(0,0,1));
+		brush.drawString("an error occured",350,300);
+		brush.setFont(new Font("Dialogue",Font.BOLD,25));
+		int curr = 0;
+		int count = 1;
+		int end;
+		int maxPerLine = 60;
+		while(curr <= _text.length()){
+			end = Math.min(curr + maxPerLine, _text.length() - 1);
+			brush.drawString(_text.substring(curr, end), 150,300 + count*50);
+			curr += maxPerLine;
+			count++;
+		}
 	}
 }
