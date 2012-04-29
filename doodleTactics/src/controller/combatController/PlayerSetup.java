@@ -4,6 +4,7 @@ import graphics.MenuItem;
 
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import util.Util;
@@ -23,19 +24,23 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	private List<Tile> _validTiles;
 	private List<Character> _units;
 	private List<Character> _toPlace;
+	private List<Character> _inPlace;
 	private Tile _selectedTile;
 	private UnitPool _pool;
 	private boolean _finalized;
 	
 	private Character _selectedCharacter;
 	private boolean _selectedFromPool;
+	
+	private CombatOrchestrator _orch;
 
-	public PlayerSetup(DoodleTactics dt, List<Tile> validTiles) {
+	public PlayerSetup(DoodleTactics dt, List<Tile> validTiles, CombatOrchestrator orch) {
 		super(dt);
 		_validTiles = validTiles;
 		_units = _dt.getParty();
 		
 		_toPlace = Util.clone(_units);
+		_inPlace = new ArrayList<Character>();
 		
 		_selectedCharacter = null;
 		_selectedFromPool = false;
@@ -46,6 +51,8 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 			
 		}
 		_finalized = false;
+		
+		_orch = orch;
 	}
 	
 	/**
@@ -120,6 +127,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 						_pool.removeCharacter(_selectedCharacter);
 						_selectedCharacter.setLocation(t.getX(), t.getY());
 						_selectedCharacter.setDown();
+						_inPlace.add(_selectedCharacter);
 					}
 					if (c != null) {
 						_gameScreen.getCharacterQueue().remove(c);
@@ -190,6 +198,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 			c.setLocation(_selectedTile.getX(), _selectedTile.getY());
 			c.setDown();
 			removeUnitFromPool(c);
+			_inPlace.add(c);
 			
 			if (_selectedCharacter != null) {
 				addUnitToPool(_selectedCharacter);
@@ -215,6 +224,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		if (!_finalized) {
 			_finalized = true;
 			_pool.setInUse(false);
+			_orch.setPlayerUnits(_inPlace);
 			_gameScreen.popControl();
 		}
 	}

@@ -48,8 +48,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	private UnitPool _pool;
 	private boolean _finalized;
 	
-	public PlayerCombatController(DoodleTactics dt) {
-		super(dt, dt.getParty());
+	public PlayerCombatController(DoodleTactics dt, List<Character> units) {
+		super(dt, units);
 
 		_destTile = null;
 		_selectedTile = null;
@@ -306,11 +306,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 */
 	public void take() {
 		super.take();
-		_units = _dt.getParty();
-		for (Character c : _units) {
-			c.setAffiliation(this);
-			System.out.println(c);
-		}
 		System.out.println("Player phase!");
 		
 		initialize();

@@ -25,6 +25,7 @@ public class RandomBattleAI extends CombatController {
 	@Override
 	public void take() {
 		super.take();
+		System.out.println("Enemy phase");
 	}
 
 	@Override

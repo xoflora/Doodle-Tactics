@@ -13,9 +13,19 @@ import character.Character;
 
 public class CombatOrchestrator extends GameScreenController {
 	
+	private enum State {
+		SETUP,
+		SETUP_COMPLETE,
+		BATTLING
+	}
+	
 	private List<CombatController> _factions;
 	private ListIterator<CombatController> _factionCycle;
-	private boolean _setup;
+	private State _state;
+	
+	private List<CombatController> _enemies;
+	private List<CombatController> _partners;
+	private List<CombatController> _others;
 	
 	private int _numUnits;
 	private static final int NUM_EXTRA_SETUP_SPACES = 0;
@@ -25,34 +35,17 @@ public class CombatOrchestrator extends GameScreenController {
 	public CombatOrchestrator(DoodleTactics dt, List<CombatController> enemies, List<CombatController> partners,
 				List<CombatController> others, int numUnits) {
 		super(dt);
-		
-		_factions = new ArrayList<CombatController>();
-		_setup = false;
-		
-		_p = _dt.getCombatControl();
-
-		if (partners == null)
-			partners = new ArrayList<CombatController>();
-		partners.add(_p);
-		
-		for (CombatController p : partners)
-			p.setEnemyAffiliations(enemies);
-		
-		for (CombatController e : enemies)
-			e.setEnemyAffiliations(partners);
-		
-		List<List<CombatController>> zip = new ArrayList<List<CombatController>>();
-		
-		zip.add(partners);
-		if (enemies != null)
-			zip.add(enemies);
-		if (others != null)
-			zip.add(others);
-		
-		_factions = Util.zip(zip);
-		
+				
+		_factions = null;
+		_factionCycle = null;
+		_state = State.SETUP;
 		_numUnits = numUnits;
-		_factionCycle = _factions.listIterator();
+		
+		_enemies = enemies;
+		_partners = partners;
+		_others = others;		
+		
+		_p = null;
 	}
 
 	@Override
@@ -74,7 +67,7 @@ public class CombatOrchestrator extends GameScreenController {
 	 */
 	public void take() {
 		super.take();
-		if (_setup) {	//swap factions
+		if (_state == State.BATTLING) {	//swap factions
 			if (_factionCycle.hasNext()) {
 				_gameScreen.pushControl(_factionCycle.next());
 			}
@@ -85,10 +78,40 @@ public class CombatOrchestrator extends GameScreenController {
 	//		else	//combat has ended - win/loss condition
 	//			_gameScreen.popControl();
 		}
-		else {
-			_gameScreen.pushControl(new PlayerSetup(_dt, _gameScreen.getValidSetupTiles(_numUnits + NUM_EXTRA_SETUP_SPACES)));
-			_setup = true;
-			System.out.println("hi" + _setup);
+		else if (_state == State.SETUP_COMPLETE) {
+			
+			if (_p == null)
+				_p = new PlayerCombatController(_dt, _dt.getParty());
+			
+			if (_partners == null)
+				_partners = new ArrayList<CombatController>();
+			_partners.add(_p);
+			
+			for (CombatController p : _partners)
+				p.setEnemyAffiliations(_enemies);
+			
+			for (CombatController e : _enemies)
+				e.setEnemyAffiliations(_partners);
+			
+			List<List<CombatController>> zip = new ArrayList<List<CombatController>>();
+			
+			zip.add(_partners);
+			if (_enemies != null)
+				zip.add(_enemies);
+			if (_others != null)
+				zip.add(_others);
+			
+			_factions = Util.zip(zip);
+			
+			
+			_factionCycle = _factions.listIterator();
+			_state = State.BATTLING;
+			take();
+		}
+		else if (_state == State.SETUP){
+			_gameScreen.pushControl(new PlayerSetup(_dt,
+					_gameScreen.getValidSetupTiles(_numUnits + NUM_EXTRA_SETUP_SPACES), this));
+			_state = State.SETUP_COMPLETE;
 		}
 	}
 	
@@ -101,5 +124,14 @@ public class CombatOrchestrator extends GameScreenController {
 		for (CombatController faction : _factions)
 			c.add(faction.getUnits());
 		return Util.union(c);
+	}
+
+	/**
+	 * set the player combat controller to have the given units
+	 * @param units the unit list of the player combat controller
+	 */
+	public void setPlayerUnits(List<Character> units) {
+		units.add(_gameScreen.getMainChar());
+		_p = new PlayerCombatController(_dt, units);
 	}
 }

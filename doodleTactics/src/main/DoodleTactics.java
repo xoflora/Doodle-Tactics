@@ -44,8 +44,6 @@ public class DoodleTactics extends JFrame {
 	private HashMap<String, Character> _allChars;
 	private List<Character> _party;
 	
-	private PlayerCombatController _combatControl;
-	
 	public DoodleTactics() {
 		super("Doodle Tactics");
 		this.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
@@ -79,8 +77,6 @@ public class DoodleTactics extends JFrame {
 		} catch (ItemException e) {
 			e.printStackTrace();
 		}
-		
-		_combatControl = new PlayerCombatController(this);
 		
 		addCharacterToParty(new Mage(_game,
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_left.png",
@@ -245,7 +241,6 @@ public class DoodleTactics extends JFrame {
 	 */
 	public void addCharacterToParty(Character c) {
 		_party.add(c);
-		c.setAffiliation(_combatControl);
 	}
 	
 	/**
@@ -258,12 +253,7 @@ public class DoodleTactics extends JFrame {
 		boolean toReturn = _party.remove(c);
 		if (!toReturn)
 			return false;
-		c.setAffiliation(null);
 		return true;
-	}
-	
-	public PlayerCombatController getCombatControl() {
-		return _combatControl;
 	}
 	
 	public static void main(String[] args) {
