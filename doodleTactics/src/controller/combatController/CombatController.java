@@ -168,5 +168,15 @@ public abstract class CombatController extends GameScreenController {
 	 */
 	public void attack(Character src, Character dest) {
 		src.attack(dest);
+		System.out.println(src.getName() + " has " + src.getHP() + " HP remaining.");
+		System.out.println(dest.getName() + " has " + dest.getHP() + " HP remaining.");
+	}
+	
+	/**
+	 * removes a unit from this combat controller; it can no longer be used in the battle
+	 */
+	public void removeUnit(Character c) {
+		_units.remove(c);
+		_gameScreen.removeCharacter(c);
 	}
 }

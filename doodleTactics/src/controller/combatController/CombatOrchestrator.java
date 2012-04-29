@@ -61,6 +61,24 @@ public class CombatOrchestrator extends GameScreenController {
 		System.out.println("Orchestrator releasing for some reason");
 		super.release();
 	}
+	
+	private void removeFaction(CombatController f) {
+		if (_enemies.remove(f))
+			return;
+		else if (_partners.remove(f))
+			return;
+		else if (_others.remove(f))
+			return;
+		System.out.println("WTF");
+	}
+	
+	private boolean isWin() {
+		return _enemies.isEmpty();
+	}
+	
+	private boolean isLoss() {
+		return !_partners.contains(_p);
+	}
 
 	@Override
 	/**
@@ -80,9 +98,20 @@ public class CombatOrchestrator extends GameScreenController {
 			}	*/
 			
 			
-			
 			if (_factionCycle.hasNext()) {
-				_gameScreen.pushControl(_factionCycle.next());
+				CombatController f = _factionCycle.next();
+				if (f.getUnits().isEmpty()) {
+					_factionCycle.remove();
+					removeFaction(f);
+					if (isWin())
+						victory();
+					else if (isLoss())
+						defeat();
+					else
+						take();
+				}
+				else
+					_gameScreen.pushControl(f);
 			}
 			else if (!_factions.isEmpty()) {	//INCORRECT CONDITION - swap for not win/loss condition
 				_factionCycle = _factions.listIterator();
@@ -128,6 +157,22 @@ public class CombatOrchestrator extends GameScreenController {
 		}
 	}
 	
+	/**
+	 * ends the combat with the player victorious
+	 */
+	private void victory() {
+		// TODO Auto-generated method stub
+		System.out.println("Player is victorious!");
+		_gameScreen.popControl();
+	}
+	
+	/**
+	 * ends the combat with the player defeated
+	 */
+	private void defeat() {
+		
+	}
+
 	/**
 	 * @return a list containing all the characters involved in the battle
 	 */
