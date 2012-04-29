@@ -65,7 +65,7 @@ public abstract class Character extends Rectangle{
 	protected Cuirass _cuirass;
 	protected Shield _shield;
 	protected Footgear _footgear;
-	protected ArrayList<Item> _inventory; //items not being worn
+	protected HashMap<Integer, Item> _inventory; //items not being worn
 	protected int _capacity; //max number of items the character can carry
 
 	//images
@@ -97,7 +97,7 @@ public abstract class Character extends Rectangle{
 		
 		_name = name;
 		_level = 1;
-		_inventory	= new ArrayList<Item>();
+		_inventory	= new HashMap<Integer, Item>();
 		_capacity = 5;
 		
 		_affiliation = null;
@@ -334,8 +334,9 @@ public abstract class Character extends Rectangle{
 		//check if capacity has been exceeded
 		if(_inventory.size() == _capacity)
 			throw new ItemException("Capacity reached");
-
-		_inventory.add(i);
+		System.out.println("The ID of the added inventory item is: " + i._id);
+		_inventory.put(i._id, i);
+		System.out.println(_inventory.size());
 	}
 
 	/**
@@ -645,7 +646,7 @@ public abstract class Character extends Rectangle{
 		_affiliation = aff;
 	}
 	
-	public ArrayList<Item> getInventory() {
+	public HashMap<Integer, Item> getInventory() {
 		return _inventory;
 	}
 

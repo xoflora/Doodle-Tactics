@@ -67,21 +67,23 @@ public class DoodleTactics extends JFrame {
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_back.png", "Dude", 10, 10);
-		addCharacterToParty(_char1);
-		BufferedImage pot;
 		try {
-			pot = ImageIO.read(new File("src/graphics/characters/warrior_left.png"));
+			BufferedImage pot = ImageIO.read(new File("src/graphics/characters/warrior_left.png"));
+			BufferedImage pot2 = ImageIO.read(new File("src/graphics/characters/warrior_right.png"));
 			_char1.addToInventory(new HealthPotion(pot, 10));
+			_char1.addToInventory(new HealthPotion(pot2, 10));
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ItemException e) {
 			e.printStackTrace();
 		}
+		addCharacterToParty(_char1);
 		
 		addCharacterToParty(new Mage(_game,
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_left.png",
 				"src/graphics/characters/warrior_right.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_front.png", "Whee", 5, 5));
+		
 		
 		addCharacterToParty(new Thief(_game, 
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/mage_left.png",
@@ -92,7 +94,6 @@ public class DoodleTactics extends JFrame {
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png",
 				"src/graphics/characters/warrior_front.png", "Bob", 20, 10));
-
 	}
 	
 	/**

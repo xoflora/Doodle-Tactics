@@ -126,7 +126,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_charInfoList = new LinkedList<CharInfo>();		
 		
 		_unitsBox = new JPanel();
-//		_unitsBox.setVisible(true);
 		_unitsBox.setBackground(java.awt.Color.DARK_GRAY);
 		
 		_unitsBox.setSize(750,660);
@@ -137,24 +136,12 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_itemInfoBox.setBackground(java.awt.Color.DARK_GRAY);
 		
 		_scrollBar = new JScrollPane(_unitsBox, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-//		_scrollBar.setVisible(true);
 		_scrollBar.setBackground(java.awt.Color.DARK_GRAY);
 		Dimension d = new Dimension(752, 662);
 		_scrollBar.setSize(d);
-//		_scrollBar.setPreferredSize(d);
-//		_scrollBar.setMaximumSize(d);
-//		_scrollBar.setMinimumSize(d);
 		_scrollBar.setLocation(new Point(200, 120));
 		_scrollBar.setOpaque(false);
 		
-//		_scrollBar.setSize(new Dimension(750, 660));
-//		_scrollBar.setLocation(new Point(200, 120));
-//		_unitsBox.setSize(750,660);
-//		_unitsBox.setLocation(1,0);
-		
-//		_itemOptionsBox = new JPanel();
-//		_itemOptionsBox.setBackground(java.awt.Color.WHITE);
-//		_itemOptionsBox.setVisible(true);
 		_numOptions = 0;
 		_itemOptBoxX = 0;
 		_itemOptBoxY = 0;
@@ -321,12 +308,13 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	}
 	
 	public void checkStopShowingOptionsBox(java.awt.Point point) {
+		this.grabFocus();
 		if (_showingItemOptions) {
 			/**
 			 * point.getX() and point.getY() get the X and Y coordinates only relative to the units box, 
 			 * so these values get the location of the units box added to them before checking
 			 */
-			if (point.getX()+200 < _itemOptBoxX || point.getX()+200 > _itemOptBoxX+200 || point.getY()+120 < _itemOptBoxY || point.getY()+120 > _itemOptBoxY+200) {
+			if (point.getX()+200 < _itemOptBoxX || point.getX()+200 > _itemOptBoxX+200 || point.getY()+120 < _itemOptBoxY+_scrollBar.getVerticalScrollBar().getValue() || point.getY()+120 > _itemOptBoxY+200+_scrollBar.getVerticalScrollBar().getValue()) {
 				for (int i=0; i<_buttonList.size(); i++) {
 					this.remove(_buttonList.get(i));
 				}
@@ -338,12 +326,18 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				Point np = new Point();
 				np.setLocation(point.getX()+200, point.getY()+120);
 				for (int i=0; i<_buttonList.size(); i++) {
-//					System.out.println("X: " + np.getX() + "; Y: " + np.getY());
-	//				System.out.println("HERE X: " + _buttonList.get(i).getX() + "; Y: " + _buttonList.get(i).getY());
+					System.out.println("--------------");
+					System.out.println("X: " + np.getX() + "; Y: " + np.getY());
+					System.out.println("HERE X: " + _buttonList.get(i).getX() + "; Y: " + _buttonList.get(i).getY());
 //					System.out.println(_buttonList.get(i).getSize());
-					if (np.getX() > _buttonList.get(i).getX() && np.getY() > _buttonList.get(i).getY() && np.getX() < _buttonList.get(i).getX()+200 && np.getY() < _buttonList.get(i).getY()+15) {
+					if (np.getX() > _buttonList.get(i).getX() && np.getY() > _buttonList.get(i).getY()+_scrollBar.getVerticalScrollBar().getValue() && np.getX() < _buttonList.get(i).getX()+200 && np.getY() < _buttonList.get(i).getY()+15+_scrollBar.getVerticalScrollBar().getValue()) {
 //						System.out.println("HERE X: " + _buttonList.get(i).getX() + "; Y: " + _buttonList.get(i).getY());
 						_buttonList.get(i).activate(_buttonList.get(i));
+						for (int j=0; j<_buttonList.size(); j++) {
+							this.remove(_buttonList.get(j));
+						}
+						_showingItemOptions = false;
+						this.repaint();
 					}
 				}
 			}
@@ -377,10 +371,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	}
 	
 	public void checkItemClicked(java.awt.Point point) {
-		System.out.println("doing stuff");
 		for (JLabel label: _labelToCharacter.keySet()) {
 			if (label.contains(point)) {
-				System.out.println("1");
 				_showingItemOptions = true;
 				this.displayItemOptions(label);
 				return;
@@ -389,7 +381,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		/**
 		 * Might not ever get here...
 		 */
-		System.out.println("set to false");
+		System.out.println("should not get here in checkItemClicked. set to false");
 		_showingItemOptions = false;
 		for (int i=0; i<_buttonList.size(); i++) {
 			this.remove(_buttonList.get(i));
@@ -418,15 +410,14 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		
 		_itemOptBoxX = (int) label.getLocationOnScreen().getX();
 		_itemOptBoxY = (int) label.getLocationOnScreen().getY();
-		
+				
 		int numOptionsInserted = 1;
 		
 		_selectedItem = _labelToItem.get(label);
 		_selectedChar = character;
 		
+		_numOptions = _dt.getParty().size()+2;
 		
-		
-		_numOptions = _dt.getParty().size()+2;;
 		if (_labelToItem.get(label).isEquip()) {
 			for (int i=0; i<character.getInventory().size(); i++) {
 				if (character.getInventory().get(i).equals(item)) {
@@ -654,7 +645,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			constraint.gridy = 0;
 			constraint.weightx = 1.0;
 			row1.add(inventory, constraint);
-			
+			System.out.println(chrter.getName() + " inventory size: " + chrter.getInventory().size());
 			for (int i=0; i<chrter.getInventory().size(); i++) {
 				JLabel item = new JLabel(new ImageIcon(chrter.getInventory().get(i).getImage()));
 //				item.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
@@ -745,7 +736,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			constraint.gridx = 3;
 			constraint.gridy = 0;
 			this.add(row1, constraint);
-			
 		}
 	}
 	
@@ -938,6 +928,5 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			// TODO Auto-generated method stub
 			
 		}
-		
 	}
 }
