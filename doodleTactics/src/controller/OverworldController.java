@@ -74,28 +74,36 @@ public class OverworldController extends GameScreenController {
 											dest = _gameScreen.getMap().getNorth(src);
 											if(dest != null && dest.canMove(Map.NORTH) && !dest.isOccupied()) {
 												System.out.println(dest.getX() + "," + dest.getY());
+												src.removeOccupant();
 												c.moveToTile(src, dest);
+												dest.setOccupant(c);
 											}
 											break;
 										case 1:
 											dest = _gameScreen.getMap().getSouth(src);
 											if(dest != null && dest.canMove(Map.SOUTH) && !dest.isOccupied()) {
 												System.out.println(dest.getX() + "," + dest.getY());
+												src.removeOccupant();
 												c.moveToTile(src, dest);
+												dest.setOccupant(c);
 											}
 											break;
 										case 2:
 											dest = _gameScreen.getMap().getEast(src);
 											if(dest != null && dest.canMove(Map.EAST) && !dest.isOccupied()) {
 												System.out.println(dest.getX() + "," + dest.getY());
+												src.removeOccupant();
 												c.moveToTile(src, dest);
+												dest.setOccupant(c);
 											}
 											break;
 										case 3:
 											dest = _gameScreen.getMap().getWest(src);
 											if(dest != null && dest.canMove(Map.WEST) && !dest.isOccupied()) {
 												System.out.println(dest.getX() + "," + dest.getY());
+												src.removeOccupant();
 												c.moveToTile(src, dest);
+												dest.setOccupant(c);
 											}
 											break;
 									}
