@@ -72,7 +72,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private Character _selectedChar;
 	private HashMap<JButton, Character> _buttonToChar;
 	private ArrayList<optionButton> _buttonList;
-	private BufferedImage _charInfoBoxImage;
+	private BufferedImage _charBoxImage, _infoBoxImage, _infoBoxTitle;
 	
 	public GameMenuScreen(DoodleTactics dt) {
 		
@@ -98,13 +98,15 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			BufferedImage quitD = ImageIO.read(new File("src/graphics/menu/quit_game_menu.png"));
 			BufferedImage quitH = ImageIO.read(new File("src/graphics/menu/quit_game_menu_hovered.png"));
 			BufferedImage titleD = ImageIO.read(new File("src/graphics/menu/overlay.png"));
-			_charInfoBoxImage = ImageIO.read(new File("src/graphics/menu/units_box.png"));
+//			BufferedImage infoBoxTitle = ImageIO.read();
+			_charBoxImage = ImageIO.read(new File("src/graphics/menu/units_box.png"));
 			_units = new MenuItem(this, unitsD,unitsH, dt);
 			_map = new MenuItem(this, mapD,mapH,dt);
 			_save = new MenuItem(this, saveD, saveH,dt);
 			_options = new MenuItem(this, optionsD,optionsH,dt);
 			_quit = new MenuItem(this, quitD, quitH,dt);
 			_title = new MenuItem(this, titleD, titleD, dt);
+//			_infoBoxTitle = new MenuItem(this, dt);
 		} catch (IOException e) {
 			
 		}
@@ -761,10 +763,35 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			
-			Image bg = (new ImageIcon(_charInfoBoxImage)).getImage();
-//			g.drawImage(bg, );
+			Image bg = (new ImageIcon(_charBoxImage)).getImage();
+			g.drawImage(bg, (this.getWidth()/2) - (bg.getWidth(this) / 2),(this.getHeight()/2) - (bg.getHeight(this) / 2),bg.getWidth(this),bg.getHeight(this),this);
+		}
+	}
+	
+	private class itemInfoBox extends JPanel {
+		public itemInfoBox(Item myItem) {
+			this.setLayout(new GridBagLayout());
+			GridBagConstraints constraint = new GridBagConstraints();
+			java.awt.Dimension panelSize = new java.awt.Dimension(730,200);
+			this.setPreferredSize(panelSize);
+			this.setSize(730,200);
+			this.setLocation(15, 15);
+//			this.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+						
+			this.setOpaque(false);
+			
+//			JLabel profile = new JLabel(new ImageIcon(chrter.getProfileImage()));
+//			profile.setSize(150, 150);
+//			profile.setPreferredSize(new Dimension(150,150));
+//			profile.setMaximumSize(new Dimension(150, 150));
+//			profile.setVisible(true);
 		}
 		
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			Image box = (new ImageIcon(_charBoxImage)).getImage();
+//			g.drawImage(bg, (this.getWidth()/2) - (bg.getWidth(this) / 2),(this.getHeight()/2) - (bg.getHeight(this) / 2),bg.getWidth(this),bg.getHeight(this),this);
+		}
 	}
 	
 	private class itemListener implements MouseListener, MouseMotionListener {
