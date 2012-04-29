@@ -53,7 +53,6 @@ public class GameScreen extends Screen<GameScreenController> {
 	private static final int NUM_TILES_X = 21;
 	private static final int NUM_TILES_Y = 17;
 
-
 	private static final int MAP_CACHE_SIZE = 5;
 
 	private static int MAP_WIDTH, MAP_HEIGHT;
@@ -67,12 +66,12 @@ public class GameScreen extends Screen<GameScreenController> {
 	private PriorityQueue<MenuItem> _menuQueue;
 	private List<Terrain> _terrainToPaint;
 	private HashMap<String, Map> _mapCache; // a hash map representing the cache of all of the maps in the game, maps file paths to maps
+	
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
 		this.setBackground(java.awt.Color.BLACK);
 		MAP_WIDTH = 20;
 		MAP_HEIGHT = 20;
-		
 		
 		_currentCharacter = parseMainChar("src/tests/data/MainCharacterDemo");
 

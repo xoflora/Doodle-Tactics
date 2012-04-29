@@ -238,20 +238,6 @@ public abstract class Character extends Rectangle{
 			_deltaY = deltaY;
 			this.addActionListener(new MoveListener(this, container));
 		}
-
-		private class MoveListener implements java.awt.event.ActionListener {
-
-			private Timer _timer;
-			private int _cnt;
-			private int _numSteps;
-			private JPanel _container;
-
-			public MoveListener (Timer t, JPanel container) {
-				_container = container;
-				_timer = t;
-				_cnt = 0;
-			}
-<<<<<<< HEAD
 			
 			private class MoveListener implements java.awt.event.ActionListener {
 				
@@ -282,24 +268,6 @@ public abstract class Character extends Rectangle{
 					}
 					
 					_container.repaint();
-=======
-
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-
-				Character.this.setLocation((Character.this.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), Character.this.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
-				_container.repaint();
-
-				_cnt+=1;
-
-				/* if we've incremented numSteps times, then we should stop */
-				/* otherwise, continue incrementing */
-				if (_cnt == _numSteps) {
-					_timer.stop();
-					Character.this._isAnimating = false;
->>>>>>> 67b4e04bb31334e57b91edcd8ce02e7e36bd9604
-				}
-
-				_container.repaint();
 			}
 		}
 	}
