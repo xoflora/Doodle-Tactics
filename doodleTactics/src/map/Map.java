@@ -837,9 +837,9 @@ public class Map implements Serializable {
 		for(Tile  t : _randBattles){
 			if(r.nextInt(100) < CUTOFF){
 				//An enemy will be placed
-				double xLoc = Tile.TILE_SIZE * (t.x() - DEFAULT_XREF);
-				double yLoc = Tile.TILE_SIZE * (t.y() - DEFAULT_YREF);
-				System.out.println("**XLOC" + t.x() + " YLOC: " + t.y());
+				double xLoc = Tile.TILE_SIZE * (t.x() - _dt.getGameScreen().getXRef());
+				double yLoc = Tile.TILE_SIZE * (t.y() - _dt.getGameScreen().getYRef());
+				System.out.println("**XREF" + _dt.getGameScreen().getXRef() + " YREF: " +_dt.getGameScreen().getYRef() + "TIle x: " + t.x() + " Y: " + t.y());
 				int overflow = 0;
 				Character enemy = Character.generateRandomCharacter(_dt,_dt.getGameScreen(),xLoc,yLoc);
 				
