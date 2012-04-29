@@ -132,6 +132,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_cacheCost = 0;
 		_cacheDestTile = null;
 		
+		if (_optionWindow != null)
+			_optionWindow.removeFromDrawingQueue();
 		_optionWindow = null;
 		_state = State.START;
 	}
@@ -162,9 +164,9 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		try {
 			_optionWindow = new CombatOptionWindow(_dt, _gameScreen, false,
 					_selectedCharacter.getInventory().size() != 0, false, this);
-			_optionWindow.setLocation(_destTile.getX() + 2*Tile.TILE_SIZE, _destTile.getY());
+			_optionWindow.setLocation(_destTile.getX() + Tile.TILE_SIZE, _destTile.getY() - Tile.TILE_SIZE);
 			_optionWindow.addToDrawingQueue();
-			System.out.println("hi");
+			
 		} catch(IOException e) {
 			_dt.error("Error finding combat window files.");
 		}
@@ -440,7 +442,21 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		}
 	}
 
+	/**
+	 * sends an action to the controller
+	 * @param action the action to send
+	 */
 	public void pushAction(ActionType action) {
+		assert(_state == State.CHARACTER_OPTION_MENU);
 		
+		if (action == ActionType.WAIT) {
+			_pool.removeCharacter(_selectedCharacter);
+			clear();
+			System.out.println(_pool.getNumUnits());
+			if (_pool.isEmpty())
+				_gameScreen.popControl();
+			else
+				_state = State.START;
+		}
 	}
 }

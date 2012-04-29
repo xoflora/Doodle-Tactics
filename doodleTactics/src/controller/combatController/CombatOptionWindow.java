@@ -38,6 +38,9 @@ public class CombatOptionWindow extends MenuItem {
 	private static final int MENU_PRIORITY = 3;
 	private static final int OPTION_PRIORITY = 50;
 	
+	private static final int HORZ_BUFFER = 4;
+	private static final int VERT_BUFFER = 3;
+	
 	private class CombatOption extends MenuItem {
 		
 		private PlayerCombatController _source;
@@ -86,14 +89,17 @@ public class CombatOptionWindow extends MenuItem {
 		_gameScreen = container;
 	}
 	
+	/**
+	 * adds the option window and its components to the game screen drawing queue
+	 */
 	public void addToDrawingQueue() {
 		_gameScreen.addMenuItem(this);
 		
-		double y = getY();
+		double y = getY() + VERT_BUFFER;
 		for (MenuItem m : _options) {
 			_gameScreen.addMenuItem(m);
-			m.setLocation(getX(), y);
-			y += m.getImage().getHeight();
+			m.setLocation(getX() + HORZ_BUFFER, y);
+			y += m.getImage().getHeight() + VERT_BUFFER;
 			m.setVisible(true);
 		}
 		
@@ -101,6 +107,9 @@ public class CombatOptionWindow extends MenuItem {
 		setSize(getImage().getWidth(), y - getY());
 	}
 	
+	/**
+	 * removes the option window and its components from the game screen drawing queue
+	 */
 	public void removeFromDrawingQueue() {
 		for (MenuItem m : _options) {
 			_gameScreen.removeMenuItem(m);
