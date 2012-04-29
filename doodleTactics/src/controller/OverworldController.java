@@ -25,113 +25,112 @@ import map.Tile;
 
 public class OverworldController extends GameScreenController {
 
-	private RandomMoveTimer _randomMoveTimer;
+	//private RandomMoveTimer _randomMoveTimer;
 	
 	public OverworldController(DoodleTactics dt, GameScreen game) {
 		super(dt);
 		_gameScreen = game;
-		_randomMoveTimer = new RandomMoveTimer();
+		//_randomMoveTimer = new RandomMoveTimer();
 	}
-
-	private class RandomMoveTimer extends Timer {
-		
-		public RandomMoveTimer() {
-			super(5000, null);
-			this.addActionListener(new RandomMoveListener());
-		}
-		
-		private class RandomMoveListener implements java.awt.event.ActionListener {
-			
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-
-				if(_gameScreen.getMap() != null) {
-				
-					for(Character c : _gameScreen.getMap().getCharactersToDisplay()) {
-						
-						// provided this character is not the main character
-						if(! c.equals(_gameScreen.getMainChar())) {
-							
-							System.out.println("character at " + c.getX() + ", " + c.getY());
-							
-							//generate a random direction to move in
-							Random r = new Random();
-							int direction = r.nextInt(4);
-							// retrieve the tile that corresponds to the given character
-							Tile src = _gameScreen.getTile((int) c.getX(), (int) c.getY());
-							System.out.println("src, x: " + src.x() + ", y:" + src.y());
-							
-							if(src != null) {
-								
-								System.out.println("character moving: " + c.getName() + " in direction " + direction + 
-										" from " + src.getX() + "," + src.getY() + " to... ");
-								
-								try {
-							
-									Tile dest = null;
-									
-									switch(direction) {
-										case 0:
-											dest = _gameScreen.getMap().getNorth(src);
-											if(dest != null && dest.canMove(Map.NORTH) && !dest.isOccupied()) {
-												System.out.println(dest.getX() + "," + dest.getY());
-												src.removeOccupant();
-												c.moveToTile(src, dest);
-												dest.setOccupant(c);
-											}
-											break;
-										case 1:
-											dest = _gameScreen.getMap().getSouth(src);
-											if(dest != null && dest.canMove(Map.SOUTH) && !dest.isOccupied()) {
-												System.out.println(dest.getX() + "," + dest.getY());
-												src.removeOccupant();
-												c.moveToTile(src, dest);
-												dest.setOccupant(c);
-											}
-											break;
-										case 2:
-											dest = _gameScreen.getMap().getEast(src);
-											if(dest != null && dest.canMove(Map.EAST) && !dest.isOccupied()) {
-												System.out.println(dest.getX() + "," + dest.getY());
-												src.removeOccupant();
-												c.moveToTile(src, dest);
-												dest.setOccupant(c);
-											}
-											break;
-										case 3:
-											dest = _gameScreen.getMap().getWest(src);
-											if(dest != null && dest.canMove(Map.WEST) && !dest.isOccupied()) {
-												System.out.println(dest.getX() + "," + dest.getY());
-												src.removeOccupant();
-												c.moveToTile(src, dest);
-												dest.setOccupant(c);
-											}
-											break;
-									}
-									
-									System.out.println("-------");
-								
-								} catch (ArrayIndexOutOfBoundsException ex) {
-									
-								}
-							}
-						}	
-					}
-				}
-			}
-		}
-	}
+//
+//	private class RandomMoveTimer extends Timer {
+//		
+//		public RandomMoveTimer() {
+//			super(5000, null);
+//			this.addActionListener(new RandomMoveListener());
+//		}
+//		
+//		private class RandomMoveListener implements java.awt.event.ActionListener {
+//			
+//			public void actionPerformed(java.awt.event.ActionEvent e) {
+//
+//				if(_gameScreen.getMap() != null) {
+//				
+//					for(Character c : _gameScreen.getMap().getCharactersToDisplay()) {
+//						
+//						// provided this character is not the main character
+//						if(! c.equals(_gameScreen.getMainChar())) {
+//							
+//							System.out.println("character at " + c.getX() + ", " + c.getY());
+//							
+//							//generate a random direction to move in
+//							Random r = new Random();
+//							int direction = r.nextInt(4);
+//							// retrieve the tile that corresponds to the given character
+//							Tile src = _gameScreen.getTile((int) c.getX(), (int) c.getY());
+//							System.out.println("src, x: " + src.x() + ", y:" + src.y());
+//							
+//							if(src != null) {
+//								
+//								System.out.println("character moving: " + c.getName() + " in direction " + direction + 
+//										" from " + src.getX() + "," + src.getY() + " to... ");
+//								
+//								try {
+//							
+//									Tile dest = null;
+//									
+//									switch(direction) {
+//										case 0:
+//											dest = _gameScreen.getMap().getNorth(src);
+//											if(dest != null && dest.canMove(Map.NORTH) && !dest.isOccupied()) {
+//												System.out.println(dest.getX() + "," + dest.getY());
+//												src.removeOccupant();
+//												c.moveToTile(src, dest);
+//												dest.setOccupant(c);
+//											}
+//											break;
+//										case 1:
+//											dest = _gameScreen.getMap().getSouth(src);
+//											if(dest != null && dest.canMove(Map.SOUTH) && !dest.isOccupied()) {
+//												System.out.println(dest.getX() + "," + dest.getY());
+//												src.removeOccupant();
+//												c.moveToTile(src, dest);
+//												dest.setOccupant(c);
+//											}
+//											break;
+//										case 2:
+//											dest = _gameScreen.getMap().getEast(src);
+//											if(dest != null && dest.canMove(Map.EAST) && !dest.isOccupied()) {
+//												System.out.println(dest.getX() + "," + dest.getY());
+//												src.removeOccupant();
+//												c.moveToTile(src, dest);
+//												dest.setOccupant(c);
+//											}
+//											break;
+//										case 3:
+//											dest = _gameScreen.getMap().getWest(src);
+//											if(dest != null && dest.canMove(Map.WEST) && !dest.isOccupied()) {
+//												System.out.println(dest.getX() + "," + dest.getY());
+//												src.removeOccupant();
+//												c.moveToTile(src, dest);
+//												dest.setOccupant(c);
+//											}
+//											break;
+//									}
+//									
+//									System.out.println("-------");
+//								
+//								} catch (ArrayIndexOutOfBoundsException ex) {
+//									
+//								}
+//							}
+//						}	
+//					}
+//				}
+//			}
+//		}
+//	}
 	
 	@Override
 	public void take() {
 		// TODO : center the map around the main character
-		System.out.println("OVERWORLD TAKES CONTROL");
-		_randomMoveTimer.start();
+		//_randomMoveTimer.start();
 	}
 
 	@Override
 	public void release() {
 		// TODO Auto-generated method stub
-		_randomMoveTimer.stop();
+		//_randomMoveTimer.stop();
 	}
 
 	@Override
