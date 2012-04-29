@@ -19,4 +19,8 @@ public class Shield extends Equipment{
 	public void exert(Character c) {
 		c.changeShield(this);
 	}
+
+	public int getDefense() {
+		return _defense;
+	}
 }
