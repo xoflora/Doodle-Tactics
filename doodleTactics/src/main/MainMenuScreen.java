@@ -74,12 +74,6 @@ public class MainMenuScreen extends Screen<MainMenuController> {
 	//	System.out.println(this);
 		return new MainMenuController(_dt, this);
 	}
-
-	@Override
-	public void render() {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);

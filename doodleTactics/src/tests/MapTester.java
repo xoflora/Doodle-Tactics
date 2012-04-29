@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import org.junit.*;
 
 import map.*;
-//TODO: (czchapma) Have Ryan to correct some of his tests, test working map
 /**
  * 
  * @author rroelke (except where noted)
@@ -34,8 +33,8 @@ public class MapTester {
 			BufferedImage img =ImageIO.read(new File("src/graphics/tiles/tile.png"));
 			for (int i = 0; i < tiles.length; i++)
 				for (int j = 0; j < tiles[i].length; j++)
-					tiles[i][j] = Tile.tile(panel, img, 'F', i, j, 1, false);
-			_test = new Map(tiles, "TestMap", null, null, null, null);
+					tiles[i][j] = Tile.tile(panel, img, 'F', i, j, 1);
+			_test = new Map(null, tiles, "TestMap", null, null, null, null);
 
 			_test.getTile(7, 7).setCost(5);
 			_test.getTile(6, 8).setCost(2);

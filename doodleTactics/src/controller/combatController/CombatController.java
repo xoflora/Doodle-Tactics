@@ -67,7 +67,7 @@ public abstract class CombatController extends GameScreenController {
 	 * @param c the character to move
 	 * @param path the path across which to move the character
 	 */
-	public void move(Character c, List<Tile> path){
+	public void move(Character c, List<Tile> path) {
 		//TODO draw the character moving along the path of tiles instead of just switching
 
 		Tile dest = path.get(0);

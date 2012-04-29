@@ -102,6 +102,4 @@ public abstract class Screen<T extends Controller> extends JPanel {
 		addMouseMotionListener(c);
 		return toReturn;
 	}	*/
-	
-	public abstract void render();
 }

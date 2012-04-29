@@ -3,9 +3,12 @@ package controller.combatController;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import main.DoodleTactics;
@@ -19,7 +22,7 @@ import graphics.Rectangle;
  */
 public class CombatOptionWindow extends Rectangle {
 	
-	private static final String MENU_IMAGE_PATH = "";
+	private static final String MENU_IMAGE_PATH = "src/graphics/characters/pokeball.png";
 	private static final String ATTACK_IMAGE = "";
 	private static final String ATTACK_HOVER = "";
 	private static final String SPECIAL_IMAGE = "";
@@ -51,21 +54,24 @@ public class CombatOptionWindow extends Rectangle {
 	private BufferedImage _img;
 	private List<CombatOption> _options;
 	
-	public CombatOptionWindow(JPanel container, boolean attack, boolean special, boolean item, boolean talk) {
+	public CombatOptionWindow(JPanel container, boolean attack, boolean special, boolean item, boolean talk,
+			PlayerCombatController source) throws IOException {
+		
 		super(container);
 		_options = new ArrayList<CombatOption>();
 		
+		_img = ImageIO.read(new File(MENU_IMAGE_PATH));
 		if (attack) {
-			
+
 		}
 		if (special) {
-			
+
 		}
 		if (item) {
-			
+
 		}
 		if (talk) {
-			
+
 		}
 	}
 
