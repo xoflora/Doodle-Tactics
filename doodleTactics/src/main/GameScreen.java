@@ -540,11 +540,13 @@ public class GameScreen extends Screen<GameScreenController> {
 	public MenuItem checkContains(java.awt.Point point) {
 
 		MenuItem toReturn = null;
-		for (MenuItem r : _menuQueue) {
-			r.setDefault();
-			if (r.contains(point)) {
-				r.setHovered();
-				toReturn = r;
+		synchronized (_menuQueue) {
+			for (MenuItem r : _menuQueue) {
+				r.setDefault();
+				if (r.contains(point)) {
+					r.setHovered();
+					toReturn = r;
+				}
 			}
 		}
 

@@ -450,6 +450,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 */
 	public void finalize() {
 		if (!_finalized) {
+			System.out.println("HIII");
 			_finalized = true;
 			_pool.setInUse(false);
 			_pool = null;
@@ -469,8 +470,11 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			_pool.removeCharacter(_selectedCharacter);
 			clear();
 			System.out.println(_pool.getNumUnits());
-			if (_pool.isEmpty())
+			if (_pool.isEmpty()) {
+				_pool.setInUse(false);
+				_pool = null;
 				_gameScreen.popControl();
+			}
 			else
 				_state = State.START;
 		}
