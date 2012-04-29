@@ -79,7 +79,6 @@ public abstract class CombatController extends GameScreenController {
 		dest.setOccupant(c);
 		c.setLocation(dest.getX(), dest.getY());
 		_hasMoved.put(c, true);
-
 	}
 	
 	@Override
@@ -89,6 +88,7 @@ public abstract class CombatController extends GameScreenController {
 	 */
 	public void take() {
 		super.take();
+		_hasMoved.clear();
 	}
 	
 	@Override

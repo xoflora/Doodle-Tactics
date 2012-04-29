@@ -163,16 +163,13 @@ public class UnitPool extends MenuItem {
 	@Override
 	public void paint(Graphics2D brush, BufferedImage img) {
 		super.paint(brush, img);
-		
-	//	_done.paint(brush, _done.getImage());
-		
+				
 		int x = DEFAULT_X + CHARACTER_OFFSET_X;
 		int y = DEFAULT_Y + CHARACTER_OFFSET_Y;
 		
 		for (Character c : _unitPool.keySet()) {
 			CharacterSelect draw = _unitPool.get(c);
 			draw.setLocation(x, y);
-		//	draw.paint(brush, draw.getImage());
 			
 			y += OFFSET_BETWEEN_CHARACTERS;
 		}

@@ -26,6 +26,7 @@ public class RandomBattleAI extends CombatController {
 	public void take() {
 		super.take();
 		System.out.println("Enemy phase");
+		_gameScreen.popControl();
 	}
 
 	@Override

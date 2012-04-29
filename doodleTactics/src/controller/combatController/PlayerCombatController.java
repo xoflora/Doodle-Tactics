@@ -109,6 +109,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		
 		_selectedTile = null;
 		_selectedCharacter = null;
+		_destTile = null;
 		_enemyAttackRange = new ArrayList<Tile>();
 
 		clearMovementRange();
@@ -153,7 +154,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				Character c = t.getOccupant();
 				if (_state == State.START) {
 					if (t.isOccupied()) {
-						if (c.getAffiliation() == this) {
+						if (c.getAffiliation() == this && !hasMoved(c)) {
 							_selectedTile = t;
 							_selectedCharacter = c;
 							
@@ -203,7 +204,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 					
 				}
 				else if (_state == State.CHARACTER_OPTION_MENU) {
-					
+					clear();
+					_state = State.START;
 				}
 			}
 		}
@@ -319,6 +321,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		// TODO Auto-generated method stub
 		double x = c.getX();
 		double y = c.getY();
+		//pan to coordinates
 	}
 
 	@Override
@@ -372,6 +375,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		if (!_finalized) {
 			_finalized = true;
 			_pool.setInUse(false);
+			_pool = null;
 			_gameScreen.popControl();
 		}
 	}
