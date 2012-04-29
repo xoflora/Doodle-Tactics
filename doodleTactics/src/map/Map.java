@@ -857,11 +857,15 @@ public class Map implements Serializable {
 		for(Tile  t : potentials){
 			if(r.nextInt(100) < CUTOFF){
 				//An enemy will be placed
-				double xLoc = Tile.TILE_SIZE * t.x()  - _mainChar.getTileX();
-				double yLoc = Tile.TILE_SIZE * t.y() - _mainChar.getTileY();
+				double xLoc = Tile.TILE_SIZE * (t.x() - DEFAULT_XREF);
+				double yLoc = Tile.TILE_SIZE * (t.y() - DEFAULT_YREF);
 				System.out.println("**XLOC" + t.x() + " YLOC: " + t.y());
+				int overflow = 0;
 				Character enemy = Character.generateRandomCharacter(_dt.getGameScreen(),xLoc,yLoc);
-			//	enemy.setLocation(xLoc,yLoc);
+				
+				/*if(enemy.getDownImage().getWidth() - Tile.TILE_SIZE <= 25.0)
+					overflow = (enemy.getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
+				enemy.setLocation(t.x() - overflow,t.y() - enemy.getDownImage().getHeight() + Tile.TILE_SIZE);*/
 				enemy.setVisible(true);
 				_activeCharacters.add(enemy);
 				t.setOccupant(enemy);
