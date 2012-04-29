@@ -1,3 +1,4 @@
+mapCord,615,535
 DemoMap,src/graphics/tiles/light_blue.png,src/graphics/tiles/grass.png
 20,20
 0,2,F,src/graphics/tiles/grass.png,1,0,0
