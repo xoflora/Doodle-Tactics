@@ -109,6 +109,20 @@ public abstract class CombatController extends GameScreenController {
 	}
 	
 	/**
+	 * checks whether the given character is an enemy of this controller
+	 * @param c the character to check
+	 * @return whether the character is an enemy of this controller
+	 */
+	public boolean isEnemy(Character c) {
+		if (c == null)
+			return false;
+		for (CombatController affiliation : _enemyAffiliations)
+			if (affiliation.isAffiliated(c))
+				return true;
+		return false;
+	}
+	
+	/**
 	 * @return the next unit for the controller that has not yet moved this turn
 	 */
 	public Character nextUnit() {

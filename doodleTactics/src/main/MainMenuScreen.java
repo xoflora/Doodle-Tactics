@@ -95,7 +95,6 @@ public class MainMenuScreen extends Screen<MainMenuController> {
 			_newGame.setHovered();
 			this.repaint();
 			
-		//	System.out.println("WEORIUEW");
 			return _newGame;
 		}
 		

@@ -27,6 +27,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		CHARACTER_OPTION_MENU
 	}
 	
+	private Tile _attackTile;
 	private Tile _destTile;
 	private Tile _selectedTile;
 	private Character _selectedCharacter;
@@ -46,11 +47,13 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	
 	private State _state;
 	private UnitPool _pool;
+	private CombatOptionWindow _optionWindow;
 	private boolean _finalized;
 	
 	public PlayerCombatController(DoodleTactics dt, List<Character> units) {
 		super(dt, units);
 
+		_attackTile = null;
 		_destTile = null;
 		_selectedTile = null;
 		_selectedCharacter = null;
@@ -69,6 +72,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_cacheAttackRange = null;
 		
 		_pool = null;
+		_optionWindow = null;
 		
 		clear();
 	}
@@ -107,6 +111,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		for (Tile t : _enemyAttackRange)
 			t.setInEnemyAttackRange(false);
 		
+		_attackTile = null;
 		_selectedTile = null;
 		_selectedCharacter = null;
 		_destTile = null;
@@ -122,6 +127,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_cacheCost = 0;
 		_cacheDestTile = null;
 		
+		_optionWindow = null;
 		_state = State.START;
 	}
 	
@@ -144,9 +150,32 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_pathCost = 0;
 	}
 	
+	/**
+	 * 
+	 * @return the nearest tile to the given coordinate with an enemy to attack
+	 */
+	private Tile nearestAttackTile(int x, int y) {
+		Tile best = null;
+		int bestDistance = 0;
+		for (Tile t : _characterAttackRange)
+			if (isEnemy(t.getOccupant()))
+				if (best == null || (t.getX() - x)*(t.getX() - x) + (t.getY() - y)*(t.getY() - y) < bestDistance)
+					best = t;
+		return best;
+	}
+	
 	@Override
 	public void move(Character c, List<Tile> path) {
 		super.move(c, path);
+		
+		try {
+			_attackTile = nearestAttackTile((int)_destTile.getX(), (int)_destTile.getY());
+			_optionWindow = new CombatOptionWindow(_dt, _gameScreen, true, false, false, false, this);
+			_gameScreen.addMenuItem(_optionWindow);
+			_gameScreen.setVisible(true);
+		} catch(IOException e) {
+			_dt.error("Error finding combat window files.");
+		}
 	}
 
 	@Override
@@ -251,6 +280,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				_cachePath = null;
 				_cacheCost = 0;
 				_cacheDestTile = null;
+				
+				_hasMoved.put(_selectedCharacter, false);
 				
 				_state = State.CHARACTER_SELECTED;
 			}
@@ -368,7 +399,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			_pool = new UnitPool(_dt, _gameScreen, this, _units);
 			_pool.setInUse(true);
 		} catch (IOException e) {
-			e.printStackTrace();
+			_dt.error("");
 		}
 	}
 	
@@ -383,5 +414,9 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			_pool = null;
 			_gameScreen.popControl();
 		}
+	}
+
+	public void pushAction(ActionType action) {
+		
 	}
 }

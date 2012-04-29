@@ -208,13 +208,13 @@ public abstract class Character extends Rectangle{
 		String begin = "src/graphics/characters/";
 		switch(r.nextInt(4)){
 		case 0:
-			return new Archer(gs, begin + "pokeball.png",begin + "knight_left.png",begin + "knight_right.png",begin + "knight_back.png","knight_front.png","RandomEnemy",tileX,tileY);
+			return new Archer(gs, begin + "pokeball.png",begin + "knight_left.png",begin + "knight_right.png",begin + "knight_back.png",begin + "knight_front.png","RandomEnemy",tileX,tileY);
 		case 1:
-			return new Warrior(gs, begin + "pokeball.png",begin + "warrior_left_color.png",begin + "warrior_right_color.png",begin + "warrior_back_color.png","warrior_front_color.png","RandomEnemy",tileX,tileY);
+			return new Warrior(gs, begin + "pokeball.png",begin + "warrior_left_color.png",begin + "warrior_right_color.png",begin + "warrior_back_color.png",begin + "warrior_front_color.png","RandomEnemy",tileX,tileY);
 		case 2:
-			return new Mage(gs, begin + "pokeball.png",begin + "mage_left.png",begin + "mage_right.png",begin + "mage_back.png","mage_front.png","RandomEnemy",tileX,tileY);
+			return new Mage(gs, begin + "pokeball.png",begin + "mage_left.png",begin + "mage_right.png",begin + "mage_back.png",begin + "mage_front.png","RandomEnemy",tileX,tileY);
 		case 3:
-			return new Mage(gs, begin + "pokeball.png",begin + "thief_left.png",begin + "thief_right.png",begin + "thief_back.png","thief_front.png","RandomEnemy",tileX,tileY);
+			return new Thief(gs, begin + "pokeball.png",begin + "thief_left.png",begin + "thief_right.png",begin + "thief_back.png",begin + "thief_front.png","RandomEnemy",tileX,tileY);
 		default:
 			System.out.println("Character Generator failed!");
 			return null;

@@ -56,7 +56,7 @@ public class Map implements Serializable {
 	private static final int DEFAULT_YREF = 5;
 
 	//Random Battle
-	private static final int CUTOFF = 50;
+	private static final int CUTOFF = 100;
 
 	private DoodleTactics _dt;
 	private BufferedImage _overflow;
@@ -285,9 +285,13 @@ public class Map implements Serializable {
 			// Create Map
 			if (main == null)
 				throw new InvalidMapException("Main Character not specified");
-			return new Map(dt,tiles, name, ImageIO.read(new File(overflowPath)),
+			Map m = new Map(dt,tiles, name, ImageIO.read(new File(overflowPath)),
 					terrainList, chars, main); 
-
+			
+			//Compute Random Battles
+			m.assignRandomEnemies(_randBattles);
+			
+			return m;
 		} catch (FileNotFoundException e) {
 			throw new InvalidMapException(
 					"Error reading map from file located at " + path + ".");
@@ -852,11 +856,19 @@ public class Map implements Serializable {
 	 */
 	public void assignRandomEnemies(LinkedList<Tile> potentials){
 		Random r = new Random();
-
 		for(Tile  t : potentials){
 			if(r.nextInt(100) < CUTOFF){
 				//An enemy will be placed
 				Character enemy = Character.generateRandomCharacter(_dt.getGameScreen(),t.getX(),t.getY());
+			int overflow = 0;
+				BufferedImage img = enemy.getDownImage();
+				if(img.getWidth() - Tile.TILE_SIZE <= 25.0)
+					overflow = (img.getWidth() - Tile.TILE_SIZE) / 2;
+			/*	System.out.println("X LOC: " + t.x() + " Y LOC: " + t.y()); 
+				addCharacter(t.x(),t.y(),enemy);
+				enemy.setLocation(t.x() - overflow, t.y() - img.getHeight() + Tile.TILE_SIZE);*/
+				_activeCharacters.add(enemy);
+
 				if(_tileToEnemies.containsKey(t))
 					_tileToEnemies.get(t).add(enemy);
 				else{
@@ -864,7 +876,18 @@ public class Map implements Serializable {
 					toAdd.add(enemy);
 					_tileToEnemies.put(t,toAdd);
 				}
-				_enemyToTiles.put(enemy,getMovementRange(t,enemy.getMovementRange()));
+				System.out.println("ENEMY ADDED, mvmt range: " + enemy.getMovementRange() + " tiles");
+				List<Tile> mvmtRange = getMovementRange(t,enemy.getMovementRange());
+				for(Tile inRange : mvmtRange){
+					if(_tileToEnemies.containsKey(inRange))
+						_tileToEnemies.get(inRange).add(enemy);
+					else{
+						LinkedList<Character> toAdd = new LinkedList<Character>();
+						toAdd.add(enemy);
+						_tileToEnemies.put(inRange,toAdd);
+					}
+				}
+				_enemyToTiles.put(enemy,mvmtRange);
 			}
 		}
 	}
@@ -879,6 +902,10 @@ public class Map implements Serializable {
 	
 	/**
 	 * @param A tile that generates a Random Battle
-	 * @return the Enemy
+	 *
 	 */
+	public void startBattle(Tile t){
+		System.out.println("COMBAT BEGINS!!");
+		_dt.getGameScreen().enterCombat(_tileToEnemies.get(t));
+	}
 }
