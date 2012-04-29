@@ -97,7 +97,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			if(split.length != 7){
 				System.out.println("Invalid Main Character File");
 			} else{
-				MainCharacter main =  new MainCharacter(this,split[2],split[3],split[4],split[5],split[6],split[2],5,5);
+				MainCharacter main =  new MainCharacter(_dt,this,split[2],split[3],split[4],split[5],split[6],split[2],5,5);
 				int overflow = (main.getImage().getWidth() - Tile.TILE_SIZE) / 2;
 				double x = 10*Tile.TILE_SIZE-overflow;
 				double y=  8*Tile.TILE_SIZE - main.getImage().getHeight() + Tile.TILE_SIZE;

@@ -8,8 +8,8 @@ import main.DoodleTactics;
 public class MainCharacter extends Character{
 	
 	int _tileX, _tileY;
-	public MainCharacter(JPanel container, String profile, String left, String right, String up, String down, String name, int x, int y){
-		super(container, profile, left, right, up, down, name, x , y);
+	public MainCharacter(DoodleTactics dt, JPanel container, String profile, String left, String right, String up, String down, String name, int x, int y){
+		super(dt,container, profile, left, right, up, down, name, x , y);
 		_tileX = x;
 		_tileY = y;
 	}

@@ -13,8 +13,8 @@ public class Archer extends Character{
 
 
 
-	public Archer(JPanel container, String profile, String left, String right, String up, String down, String name,double x, double y){
-		super(container, profile, left, right, up, down, name,x,y);
+	public Archer(DoodleTactics dt, JPanel container, String profile, String left, String right, String up, String down, String name,double x, double y){
+		super(dt,container, profile, left, right, up, down, name,x,y);
 		_BASE_STATS[STRENGTH] = 7;
 		_BASE_STATS[DEFENSE] = 5;
 		_BASE_STATS[SPECIAL] = 5;
