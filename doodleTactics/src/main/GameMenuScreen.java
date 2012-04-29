@@ -183,6 +183,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 		_itemInfoBox.setLocation(15, 570);
 		_itemInfoBox.setSize(144, 230);
+		_itemInfoBox.revalidate();
 //		_scrollBar.setSize(new Dimension(748, 660));
 		_scrollBar.setLocation(new Point(200, 120));
 		_title.paint((Graphics2D) g, _title.getImage());
