@@ -27,7 +27,9 @@ public class ItemWindow extends MenuItem {
 	private static final int HORZ_BUFFER = 6;
 	private static final int VERT_BUFFER = 2;
 	
-	private static final String MENU_IMAGE = "src/graphics/menu/combat_menu_background.png";
+	private static final String MENU_IMAGE = "src/graphics/menu/combatMenu/item_box.png";
+	private static final String ARROW_IMAGE = "src/graphics/menu/combatMenu/item_arrow.png";
+	private static final String DESCRIPTION_BOX = "src/graphics/menu/combatMenu/item_description_box.png";
 	
 	
 	private class ItemOption extends MenuItem {
