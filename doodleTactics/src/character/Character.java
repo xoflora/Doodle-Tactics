@@ -325,7 +325,7 @@ public abstract class Character extends Rectangle{
 
 					/* if we've incremented numSteps times, then we should stop */
 					/* otherwise, continue incrementing */
-					if (_cnt == _path.size()) {
+					if (_cnt == _path.size() - 1) {
 						PathTimer.this.stop();
 						System.out.println("=========END FOLLOW PATH=========");
 					}

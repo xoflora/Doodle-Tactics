@@ -167,6 +167,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	
 	@Override
 	public void move(Character c, Tile source, List<Tile> path) {
+		_state = State.CHARACTER_MOVING;
 		super.move(c, source, path);
 		
 		try {
@@ -178,6 +179,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		} catch(IOException e) {
 			_dt.error("Error finding combat window files.");
 		}
+		
+		_state = State.CHARACTER_OPTION_MENU;
 	}
 
 	@Override
@@ -208,11 +211,18 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 							}
 							_state = State.CHARACTER_SELECTED;
 						}
-						else if (_enemyAffiliations.contains(c.getAffiliation())) {
+						else if (isEnemy(c)) {
 							_enemyAttackRange = Util.union(_enemyAttackRange,
 									_gameScreen.getMap().getAttackRange(t, c.getMovementRange(),
 											c.getMinAttackRange(), c.getMaxAttackRange()));
+							for (Tile toPaint : _enemyAttackRange)
+								toPaint.setInEnemyAttackRange(true);
 						}
+						
+						System.out.println(c.getAffiliation());
+						for (CombatController d : _enemyAffiliations)
+							System.out.println(d);
+						
 					}
 				}
 				//selected tile and character are not null; selected character is the occupant of the tile
@@ -233,8 +243,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						_cacheCost = _pathCost;
 						_cacheDestTile = _destTile;
 						clearPath();
-						
-						_state = State.CHARACTER_OPTION_MENU;
 					}
 				}
 				//selected tile is the coordinate to move the character to
