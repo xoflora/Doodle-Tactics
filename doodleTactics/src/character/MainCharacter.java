@@ -10,7 +10,7 @@ public class MainCharacter extends Character{
 	
 	private DoodleTactics _dt;
 	
-	int _tileX, _tileY;
+	private int _tileX, _tileY;
 	public MainCharacter(DoodleTactics dt, JPanel container, String profile, String left, String right, String up, String down, String name, int x, int y){
 		super(dt,container, profile, left, right, up, down, name, x , y);
 		_tileX = x;
@@ -24,6 +24,14 @@ public class MainCharacter extends Character{
 	
 	public int getTileY(){
 		return _tileY;
+	}
+	
+	public void setTileX(int x) {
+		_tileX = x;
+	}
+	
+	public void setTileY(int y) {
+		_tileY = y;
 	}
 	
 	//special, options to choose special ability, set name, special statistics

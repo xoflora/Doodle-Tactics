@@ -916,12 +916,17 @@ public class Map implements Serializable {
 	}
 	
 	/**
+	 * generates a random battle inside the map; characters within movement range of the player can be added
 	 * @param A tile that generates a Random Battle
-	 *
 	 */
 	public void startBattle(Tile t){
 		System.out.println("COMBAT BEGINS!!");
-		_dt.getGameScreen().enterCombat(_enemyTiles);
+		HashMap<Character, Tile> controllerMap = new HashMap<Character, Tile>();
+		List<Character> chars = _tileToEnemies.get(t);
+		for (Character c : chars)
+			controllerMap.put(c, _enemyTiles.get(c));
+		
+		_dt.getGameScreen().enterCombat(controllerMap);
 	}
 	
 	/**
