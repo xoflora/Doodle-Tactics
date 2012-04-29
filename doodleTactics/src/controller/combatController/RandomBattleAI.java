@@ -2,16 +2,18 @@ package controller.combatController;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
 import java.util.List;
 
 import main.DoodleTactics;
+import map.Tile;
 import character.Character;
 
 public class RandomBattleAI extends CombatController implements Runnable {
 	
 	public static final int RANDOM_BATTLE_NUM_UNITS = 3;
 
-	public RandomBattleAI(DoodleTactics dt, List<Character> random) {
+	public RandomBattleAI(DoodleTactics dt, HashMap<Character, Tile> random) {
 		super(dt, random);
 	}
 	

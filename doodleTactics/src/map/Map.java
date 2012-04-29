@@ -37,8 +37,10 @@ import util.Heap;
 
 /**
  * 
- * @author rroelke (except where noted) a Map is a segment of the game world
- *         during which gameplay occurs implements Serializable, for saving
+ * @author rroelke (except where noted)
+ * a Map is a segment of the game world
+ *         during which gameplay occurs
+ * implements Serializable, for saving
  *         purposes
  */
 public class Map implements Serializable {
@@ -67,9 +69,19 @@ public class Map implements Serializable {
 	private MainCharacter _mainChar;
 	private Stack<Integer> _prevXRef;
 	private Stack<Integer> _prevYRef;
-	private HashMap<Character,List<Tile>> _enemyToTiles;
+	
+	/**
+	 * fields used to generate random battles;
+	 *  - _enemyTiles maps characters to the tile on which they reside
+	 *  - _enemyToTiles maps characters to the list of tiles within their movement range
+	 *  - _tileToEnemies maps a tile to the enemies whose movement range contains that tile
+	 *  - _randBattles is a list of possible sites of random enemies
+	 */
+	private HashMap<Character, Tile> _enemyTiles;
+	private HashMap<Character, List<Tile>> _enemyToTiles;
 	private HashMap<Tile,List<Character>> _tileToEnemies;
 	private LinkedList<Tile> _randBattles;
+	
 	String _name;
 	
 	private static Point _mapCords;
@@ -88,6 +100,7 @@ public class Map implements Serializable {
 
 
 		//Random Battle data structures:
+		_enemyTiles = new HashMap<Character, Tile>();
 		_enemyToTiles = new HashMap<Character,List<Tile>>();
 		_tileToEnemies = new HashMap<Tile,List<Character>>();
 
@@ -139,8 +152,7 @@ public class Map implements Serializable {
 			splitLine = reader.readLine().split(",");
 			
 			if (splitLine.length != 3)
-				throw new InvalidMapException(
-				"(line 2) Incorrect amount of data");
+				throw new InvalidMapException("(line 2) Incorrect amount of data");
 
 			String name = splitLine[0];
 			BufferedImage defaultImage = dt.importImage(splitLine[1]);
@@ -860,7 +872,7 @@ public class Map implements Serializable {
 				double xLoc = Tile.TILE_SIZE * (t.x() - _dt.getGameScreen().getXRef());
 				double yLoc = Tile.TILE_SIZE * (t.y() - _dt.getGameScreen().getYRef());
 				System.out.println("**XREF" + _dt.getGameScreen().getXRef() + " YREF: " +_dt.getGameScreen().getYRef() + "TIle x: " + t.x() + " Y: " + t.y());
-				int overflow = 0;
+
 				Character enemy = Character.generateRandomCharacter(_dt,_dt.getGameScreen(),xLoc,yLoc);
 				
 				/*if(enemy.getDownImage().getWidth() - Tile.TILE_SIZE <= 25.0)
@@ -869,6 +881,8 @@ public class Map implements Serializable {
 				enemy.setVisible(true);
 				_activeCharacters.add(enemy);
 				t.setOccupant(enemy);
+				_enemyTiles.put(enemy, t);
+				
 				if(_tileToEnemies.containsKey(t))
 					_tileToEnemies.get(t).add(enemy);
 				else{
@@ -876,6 +890,7 @@ public class Map implements Serializable {
 					toAdd.add(enemy);
 					_tileToEnemies.put(t,toAdd);
 				}
+				
 				System.out.println("ENEMY ADDED, mvmt range: " + enemy.getMovementRange() + " tiles");
 				List<Tile> mvmtRange = getMovementRange(t,enemy.getMovementRange());
 				for(Tile inRange : mvmtRange){
@@ -906,17 +921,20 @@ public class Map implements Serializable {
 	 */
 	public void startBattle(Tile t){
 		System.out.println("COMBAT BEGINS!!");
-		_dt.getGameScreen().enterCombat(_tileToEnemies.get(t));
+		_dt.getGameScreen().enterCombat(_enemyTiles);
 	}
 	
 	/**
 	 * When you exit  a map, random battle references are erased
 	 */
 	public void clearRandomBattleMaps(){
-		for(Character c : _enemyToTiles.keySet())
+		for(Character c : _enemyToTiles.keySet()) {
+			_enemyTiles.get(c).setOccupant(null);
 			_activeCharacters.remove(c);
+		}
+		
+		_enemyTiles.clear();
 		_enemyToTiles.clear();
 		_tileToEnemies.clear();
-
 	}
 }

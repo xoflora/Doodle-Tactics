@@ -1,8 +1,7 @@
 package controller.combatController;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -11,6 +10,7 @@ import controller.GameScreenController;
 import controller.combatController.player.PlayerCombatController;
 import controller.combatController.player.PlayerSetup;
 import main.DoodleTactics;
+import map.Tile;
 import character.Character;
 
 public class CombatOrchestrator extends GameScreenController {
@@ -122,8 +122,8 @@ public class CombatOrchestrator extends GameScreenController {
 		}
 		else if (_state == State.SETUP_COMPLETE) {
 			
-			if (_p == null)
-				_p = new PlayerCombatController(_dt, _dt.getParty());
+		//	if (_p == null)
+		//		_p = new PlayerCombatController(_dt, _dt.getParty());
 			
 			if (_partners == null)
 				_partners = new ArrayList<CombatController>();
@@ -163,6 +163,8 @@ public class CombatOrchestrator extends GameScreenController {
 	private void victory() {
 		// TODO Auto-generated method stub
 		System.out.println("Player is victorious!");
+		while (!_p.getUnits().isEmpty())
+			_p.removeUnit(_p.getUnits().get(0));
 		_gameScreen.popControl();
 	}
 	
@@ -188,8 +190,8 @@ public class CombatOrchestrator extends GameScreenController {
 	 * set the player combat controller to have the given units
 	 * @param units the unit list of the player combat controller
 	 */
-	public void setPlayerUnits(List<Character> units) {
-		units.add(_gameScreen.getMainChar());
+	public void setPlayerUnits(HashMap<Character, Tile> units) {
+	//	units.add(_gameScreen.getMainChar());
 		_p = new PlayerCombatController(_dt, units);
 	}
 }

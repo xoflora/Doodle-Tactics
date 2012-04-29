@@ -623,7 +623,6 @@ public abstract class Character extends Rectangle{
 					" takes " + damage + " damage!");
 
 			if (opponent._currentHP <= 0) {
-				opponent.getAffiliation().removeUnit(opponent);
 				System.out.println(opponent.getName() + " defeated.");
 				return;
 			}
@@ -652,7 +651,6 @@ public abstract class Character extends Rectangle{
 					" takes " + damage + " damage!");
 
 			if (_currentHP <= 0) {
-				getAffiliation().removeUnit(this);
 				System.out.println(getName() + " defeated.");
 				return;
 			}

@@ -23,19 +23,24 @@ public abstract class CombatController extends GameScreenController {
 	protected List<Character> _units;
 	private ListIterator<Character> _unitCycle;
 	protected HashMap<Character, Boolean> _hasMoved;
+	protected HashMap<Character, Tile> _locations;
 	
 	protected List<CombatController> _enemyAffiliations;
 	
 	private Random r;
 	
-	public CombatController(DoodleTactics dt, List<Character> units) {
+	public CombatController(DoodleTactics dt, HashMap<Character, Tile> units) {
 		super(dt);
 		
-		_units = units;
+		_locations = units;
+		_units = new ArrayList<Character>();
+		for (Character c : _locations.keySet())
+			_units.add(c);
 		
 		_enemyAffiliations = new ArrayList<CombatController>();
 		_hoveredTile = null;
 		_hasMoved = new HashMap<Character, Boolean>();
+		_locations = new HashMap<Character, Tile>();
 		
 		r = new Random();
 		
@@ -87,6 +92,7 @@ public abstract class CombatController extends GameScreenController {
 		
 		//c.setLocation(dest.getX(), dest.getY());
 		_hasMoved.put(c, true);
+		_locations.put(c, path.get(path.size() - 1));
 	}
 	
 	@Override
@@ -183,5 +189,9 @@ public abstract class CombatController extends GameScreenController {
 	public void removeUnit(Character c) {
 		_units.remove(c);
 		_gameScreen.removeCharacter(c);
+		_locations.get(c).setOccupant(null);
+		_locations.put(c, null);
+	///	if (t.occupant() == c)
+	//		t.setOccupant(null);
 	}
 }
