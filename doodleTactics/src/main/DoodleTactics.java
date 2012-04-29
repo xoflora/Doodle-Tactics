@@ -64,9 +64,9 @@ public class DoodleTactics extends JFrame {
 		_game.setMap("src/tests/data/testMapDemo");
 		
 		Archer _char1 = new Archer(this,_game, 
-				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_back.png", "Dude", 10, 10);
+				"src/graphics/characters/doodle_knight_portrait.png", "src/graphics/characters/warrior_left_color.png",
+				"src/graphics/characters/warrior_right_color.png", "src/graphics/characters/warrior_back_color.png",
+				"src/graphics/characters/warrior_front_color.png", "Dude", 10, 10);
 		try {
 			BufferedImage pot = importImage("src/graphics/items/donut.png");
 			HealthPotion potion = new HealthPotion(pot, 10);
@@ -87,20 +87,20 @@ public class DoodleTactics extends JFrame {
 		addCharacterToParty(_char1);
 		
 		addCharacterToParty(new Mage(this,_game,
-				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_left.png",
-				"src/graphics/characters/warrior_right.png", "src/graphics/characters/warrior_back.png",
-				"src/graphics/characters/warrior_front.png", "Whee", 5, 5));
+				"src/graphics/characters/mage_portrait.png", "src/graphics/characters/mage_left.png",
+				"src/graphics/characters/mage_right.png", "src/graphics/characters/mage_back.png",
+				"src/graphics/characters/mage_front.png", "Whee", 5, 5));
 		
 		
 		addCharacterToParty(new Thief(this,_game, 
-				"src/graphics/characters/pokeball.png", "src/graphics/characters/mage_left.png",
-				"src/graphics/characters/mage_right.png", "src/graphics/characters/mage_back.png",
-				"src/graphics/characters/mage_back.png", "Shirley", 15, 15));
+				"src/graphics/characters/thief_portrait.png", "src/graphics/characters/thief_left.png",
+				"src/graphics/characters/thief_right.png", "src/graphics/characters/thief_back.png",
+				"src/graphics/characters/thief_front.png", "Shirley", 15, 15));
 		
 		addCharacterToParty(new Warrior(this,_game, 
-				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_front.png",
-				"src/graphics/characters/warrior_front.png", "src/graphics/characters/warrior_front.png",
-				"src/graphics/characters/warrior_front.png", "Bob", 20, 10));
+				"src/graphics/characters/warrior_portrait.png", "src/graphics/characters/warrior_left_color.png",
+				"src/graphics/characters/warrior_right_color.png", "src/graphics/characters/warrior_back_color.png",
+				"src/graphics/characters/warrior_front_color.png", "Bob", 20, 10));
 	}
 	
 	/**
