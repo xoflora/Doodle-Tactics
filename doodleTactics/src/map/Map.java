@@ -56,7 +56,7 @@ public class Map implements Serializable {
 	private static final int DEFAULT_YREF = 5;
 
 	//Random Battle
-	private static final int CUTOFF = 50;
+	private static final int CUTOFF = 100;
 
 	private DoodleTactics _dt;
 	private BufferedImage _overflow;

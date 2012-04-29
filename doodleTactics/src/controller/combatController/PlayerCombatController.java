@@ -46,6 +46,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	
 	private State _state;
 	private UnitPool _pool;
+	private CombatOptionWindow _optionWindow;
 	private boolean _finalized;
 	
 	public PlayerCombatController(DoodleTactics dt, List<Character> units) {
@@ -69,6 +70,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_cacheAttackRange = null;
 		
 		_pool = null;
+		_optionWindow = null;
 		
 		clear();
 	}
@@ -122,6 +124,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_cacheCost = 0;
 		_cacheDestTile = null;
 		
+		_optionWindow = null;
 		_state = State.START;
 	}
 	
@@ -144,9 +147,26 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_pathCost = 0;
 	}
 	
+	/**
+	 * 
+	 * @return the nearest tile to the given coordinate with an enemy to attack
+	 */
+	private Tile nearestAttackTile(int x, int y) {
+		Tile best = null;
+		int bestDistance = 0;
+		for (Tile t : _characterAttackRange)
+			if (isEnemy(t.getOccupant()))
+				if (best == null || (t.getX() - x)*(t.getX() - x) + (t.getY() - y)*(t.getY() - y) < bestDistance)
+					best = t;
+		return best;
+	}
+	
 	@Override
 	public void move(Character c, List<Tile> path) {
 		super.move(c, path);
+		
+		boolean attack = false;
+	//	_optionWindow = new CombatOptionWindow(_dt, _gameScreen, );
 	}
 
 	@Override
@@ -383,5 +403,9 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			_pool = null;
 			_gameScreen.popControl();
 		}
+	}
+
+	public void pushAction(ActionType action) {
+		
 	}
 }
