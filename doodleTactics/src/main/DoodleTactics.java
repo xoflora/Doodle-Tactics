@@ -71,7 +71,7 @@ public class DoodleTactics extends JFrame {
 			BufferedImage pot = importImage("src/graphics/items/donut.png");
 			HealthPotion potion = new HealthPotion(pot, 10);
 			_char1.addToInventory(potion);
-			potion.setDescription("This enchanted sprinkled doughnut heals your character for 10 HP.");
+			potion.setDescription("Sup bro");
 			_char1.updateHP(-10);
 		} catch (ItemException e) {
 			e.printStackTrace();

@@ -29,7 +29,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		START,
 		CHARACTER_SELECTED,
 		CHARACTER_MOVING,
-		CHARACTER_OPTION_MENU
+		CHARACTER_OPTION_MENU,
+		SELECTING_ITEM
 	}
 	
 	private Tile _destTile;
@@ -56,6 +57,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	private State _state;
 	private UnitPool _pool;
 	private CombatOptionWindow _optionWindow;
+	private ItemWindow _itemWindow;
 	private boolean _finalized;
 	
 	public PlayerCombatController(DoodleTactics dt, List<Character> units) {
@@ -80,6 +82,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		
 		_pool = null;
 		_optionWindow = null;
+		_itemWindow = null;
 		
 		_menuDraggedx = 0;
 		_menuDraggedy = 0;
@@ -292,6 +295,13 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				
 				_state = State.CHARACTER_SELECTED;
 			}
+			else if (_state == State.SELECTING_ITEM) {
+				_itemWindow.removeFromDrawingQueue();
+				_itemWindow = null;
+				
+				_optionWindow.addToDrawingQueue();
+				_state = State.CHARACTER_OPTION_MENU;
+			}
 		}
 	}
 
@@ -304,6 +314,10 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			if (_state == State.CHARACTER_SELECTED) {	//selected character and tile are not null
 				if (_selectedMovementRange.contains(t)) {
 					if (_path.isEmpty()) {
+						if (!_path.contains(_selectedTile)) {
+							_path.add(_selectedTile);
+							_selectedTile.setInMovementPath(true);
+						}
 						if (t.isAdjacent(_selectedTile) && t.cost() <= _selectedCharacter.getMovementRange()) {
 							_path.add(t);
 							_pathCost += t.cost();
@@ -344,7 +358,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void mousePressed(MouseEvent e) {
 		super.mousePressed(e);
 		MenuItem m = _gameScreen.checkContains(e.getPoint());
-		if (m != null && m == _optionWindow) {
+		if (m != null && (m == _optionWindow || m == _itemWindow)) {
 			_menuDraggedx = e.getX();
 			_menuDraggedy = e.getY();
 			_draggingMenu = true;
@@ -358,10 +372,17 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void mouseDragged(MouseEvent e) {
 		if (!_draggingMenu)
 			super.mouseDragged(e);
-		else if (_optionWindow != null) {
-			_optionWindow.setLocation(e.getX() - _menuDraggedx, e.getY() - _menuDraggedy);
-			_menuDraggedx = e.getX();
-			_menuDraggedy = e.getY();
+		else {
+			if (_optionWindow != null) {
+				_optionWindow.setLocation(e.getX() - _menuDraggedx, e.getY() - _menuDraggedy);
+				_menuDraggedx = e.getX();
+				_menuDraggedy = e.getY();
+			}
+			if (_itemWindow != null) {
+				_itemWindow.setLocation(e.getX() - _menuDraggedx, e.getY() - _menuDraggedy);
+				_menuDraggedx = e.getX();
+				_menuDraggedy = e.getY();
+			}
 		}
 	}
 	
@@ -482,7 +503,13 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				_state = State.START;
 		}
 		else if (action == ActionType.ITEM) {
+			_itemWindow = new ItemWindow(_gameScreen, _dt, _selectedCharacter, this);
+			_itemWindow.setLocation(_optionWindow.getX(), _optionWindow.getY());
 			
+			_optionWindow.removeFromDrawingQueue();
+			_itemWindow.addToDrawingQueue();
+			
+			_state = State.SELECTING_ITEM;
 		}
 		else if (action == ActionType.SPECIAL) {
 			

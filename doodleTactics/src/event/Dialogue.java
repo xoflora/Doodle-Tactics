@@ -67,7 +67,6 @@ public class Dialogue extends Event {
 
 			_background.paint(brush,img);
 			paintNext(brush);
-
 		}
 	}
 
