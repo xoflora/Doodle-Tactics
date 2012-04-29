@@ -504,7 +504,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	 * @author rroelke
 	 */
 	public void enterCombat(HashMap<Character, Tile> enemies) {
-		RandomBattleAI enemy = new RandomBattleAI(_dt, new HashMap<Character, Tile>());
+		RandomBattleAI enemy = new RandomBattleAI(_dt, enemies);
 		List<CombatController> e = new ArrayList<CombatController>();
 		e.add(enemy);
 		enterCombat(new CombatOrchestrator(_dt, e, null, null, RandomBattleAI.RANDOM_BATTLE_NUM_UNITS));

@@ -40,7 +40,7 @@ public abstract class CombatController extends GameScreenController {
 		_enemyAffiliations = new ArrayList<CombatController>();
 		_hoveredTile = null;
 		_hasMoved = new HashMap<Character, Boolean>();
-		_locations = new HashMap<Character, Tile>();
+		_locations = units;
 		
 		r = new Random();
 		
@@ -187,10 +187,11 @@ public abstract class CombatController extends GameScreenController {
 	 * removes a unit from this combat controller; it can no longer be used in the battle
 	 */
 	public void removeUnit(Character c) {
+		System.out.println("removeing" + c + " from tile " + _locations.get(c));
 		_units.remove(c);
 		_gameScreen.removeCharacter(c);
 		_locations.get(c).setOccupant(null);
-		_locations.put(c, null);
+		_locations.remove(c);
 	///	if (t.occupant() == c)
 	//		t.setOccupant(null);
 	}

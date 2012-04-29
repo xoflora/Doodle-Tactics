@@ -205,6 +205,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 			c.setLocation(_selectedTile.getX(), _selectedTile.getY());
 			c.setDown();
 			removeUnitFromPool(c);
+			System.out.println("character put in place at " + _selectedTile);
 			_inPlace.put(c, _selectedTile);
 			
 			if (_selectedCharacter != null) {
