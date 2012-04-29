@@ -104,6 +104,8 @@ public class OverworldController extends GameScreenController {
 				if(newTile != null && newTile.canMove(Map.SOUTH)){			
 					if(newTile.hasEnterEvent()){
 						_gameScreen.pushControl(newTile.getEvent());
+					} else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
+						_dt.getGameScreen().getMap().startBattle(newTile);
 					}
 					else{
 						newTile.setOccupant(_gameScreen.getMainChar());
@@ -120,7 +122,9 @@ public class OverworldController extends GameScreenController {
 				if(newTile != null && newTile.canMove(Map.EAST)){			
 					if(newTile.hasEnterEvent())
 						_gameScreen.pushControl(newTile.getEvent());
-					else{
+					else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
+						_dt.getGameScreen().getMap().startBattle(newTile);
+					}else{
 						newTile.setOccupant(_gameScreen.getMainChar());
 					}
 					_gameScreen.mapUpdate(-1, 0);
@@ -136,7 +140,9 @@ public class OverworldController extends GameScreenController {
 					if(newTile.hasEnterEvent()){
 						_gameScreen.pushControl(newTile.getEvent());
 					}
-					else{
+					else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
+						_dt.getGameScreen().getMap().startBattle(newTile);
+					}else{
 						newTile.setOccupant(_gameScreen.getMainChar());
 					}
 
@@ -151,7 +157,9 @@ public class OverworldController extends GameScreenController {
 				if(newTile != null && newTile.canMove(Map.WEST)){
 					if(newTile.hasEnterEvent())
 						_gameScreen.pushControl(newTile.getEvent());
-
+					else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
+						_dt.getGameScreen().getMap().startBattle(newTile);
+					}
 					else{
 						newTile.setOccupant(_gameScreen.getMainChar());
 					}
