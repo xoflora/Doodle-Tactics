@@ -564,4 +564,11 @@ public class GameScreen extends Screen<GameScreenController> {
 	public void addCharacter(Character c) {
 		_currMap.getCharactersToDisplay().add(c);
 	}
+	
+	/**
+	 * removes a character from the gamescreen for display
+	 */
+	public void removeCharacter(Character c) {
+		_currMap.getCharactersToDisplay().remove(c);
+	}
 }

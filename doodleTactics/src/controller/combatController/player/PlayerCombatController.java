@@ -247,6 +247,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				//	_state = State.START;
 					if (_characterAttackRange.contains(t) && isEnemy(t.getOccupant())) {
 						attack(_selectedCharacter, t.getOccupant());
+						_pool.removeCharacter(_selectedCharacter);
 						
 						clear();
 						_state = State.START;
@@ -474,7 +475,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 */
 	public void finalize() {
 		if (!_finalized) {
-			System.out.println("HIII");
 			_finalized = true;
 			_pool.setInUse(false);
 			_pool = null;
