@@ -204,10 +204,11 @@ public class OverworldController extends GameScreenController {
 					} else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
 						_dt.getGameScreen().getMap().startBattle(newTile);
 					}
-					
-					newTile.setOccupant(_gameScreen.getMainChar());
-					oldTile.removeOccupant();
-					_gameScreen.mapUpdate(0, -1);
+					else {
+						newTile.setOccupant(_gameScreen.getMainChar());
+						oldTile.removeOccupant();
+						_gameScreen.mapUpdate(0, -1);
+					}
 				}
 				break;
 			case 'a':
@@ -223,10 +224,11 @@ public class OverworldController extends GameScreenController {
 					else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
 						_dt.getGameScreen().getMap().startBattle(newTile);
 					}
-					
-					newTile.setOccupant(_gameScreen.getMainChar());
-					_gameScreen.mapUpdate(-1, 0);
-					oldTile.removeOccupant();
+					else {
+						newTile.setOccupant(_gameScreen.getMainChar());
+						_gameScreen.mapUpdate(-1, 0);
+						oldTile.removeOccupant();
+					}
 				}
 				break;
 			case 's':
@@ -242,10 +244,11 @@ public class OverworldController extends GameScreenController {
 					else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
 						_dt.getGameScreen().getMap().startBattle(newTile);
 					}
-					
-					newTile.setOccupant(_gameScreen.getMainChar());
-					_gameScreen.mapUpdate(0, 1);
-					oldTile.removeOccupant();
+					else {
+						newTile.setOccupant(_gameScreen.getMainChar());
+						_gameScreen.mapUpdate(0, 1);
+						oldTile.removeOccupant();
+					}
 				}
 				break;
 			case 'd':
@@ -260,10 +263,11 @@ public class OverworldController extends GameScreenController {
 					else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
 						_dt.getGameScreen().getMap().startBattle(newTile);
 					}
-					
-					newTile.setOccupant(_gameScreen.getMainChar());
-					_gameScreen.mapUpdate(1, 0);
-					oldTile.removeOccupant();
+					else {
+						newTile.setOccupant(_gameScreen.getMainChar());
+						_gameScreen.mapUpdate(1, 0);
+						oldTile.removeOccupant();
+					}
 				}
 				break;
 			case 'f':
