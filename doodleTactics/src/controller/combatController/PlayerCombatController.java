@@ -339,12 +339,9 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 
 	@Override
 	/**
-	 * 
+	 * unused
 	 */
-	public void addUnitToPool(Character c) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void addUnitToPool(Character c) { }
 	
 	@Override
 	/**

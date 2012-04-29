@@ -467,12 +467,6 @@ public class GameScreen extends Screen<GameScreenController> {
 
 	}
 
-	@Override
-	public void render() {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void switchToGameMenu() {
 		_dt.changeScreens(_dt.getGameMenuScreen());
 	}

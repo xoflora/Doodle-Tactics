@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import org.junit.*;
 
 import map.*;
-//TODO: (czchapma) Have Ryan to correct some of his tests, test working map
 /**
  * 
  * @author rroelke (except where noted)
