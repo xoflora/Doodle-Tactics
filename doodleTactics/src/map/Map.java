@@ -116,7 +116,6 @@ public class Map implements Serializable {
 		LinkedList<Character> chars = new LinkedList<Character>();
 		LinkedList<Tile> _randBattles = new LinkedList<Tile>();
 		MainCharacter main = dt.getGameScreen().getMainChar();
-		HashMap<String,BufferedImage> images = new HashMap<String,BufferedImage>();
 		try {
 			// Parse initial data
 			BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
@@ -127,7 +126,7 @@ public class Map implements Serializable {
 				"(line 1) Incorrect amount of data");
 
 			String name = splitLine[0];
-			BufferedImage defaultImage = ImageIO.read(new File(splitLine[1]));
+			BufferedImage defaultImage = dt.importImage(splitLine[1]);
 			String overflowPath = splitLine[2];
 
 			// parse the dimensions of the map
@@ -158,17 +157,7 @@ public class Map implements Serializable {
 				if (splitLine.length == 5 && splitLine[0].equals("img")) {
 					if(main == null)
 						throw new InvalidMapException("(line " + count + ") Main Character must be parsed before images");
-					BufferedImage img;
-					String imgPath = splitLine[1];
-
-					//If image has already been imported, retrieve it
-					if(images.containsKey(imgPath))
-						img = images.get(imgPath);
-					else{
-						img = ImageIO.read(new File(imgPath));
-						images.put(imgPath, img);
-					}
-
+					BufferedImage img = dt.importImage(splitLine[1]);
 					int xTile = Integer.parseInt(splitLine[2]);
 					int yTile = Integer.parseInt(splitLine[3]);
 					System.out.println(main.getTileX() + ": " + main.getTileY());
@@ -242,15 +231,7 @@ public class Map implements Serializable {
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
 
-					BufferedImage img;
-					String imgPath = splitLine[3];
-					//If image has already been imported, retrieve it
-					if(images.containsKey(imgPath))
-						img = images.get(imgPath);
-					else{
-						img = ImageIO.read(new File(imgPath));
-						images.put(imgPath, img);
-					}
+					BufferedImage img = dt.importImage(splitLine[3]);
 
 
 					tiles[x][y] = Tile.tile(container, img,
@@ -283,7 +264,7 @@ public class Map implements Serializable {
 			// Create Map
 			if (main == null)
 				throw new InvalidMapException("Main Character not specified");
-			Map m = new Map(dt,tiles, name, ImageIO.read(new File(overflowPath)),
+			Map m = new Map(dt,tiles, name, dt.importImage(overflowPath),
 					terrainList, chars, main); 
 			
 			//Compute Random Battles

@@ -79,6 +79,8 @@ public abstract class Character extends Rectangle{
 	private CombatController _affiliation; //player/AI etc
 	
 	private FloatTimer _floatTimer; // internal timer used to animate floating
+	private JPanel _container;
+	private boolean _isAnimating;
 	
 	public static enum CharacterDirection{
 		LEFT,RIGHT,UP,DOWN
@@ -88,6 +90,7 @@ public abstract class Character extends Rectangle{
 			String up, String down, String name,double x, double y) {
 		
 		super(container);
+		_container = container;
 		_BASE_STATS = new int[NUM_STATS];
 		_currentStats = new int[NUM_STATS];
 		_unitPoints = new int[NUM_STATS]; 
@@ -201,6 +204,60 @@ public abstract class Character extends Rectangle{
 	}
 	
 	/**
+	 * moves the character to the given tile provided that it is valid to move to that tile
+	 * @param t the desired tile to move the character to
+	 */
+	public void moveToTile(Tile t) {
+		MoveTimer mt = new MoveTimer(_container, (int) (t.getX() - this.getX()), (int) (t.getY() - this.getY()));
+		_isAnimating = true;
+		mt.start();
+	}
+	
+	private class MoveTimer extends Timer {
+			
+			private int _deltaX;
+			private int _deltaY;
+			
+			public MoveTimer(JPanel container, int deltaX, int deltaY) {
+				super(50, null);
+				_deltaX = deltaX;
+				_deltaY = deltaY;
+				this.addActionListener(new MoveListener(this, container));
+			}
+			
+			private class MoveListener implements java.awt.event.ActionListener {
+				
+				private Timer _timer;
+				private int _cnt;
+				private int _numSteps;
+				private JPanel _container;
+	
+				public MoveListener (Timer t, JPanel container) {
+					_container = container;
+					_timer = t;
+					_cnt = 0;
+				}
+	
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					
+					Character.this.setLocation((Character.this.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), Character.this.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
+					_container.repaint();
+					
+					_cnt+=1;
+
+					/* if we've incremented numSteps times, then we should stop */
+					/* otherwise, continue incrementing */
+					if (_cnt == _numSteps) {
+						_timer.stop();
+						Character.this._isAnimating = false;
+					}
+					
+					_container.repaint();
+				}
+			}
+		}
+	
+	/**
 	 * Generates a Random Character, simple for now, perhaps random statistics in the future
 	 */
 	public static Character generateRandomCharacter(GameScreen gs, double tileX, double tileY){
@@ -258,6 +315,10 @@ public abstract class Character extends Rectangle{
 	
 	public Footgear getFootgear(){
 		return _footgear;
+	}
+	
+	public boolean isAnimating() {
+		return _isAnimating;
 	}
 	
 	/**
