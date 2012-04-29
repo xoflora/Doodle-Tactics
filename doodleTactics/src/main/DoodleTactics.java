@@ -43,18 +43,19 @@ public class DoodleTactics extends JFrame {
 	private Stack<Screen<?>> _screens;
 	private HashMap<String, Character> _allChars;
 	private List<Character> _party;
+	private HashMap<String,BufferedImage> _images;
 	
 	public DoodleTactics() {
 		super("Doodle Tactics");
 		this.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
 		this.setSize(TILE_COLS*map.Tile.TILE_SIZE+13,TILE_ROWS*map.Tile.TILE_SIZE+33);
 		_allChars = new HashMap<String,Character>();
+		_images = new HashMap<String,BufferedImage>();
 
 		_gameMenu = new GameMenuScreen(this);
 		_game = new GameScreen(this);
 		_game.setMap("src/tests/data/testMapDemo");
 		_mainMenu = new MainMenuScreen(this);
-		
 		_screens = new Stack<Screen<?>>();
 		_party = new ArrayList<Character>();
 		this.changeScreens(_mainMenu);
@@ -68,13 +69,16 @@ public class DoodleTactics extends JFrame {
 				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_back.png", "Dude", 10, 10);
 		try {
-			BufferedImage pot = ImageIO.read(new File("src/graphics/characters/warrior_left.png"));
-			BufferedImage pot2 = ImageIO.read(new File("src/graphics/characters/warrior_right.png"));
+			BufferedImage pot = importImage("src/graphics/items/donut.png");
 			_char1.addToInventory(new HealthPotion(pot, 10));
-			_char1.addToInventory(new HealthPotion(pot2, 10));
-		} catch (IOException e) {
-			e.printStackTrace();
+			_char1.updateHP(-10);
 		} catch (ItemException e) {
+			e.printStackTrace();
+		}
+		try {
+			BufferedImage pot2 = importImage("src/graphics/items/donut.png");
+			_char1.addToInventory(new HealthPotion(pot2, 10));
+		}  catch (ItemException e) {
 			e.printStackTrace();
 		}
 		addCharacterToParty(_char1);
@@ -214,6 +218,29 @@ public class DoodleTactics extends JFrame {
 	
 	public MainMenuScreen getMainMenuScreen() {
 		return _mainMenu;
+	}
+	
+	/**
+	 * Called by any method which imports an image
+	 * Maintains a HashMap of parsedImages to avoid reading in
+	 * multiple images
+	 */
+	public BufferedImage importImage(String path){
+		//Path already imported, simply return associated image
+		if(_images.containsKey(path))
+			return _images.get(path);
+		//Otherwise read in image and add to HashMap
+		else{
+			try {
+				BufferedImage img = ImageIO.read(new File(path));
+				_images.put(path, img);
+				return img;
+			} catch (IOException e) {
+				error("File " + path + "could not be parsed");
+			}
+		}
+		System.out.println("Returning Null");
+		return null;
 	}
 	
 	/**

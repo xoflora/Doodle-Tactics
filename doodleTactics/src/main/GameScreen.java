@@ -105,11 +105,10 @@ public class GameScreen extends Screen<GameScreenController> {
 				return main;
 			}
 		} catch (FileNotFoundException e) {
-			System.out.println("Invalid Main Character File Path");
+			_dt.error("Invalid main character file path.");
 		} catch (IOException e) {
-			System.out.println("Invalid Main Character File");
+			_dt.error("Invalid main character file.");
 		}
-		System.exit(0);
 		return null;
 	}
 	
@@ -217,9 +216,9 @@ public class GameScreen extends Screen<GameScreenController> {
 
 				/* if the camera is panning, then all of the characters including
 				 * the character in control should move */
-				if(_isPan) {
-					_currentCharacter.setLocation((_currentCharacter.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), _currentCharacter.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
-				}
+//				if(_isPan) {
+//					_currentCharacter.setLocation((_currentCharacter.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), _currentCharacter.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
+//				}
 
 				for(Character c : charsToPaint) {
 					c.setLocation((c.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), c.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
@@ -266,6 +265,18 @@ public class GameScreen extends Screen<GameScreenController> {
 	public MainCharacter getMainChar() {
 		return _currentCharacter;
 	}
+	
+	/**
+	 * sets the given character as the focus of the camera
+	 * @param c the character to center the camera around
+	 */
+	public void centerCamera(Character c) {
+		int charX = (int) c.getX() / Tile.TILE_SIZE;
+		int charY = (int) c.getY() / Tile.TILE_SIZE;
+		
+		_xRef = charX - 10;
+		_yRef = charY - 8;
+	}
 
 	/* accessor method returning whether or not the GameScreen is currently animating, used by Timer */
 	public boolean isAnimating() {
@@ -290,8 +301,6 @@ public class GameScreen extends Screen<GameScreenController> {
 			_xRef += x;
 			_yRef += y;
 		}
-
-		//	System.out.println("--------------------------");
 	}
 
 	public void pan(int x, int y) {
