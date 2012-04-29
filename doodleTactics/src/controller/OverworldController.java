@@ -24,15 +24,18 @@ import map.Tile;
 
 public class OverworldController extends GameScreenController {
 
+	private RandomMoveTimer _randomMoveTimer;
+	
 	public OverworldController(DoodleTactics dt, GameScreen game) {
 		super(dt);
 		_gameScreen = game;
+		_randomMoveTimer = new RandomMoveTimer();
 	}
 
 	private class RandomMoveTimer extends Timer {
 		
 		public RandomMoveTimer() {
-			super(480, null);
+			super(500, null);
 			this.addActionListener(new RandomMoveListener());
 		}
 		
@@ -40,20 +43,67 @@ public class OverworldController extends GameScreenController {
 			
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 
-				for(Character c : _gameScreen.getMap().getCharactersToDisplay()) {
-					
-					// provided this character is not the main character
-					if(! c.equals(_gameScreen.getMainChar())) {
+				if(_gameScreen.getMap() != null) {
+				
+					for(Character c : _gameScreen.getMap().getCharactersToDisplay()) {
 						
-						//generate a random direction to move in
-						Random r = new Random();
-						int direction = r.nextInt(4);
+						// provided this character is not the main character
+						if(! c.equals(_gameScreen.getMainChar())) {
+							
+							//generate a random direction to move in
+							Random r = new Random();
+							int direction = r.nextInt(4);
+							Tile src = _gameScreen.getMap().getTile(_gameScreen.getMapX((int) c.getX()),_gameScreen.getMapY((int) c.getY()));
 						
-						switch(direction) {
-						
-						}
+							if(src != null) {
+								
+								System.out.println("character moving: " + c.getName() + " in direction " + direction + 
+										" from " + src.getX() + "," + src.getY() + " to... ");
+								
+								try {
+							
+									Tile dest = null;
+									
+									switch(direction) {
+										case 0:
+											dest = _gameScreen.getMap().getNorth(src);
+											if(dest != null) {
+												System.out.println(dest.getX() + "," + dest.getY());
+												c.moveToTile(dest);
+											}
+											break;
+										case 1:
+											dest = _gameScreen.getMap().getSouth(src);
+											if(dest != null) {
+												System.out.println(dest.getX() + "," + dest.getY());
+												c.moveToTile(dest);
+											}
+											break;
+										case 2:
+											dest = _gameScreen.getMap().getEast(src);
+											if(dest != null) {
+												System.out.println(dest.getX() + "," + dest.getY());
+												c.moveToTile(dest);
+											}
+											break;
+										case 3:
+											dest = _gameScreen.getMap().getWest(src);
+											if(dest != null) {
+												System.out.println(dest.getX() + "," + dest.getY());
+												c.moveToTile(dest);
+											}
+											break;
+									}
+									
+									System.out.println("-------");
+								
+								} catch (ArrayIndexOutOfBoundsException ex) {
+									
+								}
+							}
+						}	
 					}
-				}	
+				}
 			}
 		}
 	}
@@ -61,12 +111,13 @@ public class OverworldController extends GameScreenController {
 	@Override
 	public void take() {
 		// TODO : center the map around the main character
-
+		_randomMoveTimer.start();
 	}
 
 	@Override
 	public void release() {
 		// TODO Auto-generated method stub
+		_randomMoveTimer.stop();
 	}
 
 	@Override

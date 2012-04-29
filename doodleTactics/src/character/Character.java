@@ -208,7 +208,25 @@ public abstract class Character extends Rectangle{
 	 * @param t the desired tile to move the character to
 	 */
 	public void moveToTile(Tile t) {
-		MoveTimer mt = new MoveTimer(_container, (int) (t.getX() - this.getX()), (int) (t.getY() - this.getY()));
+		
+		int xDiff = (int) (t.getX() - this.getX());
+		int yDiff = (int) (t.getY() - this.getY());
+		
+		MoveTimer mt = new MoveTimer(_container, xDiff, yDiff);
+		
+		/* determine which orientation to set the character to */
+		if(xDiff > 0) {
+			this.setRight();
+		} else {
+			this.setLeft();
+		}
+		
+		if(yDiff > 0) {
+			this.setDown();
+		} else {
+			this.setUp();
+		}
+		
 		_isAnimating = true;
 		mt.start();
 	}
@@ -236,6 +254,7 @@ public abstract class Character extends Rectangle{
 					_container = container;
 					_timer = t;
 					_cnt = 0;
+					_numSteps = 6;
 				}
 	
 				public void actionPerformed(java.awt.event.ActionEvent e) {
