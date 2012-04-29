@@ -13,7 +13,7 @@ import map.Tile;
  * @author jeshapir
  */
 
-public abstract class Rectangle extends Shape {
+public abstract class Rectangle extends Shape implements Comparable<Rectangle> {
 	
 	/* Comparator for rectangles, which uses the rectangle's priority used
 	 * based on the painting order */
@@ -32,7 +32,8 @@ public abstract class Rectangle extends Shape {
 				int yDiff = r1.getPaintPriority() - r2.getPaintPriority();
 				
 				// check that the difference is at least the size of a tile
-				return (Math.abs(yDiff) >= Tile.TILE_SIZE) ? yDiff : xDiff;
+			//	return (Math.abs(yDiff) >= Tile.TILE_SIZE) ? yDiff : xDiff;
+				return yDiff;
 			}
 		}
 	}
@@ -61,5 +62,21 @@ public abstract class Rectangle extends Shape {
 	 * @return the image of the Rectangle
 	 */
 	public abstract BufferedImage getImage();
+	
+	@Override
+	public int compareTo(Rectangle other) {
+		int xDiff = (int)( getX() - other.getX());
+		
+		// use the x as the priority in the case that the paint priority is equal
+		if(getPaintPriority() == other.getPaintPriority()) {
+			return xDiff;
+		} else {
+			
+			int yDiff = getPaintPriority() - other.getPaintPriority();
+			
+			// check that the difference is at least the size of a tile
+			return (Math.abs(yDiff) >= Tile.TILE_SIZE) ? yDiff : xDiff;
+		}
+	}
 	
 }

@@ -162,7 +162,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		try {
 			_optionWindow = new CombatOptionWindow(_dt, _gameScreen, false,
 					_selectedCharacter.getInventory().size() != 0, false, this);
-			_optionWindow.setLocation(_destTile.getX(), _destTile.getY());
+			_optionWindow.setLocation(_destTile.getX() + 2*Tile.TILE_SIZE, _destTile.getY());
 			_optionWindow.addToDrawingQueue();
 			System.out.println("hi");
 		} catch(IOException e) {
