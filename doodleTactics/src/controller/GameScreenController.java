@@ -81,7 +81,7 @@ public abstract class GameScreenController extends Controller {
 		int updatey = (e.getY() - _draggedy)/Tile.TILE_SIZE;
 				
 		if (updatex != 0 || updatey != 0) {
-			_gameScreen.pan(updatex, updatey);
+			_gameScreen.pan(-updatex, -updatey);
 			_draggedx = e.getX();
 			_draggedy = e.getY();
 		}

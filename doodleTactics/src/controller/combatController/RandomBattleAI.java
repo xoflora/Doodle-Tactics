@@ -7,7 +7,7 @@ import java.util.List;
 import main.DoodleTactics;
 import character.Character;
 
-public class RandomBattleAI extends CombatController {
+public class RandomBattleAI extends CombatController implements Runnable {
 	
 	public static final int RANDOM_BATTLE_NUM_UNITS = 3;
 
@@ -15,8 +15,10 @@ public class RandomBattleAI extends CombatController {
 		super(dt, random);
 	}
 	
+	public void run() {
+		_gameScreen.popControl();
+	}
 	
-
 	@Override
 	public void release() {
 		super.release();
@@ -26,7 +28,7 @@ public class RandomBattleAI extends CombatController {
 	public void take() {
 		super.take();
 		System.out.println("Enemy phase");
-		_gameScreen.popControl();
+		new Thread(this).start();
 	}
 
 	@Override

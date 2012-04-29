@@ -24,8 +24,6 @@ public abstract class Screen<T extends Controller> extends JPanel {
 		_control = new Stack<T>();
 		
 		setDoubleBuffered(true);
-		
-		pushControl(defaultController());
 	}
 	
 	private void removeController(Controller c) {
