@@ -346,7 +346,7 @@ public abstract class Character extends Rectangle{
 			System.out.println("tile: " + t.getX() + "," + t.getY());
 		}
 		System.out.println("===================================");
-		if(tiles != null && tiles.size() != 0) {
+		if(tiles != null && tiles.size() > 1) {
 			PathTimer timer = new PathTimer(tiles);
 			timer.start();
 		}
