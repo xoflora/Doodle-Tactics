@@ -1,11 +1,6 @@
 package util;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-
-public class ListPriorityQueue<T extends Comparable<T>> implements List<T> {
+public class ListPriorityQueue<T extends Comparable<T>> {
 	
 	private static class ListNode<T> {
 		public T _item;
@@ -27,10 +22,10 @@ public class ListPriorityQueue<T extends Comparable<T>> implements List<T> {
 		_size = 0;
 	}
 
-	@Override
 	public boolean add(T e) {
 		if (_start == null) {
 			_start = new ListNode<T>(e);
+			_size++;
 			return true;
 		}
 		
@@ -45,144 +40,54 @@ public class ListPriorityQueue<T extends Comparable<T>> implements List<T> {
 			_start = new ListNode<T>(e);
 			_start._next = curr;
 		}
+		else {
+			ListNode<T> n = new ListNode<T>(e);
+			prev._next = n;
+			n._next = curr;
+		}
 		
-		ListNode<T> n = new ListNode<T>(e);
-		prev._next = n;
-		n._next = curr;
+		_size++;
 		
-		return false;
+		return true;
 	}
 
-	@Override
-	public void add(int index, T element) {
-		// TODO Auto-generated method stub
+	public T get(int n) {
+		ListNode<T> node = _start;
+		while (n > 0 && node != null) {
+			node = node._next;
+			n--;
+		}
 		
+		if (node == null)
+			return null;
+		else
+			return node._item;
 	}
-
-	@Override
-	public boolean addAll(Collection<? extends T> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean contains(Object o) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean containsAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public T get(int index) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int indexOf(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Iterator<T> iterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int lastIndexOf(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public ListIterator<T> listIterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ListIterator<T> listIterator(int index) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean remove(Object o) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public T remove(int index) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean removeAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean retainAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public T set(int index, T element) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
+	
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return _size;
 	}
-
-	@Override
-	public List<T> subList(int fromIndex, int toIndex) {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public boolean isEmpty() {
+		return _size == 0;
 	}
-
-	@Override
-	public Object[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public boolean remove(T item) {
+		ListNode<T> prev = null;
+		ListNode<T> node = _start;
+		while (node != null) {
+			if (node._item == item) {
+				if (node == _start)
+					_start = node._next;
+				else
+					prev._next = node._next;
+				_size--;
+				return true;
+			}
+			
+			prev = node;
+			node = node._next;
+		}
+		return false;
 	}
-
-	@Override
-	public <T> T[] toArray(T[] a) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
