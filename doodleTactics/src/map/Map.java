@@ -186,7 +186,6 @@ public class Map implements Serializable {
 
 					Character toAdd = null;
 					Tile target = tiles[Integer.parseInt(splitLine[8])][Integer.parseInt(splitLine[9])]; 
-					System.out.println("TARGET: " + target.x() + "," + target.y());
 
 					double xLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[8])  - main.getTileX());
 					double yLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[9]) - main.getTileY());
@@ -218,7 +217,6 @@ public class Map implements Serializable {
 					if (toAdd != null) { 
 						chars.add(toAdd);
 						target.setOccupant(toAdd);
-						System.out.println("Adding Character: " + splitLine[2]);
 						dt.addCharacterToMap(toAdd, splitLine[2]);
 					}
 
@@ -859,16 +857,14 @@ public class Map implements Serializable {
 		for(Tile  t : potentials){
 			if(r.nextInt(100) < CUTOFF){
 				//An enemy will be placed
-				Character enemy = Character.generateRandomCharacter(_dt.getGameScreen(),t.getX(),t.getY());
-			int overflow = 0;
-				BufferedImage img = enemy.getDownImage();
-				if(img.getWidth() - Tile.TILE_SIZE <= 25.0)
-					overflow = (img.getWidth() - Tile.TILE_SIZE) / 2;
-			/*	System.out.println("X LOC: " + t.x() + " Y LOC: " + t.y()); 
-				addCharacter(t.x(),t.y(),enemy);
-				enemy.setLocation(t.x() - overflow, t.y() - img.getHeight() + Tile.TILE_SIZE);*/
+				double xLoc = Tile.TILE_SIZE * t.x()  - _mainChar.getTileX();
+				double yLoc = Tile.TILE_SIZE * t.y() - _mainChar.getTileY();
+				System.out.println("**XLOC" + t.x() + " YLOC: " + t.y());
+				Character enemy = Character.generateRandomCharacter(_dt.getGameScreen(),xLoc,yLoc);
+			//	enemy.setLocation(xLoc,yLoc);
+				enemy.setVisible(true);
 				_activeCharacters.add(enemy);
-
+				t.setOccupant(enemy);
 				if(_tileToEnemies.containsKey(t))
 					_tileToEnemies.get(t).add(enemy);
 				else{
