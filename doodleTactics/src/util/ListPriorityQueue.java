@@ -1,6 +1,6 @@
 package util;
 
-public class ListPriorityQueue<T extends Comparable<T>> {
+public class ListPriorityQueue<T extends Comparable<? super T>> {
 	
 	private static class ListNode<T> {
 		public T _item;
@@ -89,5 +89,12 @@ public class ListPriorityQueue<T extends Comparable<T>> {
 			node = node._next;
 		}
 		return false;
+	}
+	
+	public T poll() {
+		T toReturn = _start._item;
+		_start = _start._next;
+		_size--;
+		return toReturn;
 	}
 }

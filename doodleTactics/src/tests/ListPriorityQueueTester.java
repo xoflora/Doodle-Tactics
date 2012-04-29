@@ -72,5 +72,10 @@ public class ListPriorityQueueTester {
 		assert(q.get(0) == 4);
 		assert(q.get(1) == 3);
 		assert(q.get(2) == null);
+		
+		assert(q.poll() == 4);
+		assert(q.size() == 1);
+		assert(q.get(0) == 3);
+		assert(q.get(1) == null);
 	}
 }
