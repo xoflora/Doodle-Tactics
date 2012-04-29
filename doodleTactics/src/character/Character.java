@@ -227,9 +227,6 @@ public abstract class Character extends Rectangle{
 		}
 		
 		_isAnimating = true;
-		
-		
-		
 		mt.start();
 	}
 
@@ -298,6 +295,45 @@ public abstract class Character extends Rectangle{
 					_container.repaint();
 			}
 		}
+	}
+	
+	private class PathTimer extends Timer {
+		
+		private List<Tile> _path;
+
+		public PathTimer(List<Tile> path) {
+			super(310, null);
+			_path = path;
+			this.addActionListener(new PathListener());
+		}
+			
+			private class PathListener implements java.awt.event.ActionListener {
+	
+				private int _cnt = 0;
+				
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					
+					Character.this.moveToTile(_path.get(_cnt));
+					
+					_cnt+=1;
+
+					/* if we've incremented numSteps times, then we should stop */
+					/* otherwise, continue incrementing */
+					if (_cnt == _path.size()) {
+						PathTimer.this.stop();
+					}
+			}
+		}
+	}
+	
+	/**
+	 * animates the character along the given path of tiles
+	 * @param tiles a list of tiles to have the character follow, used for combat movement
+	 */
+	
+	public void followPath(List<Tile> tiles) {
+		PathTimer timer = new PathTimer(tiles);
+		timer.start();
 	}
 
 	/**
