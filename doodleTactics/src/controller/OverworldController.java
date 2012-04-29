@@ -40,17 +40,46 @@ public class OverworldController extends GameScreenController {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+		switch (e.getKeyCode()){
+		case KeyEvent.VK_CONTROL:
 			//do stuff
 			_gameScreen.switchToGameMenu();
 			_dt.getGameMenuScreen().setDefaultTabToUnits();
-		}
+			break;
 
-		/*	TEST COMBAT CONTROLLER STUFF:
-		 *  REMOVE WHEN DONE WITH ALL THAT
-		 */
-		else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			/*	TEST COMBAT CONTROLLER STUFF:
+			 *  REMOVE WHEN DONE WITH ALL THAT
+			 */
+		case KeyEvent.VK_ENTER: 
 			_gameScreen.enterCombat((List<Character>)new ArrayList<Character>());
+			break;
+
+		case KeyEvent.VK_SPACE:
+			System.out.println("Space");
+			int currentX = _gameScreen.getMapX(_gameScreen.getX()) + 10;
+			int currentY = _gameScreen.getMapY(_gameScreen.getY()) + 8;
+			Tile newTile = null;
+
+			switch(_gameScreen.getMainChar().getDirection()){
+			case LEFT:
+				newTile = _gameScreen.getMap().getTile(currentX - 1, currentY);
+				break;
+			case RIGHT:
+				newTile = _gameScreen.getMap().getTile(currentX + 1, currentY);
+				break;
+			case UP:
+				newTile = _gameScreen.getMap().getTile(currentX, currentY - 1);
+				break;
+			case DOWN:
+				newTile = _gameScreen.getMap().getTile(currentX, currentY + 1);
+				break;
+			}
+
+			if(newTile != null && newTile.interactible()){
+				System.out.println("Here");
+				_gameScreen.pushControl(newTile.getEvent());
+			}
+			break;
 		}
 	}
 
@@ -130,30 +159,8 @@ public class OverworldController extends GameScreenController {
 					oldTile.removeOccupant();
 				}
 				break;
-			case KeyEvent.VK_SPACE:
-				System.out.println("Space");
-				switch(_gameScreen.getMainChar().getDirection()){
-				case LEFT:
-					newTile = _gameScreen.getMap().getTile(currentX - 1, currentY);
-					break;
-				case RIGHT:
-					newTile = _gameScreen.getMap().getTile(currentX + 1, currentY);
-					break;
-				case UP:
-					newTile = _gameScreen.getMap().getTile(currentX, currentY - 1);
-					break;
-				case DOWN:
-					newTile = _gameScreen.getMap().getTile(currentX, currentY + 1);
-					break;
-				}
-				
-				if(newTile != null && newTile.interactible()){
-					System.out.println("Here");
-					_gameScreen.pushControl(newTile.getEvent());
-				}
-				break;
 			case 'f':
-				//Easter Egg -- Hungry? Visit foodler
+
 				try {
 					Runtime.getRuntime().exec("google-chrome www.foodler.com");
 				} catch (IOException e1) {

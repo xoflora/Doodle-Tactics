@@ -85,7 +85,7 @@ public class Dialogue extends Event {
 	 * @throws IOException, FileNotFoundException 
 	 */
 	public Dialogue(DoodleTactics dt,  String filename)
-	throws InvalidEventException, IOException, FileNotFoundException{
+			throws InvalidEventException, IOException, FileNotFoundException{
 		super(dt);
 		_filename = filename;
 	}
@@ -106,11 +106,14 @@ public class Dialogue extends Event {
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		_currIndex++;
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_SPACE){
+			System.out.println("SPACE!");
+			_currIndex++;
 
-		if(_currIndex >= _characters.size())
-			_gameScreen.popControl();
+			if(_currIndex >= _characters.size())
+				_gameScreen.popControl();
+		}
 
 	}
 
