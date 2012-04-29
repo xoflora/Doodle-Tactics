@@ -65,9 +65,6 @@ public abstract class GameScreenController extends Controller {
 		return toReturn;
 	}
 	
-	
-	
-	
 	@Override
 	public void mousePressed(MouseEvent e) {
 		_draggedx = e.getX();
@@ -84,7 +81,7 @@ public abstract class GameScreenController extends Controller {
 		int updatey = (e.getY() - _draggedy)/Tile.TILE_SIZE;
 				
 		if (updatex != 0 || updatey != 0) {
-			_gameScreen.mapUpdate(-updatex, -updatey);
+			_gameScreen.pan(updatex, updatey);
 			_draggedx = e.getX();
 			_draggedy = e.getY();
 		}

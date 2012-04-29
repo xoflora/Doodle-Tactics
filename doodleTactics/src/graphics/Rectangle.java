@@ -37,7 +37,7 @@ public abstract class Rectangle extends Shape {
 		}
 	}
 	
-	private int _paintPriority;
+	protected int _paintPriority;
 	
 	public Rectangle(JPanel container) {
 		super(container, new java.awt.geom.Rectangle2D.Double());

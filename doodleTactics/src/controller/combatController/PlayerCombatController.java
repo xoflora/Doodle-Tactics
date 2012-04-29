@@ -1,5 +1,7 @@
 package controller.combatController;
 
+import graphics.MenuItem;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -27,7 +29,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		CHARACTER_OPTION_MENU
 	}
 	
-	private Tile _attackTile;
 	private Tile _destTile;
 	private Tile _selectedTile;
 	private Character _selectedCharacter;
@@ -45,6 +46,9 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	private int _cacheCost;
 	private Tile _cacheDestTile;
 	
+	private int _menuDraggedx;
+	private int _menuDraggedy;
+	
 	private State _state;
 	private UnitPool _pool;
 	private CombatOptionWindow _optionWindow;
@@ -53,7 +57,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public PlayerCombatController(DoodleTactics dt, List<Character> units) {
 		super(dt, units);
 
-		_attackTile = null;
 		_destTile = null;
 		_selectedTile = null;
 		_selectedCharacter = null;
@@ -73,6 +76,9 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		
 		_pool = null;
 		_optionWindow = null;
+		
+		_menuDraggedx = 0;
+		_menuDraggedy = 0;
 		
 		clear();
 	}
@@ -111,7 +117,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		for (Tile t : _enemyAttackRange)
 			t.setInEnemyAttackRange(false);
 		
-		_attackTile = null;
 		_selectedTile = null;
 		_selectedCharacter = null;
 		_destTile = null;
@@ -150,29 +155,16 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_pathCost = 0;
 	}
 	
-	/**
-	 * 
-	 * @return the nearest tile to the given coordinate with an enemy to attack
-	 */
-	private Tile nearestAttackTile(int x, int y) {
-		Tile best = null;
-		int bestDistance = 0;
-		for (Tile t : _characterAttackRange)
-			if (isEnemy(t.getOccupant()))
-				if (best == null || (t.getX() - x)*(t.getX() - x) + (t.getY() - y)*(t.getY() - y) < bestDistance)
-					best = t;
-		return best;
-	}
-	
 	@Override
 	public void move(Character c, List<Tile> path) {
 		super.move(c, path);
 		
 		try {
-			_attackTile = nearestAttackTile((int)_destTile.getX(), (int)_destTile.getY());
-			_optionWindow = new CombatOptionWindow(_dt, _gameScreen, true, false, false, false, this);
-			_gameScreen.addMenuItem(_optionWindow);
-			_gameScreen.setVisible(true);
+			_optionWindow = new CombatOptionWindow(_dt, _gameScreen, false,
+					_selectedCharacter.getInventory().size() != 0, false, this);
+			_optionWindow.setLocation(_destTile.getX(), _destTile.getY());
+			_optionWindow.addToDrawingQueue();
+			System.out.println("hi");
 		} catch(IOException e) {
 			_dt.error("Error finding combat window files.");
 		}
@@ -240,9 +232,15 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 					
 				}
 				else if (_state == State.CHARACTER_OPTION_MENU) {
-					_pool.removeCharacter(_selectedCharacter);
-					clear();
-					_state = State.START;
+				//	_pool.removeCharacter(_selectedCharacter);
+				//	clear();
+				//	_state = State.START;
+					if (_characterAttackRange.contains(t) && isEnemy(t.getOccupant())) {
+						attack(_selectedCharacter, t.getOccupant());
+						
+						clear();
+						_state = State.START;
+					}
 				}
 			}
 		}
@@ -282,6 +280,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				_cacheDestTile = null;
 				
 				_hasMoved.put(_selectedCharacter, false);
+				_optionWindow.removeFromDrawingQueue();
+				_optionWindow = null;
 				
 				_state = State.CHARACTER_SELECTED;
 			}
@@ -327,6 +327,30 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 					}
 				}
 			}
+		}
+	}
+	
+	@Override
+	/**
+	 * 
+	 */
+	public void mousePressed(MouseEvent e) {
+		MenuItem m = _gameScreen.checkContains(e.getPoint());
+		if (m != null && m == _optionWindow) {
+			_menuDraggedx = e.getX();
+			_menuDraggedy = e.getY();
+		}
+	}
+	
+	@Override
+	/**
+	 * 
+	 */
+	public void mouseDragged(MouseEvent e) {
+		if (_optionWindow != null) {
+			_optionWindow.setLocation(e.getX() - _menuDraggedx, e.getY() - _menuDraggedy);
+			_menuDraggedx = e.getX();
+			_menuDraggedy = e.getY();
 		}
 	}
 

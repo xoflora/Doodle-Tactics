@@ -7,11 +7,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import main.DoodleTactics;
+import main.GameScreen;
 import graphics.MenuItem;
 import graphics.Rectangle;
 
@@ -22,9 +24,9 @@ import graphics.Rectangle;
  */
 public class CombatOptionWindow extends MenuItem {
 	
-	private static final String MENU_IMAGE_PATH = "src/graphics/characters/pokeball.png";
-	private static final String ATTACK_IMAGE = "src/graphics/menu/attack.png";
-	private static final String ATTACK_HOVER = "src/graphics/menu/attack_hovered.png";
+	private static final String MENU_IMAGE_PATH = "src/graphics/menu/combat_menu_background.png";
+//	private static final String ATTACK_IMAGE = "src/graphics/menu/attack.png";
+//	private static final String ATTACK_HOVER = "src/graphics/menu/attack_hovered.png";
 	private static final String SPECIAL_IMAGE = "src/graphics/menu/special.png";
 	private static final String SPECIAL_HOVER = "src/graphics/menu/special_hovered.png";
 	private static final String ITEM_IMAGE = "src/graphics/menu/item.png";
@@ -34,6 +36,9 @@ public class CombatOptionWindow extends MenuItem {
 	private static final String WAIT_IMAGE = "src/graphics/menu/wait.png";
 	private static final String WAIT_HOVER = "src/graphics/menu/wait_hovered.png";
 	
+	private static final int MENU_PRIORITY = 3;
+	private static final int OPTION_PRIORITY = 50;
+	
 	private class CombatOption extends MenuItem {
 		
 		private PlayerCombatController _source;
@@ -41,7 +46,8 @@ public class CombatOptionWindow extends MenuItem {
 
 		public CombatOption(JPanel container, BufferedImage defltPath, BufferedImage hoveredPath,
 				DoodleTactics dt, PlayerCombatController source, ActionType action) {
-			super(container, defltPath, hoveredPath, dt);
+			super(container, defltPath, hoveredPath, dt, OPTION_PRIORITY);
+			System.out.println(_paintPriority);
 			_source = source;
 			_action = action;
 		}
@@ -54,18 +60,17 @@ public class CombatOptionWindow extends MenuItem {
 		}
 	}
 	
+	private GameScreen _gameScreen;
 	private List<CombatOption> _options;
 	
-	public CombatOptionWindow(DoodleTactics dt, JPanel container, boolean attack, boolean special, boolean item, boolean talk,
+	public CombatOptionWindow(DoodleTactics dt, GameScreen container, boolean special, boolean item, boolean talk,
 			PlayerCombatController source) throws IOException {
 		
-		super(container, ImageIO.read(new File(MENU_IMAGE_PATH)), ImageIO.read(new File(MENU_IMAGE_PATH)), dt);
+		super(container, ImageIO.read(new File(MENU_IMAGE_PATH)),
+				ImageIO.read(new File(MENU_IMAGE_PATH)), dt, MENU_PRIORITY);
+		System.out.println(_paintPriority);
 		_options = new ArrayList<CombatOption>();
 		
-		if (attack) {
-			_options.add(new CombatOption(container, ImageIO.read(new File(ATTACK_IMAGE)),
-					ImageIO.read(new File(ATTACK_HOVER)), dt, source, ActionType.ATTACK));
-		}
 		if (special) {
 			_options.add(new CombatOption(container, ImageIO.read(new File(SPECIAL_IMAGE)),
 					ImageIO.read(new File(SPECIAL_HOVER)), dt, source, ActionType.SPECIAL));
@@ -80,5 +85,37 @@ public class CombatOptionWindow extends MenuItem {
 		}
 		_options.add(new CombatOption(container, ImageIO.read(new File(WAIT_IMAGE)),
 				ImageIO.read(new File(WAIT_HOVER)), dt, source, ActionType.WAIT));
+		
+		_gameScreen = container;
+	}
+	
+	public void addToDrawingQueue() {
+		_gameScreen.addMenuItem(this);
+		
+		double y = getY();
+		for (MenuItem m : _options) {
+			_gameScreen.addMenuItem(m);
+			m.setLocation(getX(), y);
+			y += m.getImage().getHeight();
+			m.setVisible(true);
+		}
+		
+		setVisible(true);
+		setSize(getImage().getWidth(), y - getY());
+	}
+	
+	public void removeFromDrawingQueue() {
+		for (MenuItem m : _options) {
+			_gameScreen.removeMenuItem(m);
+			m.setVisible(false);
+		}
+		_gameScreen.removeMenuItem(this);
+	}
+	
+	@Override
+	public void setLocation(double x, double y) {
+		super.setLocation(getX() + x, getY() + y);
+		for (MenuItem m : _options)
+			m.setLocation(m.getX() + x, m.getY() + y);
 	}
 }
