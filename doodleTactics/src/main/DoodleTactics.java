@@ -54,7 +54,6 @@ public class DoodleTactics extends JFrame {
 
 		_gameMenu = new GameMenuScreen(this);
 		_game = new GameScreen(this);
-		_game.setMap("src/tests/data/testMapDemo");
 		_mainMenu = new MainMenuScreen(this);
 		_screens = new Stack<Screen<?>>();
 		_party = new ArrayList<Character>();
@@ -62,6 +61,7 @@ public class DoodleTactics extends JFrame {
 		this.setFocusable(false);
 		this.setResizable(false);
 		this.setVisible(true);
+		_game.setMap("src/tests/data/testMapDemo");
 
 		
 		Archer _char1 = new Archer(this,_game, 
@@ -239,7 +239,7 @@ public class DoodleTactics extends JFrame {
 				_images.put(path, img);
 				return img;
 			} catch (IOException e) {
-				error("File " + path + "could not be parsed");
+				error("File " + path + " could not be parsed.");
 			}
 		}
 		System.out.println("Returning Null");
@@ -292,6 +292,7 @@ public class DoodleTactics extends JFrame {
 	 * indicates that an error has occurred and sets the game to an error screen
 	 */
 	public void error(String message) {
+		System.out.println("We're here");
 		changeScreens(new ErrorScreen(this, message));
 	}
 	

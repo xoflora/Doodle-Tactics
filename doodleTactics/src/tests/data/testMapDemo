@@ -148,8 +148,9 @@ DemoMap,src/graphics/tiles/light_blue.png,src/graphics/tiles/grass.png
 0,16,F,src/graphics/tiles/left.png,1,0,0
 0,17,0,src/graphics/tiles/left.png,1,0,0
 11,10,F,src/graphics/tiles/light_blue.png,1,0,0
-0,13,0,src/graphics/tiles/light_blue.png,1,0,0
-8,12,0,src/graphics/tiles/blue.png,1,1,0
+0,13,0,src/graphics/tiles/blue.png,1,0,0
+4,5,0,src/graphics/tiles/light_blue.png,1,1,0
+14,14,0,src/graphics/tiles/light_blue.png,1,0,1,src/tests/data/DialogueDemo
 img,src/graphics/terrain/pen_pillar.png,0,0,A
 img,src/graphics/terrain/pen_pillar.png,1,0,A
 img,src/graphics/terrain/pen_pillar.png,2,0,A
@@ -168,7 +169,7 @@ img,src/graphics/terrain/pen_pillar.png,16,0,A
 img,src/graphics/terrain/pen_pillar.png,17,0,A
 img,src/graphics/terrain/pen_pillar.png,18,0,A
 img,src/graphics/terrain/pen_pillar.png,19,0,A
-char,Warrior,Knight,src/graphics/characters/sampleProfile.gif,src/graphics/characters/knight_left.png,src/graphics/characters/knight_right.png,src/graphics/characters/knight_back.png,src/graphics/characters/knight_front.png,0,19
-char,Thief,Thighs,src/graphics/characters/sampleProfile.gif,src/graphics/characters/thief_left.png,src/graphics/characters/thief_right.png,src/graphics/characters/thief_back.png,src/graphics/characters/thief_front.png,1,19
-char,Warrior,Warrior,src/graphics/characters/pokeball.png,src/graphics/characters/warrior_left_color.png,src/graphics/characters/warrior_right_color.png,src/graphics/characters/warrior_back_color.png,src/graphics/characters/warrior_front_color.png,2,19
-char,Mage,Renoir,src/graphics/characters/pokeball.png,src/graphics/characters/mage_left.png,src/graphics/characters/mage_right.png,src/graphics/characters/mage_back.png,src/graphics/characters/mage_front.png,3,19
+char,Warrior,Knight,src/graphics/characters/sampleProfile.gif,src/graphics/characters/knight_left.png,src/graphics/characters/knight_right.png,src/graphics/characters/knight_back.png,src/graphics/characters/knight_front.png,5,19
+char,Thief,Thighs,src/graphics/characters/sampleProfile.gif,src/graphics/characters/thief_left.png,src/graphics/characters/thief_right.png,src/graphics/characters/thief_back.png,src/graphics/characters/thief_front.png,14,14
+char,Warrior,Warrior,src/graphics/characters/pokeball.png,src/graphics/characters/warrior_left_color.png,src/graphics/characters/warrior_right_color.png,src/graphics/characters/warrior_back_color.png,src/graphics/characters/warrior_front_color.png,19,3
+char,Mage,Renoir,src/graphics/characters/pokeball.png,src/graphics/characters/mage_left.png,src/graphics/characters/mage_right.png,src/graphics/characters/mage_back.png,src/graphics/characters/mage_front.png,13,4
