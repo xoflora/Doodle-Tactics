@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Map.Entry;
 import event.Dialogue;
 import event.InvalidEventException;
@@ -20,6 +21,7 @@ import controller.combatController.CombatController;
 import controller.combatController.PlayerCombatController;
 
 import main.DoodleTactics;
+import main.GameScreen;
 import map.Tile;
 import graphics.Rectangle;
 import graphics.Shape;
@@ -195,6 +197,27 @@ public abstract class Character extends Rectangle{
 				
 				_container.repaint();
 			}
+		}
+	}
+	
+	/**
+	 * Generates a Random Character, simple for now, perhaps random statistics in the future
+	 */
+	public static Character generateRandomCharacter(GameScreen gs, int tileX, int tileY){
+		Random r = new Random();
+		String begin = "src/graphics/characters/";
+		switch(r.nextInt(4)){
+		case 0:
+			return new Archer(gs, begin + "pokeball.png",begin + "knight_left.png",begin + "knight_right.png",begin + "knight_back.png","knight_front.png","RandomEnemy",tileX,tileY);
+		case 1:
+			return new Warrior(gs, begin + "pokeball.png",begin + "warrior_left_color.png",begin + "warrior_right_color.png",begin + "warrior_back_color.png","warrior_front_color.png","RandomEnemy",tileX,tileY);
+		case 2:
+			return new Mage(gs, begin + "pokeball.png",begin + "mage_left.png",begin + "mage_right.png",begin + "mage_back.png","mage_front.png","RandomEnemy",tileX,tileY);
+		case 3:
+			return new Mage(gs, begin + "pokeball.png",begin + "thief_left.png",begin + "thief_right.png",begin + "thief_back.png","thief_front.png","RandomEnemy",tileX,tileY);
+		default:
+			System.out.println("Character Generator failed!");
+			return null;
 		}
 	}
 	
