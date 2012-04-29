@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import controller.combatController.ActionType;
@@ -60,7 +61,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	private ItemWindow _itemWindow;
 	private boolean _finalized;
 	
-	public PlayerCombatController(DoodleTactics dt, List<Character> units) {
+	public PlayerCombatController(DoodleTactics dt, HashMap<Character, Tile> units) {
 		super(dt, units);
 
 		_destTile = null;
@@ -217,12 +218,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 											c.getMinAttackRange(), c.getMaxAttackRange()));
 							for (Tile toPaint : _enemyAttackRange)
 								toPaint.setInEnemyAttackRange(true);
-						}
-						
-						System.out.println(c.getAffiliation());
-						for (CombatController d : _enemyAffiliations)
-							System.out.println(d);
-						
+						}						
 					}
 				}
 				//selected tile and character are not null; selected character is the occupant of the tile
@@ -254,7 +250,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				//	clear();
 				//	_state = State.START;
 					if (_characterAttackRange.contains(t) && isEnemy(t.getOccupant())) {
-						attack(_selectedCharacter, t.getOccupant());
+					//	attack(_destTile, t);
 						_pool.removeCharacter(_selectedCharacter);
 						
 						clear();
@@ -299,6 +295,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				_cacheDestTile = null;
 				
 				_hasMoved.put(_selectedCharacter, false);
+				_locations.put(_selectedCharacter, _selectedTile);
 				_optionWindow.removeFromDrawingQueue();
 				_optionWindow = null;
 				

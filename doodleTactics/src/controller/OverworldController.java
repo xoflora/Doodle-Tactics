@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -139,7 +140,7 @@ public class OverworldController extends GameScreenController {
 			 *  REMOVE WHEN DONE WITH ALL THAT
 			 */
 		case KeyEvent.VK_ENTER: 
-			_gameScreen.enterCombat((List<Character>)new ArrayList<Character>());
+			_gameScreen.enterCombat(new HashMap<Character, Tile>());
 			break;
 
 		case KeyEvent.VK_SPACE:

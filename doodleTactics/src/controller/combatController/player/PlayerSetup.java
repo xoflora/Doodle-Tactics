@@ -5,6 +5,7 @@ import graphics.MenuItem;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import util.Util;
@@ -25,7 +26,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	private List<Tile> _validTiles;
 	private List<Character> _units;
 	private List<Character> _toPlace;
-	private List<Character> _inPlace;
+	private HashMap<Character, Tile> _inPlace;
 	private Tile _selectedTile;
 	private UnitPool _pool;
 	private boolean _finalized;
@@ -43,7 +44,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 			_units = _dt.getParty();
 			
 			_toPlace = Util.clone(_units);
-			_inPlace = new ArrayList<Character>();
+			_inPlace = new HashMap<Character, Tile>();
 			
 			_selectedCharacter = null;
 			_selectedFromPool = false;
@@ -130,7 +131,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 						_pool.removeCharacter(_selectedCharacter);
 						_selectedCharacter.setLocation(t.getX(), t.getY());
 						_selectedCharacter.setDown();
-						_inPlace.add(_selectedCharacter);
+						_inPlace.put(_selectedCharacter, t);
 					}
 					if (c != null) {
 						_gameScreen.getCharacterQueue().remove(c);
@@ -142,8 +143,11 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 					_selectedTile.setOccupant(c);
 					t.setOccupant(_selectedCharacter);
 					_selectedCharacter.setLocation(t.getX(), t.getY());
-					if (c != null)
+					_inPlace.put(_selectedCharacter, t);
+					if (c != null) {
 						c.setLocation(_selectedTile.getX(), _selectedTile.getY());
+						_inPlace.put(c, _selectedTile);
+					}
 				}
 			}
 			
@@ -201,7 +205,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 			c.setLocation(_selectedTile.getX(), _selectedTile.getY());
 			c.setDown();
 			removeUnitFromPool(c);
-			_inPlace.add(c);
+			_inPlace.put(c, _selectedTile);
 			
 			if (_selectedCharacter != null) {
 				addUnitToPool(_selectedCharacter);
