@@ -77,7 +77,10 @@ public abstract class CombatController extends GameScreenController {
 		
 		source.setOccupant(null);
 		dest.setOccupant(c);
-		c.setLocation(dest.getX(), dest.getY());
+		
+		c.followPath(path);
+		
+		//c.setLocation(dest.getX(), dest.getY());
 		_hasMoved.put(c, true);
 	}
 	

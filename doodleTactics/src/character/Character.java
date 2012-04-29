@@ -214,15 +214,15 @@ public abstract class Character extends Rectangle{
 		MoveTimer mt = new MoveTimer(_container, xDiff, yDiff);
 		
 		/* determine which orientation to set the character to */
-		if(xDiff < 0) {
+		if(xDiff > 0) {
 			this.setRight();
-		} else if (xDiff > 0) {
+		} else if (xDiff < 0) {
 			this.setLeft();
 		}
 		
-		if(yDiff < 0) {
+		if(yDiff > 0) {
 			this.setDown();
-		} else if (yDiff > 0) {
+		} else if (yDiff < 0) {
 			this.setUp();
 		}
 		
@@ -258,7 +258,7 @@ public abstract class Character extends Rectangle{
 	
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					
-					Character.this.setLocation((Character.this.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), Character.this.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
+					Character.this.setLocation((Character.this.getX() + (_deltaX*Tile.TILE_SIZE / _numSteps)), Character.this.getY() + (_deltaY*Tile.TILE_SIZE / _numSteps));
 					
 					switch(_cnt) {
 					case 0:
@@ -302,7 +302,7 @@ public abstract class Character extends Rectangle{
 		private List<Tile> _path;
 
 		public PathTimer(List<Tile> path) {
-			super(310, null);
+			super(300, null);
 			_path = path;
 			this.addActionListener(new PathListener());
 		}
