@@ -203,10 +203,15 @@ public abstract class Character extends Rectangle{
 	 * moves the character to the given tile provided that it is valid to move to that tile
 	 * @param t the desired tile to move the character to
 	 */
-	public void moveToTile(Tile t) {
+	public void moveToTile(Tile src, Tile dest) {
 		
-		int xDiff = (int) ((t.getX() - this.getX()) / Tile.TILE_SIZE);
-		int yDiff = (int) ((t.getY() - this.getY()) / Tile.TILE_SIZE);
+		System.out.println("---MOVE TO TILE---");
+		
+		System.out.println("xDiff before: " + (dest.getX() - src.getX()));
+		System.out.println("yDiff before: " + (dest.getY() - src.getY()));
+		
+		int xDiff = ((int)dest.getX() - (int) src.getX()) / Tile.TILE_SIZE;
+		int yDiff = ((int) dest.getY() - (int) src.getY()) / Tile.TILE_SIZE;
 		
 		System.out.println("xDiff: " + xDiff);
 		System.out.println("yDiff: " + yDiff);
@@ -290,6 +295,7 @@ public abstract class Character extends Rectangle{
 					if (_cnt == _numSteps) {
 						_timer.stop();
 						Character.this._isAnimating = false;
+						System.out.println("---END MOVE TO TILE---");
 					}
 					
 					_container.repaint();
@@ -302,7 +308,7 @@ public abstract class Character extends Rectangle{
 		private List<Tile> _path;
 
 		public PathTimer(List<Tile> path) {
-			super(300, null);
+			super(400, null);
 			_path = path;
 			this.addActionListener(new PathListener());
 		}
@@ -313,14 +319,15 @@ public abstract class Character extends Rectangle{
 				
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					
-					Character.this.moveToTile(_path.get(_cnt));
+					Character.this.moveToTile(_path.get(_cnt), _path.get(_cnt + 1));
 					
-					_cnt+=1;
+					_cnt += 1;
 
 					/* if we've incremented numSteps times, then we should stop */
 					/* otherwise, continue incrementing */
 					if (_cnt == _path.size()) {
 						PathTimer.this.stop();
+						System.out.println("=========END FOLLOW PATH=========");
 					}
 			}
 		}
@@ -332,8 +339,21 @@ public abstract class Character extends Rectangle{
 	 */
 	
 	public void followPath(List<Tile> tiles) {
-		PathTimer timer = new PathTimer(tiles);
-		timer.start();
+		
+		this.stopHovering();
+		
+		System.out.println("=========START FOLLOW PATH=========");
+		//tiles.remove(0);
+		for(Tile t : tiles) {
+			System.out.println("tile: " + t.getX() + "," + t.getY());
+		}
+		System.out.println("===================================");
+		if(tiles != null && tiles.size() != 0) {
+			PathTimer timer = new PathTimer(tiles);
+			timer.start();
+		}
+		
+		this.startHovering();
 	}
 
 	/**
