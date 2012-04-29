@@ -9,22 +9,29 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JPanel;
+
 import controller.ErrorScreenController;
 
 public class ErrorScreen extends Screen<ErrorScreenController> {
-
+	
+	private DoodleTactics _dt;
 	private MenuItem _title;
 	private MenuItem _quit;
 
+	
+	
+
+	
 	public ErrorScreen(DoodleTactics dt, String message) {
 		super(dt);
-
+		_dt = dt;
 		setBackground(Color.GRAY);
 
 		BufferedImage titleImage = dt.importImage("src/graphics/menu/title.png");
 
 		_title = new MenuItem(this, titleImage, titleImage, dt);
-
+		
 		_quit = new MenuItem(this, dt.importImage("src/graphics/menu/quit.png"),
 				dt.importImage("src/graphics/menu/quit_hovered.png"), dt);
 
@@ -42,6 +49,28 @@ public class ErrorScreen extends Screen<ErrorScreenController> {
 		setVisible(true);
 
 	}
+	
+	/*private class ErrorMenu extends MenuItem{
+		private BufferedImage _title,_quit,_quitHovered;
+		public ErrorMenu(DoodleTactics dt,BufferedImage title,BufferedImage quit, BufferedImage quitHovered) {
+			super(dt.getGameScreen(),quit,quitHovered,dt);
+			_title = title;
+			_quit = quit;
+			_quitHovered = quitHovered;
+		}
+		
+		@Override
+		public void paint(java.awt.Graphics2D brush,BufferedImage img) {
+			super.paint(brush, img);
+
+			_title.paint(brush,);
+
+		}
+
+		
+		
+	}*/
+
 
 	@Override
 	protected ErrorScreenController defaultController() {
