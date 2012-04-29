@@ -28,6 +28,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -56,12 +57,11 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	public int _currClicked = 0;
 	private DoodleTactics _dt;
 	private LinkedList<CharInfo> _charInfoList;
-	private JPanel _unitsBox, _itemInfoBox;
-//	private JPanel _itemOptionsBox;
-	private HashMap<JLabel, Character> _labelToCharacter;
-	private HashMap<JLabel, Item> _labelToItem;
+	private JPanel _unitsBox;
+	private JPanel _itemInfoBox;
+	private HashMap<JLabel, Character> _labelToCharacter; //stores who each item belongs to
+	private HashMap<JLabel, Item> _labelToItem; //stores each item image to the actual item to holds
 	private JScrollPane _scrollBar;
-//	public boolean _beingHovered = false;
 	private boolean _showingItemOptions;
 	private itemListener _itemListener;
 	private unitsBoxListener _unitsBoxListener;
@@ -69,7 +69,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private Item _selectedItem;
 	private Character _selectedChar;
 	private HashMap<JButton, Character> _buttonToChar;
-	private ArrayList<JButton> _buttonList;
+	private ArrayList<optionButton> _buttonList;
 	
 	public GameMenuScreen(DoodleTactics dt) {
 		
@@ -81,7 +81,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_labelToItem = new HashMap<JLabel, Item>();
 		System.out.println("set to false");
 		_showingItemOptions = false;
-		_buttonList = new ArrayList<JButton>();
+		_buttonList = new ArrayList<optionButton>();
 		_buttonToChar = new HashMap<JButton, Character>();
 		try {
 			BufferedImage unitsD = ImageIO.read(new File("src/graphics/menu/units.png"));
@@ -145,6 +145,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 //		_scrollBar.setMaximumSize(d);
 //		_scrollBar.setMinimumSize(d);
 		_scrollBar.setLocation(new Point(200, 120));
+		_scrollBar.setOpaque(false);
 		
 //		_scrollBar.setSize(new Dimension(750, 660));
 //		_scrollBar.setLocation(new Point(200, 120));
@@ -196,7 +197,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		if (_showingItemOptions) {
 //			System.out.println("X: " + _itemOptBoxX + "; Y: " + _itemOptBoxY);
 			for (int i=0; i<_buttonList.size(); i++) {
-				System.out.println("button x: " + _buttonList.get(i).getX() + "; y: " + _buttonList.get(i).getY());
+//				System.out.println("button x: " + _buttonList.get(i).getX() + "; y: " + _buttonList.get(i).getY());
 				_buttonList.get(i).repaint();
 			}
 		}
@@ -333,6 +334,19 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				_showingItemOptions = false;
 				this.repaint();
 			}
+			else {
+				Point np = new Point();
+				np.setLocation(point.getX()+200, point.getY()+120);
+				for (int i=0; i<_buttonList.size(); i++) {
+//					System.out.println("X: " + np.getX() + "; Y: " + np.getY());
+	//				System.out.println("HERE X: " + _buttonList.get(i).getX() + "; Y: " + _buttonList.get(i).getY());
+//					System.out.println(_buttonList.get(i).getSize());
+					if (np.getX() > _buttonList.get(i).getX() && np.getY() > _buttonList.get(i).getY() && np.getX() < _buttonList.get(i).getX()+200 && np.getY() < _buttonList.get(i).getY()+15) {
+//						System.out.println("HERE X: " + _buttonList.get(i).getX() + "; Y: " + _buttonList.get(i).getY());
+						_buttonList.get(i).activate(_buttonList.get(i));
+					}
+				}
+			}
 		}
 	}
 	
@@ -399,7 +413,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			this.remove(_buttonList.get(i));
 		}
 		
-		_buttonList = new ArrayList<JButton>();
+		_buttonList = new ArrayList<optionButton>();
 		_buttonToChar = new HashMap<JButton, Character>();
 		
 		_itemOptBoxX = (int) label.getLocationOnScreen().getX();
@@ -410,11 +424,14 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_selectedItem = _labelToItem.get(label);
 		_selectedChar = character;
 		
+		
+		
 		_numOptions = _dt.getParty().size()+2;;
 		if (_labelToItem.get(label).isEquip()) {
 			for (int i=0; i<character.getInventory().size(); i++) {
 				if (character.getInventory().get(i).equals(item)) {
-					JButton _unequip = new JButton("Unequip from " + character.getName());
+					unequipButton _unequip = new unequipButton("Unequip from " + character.getName());
+					
 					_unequip.setSize(labelWidth, labelHeight);
 					_unequip.setVisible(true);
 					_unequip.setLocation(_itemOptBoxX, _itemOptBoxY);
@@ -422,7 +439,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 					break;
 				}
 				if (i==character.getInventory().size()) {
-					JButton _equip = new JButton("Equip to " + character.getName());
+					equipButton _equip = new equipButton("Equip to " + character.getName());
 					_equip.setSize(labelWidth, labelHeight);
 					_equip.setPreferredSize(new Dimension(labelWidth, labelHeight));
 					_equip.setVisible(true);
@@ -432,27 +449,29 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			}
 		}
 		else {
-			JButton _use = new JButton("Use on " + character.getName());
+			useButton _use = new useButton("Use on " + character.getName());
 			_use.setSize(labelWidth, labelHeight);
 			_use.setVisible(true);
 			_use.setLocation(_itemOptBoxX, _itemOptBoxY);
+			_use.doClick();
 			_buttonList.add(_use);
 		}
 		if (_dt.getParty().size() > 0) {
-			for (int i=0; i<_dt.getParty().size()-1; i++) {
+			for (int i=0; i<_dt.getParty().size(); i++) {
 				if (!_dt.getParty().get(i).equals(_labelToCharacter.get(label))) {
 					if (_dt.getParty().get(i).getInventory().size() != _dt.getParty().get(i).getCapacity()) {
-						JButton _giveToChar = new JButton("Give to " + _dt.getParty().get(i).getName());
+						giveToCharButton _giveToChar = new giveToCharButton("Give to " + _dt.getParty().get(i).getName());
 						_giveToChar.setSize(labelWidth, labelHeight);
 						_giveToChar.setVisible(true);
 						_giveToChar.setLocation(_itemOptBoxX, _itemOptBoxY+(numOptionsInserted*labelHeight));
 						numOptionsInserted+=1;
+						_buttonToChar.put(_giveToChar, _dt.getParty().get(i));
 						_buttonList.add(_giveToChar);
 					}
 				}
 			}
 		}
-		JButton _drop = new JButton("Drop item");
+		dropButton _drop = new dropButton("Drop item");
 		_drop.setSize(labelWidth, labelHeight);
 		_drop.setVisible(true);
 		_drop.setLocation(_itemOptBoxX, _itemOptBoxY+(numOptionsInserted*labelHeight));
@@ -482,6 +501,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 		
 		for (int i=0; i<_buttonList.size(); i++) {
+			_buttonList.get(i).setVisible(true);
 			this.add(_buttonList.get(i));
 		}
 		
@@ -490,6 +510,9 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 //		this.add(_itemOptionsBox);
 //		_itemOptionsBox.repaint();
 		this.repaint();
+		_unitsBox.grabFocus();
+//		this.grabFocus();
+//		_buttonList.get(3).grabFocus();
 	}
 	
 	public void switchToGameScreen() {
@@ -522,7 +545,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			
 			Insets inset = new Insets(5, 5, 5, 5);
 			
-			JLabel name = new JLabel("Renoir");
+			JLabel name = new JLabel(chrter.getName());
 			name.setSize(200, 50);
 			name.setVisible(true);
 			
@@ -730,6 +753,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			System.out.println("clicked in itemListener");
 			GameMenuScreen.this.checkItemClicked(e.getPoint());
 		}
 
@@ -817,21 +841,34 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 	}
 	
-	private class giveToCharListener implements ActionListener {
-
-		JButton _button;
+	private abstract class optionButton extends JButton {
 		
-		public giveToCharListener(JButton button) {
-			_button = button;
+		public optionButton(String string) {
+			super(string);
+		}
+		public abstract void activate(optionButton button);
+	}
+	
+	
+	private class giveToCharButton extends optionButton {
+		
+		public giveToCharButton(String string) {
+			super(string);
 		}
 		
-		public void actionPerformed(ActionEvent e) {
-			Character myChar = _buttonToChar.get(_button);
+		public void activate(optionButton button) {
+			Character myChar = _buttonToChar.get(button);
 			try {
 				if (myChar.getInventory().size() != myChar.getCapacity()) {
 					myChar.addToInventory(_selectedItem);
 					_selectedChar.removeFromInventory(_selectedItem);
+					for (int i=0; i<_buttonList.size(); i++) {
+						this.remove(_buttonList.get(i));
+					}
 					GameMenuScreen.this.setDefaultTabToUnits();
+					System.out.println("set to false");
+					_showingItemOptions = false;
+					this.repaint();
 				}
 			} catch (ItemException e1) {
 				System.out.println("Something bad happened in the Game Menu Screen");
@@ -839,32 +876,68 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 	}
 	
-	private class dropListener implements ActionListener {
+	private class dropButton extends optionButton {
 
-		public void actionPerformed(ActionEvent e) {
+		public dropButton(String string) {
+			super(string);
+		}
+
+		public void activate(optionButton button) {
 			try {
 				_selectedChar.removeFromInventory(_selectedItem);
+				for (int i=0; i<_buttonList.size(); i++) {
+					this.remove(_buttonList.get(i));
+					_buttonList.get(i).setVisible(false);
+				}
 				GameMenuScreen.this.setDefaultTabToUnits();
+				System.out.println("set to false");
+				_showingItemOptions = false;
+				this.repaint();
 			} catch (ItemException e1) {
 				System.out.println("Something bad happened in the Game Menu Screen");
 			}
 		}
 	}
 	
-	private class equipListener implements ActionListener {
+	private class unequipButton extends optionButton {
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub	
+		public unequipButton(String string) {
+			super(string);
+			// TODO Auto-generated constructor stub
 		}
-	}
-	
-	private class useListener implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void activate(optionButton button) {
 			// TODO Auto-generated method stub
 			
 		}
+		
+	}
+	
+	private class equipButton extends optionButton {
+
+		public equipButton(String string) {
+			super(string);
+			// TODO Auto-generated constructor stub
+		}
+
+		public void activate(optionButton button) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
+	private class useButton extends optionButton {
+
+		public useButton(String string) {
+			super(string);
+			// TODO Auto-generated constructor stub
+		}
+
+		public void activate(optionButton button) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 }
