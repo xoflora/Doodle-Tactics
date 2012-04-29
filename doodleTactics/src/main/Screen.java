@@ -50,11 +50,8 @@ public abstract class Screen<T extends Controller> extends JPanel {
 		if (getController() != null)
 			removeController(getController());
 		
-	//	System.out.println("pushing " + controller.getClass());
 		_control.push(controller);
 		addController(controller);
-		
-		
 	}
 	
 	/**

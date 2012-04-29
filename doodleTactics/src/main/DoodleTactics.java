@@ -18,7 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
 import controller.Controller;
-import controller.combatController.PlayerCombatController;
+import controller.combatController.player.PlayerCombatController;
 
 import character.Archer;
 import character.Character;

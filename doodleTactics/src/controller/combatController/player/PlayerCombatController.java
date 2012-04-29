@@ -1,4 +1,4 @@
-package controller.combatController;
+package controller.combatController.player;
 
 import graphics.MenuItem;
 
@@ -7,6 +7,9 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import controller.combatController.ActionType;
+import controller.combatController.CombatController;
 
 
 import util.Util;
@@ -477,6 +480,12 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			}
 			else
 				_state = State.START;
+		}
+		else if (action == ActionType.ITEM) {
+			
+		}
+		else if (action == ActionType.SPECIAL) {
+			
 		}
 	}
 }
