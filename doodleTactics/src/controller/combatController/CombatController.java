@@ -157,4 +157,13 @@ public abstract class CombatController extends GameScreenController {
 		
 		return null;
 	}
+	
+	/**
+	 * causes one character to attack another
+	 * @param src offense
+	 * @param dest defense
+	 */
+	public void attack(Character src, Character dest) {
+		src.attack(dest);
+	}
 }
