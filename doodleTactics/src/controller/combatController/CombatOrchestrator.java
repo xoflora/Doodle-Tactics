@@ -67,7 +67,18 @@ public class CombatOrchestrator extends GameScreenController {
 	 */
 	public void take() {
 		super.take();
+		
 		if (_state == State.BATTLING) {	//swap factions
+		/*	while (!_factionCycle.hasNext()) {
+				if (!_factions.isEmpty())
+					_factionCycle = _factions.listIterator();
+				else {
+					
+				}
+			}	*/
+			
+			
+			
 			if (_factionCycle.hasNext()) {
 				_gameScreen.pushControl(_factionCycle.next());
 			}

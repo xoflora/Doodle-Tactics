@@ -40,7 +40,7 @@ public class DoodleTactics extends JFrame {
 	private GameMenuScreen _gameMenu;
 	private MainMenuScreen _mainMenu;
 	
-	private Stack<Screen<?>> _screens;
+	private Stack<Screen<? extends Controller>> _screens;
 	private HashMap<String, Character> _allChars;
 	private List<Character> _party;
 	private HashMap<String,BufferedImage> _images;
@@ -54,7 +54,6 @@ public class DoodleTactics extends JFrame {
 
 		_gameMenu = new GameMenuScreen(this);
 		_game = new GameScreen(this);
-		_game.setMap("src/tests/data/testMapDemo");
 		_mainMenu = new MainMenuScreen(this);
 		_screens = new Stack<Screen<?>>();
 		_party = new ArrayList<Character>();
@@ -62,6 +61,7 @@ public class DoodleTactics extends JFrame {
 		this.setFocusable(false);
 		this.setResizable(false);
 		this.setVisible(true);
+		_game.setMap("src/tests/data/testMapDemo");
 
 		
 		Archer _char1 = new Archer(this,_game, 
@@ -114,7 +114,7 @@ public class DoodleTactics extends JFrame {
 	/** 
 	 * @param screen, the new screen for the game
 	 */
-	public void setScreen(Screen<? extends Controller> screen) {
+	public <T extends Controller> void setScreen(Screen<T> screen) {
 		
 		/* Check that the current screen is not null before
 		 * removing */
@@ -130,13 +130,16 @@ public class DoodleTactics extends JFrame {
 			screen.setVisible(true);
 			this.repaint();
 			screen.grabFocus();
+			
+		if (screen.getController() == null)
+			screen.pushControl(screen.defaultController());
 	}
 	
 	/**
 	 * instructs a game screen to sleep; it is no longer the active part of the game
 	 * @param screen the screen to temporarily shut down
 	 */
-	private void screenSleep(Screen<? extends Controller> screen) {
+	private <T extends Controller> void screenSleep(Screen<T> screen) {
 		remove(screen);
 		screen.setVisible(false);
 		screen.setFocusable(false);
@@ -148,7 +151,7 @@ public class DoodleTactics extends JFrame {
 	 * activates a dormant screen, setting it to the main game screen
 	 * @param screen the screen to set to the forefront of gameplay
 	 */
-	private void screenActivate(Screen<? extends Controller> screen) {
+	private <T extends Controller> void screenActivate(Screen<T> screen) {
 	/*	screen.setVisible(true);
 		screen.setFocusable(true);
 		repaint();
@@ -169,7 +172,7 @@ public class DoodleTactics extends JFrame {
 	 * sets the screen to the given screen
 	 * @param screen the new active screen of the game
 	 */
-	public void changeScreens(Screen<? extends Controller> screen) {
+	public <T extends Controller> void changeScreens(Screen<T> screen) {
 	/*	if (currentScreen() != null) {
 			System.out.println("sellpgin " + (screen == currentScreen()));
 			screenSleep(currentScreen());
@@ -236,7 +239,7 @@ public class DoodleTactics extends JFrame {
 				_images.put(path, img);
 				return img;
 			} catch (IOException e) {
-				error("File " + path + "could not be parsed");
+				error("File " + path + " could not be parsed.");
 			}
 		}
 		System.out.println("Returning Null");
@@ -289,6 +292,7 @@ public class DoodleTactics extends JFrame {
 	 * indicates that an error has occurred and sets the game to an error screen
 	 */
 	public void error(String message) {
+		System.out.println("We're here");
 		changeScreens(new ErrorScreen(this, message));
 	}
 	

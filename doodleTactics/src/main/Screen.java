@@ -24,8 +24,6 @@ public abstract class Screen<T extends Controller> extends JPanel {
 		_control = new Stack<T>();
 		
 		setDoubleBuffered(true);
-		
-		pushControl(defaultController());
 	}
 	
 	private void removeController(Controller c) {
@@ -56,7 +54,7 @@ public abstract class Screen<T extends Controller> extends JPanel {
 		_control.push(controller);
 		addController(controller);
 		
-		
+		System.out.println("current stack size is " + _control.size());
 	}
 	
 	/**

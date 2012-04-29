@@ -136,8 +136,13 @@ public class GameScreen extends Screen<GameScreenController> {
 			if(prevMap != null){
 				prevMap.setPrevXRef(_xRef);
 				prevMap.setPrevYRef(_yRef);
+				//Remove references to previous randomBattle
 			}
+			
+			
 			_currMap = map;
+			_currMap.clearRandomBattleMaps();
+			_currMap.assignRandomEnemies();
 			Character prevCharacter = _currentCharacter;
 			_currentCharacter = _currMap.getMainCharacter();
 			_terrainToPaint = _currMap.getTerrain();
@@ -534,11 +539,13 @@ public class GameScreen extends Screen<GameScreenController> {
 	public MenuItem checkContains(java.awt.Point point) {
 
 		MenuItem toReturn = null;
-		for (MenuItem r : _menuQueue) {
-			r.setDefault();
-			if (r.contains(point)) {
-				r.setHovered();
-				toReturn = r;
+		synchronized (_menuQueue) {
+			for (MenuItem r : _menuQueue) {
+				r.setDefault();
+				if (r.contains(point)) {
+					r.setHovered();
+					toReturn = r;
+				}
 			}
 		}
 
