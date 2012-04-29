@@ -98,7 +98,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			BufferedImage quitD = ImageIO.read(new File("src/graphics/menu/quit_game_menu.png"));
 			BufferedImage quitH = ImageIO.read(new File("src/graphics/menu/quit_game_menu_hovered.png"));
 			BufferedImage titleD = ImageIO.read(new File("src/graphics/menu/overlay.png"));
-//			BufferedImage infoBoxTitle = ImageIO.read(new File);
+//			BufferedImage infoBoxTitle = ImageIO.read(new File("src/graphics/menu/"));
 			_charBoxImage = ImageIO.read(new File("src/graphics/menu/units_box.png"));
 			_units = new MenuItem(this, unitsD,unitsH, dt);
 			_map = new MenuItem(this, mapD,mapH,dt);
@@ -108,7 +108,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_title = new MenuItem(this, titleD, titleD, dt);
 //			_infoBoxTitle = new MenuItem(this, dt);
 		} catch (IOException e) {
-			e.printStackTrace();
+//			dt.error("Game Menu Screen: One of the file image paths was invalid");
 		}
 		
 		int buttonHeight = _units.getImage().getHeight();
@@ -780,17 +780,17 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 						
 			this.setOpaque(false);
 			
-			JLabel profile = new JLabel(new ImageIcon(chrter.getProfileImage()));
-			profile.setSize(150, 150);
-			profile.setPreferredSize(new Dimension(150,150));
-			profile.setMaximumSize(new Dimension(150, 150));
-			profile.setVisible(true);
+//			JLabel profile = new JLabel(new ImageIcon(chrter.getProfileImage()));
+//			profile.setSize(150, 150);
+//			profile.setPreferredSize(new Dimension(150,150));
+//			profile.setMaximumSize(new Dimension(150, 150));
+//			profile.setVisible(true);
 		}
 		
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Image box = (new ImageIcon(_charBoxImage)).getImage();
-			g.drawImage(bg, (this.getWidth()/2) - (bg.getWidth(this) / 2),(this.getHeight()/2) - (bg.getHeight(this) / 2),bg.getWidth(this),bg.getHeight(this),this);
+//			g.drawImage(bg, (this.getWidth()/2) - (bg.getWidth(this) / 2),(this.getHeight()/2) - (bg.getHeight(this) / 2),bg.getWidth(this),bg.getHeight(this),this);
 		}
 	}
 	
