@@ -12,24 +12,23 @@ import java.io.IOException;
 
 import javax.swing.JPanel;
 
-import controller.ErrorScreenController;
+import controller.GameOverScreenController;
 
-public class ErrorScreen extends Screen<ErrorScreenController> {
-	
+public class GameOverScreen extends Screen<GameOverScreenController> {
+
 	private MenuItem _title;
 	private MenuItem _quit;
 	private String _text;
-	
-	public ErrorScreen(DoodleTactics dt, String message) {
+
+	public GameOverScreen(DoodleTactics dt) {
 		super(dt);
 		_dt = dt;
 		setBackground(Color.GRAY);
 
 		BufferedImage titleImage = dt.importImage("src/graphics/menu/title.png");
-		
-		_text = message;
+
 		_title = new MenuItem(this, titleImage, titleImage, dt);
-		
+
 		_quit = new QuitMenuButton(this, dt.importImage("src/graphics/menu/quit.png"),
 				dt.importImage("src/graphics/menu/quit_hovered.png"), dt);
 
@@ -47,32 +46,11 @@ public class ErrorScreen extends Screen<ErrorScreenController> {
 		setVisible(true);
 
 	}
-	
-/*	private class ErrorMenu extends MenuItem{
-		private BufferedImage _title,_quit,_quitHovered;
-		public ErrorMenu(DoodleTactics dt,BufferedImage title,BufferedImage quit, BufferedImage quitHovered) {
-			super(dt.getGameScreen(),quit,quitHovered,dt);
-			_title = title;
-			_quit =
-		}
-		
-		@Override
-		public void paint(java.awt.Graphics2D brush,BufferedImage img) {
-			super.paint(brush, img);
-
-			_title.paint(brush,);
-			paintNext(brush);
-
-		}
-
-		
-		
-	}*/
 
 
 	@Override
-	protected ErrorScreenController defaultController() {
-		return new ErrorScreenController(_dt, this);
+	protected GameOverScreenController defaultController() {
+		return new GameOverScreenController(_dt, this);
 	}
 
 	public MenuItem checkContains(java.awt.Point point) {
@@ -103,19 +81,5 @@ public class ErrorScreen extends Screen<ErrorScreenController> {
 
 		_title.paint(g, _title.getImage());
 		_quit.paint(g, _quit.getImage());
-		brush.setFont(new Font("Dialogue",Font.BOLD,40));
-		brush.setColor(new Color(0,0,1));
-		brush.drawString("an error occured",350,300);
-		brush.setFont(new Font("Dialogue",Font.BOLD,25));
-		int curr = 0;
-		int count = 1;
-		int end;
-		int maxPerLine = 60;
-		while(curr <= _text.length()){
-			end = Math.min(curr + maxPerLine, _text.length() - 1);
-			brush.drawString(_text.substring(curr, end), 150,300 + count*50);
-			curr += maxPerLine;
-			count++;
-		}
 	}
 }

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.Timer;
+
 import controller.combatController.ActionType;
 import controller.combatController.CombatController;
 
@@ -29,9 +31,26 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	private enum State {
 		START,
 		CHARACTER_SELECTED,
-		CHARACTER_MOVING,
 		CHARACTER_OPTION_MENU,
-		SELECTING_ITEM
+		SELECTING_ITEM,
+		ITEM_MENU;
+		
+		public String toString() {
+			switch (this) {
+			case START:
+				return "START";
+			case CHARACTER_SELECTED:
+				return "CHARACTER_SELECTED";
+			case CHARACTER_OPTION_MENU:
+				return "CHARACTER_OPTION_MENU";
+			case SELECTING_ITEM:
+				return "SELECTING_ITEM";
+			case ITEM_MENU:
+				return "ITEM_MENU";
+			default:
+				return "";
+			}
+		}
 	}
 	
 	private Tile _destTile;
@@ -168,7 +187,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	
 	@Override
 	public void move(Character c, Tile source, List<Tile> path) {
-		_state = State.CHARACTER_MOVING;
 		super.move(c, source, path);
 		
 		try {
@@ -187,7 +205,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
-
+		
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			Tile t = _gameScreen.getTile(e.getX(), e.getY());
 			if (t != null) {
@@ -225,7 +243,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				else if (_state == State.CHARACTER_SELECTED) {
 					if (_path.contains(t)) {
 						_destTile = t;
-						_state = State.CHARACTER_MOVING;
 						
 						move(_selectedCharacter, _selectedTile, _path);
 						
@@ -241,16 +258,12 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						clearPath();
 					}
 				}
-				//selected tile is the coordinate to move the character to
-				else if (_state == State.CHARACTER_MOVING) {
-					
-				}
 				else if (_state == State.CHARACTER_OPTION_MENU) {
 				//	_pool.removeCharacter(_selectedCharacter);
 				//	clear();
 				//	_state = State.START;
 					if (_characterAttackRange.contains(t) && isEnemy(t.getOccupant())) {
-					//	attack(_destTile, t);
+						attack(_selectedCharacter, t.getOccupant());
 						_pool.removeCharacter(_selectedCharacter);
 						
 						clear();
@@ -264,11 +277,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				clear();
 			else if (_state == State.CHARACTER_SELECTED)
 				clear();
-			else if (_state == State.CHARACTER_MOVING) {
-				clearPath();
-				_state = State.CHARACTER_SELECTED;
-			}
 			else if (_state == State.CHARACTER_OPTION_MENU) {
+				_selectedCharacter.stopMotion();
 				_destTile.setOccupant(null);
 				_selectedTile.setOccupant(_selectedCharacter);
 				_selectedCharacter.setLocation(_selectedTile.getX(), _selectedTile.getY());

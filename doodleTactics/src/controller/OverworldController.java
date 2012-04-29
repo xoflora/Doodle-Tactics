@@ -297,7 +297,9 @@ public class OverworldController extends GameScreenController {
 	public void mouseDragged(MouseEvent e) { }
 
 	@Override
-	public void mouseMoved(MouseEvent e) { }
+	public void mouseMoved(MouseEvent e) {
+		super.mouseMoved(e);
+	}
 
 	@Override
 	public LinkedList<Character> getCharactersToDisplay() {

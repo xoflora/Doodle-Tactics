@@ -81,6 +81,9 @@ public abstract class Character extends Rectangle{
 	private FloatTimer _floatTimer; // internal timer used to animate floating
 	private JPanel _container;
 	private boolean _isAnimating;
+	
+	private PathTimer _pathTimer;
+	private MoveTimer _moveTimer;
 
 	public static enum CharacterDirection{
 		LEFT,RIGHT,UP,DOWN
@@ -119,6 +122,9 @@ public abstract class Character extends Rectangle{
 		this.setLocation(x - overflow,y - _down.getHeight() + Tile.TILE_SIZE);
 		_floatTimer = new FloatTimer(container);
 		this.startHovering();
+		
+		_pathTimer = null;
+		_moveTimer = null;
 	}
 
 	private class FloatTimer extends Timer {
@@ -216,7 +222,7 @@ public abstract class Character extends Rectangle{
 		System.out.println("xDiff: " + xDiff);
 		System.out.println("yDiff: " + yDiff);
 		
-		MoveTimer mt = new MoveTimer(_container, xDiff, yDiff);
+		_moveTimer = new MoveTimer(_container, xDiff, yDiff);
 		
 		/* determine which orientation to set the character to */
 		if(xDiff > 0) {
@@ -232,7 +238,7 @@ public abstract class Character extends Rectangle{
 		}
 		
 		_isAnimating = true;
-		mt.start();
+		_moveTimer.start();
 	}
 
 	private class MoveTimer extends Timer {
@@ -347,9 +353,30 @@ public abstract class Character extends Rectangle{
 		}
 		System.out.println("===================================");
 		if(tiles != null && tiles.size() > 1) {
-			PathTimer timer = new PathTimer(tiles);
-			timer.start();
+			_pathTimer = new PathTimer(tiles);
+			_pathTimer.start();
 		}
+	}
+	
+	/**
+	 * stops all motion of this character
+	 */
+	public void stopMotion() {
+		if (_pathTimer != null && _pathTimer.isRunning())
+			_pathTimer.stop();
+		if (_moveTimer != null && _moveTimer.isRunning())
+			_moveTimer.stop();
+		
+		_pathTimer = null;
+		_moveTimer = null;
+	}
+	
+	/**
+	 * @return whether the character is presently in motion
+	 */
+	public boolean isMoving() {
+		return (_pathTimer != null && _pathTimer.isRunning()) ||
+			(_moveTimer != null && _moveTimer.isRunning());
 	}
 
 	/**
@@ -360,13 +387,13 @@ public abstract class Character extends Rectangle{
 		String begin = "src/graphics/characters/";
 		switch(r.nextInt(4)){
 		case 0:
-			return new Archer(dt,gs, begin + "pokeball.png",begin + "knight_left.png",begin + "knight_right.png",begin + "knight_back.png",begin + "knight_front.png","RandomEnemy",tileX,tileY);
+			return new Archer(dt,gs, begin + "doodle_knight_portrait.png",begin + "knight_left.png",begin + "knight_right.png",begin + "knight_back.png",begin + "knight_front.png","RandomEnemy",tileX,tileY);
 		case 1:
-			return new Warrior(dt,gs, begin + "pokeball.png",begin + "warrior_left_color.png",begin + "warrior_right_color.png",begin + "warrior_back_color.png",begin + "warrior_front_color.png","RandomEnemy",tileX,tileY);
+			return new Warrior(dt,gs, begin + "warrior_portrait.png",begin + "warrior_left_color.png",begin + "warrior_right_color.png",begin + "warrior_back_color.png",begin + "warrior_front_color.png","RandomEnemy",tileX,tileY);
 		case 2:
-			return new Mage(dt,gs, begin + "pokeball.png",begin + "mage_left.png",begin + "mage_right.png",begin + "mage_back.png",begin + "mage_front.png","RandomEnemy",tileX,tileY);
+			return new Mage(dt,gs, begin + "mage_portrait.png",begin + "mage_left.png",begin + "mage_right.png",begin + "mage_back.png",begin + "mage_front.png","RandomEnemy",tileX,tileY);
 		case 3:
-			return new Thief(dt,gs, begin + "pokeball.png",begin + "thief_left.png",begin + "thief_right.png",begin + "thief_back.png",begin + "thief_front.png","RandomEnemy",tileX,tileY);
+			return new Thief(dt,gs, begin + "thief_portrait.png",begin + "thief_left.png",begin + "thief_right.png",begin + "thief_back.png",begin + "thief_front.png","RandomEnemy",tileX,tileY);
 		default:
 			System.out.println("Character Generator failed!");
 			return null;
@@ -590,10 +617,10 @@ public abstract class Character extends Rectangle{
 			_currentStats[i] = 10 * _BASE_STATS[i] + _level*_BASE_STATS[i] + _unitPoints[i]/12;
 	}
 
-	//TODO update signatures, get from ryan + joe
 	/**
-	 *  attack
-	 *  @param opponent
+	 *  attacks an opponent character
+	 *  @param opponent the character to attack
+	 *  @param r a random number generator
 	 *  @author rroelke
 	 */
 	public void attack(Character opponent, Random r){
@@ -624,6 +651,7 @@ public abstract class Character extends Rectangle{
 
 			if (opponent._currentHP <= 0) {
 				System.out.println(opponent.getName() + " defeated.");
+				opponent.setDefeated();
 				return;
 			}
 		}
@@ -652,6 +680,7 @@ public abstract class Character extends Rectangle{
 
 			if (_currentHP <= 0) {
 				System.out.println(getName() + " defeated.");
+				setDefeated();
 				return;
 			}
 		}
@@ -906,6 +935,10 @@ public abstract class Character extends Rectangle{
 
 	public void setAffiliation(CombatController combatControl) {
 		_affiliation = combatControl;
+	}
+	
+	public void setDefeated() {
+		_affiliation.removeUnit(this);
 	}
 
 	/*	public static void testPreSerialize(){
