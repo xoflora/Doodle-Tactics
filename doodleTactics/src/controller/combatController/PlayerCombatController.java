@@ -143,6 +143,11 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_path = new ArrayList<Tile>();
 		_pathCost = 0;
 	}
+	
+	@Override
+	public void move(Character c, List<Tile> path) {
+		super.move(c, path);
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -184,8 +189,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 					if (_path.contains(t)) {
 						_destTile = t;
 						_state = State.CHARACTER_MOVING;
+						
 						move(_selectedCharacter, _path);
-						_state = State.CHARACTER_OPTION_MENU;
 						
 						_cacheMovementRange = _selectedMovementRange;
 						clearMovementRange();
@@ -197,6 +202,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						_cacheCost = _pathCost;
 						_cacheDestTile = _destTile;
 						clearPath();
+						
+						_state = State.CHARACTER_OPTION_MENU;
 					}
 				}
 				//selected tile is the coordinate to move the character to
@@ -204,6 +211,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 					
 				}
 				else if (_state == State.CHARACTER_OPTION_MENU) {
+					_pool.removeCharacter(_selectedCharacter);
 					clear();
 					_state = State.START;
 				}
