@@ -45,20 +45,20 @@ public class Map implements Serializable {
 	public static final int EAST = 1;
 	public static final int SOUTH = 2;
 	public static final int WEST = 3;
-	
+
 	//Used by Tiles
 	public static final int NO_EVENT = 0;
 	public static final int DIALOGUE = 1;
 	public static final int WARP = 2;
 	// ...
-	
+
 	private static final int DEFAULT_XREF = 5;
 	private static final int DEFAULT_YREF = 5;
-	
+
 	//Random Battle
 	private static final int CUTOFF = 50;
-	
-	
+
+	private DoodleTactics _dt;
 	private BufferedImage _overflow;
 	private Tile[][] _map;
 	private LinkedList<Terrain> _terrain;
@@ -66,11 +66,11 @@ public class Map implements Serializable {
 	private MainCharacter _mainChar;
 	private Stack<Integer> _prevXRef;
 	private Stack<Integer> _prevYRef;
-	private HashMap<Character,LinkedList<Tile>> _enemyToTiles;
-	private HashMap<Tile,Character> _tileToEnemy;
+	private HashMap<Character,List<Tile>> _enemyToTiles;
+	private HashMap<Tile,List<Character>> _tileToEnemies;
 	String _name;
 
-	public Map(Tile[][] tiles, String name, BufferedImage overflow,
+	public Map(DoodleTactics dt, Tile[][] tiles, String name, BufferedImage overflow,
 			LinkedList<Terrain> terrain,
 			LinkedList<Character> chars, MainCharacter main) {
 		_map = tiles;
@@ -79,11 +79,13 @@ public class Map implements Serializable {
 		_terrain = terrain;
 		_activeCharacters = chars;
 		_mainChar = main;
-		
+		_dt = dt;
+
+
 		//Random Battle data structures:
-		_enemyToTiles = new HashMap<Character,LinkedList<Tile>>();
-		_tileToEnemy = new HashMap<Tile,Character>();
-		
+		_enemyToTiles = new HashMap<Character,List<Tile>>();
+		_tileToEnemies = new HashMap<Tile,List<Character>>();
+
 		//Handle restoring XRef and YRef
 		_prevXRef = new Stack<Integer>();
 		_prevYRef = new Stack<Integer>();
@@ -134,7 +136,7 @@ public class Map implements Serializable {
 				throw new InvalidMapException("(line 2) Incorrect amount of data");
 			int numX = Integer.parseInt(splitLine[0]);
 			int numY = Integer.parseInt(splitLine[1]);
-			
+
 			Tile[][] tiles = new Tile[numY][numX];
 			// Set all currently null tiles to default
 			for (int x = 0; x < numX; x++) {
@@ -144,7 +146,7 @@ public class Map implements Serializable {
 								y, 1);
 				}
 			}
-			
+
 			// Read and parse tiles from file
 			String line = reader.readLine();
 			int x, y;
@@ -158,7 +160,7 @@ public class Map implements Serializable {
 						throw new InvalidMapException("(line " + count + ") Main Character must be parsed before images");
 					BufferedImage img;
 					String imgPath = splitLine[1];
-					
+
 					//If image has already been imported, retrieve it
 					if(images.containsKey(imgPath))
 						img = images.get(imgPath);
@@ -166,7 +168,7 @@ public class Map implements Serializable {
 						img = ImageIO.read(new File(imgPath));
 						images.put(imgPath, img);
 					}
-					
+
 					int xTile = Integer.parseInt(splitLine[2]);
 					int yTile = Integer.parseInt(splitLine[3]);
 					System.out.println(main.getTileX() + ": " + main.getTileY());
@@ -178,27 +180,27 @@ public class Map implements Serializable {
 
 					// Character Case
 				} else if (splitLine.length == 10 && splitLine[0].equals("char")) {
-					
+
 					if(main == null)
 						throw new InvalidMapException("(line " + count + ") Main Character must be parsed before other Characters");
-					
+
 					Character toAdd = null;
 					Tile target = tiles[Integer.parseInt(splitLine[8])][Integer.parseInt(splitLine[9])]; 
 					System.out.println("TARGET: " + target.x() + "," + target.y());
-					
+
 					double xLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[8])  - main.getTileX());
 					double yLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[9]) - main.getTileY());
-					
+
 					// check which type of character toAdd is
 					if (splitLine[1].equals("Archer")) { 
 						toAdd = new Archer(container, splitLine[3],
 								splitLine[4], splitLine[5], splitLine[6],
 								splitLine[7], splitLine[2], xLoc,yLoc);
-						
+
 					} else if (splitLine[1].equals("Mage")) {
 						toAdd = new Mage(container, splitLine[3], splitLine[4],
 								splitLine[5], splitLine[6], splitLine[7],
-								 splitLine[2], xLoc,yLoc);
+								splitLine[2], xLoc,yLoc);
 
 					} else if (splitLine[1].equals("Thief")) {
 						toAdd = new Thief(container, splitLine[3],
@@ -211,7 +213,7 @@ public class Map implements Serializable {
 								splitLine[7],  splitLine[2], xLoc,yLoc);
 					} else
 						throw new InvalidMapException("Invalid Character Type");
-					
+
 					// set the tile's occupant to the character we just parsed
 					if (toAdd != null) { 
 						chars.add(toAdd);
@@ -219,8 +221,8 @@ public class Map implements Serializable {
 						System.out.println("Adding Character: " + splitLine[2]);
 						dt.addCharacterToMap(toAdd, splitLine[2]);
 					}
-					
-				// Main character case
+
+					// Main character case
 				}/* else if(splitLine.length == 8 && splitLine[1].equals("Main")){
 					main = new MainCharacter(container, splitLine[3],
 							splitLine[4], splitLine[5], splitLine[6],
@@ -241,7 +243,7 @@ public class Map implements Serializable {
 				else if (((splitLine.length == 7) && Integer.parseInt(splitLine[6]) == NO_EVENT) || splitLine.length == 8) {
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
-					
+
 					BufferedImage img;
 					String imgPath = splitLine[3];
 					//If image has already been imported, retrieve it
@@ -256,7 +258,7 @@ public class Map implements Serializable {
 					tiles[x][y] = Tile.tile(container, img,
 							splitLine[2].charAt(0), x, y, Integer
 							.parseInt(splitLine[4]));
-					
+
 					//Handle Events
 					if(Integer.parseInt(splitLine[6]) == DIALOGUE){
 						tiles[x][y].setEvent(new Dialogue(dt,splitLine[7]));
@@ -266,11 +268,11 @@ public class Map implements Serializable {
 						tiles[x][y].setEnterEvent();
 					}
 					//add others in the future perhaps
-					
+
 					//Check if tile can generate random battles
 					if(splitLine[5].equals("1"))
 						_randBattles.add(tiles[x][y]);
-					
+
 					// Error Case
 				} else
 					throw new InvalidMapException("(line " + count
@@ -283,7 +285,7 @@ public class Map implements Serializable {
 			// Create Map
 			if (main == null)
 				throw new InvalidMapException("Main Character not specified");
-			return new Map(tiles, name, ImageIO.read(new File(overflowPath)),
+			return new Map(dt,tiles, name, ImageIO.read(new File(overflowPath)),
 					terrainList, chars, main); 
 
 		} catch (FileNotFoundException e) {
@@ -291,7 +293,7 @@ public class Map implements Serializable {
 					"Error reading map from file located at " + path + ".");
 		} catch (IOException e) {
 			throw new InvalidMapException(
-			"(line " + count + ") Something went wrong while reading the file.");
+					"(line " + count + ") Something went wrong while reading the file.");
 		} catch (NumberFormatException e) {
 			String msg = "Expected int";
 			if (count > 2)
@@ -805,7 +807,7 @@ public class Map implements Serializable {
 	public MainCharacter getMainCharacter() {
 		return _mainChar;
 	}
-	
+
 	/**
 	 * adds a character to the map
 	 * @param x the x-coordinate to add the character to
@@ -820,47 +822,63 @@ public class Map implements Serializable {
 			c.setVisible(true);
 		} catch(ArrayIndexOutOfBoundsException e) { }
 	}
-	
+
 	/**
 	 * Getters for PrevX and Y ref
 	 */
 	public int getPrevXRef(){
 		return _prevXRef.pop();
 	}
-	
+
 	public int getPrevYRef(){
 		return _prevYRef.pop();
 	}
 
-	
+
 	/**
 	 * Setters for PrevX and YRef
 	 */
 	public void setPrevXRef(int x){
 		_prevXRef.push(x);
 	}
-	
+
 	public void setPrevYRef(int y){
 		_prevYRef.push(y);
 	}
-	
+
 	/**
 	 * Assign Random Enemies to Tiles
 	 * @param A list of tiles that can potentially store 
 	 */
 	public void assignRandomEnemies(LinkedList<Tile> potentials){
 		Random r = new Random();
-		
+
 		for(Tile  t : potentials){
 			if(r.nextInt(100) < CUTOFF){
 				//An enemy will be placed
-				Character enemy = Character.generateRandomCharacter();
-				_tileToEnemy.put(t, enemy);
-				LinkedList<Tile> affectedTiles = new LinkedList<Tile>();
-				
-				_enemyToTiles.put(enemy,affectedTiles);
+				Character enemy = Character.generateRandomCharacter(_dt.getGameScreen(),t.getX(),t.getY());
+				if(_tileToEnemies.containsKey(t))
+					_tileToEnemies.get(t).add(enemy);
+				else{
+					LinkedList<Character> toAdd = new LinkedList<Character>();
+					toAdd.add(enemy);
+					_tileToEnemies.put(t,toAdd);
+				}
+				_enemyToTiles.put(enemy,getMovementRange(t,enemy.getMovementRange()));
 			}
 		}
-		
 	}
+	
+	/**
+	 * @param A tile on the map
+	 * @return true if the tile generates a random battle and false otherwise
+	 */
+	public boolean generatesRandomBattle(Tile t){
+		return _tileToEnemies.containsKey(t);
+	}
+	
+	/**
+	 * @param A tile that generates a Random Battle
+	 * @return the Enemy
+	 */
 }
