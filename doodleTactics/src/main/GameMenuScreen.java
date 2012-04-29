@@ -5,10 +5,12 @@ import items.ItemException;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -70,6 +72,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private Character _selectedChar;
 	private HashMap<JButton, Character> _buttonToChar;
 	private ArrayList<optionButton> _buttonList;
+	private BufferedImage _charInfoBoxImage;
 	
 	public GameMenuScreen(DoodleTactics dt) {
 		
@@ -95,6 +98,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			BufferedImage quitD = ImageIO.read(new File("src/graphics/menu/quit_game_menu.png"));
 			BufferedImage quitH = ImageIO.read(new File("src/graphics/menu/quit_game_menu_hovered.png"));
 			BufferedImage titleD = ImageIO.read(new File("src/graphics/menu/overlay.png"));
+			_charInfoBoxImage = ImageIO.read(new File("src/graphics/menu/units_box.png"));
 			_units = new MenuItem(this, unitsD,unitsH, dt);
 			_map = new MenuItem(this, mapD,mapH,dt);
 			_save = new MenuItem(this, saveD, saveH,dt);
@@ -384,7 +388,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_showingItemOptions = true;
 			this.displayItemOptions(label);
 			return;
-		}	
+		}
 		/**
 		 * Might not ever get here...
 		 */
@@ -402,18 +406,22 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		 * number of options is set by the #of people in the party -1, plus 3 options for each item
 		 */
 		
+		System.out.println("whee");
+		
 		Item item = _labelToItem.get(label);
 		Character character = _labelToCharacter.get(label);
 		
 		int labelWidth = 200;
 		int labelHeight = 15;
-		label.revalidate();
+//		label.revalidate();
 		for (int i=0; i<_buttonList.size(); i++) {
 			this.remove(_buttonList.get(i));
 		}
 		
 		_buttonList = new ArrayList<optionButton>();
 		_buttonToChar = new HashMap<JButton, Character>();
+		
+		System.out.println("Label Location on Screen X: " + label.getLocationOnScreen().getX() + "; Y: " + label.getLocationOnScreen().getY());
 		
 		_itemOptBoxX = (int) label.getLocationOnScreen().getX();
 		_itemOptBoxY = (int) label.getLocationOnScreen().getY();
@@ -473,6 +481,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_drop.setSize(labelWidth, labelHeight);
 		_drop.setVisible(true);
 		_drop.setLocation(_itemOptBoxX, _itemOptBoxY+(numOptionsInserted*labelHeight));
+		_buttonToChar.put(_drop, character);
 		_buttonList.add(_drop);
 		
 		boolean canPutRight;
@@ -532,8 +541,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			this.setPreferredSize(panelSize);
 			this.setSize(730,200);
 			this.setLocation(15, 15);
-			this.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-			this.setBackground(java.awt.Color.LIGHT_GRAY);
+//			this.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+						
+			this.setOpaque(false);
+			
 			JLabel profile = new JLabel(new ImageIcon(chrter.getProfileImage()));
 			profile.setSize(150, 150);
 			profile.setPreferredSize(new Dimension(150,150));
@@ -746,6 +757,14 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			constraint.gridy = 0;
 			this.add(row1, constraint);
 		}
+		
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			
+			Image bg = (new ImageIcon(_charInfoBoxImage)).getImage();
+//			g.drawImage(bg, );
+		}
+		
 	}
 	
 	private class itemListener implements MouseListener, MouseMotionListener {
