@@ -56,7 +56,7 @@ public class Dialogue extends Event {
 			_background = new MenuItem(_gameScreen,img,img,_dt,10);
 			_background.setVisible(true);
 			//_background.setSize(10, 200);
-			_background.setLocation(0,550);
+			_background.setLocation(3, 625);
 
 			_gameScreen.repaint();
 
@@ -122,7 +122,7 @@ public class Dialogue extends Event {
 		_profile = new MenuItem(_gameScreen, profileImg,profileImg,_dt,5);
 		_profile.setVisible(true);
 		_profile.setSize(150, 150);
-		_profile.setLocation(230,635);
+		_profile.setLocation(275,645);
 		_profile.paint(brush,profileImg);
 
 		brush.setRenderingHint(
@@ -130,7 +130,7 @@ public class Dialogue extends Event {
 				RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 		brush.setFont(new Font("M",Font.BOLD,25));
 		brush.setColor(new Color(0,0,1));
-		brush.drawString(_phrases.get(_currIndex), 350,675);
+		brush.drawString(_phrases.get(_currIndex), 450,665);
 	}
 
 	@Override
