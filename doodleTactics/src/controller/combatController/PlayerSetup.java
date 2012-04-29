@@ -36,23 +36,25 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 
 	public PlayerSetup(DoodleTactics dt, List<Tile> validTiles, CombatOrchestrator orch) {
 		super(dt);
-		_validTiles = validTiles;
-		_units = _dt.getParty();
-		
-		_toPlace = Util.clone(_units);
-		_inPlace = new ArrayList<Character>();
-		
-		_selectedCharacter = null;
-		_selectedFromPool = false;
 
 		try {
-			_pool = new UnitPool(_dt, _gameScreen, this, _toPlace);
-		} catch(IOException e) {
+			_validTiles = validTiles;
+			_units = _dt.getParty();
 			
+			_toPlace = Util.clone(_units);
+			_inPlace = new ArrayList<Character>();
+			
+			_selectedCharacter = null;
+			_selectedFromPool = false;
+			
+			_pool = new UnitPool(_dt, _gameScreen, this, _toPlace);
+			
+			_finalized = false;
+			
+			_orch = orch;
+		} catch(IOException e) {
+			_dt.error("");
 		}
-		_finalized = false;
-		
-		_orch = orch;
 	}
 	
 	/**
@@ -216,7 +218,8 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	
 	@Override
 	public void initialize() {
-		_pool.setInUse(true);
+		if (_pool != null)
+			_pool.setInUse(true);
 	}
 
 	@Override

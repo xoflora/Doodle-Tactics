@@ -368,7 +368,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			_pool = new UnitPool(_dt, _gameScreen, this, _units);
 			_pool.setInUse(true);
 		} catch (IOException e) {
-			e.printStackTrace();
+			_dt.error("");
 		}
 	}
 	

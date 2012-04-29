@@ -18,7 +18,7 @@ public class ErrorScreen extends Screen<ErrorScreenController> {
 	private MenuItem _title;
 	private MenuItem _quit;
 
-	public ErrorScreen(DoodleTactics dt) {
+	public ErrorScreen(DoodleTactics dt, String message) {
 		super(dt);
 
 		try {
@@ -31,8 +31,18 @@ public class ErrorScreen extends Screen<ErrorScreenController> {
 			_quit = new MenuItem(this, ImageIO.read(new File("src/graphics/menu/quit.png")),
 					ImageIO.read(new File("src/graphics/menu/quit_hovered.png")), dt);
 			
+			_title.setSize(_title.getImage().getWidth(), _title.getImage().getHeight());
+			_quit.setSize(_quit.getImage().getWidth(), _quit.getImage().getHeight());
+			
 			_title.setLocation(((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _title.getImage().getWidth())/2, 50);
-			_quit.setLocation(320, 240);
+			_quit.setLocation(80, 600);
+			
+			
+			
+			_title.setVisible(true);
+			_quit.setVisible(true);
+			
+			setVisible(true);
 
 		} catch(IOException e) {
 			System.out.println("Fatal error.");
@@ -65,7 +75,11 @@ public class ErrorScreen extends Screen<ErrorScreenController> {
 	
 	@Override
 	public void paint(Graphics brush) {
+		super.paint(brush);
 		Graphics2D g = (Graphics2D) brush;
+		
+		_title.setSize(_title.getImage().getWidth(), _title.getImage().getHeight());
+		_quit.setSize(_quit.getImage().getWidth(), _quit.getImage().getHeight());
 		
 		_title.paint(g, _title.getImage());
 		_quit.paint(g, _quit.getImage());

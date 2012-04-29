@@ -110,7 +110,7 @@ public class DoodleTactics extends JFrame {
 	/** 
 	 * @param screen, the new screen for the game
 	 */
-	public void setScreen(Screen screen) {
+	public void setScreen(Screen<? extends Controller> screen) {
 		
 		/* Check that the current screen is not null before
 		 * removing */
@@ -256,6 +256,15 @@ public class DoodleTactics extends JFrame {
 			return false;
 		return true;
 	}
+	
+	
+	/**
+	 * indicates that an error has occurred and sets the game to an error screen
+	 */
+	public void error(String message) {
+		changeScreens(new ErrorScreen(this, message));
+	}
+	
 	
 	public static void main(String[] args) {
 		new DoodleTactics();
