@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import controller.combatController.RandomBattleAI;
 import character.Character;
@@ -26,6 +29,35 @@ public class OverworldController extends GameScreenController {
 		_gameScreen = game;
 	}
 
+	private class RandomMoveTimer extends Timer {
+		
+		public RandomMoveTimer() {
+			super(480, null);
+			this.addActionListener(new RandomMoveListener());
+		}
+		
+		private class RandomMoveListener implements java.awt.event.ActionListener {
+			
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+
+				for(Character c : _gameScreen.getMap().getCharactersToDisplay()) {
+					
+					// provided this character is not the main character
+					if(! c.equals(_gameScreen.getMainChar())) {
+						
+						//generate a random direction to move in
+						Random r = new Random();
+						int direction = r.nextInt(4);
+						
+						switch(direction) {
+						
+						}
+					}
+				}	
+			}
+		}
+	}
+	
 	@Override
 	public void take() {
 		// TODO : center the map around the main character
