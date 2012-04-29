@@ -192,14 +192,14 @@ public class OverworldController extends GameScreenController {
 				if(newTile != null && newTile.canMove(Map.SOUTH)){			
 					if(newTile.hasEnterEvent()){
 						_gameScreen.pushControl(newTile.getEvent());
+						break;
 					} else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
 						_dt.getGameScreen().getMap().startBattle(newTile);
 					}
-					else{
-						newTile.setOccupant(_gameScreen.getMainChar());
-					}
-					_gameScreen.mapUpdate(0, -1);
+					
+					newTile.setOccupant(_gameScreen.getMainChar());
 					oldTile.removeOccupant();
+					_gameScreen.mapUpdate(0, -1);
 				}
 				break;
 			case 'a':
@@ -208,13 +208,15 @@ public class OverworldController extends GameScreenController {
 				_gameScreen.getMainChar().setLeft();
 
 				if(newTile != null && newTile.canMove(Map.EAST)){			
-					if(newTile.hasEnterEvent())
+					if(newTile.hasEnterEvent()) {
 						_gameScreen.pushControl(newTile.getEvent());
+						break;
+					}
 					else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
 						_dt.getGameScreen().getMap().startBattle(newTile);
-					}else{
-						newTile.setOccupant(_gameScreen.getMainChar());
 					}
+					
+					newTile.setOccupant(_gameScreen.getMainChar());
 					_gameScreen.mapUpdate(-1, 0);
 					oldTile.removeOccupant();
 				}
@@ -227,13 +229,13 @@ public class OverworldController extends GameScreenController {
 				if(newTile != null && newTile.canMove(Map.NORTH)){			
 					if(newTile.hasEnterEvent()){
 						_gameScreen.pushControl(newTile.getEvent());
+						break;
 					}
 					else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
 						_dt.getGameScreen().getMap().startBattle(newTile);
-					}else{
-						newTile.setOccupant(_gameScreen.getMainChar());
 					}
-
+					
+					newTile.setOccupant(_gameScreen.getMainChar());
 					_gameScreen.mapUpdate(0, 1);
 					oldTile.removeOccupant();
 				}
@@ -243,14 +245,15 @@ public class OverworldController extends GameScreenController {
 				newTile = _gameScreen.getMap().getTile(currentX + 1,  currentY);
 				_gameScreen.getMainChar().setRight();
 				if(newTile != null && newTile.canMove(Map.WEST)){
-					if(newTile.hasEnterEvent())
+					if(newTile.hasEnterEvent()) {
 						_gameScreen.pushControl(newTile.getEvent());
+						break;
+					}
 					else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
 						_dt.getGameScreen().getMap().startBattle(newTile);
 					}
-					else{
-						newTile.setOccupant(_gameScreen.getMainChar());
-					}
+					
+					newTile.setOccupant(_gameScreen.getMainChar());
 					_gameScreen.mapUpdate(1, 0);
 					oldTile.removeOccupant();
 				}

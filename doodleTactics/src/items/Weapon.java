@@ -30,4 +30,12 @@ public abstract class Weapon extends Equipment{
 	public int getMaxAttackRange() {
 		return _maxAttackRange;
 	}
+
+	public int getPower() {
+		return _attackPower;
+	}
+
+	public double getAccuracy() {
+		return _accuracy;
+	}
 }

@@ -596,9 +596,67 @@ public abstract class Character extends Rectangle{
 	 *  @param opponent
 	 *  @author rroelke
 	 */
-	public void attack(Character opponent){
-		//TODO Ryan fills in
-		System.out.println(_name + " attacks " + opponent._name + "!");
+	public void attack(Character opponent, Random r){
+		int offense, defense, damage;
+		boolean critical;
+		
+		if (r.nextInt(100) > (_equipped == null ? 90:_equipped.getAccuracy())
+				+ 2.5*_currentStats[SKILL] - opponent._currentStats[SKILL]) {
+			System.out.println("Attack missed!");
+		}		
+		else {
+			offense = _currentStats[STRENGTH] + (_equipped == null ? 0:_equipped.getPower());
+			defense = opponent._currentStats[DEFENSE] + (opponent._cuirass == null ? 0:opponent._cuirass.getDefense())
+			+ (opponent._shield == null ? 0:opponent._shield.getDefense());
+
+			damage = Math.max(offense - defense + r.nextInt(Math.max((offense - defense)/4, 1)), 0);
+
+			critical = (r.nextInt(100) <= (_currentStats[LUCK] - opponent._currentStats[LUCK]));
+			if (critical) {
+				damage *= 2;
+				System.out.print("Critical hit! ");
+			}
+
+			opponent.updateHP(-damage);
+
+			System.out.println(_name + " attacks " + opponent._name + "!  " + opponent._name +
+					" takes " + damage + " damage!");
+
+			if (opponent._currentHP <= 0) {
+				opponent.getAffiliation().removeUnit(opponent);
+				System.out.println(opponent.getName() + " defeated.");
+				return;
+			}
+		}
+		
+		if (r.nextInt(100) > (opponent._equipped == null ? 90:_equipped.getAccuracy())
+				+ 2.5*opponent._currentStats[SKILL] - _currentStats[SKILL]) {
+			System.out.println("Attack missed!");
+		}
+		else {
+			offense = opponent._currentStats[STRENGTH] + (opponent._equipped == null ? 0:opponent._equipped.getPower());
+			defense = _currentStats[DEFENSE] + (_cuirass == null ? 0:_cuirass.getDefense())
+				+ (_shield == null ? 0:_shield.getDefense());
+			critical = (r.nextInt(100) <= (opponent._currentStats[LUCK] - _currentStats[LUCK]));
+			
+			damage = Math.max(offense - defense + r.nextInt(Math.max((offense - defense)/4, 1)), 0);
+			
+			if (critical) {
+				damage *= 2;
+				System.out.println("Critical hit!");
+			}
+			
+			updateHP(-damage);
+			
+			System.out.println(opponent._name + " attacks " + _name + "!  " + _name +
+					" takes " + damage + " damage!");
+
+			if (_currentHP <= 0) {
+				getAffiliation().removeUnit(this);
+				System.out.println(getName() + " defeated.");
+				return;
+			}
+		}
 	}
 
 	/**

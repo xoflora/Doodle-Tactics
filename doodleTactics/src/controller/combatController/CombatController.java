@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Random;
 
 import controller.GameScreenController;
 
@@ -25,6 +26,8 @@ public abstract class CombatController extends GameScreenController {
 	
 	protected List<CombatController> _enemyAffiliations;
 	
+	private Random r;
+	
 	public CombatController(DoodleTactics dt, List<Character> units) {
 		super(dt);
 		
@@ -33,6 +36,8 @@ public abstract class CombatController extends GameScreenController {
 		_enemyAffiliations = new ArrayList<CombatController>();
 		_hoveredTile = null;
 		_hasMoved = new HashMap<Character, Boolean>();
+		
+		r = new Random();
 		
 		for (Character c : _units)
 			c.affiliate(this);
@@ -167,7 +172,7 @@ public abstract class CombatController extends GameScreenController {
 	 * @param dest defense
 	 */
 	public void attack(Character src, Character dest) {
-		src.attack(dest);
+		src.attack(dest, r);
 		System.out.println(src.getName() + " has " + src.getHP() + " HP remaining.");
 		System.out.println(dest.getName() + " has " + dest.getHP() + " HP remaining.");
 	}
