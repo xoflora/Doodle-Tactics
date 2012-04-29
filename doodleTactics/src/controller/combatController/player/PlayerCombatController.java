@@ -363,8 +363,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 */
 	public void mousePressed(MouseEvent e) {
 		super.mousePressed(e);
-		MenuItem m = _gameScreen.checkContains(e.getPoint());
-		if (m != null && (m == _optionWindow || m == _itemWindow)) {
+		List<MenuItem> m = _gameScreen.checkContains(e.getPoint());
+		if (m.contains(_optionWindow) || m.contains(_itemWindow)) {
 			_menuDraggedx = e.getX();
 			_menuDraggedy = e.getY();
 			_draggingMenu = true;
@@ -379,16 +379,12 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		if (!_draggingMenu)
 			super.mouseDragged(e);
 		else {
-			if (_optionWindow != null) {
+			if (_optionWindow != null)
 				_optionWindow.setLocation(e.getX() - _menuDraggedx, e.getY() - _menuDraggedy);
-				_menuDraggedx = e.getX();
-				_menuDraggedy = e.getY();
-			}
-			if (_itemWindow != null) {
+			if (_itemWindow != null)
 				_itemWindow.setLocation(e.getX() - _menuDraggedx, e.getY() - _menuDraggedy);
-				_menuDraggedx = e.getX();
-				_menuDraggedy = e.getY();
-			}
+			_menuDraggedx = e.getX();
+			_menuDraggedy = e.getY();
 		}
 	}
 	
@@ -476,7 +472,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	
 	@Override
 	/**
-	 * used at the end of the player's turn
+	 * used at the end of the player's turn; clears the unit pool and releases control
 	 */
 	public void finalize() {
 		if (!_finalized) {

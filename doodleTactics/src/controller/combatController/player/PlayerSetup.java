@@ -96,11 +96,11 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		super.mouseClicked(e);
 
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
-		MenuItem m = _gameScreen.checkContains(e.getPoint());
+		List<MenuItem> m = _gameScreen.checkContains(e.getPoint());
 		boolean valid = _validTiles.contains(t);
 		
 		if (e.getButton() == UnitPool.SELECT_BUTTON) {
-			if (valid && m == null) {
+			if (valid && m.isEmpty()) {
 				if (_selectedTile != null)
 					_selectedTile.setInEnemyAttackRange(false);
 				_selectedTile = t;
@@ -115,13 +115,13 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		/*	else if (m != null) {
 				System.out.println("currently selected: " + _selectedCharacter);
 			}	*/
-			else if (m == null)
+			else if (m.isEmpty())
 				clearSelection();
 		}
 		else if (e.getButton() == UnitPool.ALT_BUTTON) {	//swap characters
 			System.out.println("selected character: " + _selectedCharacter);
 		
-			if (valid && m == null) {
+			if (valid && m.isEmpty()) {
 				if (_selectedFromPool) {	//swap character out of pool into tile
 					Character c = t.getOccupant();
 					t.setOccupant(_selectedCharacter);
