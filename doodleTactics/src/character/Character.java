@@ -340,8 +340,6 @@ public abstract class Character extends Rectangle{
 	
 	public void followPath(List<Tile> tiles) {
 		
-		this.stopHovering();
-		
 		System.out.println("=========START FOLLOW PATH=========");
 		//tiles.remove(0);
 		for(Tile t : tiles) {
@@ -352,8 +350,6 @@ public abstract class Character extends Rectangle{
 			PathTimer timer = new PathTimer(tiles);
 			timer.start();
 		}
-		
-		this.startHovering();
 	}
 
 	/**
