@@ -40,7 +40,7 @@ public class DoodleTactics extends JFrame {
 	private GameMenuScreen _gameMenu;
 	private MainMenuScreen _mainMenu;
 	
-	private Stack<Screen<?>> _screens;
+	private Stack<Screen<? extends Controller>> _screens;
 	private HashMap<String, Character> _allChars;
 	private List<Character> _party;
 	private HashMap<String,BufferedImage> _images;
@@ -114,7 +114,7 @@ public class DoodleTactics extends JFrame {
 	/** 
 	 * @param screen, the new screen for the game
 	 */
-	public void setScreen(Screen<? extends Controller> screen) {
+	public <T extends Controller> void setScreen(Screen<T> screen) {
 		
 		/* Check that the current screen is not null before
 		 * removing */
@@ -130,13 +130,16 @@ public class DoodleTactics extends JFrame {
 			screen.setVisible(true);
 			this.repaint();
 			screen.grabFocus();
+			
+		if (screen.getController() == null)
+			screen.pushControl(screen.defaultController());
 	}
 	
 	/**
 	 * instructs a game screen to sleep; it is no longer the active part of the game
 	 * @param screen the screen to temporarily shut down
 	 */
-	private void screenSleep(Screen<? extends Controller> screen) {
+	private <T extends Controller> void screenSleep(Screen<T> screen) {
 		remove(screen);
 		screen.setVisible(false);
 		screen.setFocusable(false);
@@ -148,7 +151,7 @@ public class DoodleTactics extends JFrame {
 	 * activates a dormant screen, setting it to the main game screen
 	 * @param screen the screen to set to the forefront of gameplay
 	 */
-	private void screenActivate(Screen<? extends Controller> screen) {
+	private <T extends Controller> void screenActivate(Screen<T> screen) {
 	/*	screen.setVisible(true);
 		screen.setFocusable(true);
 		repaint();
@@ -169,7 +172,7 @@ public class DoodleTactics extends JFrame {
 	 * sets the screen to the given screen
 	 * @param screen the new active screen of the game
 	 */
-	public void changeScreens(Screen<? extends Controller> screen) {
+	public <T extends Controller> void changeScreens(Screen<T> screen) {
 	/*	if (currentScreen() != null) {
 			System.out.println("sellpgin " + (screen == currentScreen()));
 			screenSleep(currentScreen());

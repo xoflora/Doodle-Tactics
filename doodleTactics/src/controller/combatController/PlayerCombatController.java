@@ -48,6 +48,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	
 	private int _menuDraggedx;
 	private int _menuDraggedy;
+	private boolean _draggingMenu;
 	
 	private State _state;
 	private UnitPool _pool;
@@ -79,6 +80,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		
 		_menuDraggedx = 0;
 		_menuDraggedy = 0;
+		_draggingMenu = false;
 		
 		clear();
 	}
@@ -158,8 +160,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	}
 	
 	@Override
-	public void move(Character c, List<Tile> path) {
-		super.move(c, path);
+	public void move(Character c, Tile source, List<Tile> path) {
+		super.move(c, source, path);
 		
 		try {
 			_optionWindow = new CombatOptionWindow(_dt, _gameScreen, false,
@@ -213,7 +215,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						_destTile = t;
 						_state = State.CHARACTER_MOVING;
 						
-						move(_selectedCharacter, _path);
+						move(_selectedCharacter, _selectedTile, _path);
 						
 						_cacheMovementRange = _selectedMovementRange;
 						clearMovementRange();
@@ -337,8 +339,24 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * 
 	 */
 	public void mousePressed(MouseEvent e) {
+		super.mousePressed(e);
 		MenuItem m = _gameScreen.checkContains(e.getPoint());
 		if (m != null && m == _optionWindow) {
+			_menuDraggedx = e.getX();
+			_menuDraggedy = e.getY();
+			_draggingMenu = true;
+		}
+	}
+	
+	@Override
+	/**
+	 * 
+	 */
+	public void mouseDragged(MouseEvent e) {
+		if (!_draggingMenu)
+			super.mouseDragged(e);
+		else if (_optionWindow != null) {
+			_optionWindow.setLocation(e.getX() - _menuDraggedx, e.getY() - _menuDraggedy);
 			_menuDraggedx = e.getX();
 			_menuDraggedy = e.getY();
 		}
@@ -348,12 +366,9 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	/**
 	 * 
 	 */
-	public void mouseDragged(MouseEvent e) {
-		if (_optionWindow != null) {
-			_optionWindow.setLocation(e.getX() - _menuDraggedx, e.getY() - _menuDraggedy);
-			_menuDraggedx = e.getX();
-			_menuDraggedy = e.getY();
-		}
+	public void mouseReleased(MouseEvent e) {
+		super.mouseReleased(e);
+		_draggingMenu = false;
 	}
 
 	@Override
@@ -439,6 +454,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			_pool.setInUse(false);
 			_pool = null;
 			_gameScreen.popControl();
+			_finalized = false;
 		}
 	}
 
