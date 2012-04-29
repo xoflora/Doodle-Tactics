@@ -203,7 +203,7 @@ public abstract class Character extends Rectangle{
 	/**
 	 * Generates a Random Character, simple for now, perhaps random statistics in the future
 	 */
-	public static Character generateRandomCharacter(GameScreen gs, int tileX, int tileY){
+	public static Character generateRandomCharacter(GameScreen gs, double tileX, double tileY){
 		Random r = new Random();
 		String begin = "src/graphics/characters/";
 		switch(r.nextInt(4)){
