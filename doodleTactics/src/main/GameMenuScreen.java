@@ -725,12 +725,9 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			
 			BufferedImage equippedPic = null;
 			
-			try {
-				equippedPic = ImageIO.read(new File("src/graphics/menu/equipped.png"));
-//				System.out.println("inventory pic size: w: " + inventoryPic.getWidth() + "y: " + inventoryPic.getHeight());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+
+			equippedPic = _dt.importImage("src/graphics/menu/equipped.png");
+//			System.out.println("inventory pic size: w: " + inventoryPic.getWidth() + "y: " + inventoryPic.getHeight());
 			
 			JLabel equipped = new JLabel(new ImageIcon(equippedPic));
 			constraint.fill = GridBagConstraints.BOTH;

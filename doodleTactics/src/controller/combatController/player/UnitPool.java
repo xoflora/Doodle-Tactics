@@ -47,9 +47,9 @@ public class UnitPool extends MenuItem {
 	public static final int SELECT_BUTTON = MouseEvent.BUTTON1;
 	public static final int ALT_BUTTON = MouseEvent.BUTTON3;
 
-	private static final String IMAGE_PATH = "src/graphics/menu/sidebar.png";
-	private static final String DONE_DEFAULT_IMG = "src/graphics/menu/done.png";
-	private static final String DONE_HOVER_IMG = "src/graphics/menu/done_hovered.png";
+	private static final String IMAGE_PATH = "src/graphics/menu/combatMenu/sidebar.png";
+	private static final String DONE_DEFAULT_IMG = "src/graphics/menu/combatMenu/done.png";
+	private static final String DONE_HOVER_IMG = "src/graphics/menu/combatMenu/done_hovered.png";
 
 	/**
 	 * corresponds to a character button in the unit pool

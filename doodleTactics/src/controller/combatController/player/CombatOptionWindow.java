@@ -25,17 +25,17 @@ import graphics.Rectangle;
  */
 public class CombatOptionWindow extends MenuItem {
 	
-	private static final String MENU_IMAGE_PATH = "src/graphics/menu/combat_menu_background.png";
+	private static final String MENU_IMAGE_PATH = "src/graphics/menu/combatMenu/combat_menu_background.png";
 //	private static final String ATTACK_IMAGE = "src/graphics/menu/attack.png";
 //	private static final String ATTACK_HOVER = "src/graphics/menu/attack_hovered.png";
-	private static final String SPECIAL_IMAGE = "src/graphics/menu/special.png";
-	private static final String SPECIAL_HOVER = "src/graphics/menu/special_hovered.png";
-	private static final String ITEM_IMAGE = "src/graphics/menu/item.png";
-	private static final String ITEM_HOVER = "src/graphics/menu/item_hovered.png";
+	private static final String SPECIAL_IMAGE = "src/graphics/menu/combatMenu/special.png";
+	private static final String SPECIAL_HOVER = "src/graphics/menu/combatMenu/special_hovered.png";
+	private static final String ITEM_IMAGE = "src/graphics/menu/combatMenu/item.png";
+	private static final String ITEM_HOVER = "src/graphics/menu/combatMenu/item_hovered.png";
 	private static final String TALK_IMAGE = "";
 	private static final String TALK_HOVER = "";
-	private static final String WAIT_IMAGE = "src/graphics/menu/wait.png";
-	private static final String WAIT_HOVER = "src/graphics/menu/wait_hovered.png";
+	private static final String WAIT_IMAGE = "src/graphics/menu/combatMenu/wait.png";
+	private static final String WAIT_HOVER = "src/graphics/menu/combatMenu/wait_hovered.png";
 	
 	private static final int MENU_PRIORITY = 3;
 	private static final int OPTION_PRIORITY = 50;
