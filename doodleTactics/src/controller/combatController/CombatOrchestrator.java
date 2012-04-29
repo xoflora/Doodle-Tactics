@@ -191,7 +191,8 @@ public class CombatOrchestrator extends GameScreenController {
 	 * @param units the unit list of the player combat controller
 	 */
 	public void setPlayerUnits(HashMap<Character, Tile> units) {
-	//	units.add(_gameScreen.getMainChar());
+		units.put(_gameScreen.getMainChar(), _gameScreen.
+				getTile((int)_gameScreen.getMainChar().getX(), (int)_gameScreen.getMainChar().getY()));
 		_p = new PlayerCombatController(_dt, units);
 	}
 }

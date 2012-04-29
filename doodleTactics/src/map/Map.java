@@ -929,7 +929,7 @@ public class Map implements Serializable {
 	 */
 	public void clearRandomBattleMaps(){
 		for(Character c : _enemyToTiles.keySet()) {
-			_enemyTiles.get(c).setOccupant(null);
+			_enemyTiles.remove(c);
 			_activeCharacters.remove(c);
 		}
 		
