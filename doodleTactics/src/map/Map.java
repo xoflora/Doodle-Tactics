@@ -68,11 +68,12 @@ public class Map implements Serializable {
 	private Stack<Integer> _prevYRef;
 	private HashMap<Character,List<Tile>> _enemyToTiles;
 	private HashMap<Tile,List<Character>> _tileToEnemies;
+	private LinkedList<Tile> _randBattles;
 	String _name;
 
 	public Map(DoodleTactics dt, Tile[][] tiles, String name, BufferedImage overflow,
 			LinkedList<Terrain> terrain,
-			LinkedList<Character> chars, MainCharacter main) {
+			LinkedList<Character> chars, LinkedList<Tile> randBattles, MainCharacter main) {
 		_map = tiles;
 		_overflow = overflow;
 		_name = "";
@@ -80,6 +81,7 @@ public class Map implements Serializable {
 		_activeCharacters = chars;
 		_mainChar = main;
 		_dt = dt;
+		_randBattles = randBattles;
 
 
 		//Random Battle data structures:
@@ -114,7 +116,7 @@ public class Map implements Serializable {
 		int count = 2;
 		LinkedList<Terrain> terrainList = new LinkedList<Terrain>();
 		LinkedList<Character> chars = new LinkedList<Character>();
-		LinkedList<Tile> _randBattles = new LinkedList<Tile>();
+		LinkedList<Tile> randBattles = new LinkedList<Tile>();
 		MainCharacter main = dt.getGameScreen().getMainChar();
 		try {
 			// Parse initial data
@@ -250,7 +252,7 @@ public class Map implements Serializable {
 
 					//Check if tile can generate random battles
 					if(splitLine[5].equals("1"))
-						_randBattles.add(tiles[x][y]);
+						randBattles.add(tiles[x][y]);
 
 					// Error Case
 				} else
@@ -265,10 +267,7 @@ public class Map implements Serializable {
 			if (main == null)
 				throw new InvalidMapException("Main Character not specified");
 			Map m = new Map(dt,tiles, name, dt.importImage(overflowPath),
-					terrainList, chars, main); 
-			
-			//Compute Random Battles
-			m.assignRandomEnemies(_randBattles);
+					terrainList, chars, randBattles,main); 
 			
 			return m;
 		} catch (FileNotFoundException e) {
@@ -831,11 +830,11 @@ public class Map implements Serializable {
 
 	/**
 	 * Assign Random Enemies to Tiles
-	 * @param A list of tiles that can potentially store 
+	 * @param A list of tiles that can potentially store Random Enemies
 	 */
-	public void assignRandomEnemies(LinkedList<Tile> potentials){
+	public void assignRandomEnemies(){
 		Random r = new Random();
-		for(Tile  t : potentials){
+		for(Tile  t : _randBattles){
 			if(r.nextInt(100) < CUTOFF){
 				//An enemy will be placed
 				double xLoc = Tile.TILE_SIZE * (t.x() - DEFAULT_XREF);
@@ -888,5 +887,16 @@ public class Map implements Serializable {
 	public void startBattle(Tile t){
 		System.out.println("COMBAT BEGINS!!");
 		_dt.getGameScreen().enterCombat(_tileToEnemies.get(t));
+	}
+	
+	/**
+	 * When you exit  a map, random battle references are erased
+	 */
+	public void clearRandomBattleMaps(){
+		for(Character c : _enemyToTiles.keySet())
+			_activeCharacters.remove(c);
+		_enemyToTiles.clear();
+		_tileToEnemies.clear();
+
 	}
 }
