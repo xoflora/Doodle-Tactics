@@ -56,7 +56,7 @@ public class Map implements Serializable {
 	private static final int DEFAULT_YREF = 5;
 
 	//Random Battle
-	private static final int CUTOFF = 100;
+	private static final int CUTOFF = 50;
 
 	private DoodleTactics _dt;
 	private BufferedImage _overflow;
@@ -833,13 +833,14 @@ public class Map implements Serializable {
 	 * @param A list of tiles that can potentially store Random Enemies
 	 */
 	public void assignRandomEnemies(){
+
 		Random r = new Random();
 		for(Tile  t : _randBattles){
 			if(r.nextInt(100) < CUTOFF){
 				//An enemy will be placed
-				double xLoc = Tile.TILE_SIZE * (t.x() - DEFAULT_XREF);
-				double yLoc = Tile.TILE_SIZE * (t.y() - DEFAULT_YREF);
-				System.out.println("**XLOC" + t.x() + " YLOC: " + t.y());
+				double xLoc = Tile.TILE_SIZE * (t.x() - _dt.getGameScreen().getXRef());
+				double yLoc = Tile.TILE_SIZE * (t.y() - _dt.getGameScreen().getYRef());
+				System.out.println("**XREF" + _dt.getGameScreen().getXRef() + " YREF: " +_dt.getGameScreen().getYRef() + "TIle x: " + t.x() + " Y: " + t.y());
 				int overflow = 0;
 				Character enemy = Character.generateRandomCharacter(_dt,_dt.getGameScreen(),xLoc,yLoc);
 				

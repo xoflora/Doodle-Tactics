@@ -8,6 +8,8 @@ import java.util.ListIterator;
 
 import util.Util;
 import controller.GameScreenController;
+import controller.combatController.player.PlayerCombatController;
+import controller.combatController.player.PlayerSetup;
 import main.DoodleTactics;
 import character.Character;
 

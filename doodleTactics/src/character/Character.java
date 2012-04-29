@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import controller.combatController.CombatController;
-import controller.combatController.PlayerCombatController;
+import controller.combatController.player.PlayerCombatController;
 
 import main.DoodleTactics;
 import main.GameScreen;

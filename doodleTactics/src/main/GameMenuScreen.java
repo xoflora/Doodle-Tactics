@@ -3,21 +3,8 @@ package main;
 import items.Item;
 import items.ItemException;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -26,17 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.*;
 
 import character.Character;
 
@@ -57,6 +34,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private MenuItem _map;
 	private MenuItem _options;
 	private MenuItem _title;
+	private MenuItem _infoBoxTitle;
 	public int _currClicked = 0;
 	private DoodleTactics _dt;
 	private LinkedList<CharInfo> _charInfoList;
@@ -65,14 +43,14 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private HashMap<JLabel, Character> _labelToCharacter; //stores who each item belongs to
 	private HashMap<JLabel, Item> _labelToItem; //stores each item image to the actual item to holds
 	private JScrollPane _scrollBar;
-	private boolean _showingItemOptions;
+	private boolean _showingItemOptions, _beingHovered;
 	private unitsBoxListener _unitsBoxListener;
 	private int _itemOptBoxX, _itemOptBoxY, _numOptions;
 	private Item _selectedItem;
 	private Character _selectedChar;
 	private HashMap<JButton, Character> _buttonToChar;
 	private ArrayList<optionButton> _buttonList;
-	private BufferedImage _charBoxImage, _infoBoxImage, _infoBoxTitle;
+	private BufferedImage _charBoxImage, _infoBoxImage;
 	
 	public GameMenuScreen(DoodleTactics dt) {
 		
@@ -84,6 +62,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_labelToItem = new HashMap<JLabel, Item>();
 		System.out.println("set to false");
 		_showingItemOptions = false;
+		_beingHovered = false;
 		_buttonList = new ArrayList<optionButton>();
 		_buttonToChar = new HashMap<JButton, Character>();
 		try {
@@ -98,15 +77,16 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			BufferedImage quitD = ImageIO.read(new File("src/graphics/menu/quit_game_menu.png"));
 			BufferedImage quitH = ImageIO.read(new File("src/graphics/menu/quit_game_menu_hovered.png"));
 			BufferedImage titleD = ImageIO.read(new File("src/graphics/menu/overlay.png"));
-//			BufferedImage infoBoxTitle = ImageIO.read(new File("src/graphics/menu/"));
+			BufferedImage infoBoxTitle = ImageIO.read(new File("src/graphics/menu/item_info_label.png"));
 			_charBoxImage = ImageIO.read(new File("src/graphics/menu/units_box.png"));
+			_infoBoxImage = ImageIO.read(new File("src/graphics/menu/item_label_box.png"));
 			_units = new MenuItem(this, unitsD,unitsH, dt);
 			_map = new MenuItem(this, mapD,mapH,dt);
 			_save = new MenuItem(this, saveD, saveH,dt);
 			_options = new MenuItem(this, optionsD,optionsH,dt);
 			_quit = new MenuItem(this, quitD, quitH,dt);
 			_title = new MenuItem(this, titleD, titleD, dt);
-//			_infoBoxTitle = new MenuItem(this, dt);
+			_infoBoxTitle = new MenuItem(this, infoBoxTitle, infoBoxTitle, dt);
 		} catch (IOException e) {
 //			dt.error("Game Menu Screen: One of the file image paths was invalid");
 		}
@@ -139,12 +119,17 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		
 		_itemInfoBox = new JPanel();
 		_itemInfoBox.setVisible(true);
-		_itemInfoBox.setBackground(java.awt.Color.DARK_GRAY);
+		_itemInfoBox.setOpaque(false);
+		_itemInfoBox.setLayout(new BorderLayout());
+		_itemInfoBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		_itemInfoBox.setLocation(15, 460);
+		_itemInfoBox.setSize(144, 340);
 		
 		_scrollBar = new JScrollPane(_unitsBox, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		_scrollBar.setBackground(java.awt.Color.DARK_GRAY);
-		Dimension d = new Dimension(752, 662);
+		Dimension d = new Dimension(748, 660);
 		_scrollBar.setSize(d);
+		_scrollBar.setPreferredSize(d);
 		_scrollBar.setLocation(new Point(200, 120));
 		_scrollBar.setOpaque(false);
 		
@@ -169,6 +154,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_labelToCharacter = new HashMap<JLabel, Character>();
 		_labelToItem = new HashMap<JLabel, Item>();
 		_charInfoList = new LinkedList<CharInfo>();
+		_infoBoxTitle.setLocation(12, 460);
+		_infoBoxTitle.setVisible(true);
 		for (Character chrter: _dt.getParty()) {
 			CharInfo toAdd = new CharInfo(this, chrter);
 			toAdd.setVisible(true);
@@ -194,7 +181,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				_buttonList.get(i).repaint();
 			}
 		}
-		_scrollBar.setSize(new Dimension(748, 660));
+		_itemInfoBox.setLocation(15, 570);
+		_itemInfoBox.setSize(144, 230);
+		_itemInfoBox.revalidate();
+//		_scrollBar.setSize(new Dimension(748, 660));
 		_scrollBar.setLocation(new Point(200, 120));
 		_title.paint((Graphics2D) g, _title.getImage());
 		_units.paint((Graphics2D) g, _units.getImage());
@@ -202,11 +192,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_quit.paint((Graphics2D) g, _quit.getImage());
 		_options.paint((Graphics2D) g, _options.getImage());
 		_map.paint((Graphics2D) g, _map.getImage());
-	}
-
-	public void render() {
-		// TODO Auto-generated method stub
-		
+		_infoBoxTitle.paint((Graphics2D) g, _infoBoxTitle.getImage());
 	}
 	
 	public void setDefault() {
@@ -215,6 +201,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_quit.setDefault();
 		_options.setDefault();
 		_save.setDefault();
+		_infoBoxTitle.setVisible(false);
 	}
 	
 	public MenuItem checkContains(java.awt.Point point) {
@@ -233,6 +220,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_unitsBox.removeAll();
 			_unitsBox.addMouseMotionListener(_unitsBoxListener);
 			_unitsBox.addMouseListener(_unitsBoxListener);
+			_infoBoxTitle.setLocation(12, 460);
+			_infoBoxTitle.setVisible(true);
 //			_scrollBar.removeAll();
 			_unitsBox.setLayout(new GridLayout(_dt.getParty().size(), 0, 10, 10));
 			_labelToCharacter = new HashMap<JLabel, Character>();
@@ -292,13 +281,15 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_itemInfoBox.setVisible(false);
 		for (JLabel label: _labelToCharacter.keySet()) {
 			if (label.contains(point)) {
+				_beingHovered = true;
 				this.showItemInfo(_labelToItem.get(label));
-//				_beingHovered = true;
+				_itemInfoBox.revalidate();
 				_itemInfoBox.repaint();
+//				this.repaint();
 				return _labelToItem.get(label);
 			}
 		}
-//		_beingHovered = false;
+		_beingHovered = false;
 		this.repaint();
 		return null;
 	}
@@ -310,7 +301,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			}
 		}
 		this.remove(_itemInfoBox);
-//		_beingHovered = false;
+		_beingHovered = false;
 		this.repaint();
 	}
 	
@@ -345,6 +336,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 						}
 						_showingItemOptions = false;
 						this.repaint();
+						break;
 					}
 				}
 			}
@@ -357,22 +349,40 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	 */
 	
 	public void showItemInfo(Item item) {
+		_itemInfoBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		_itemInfoBox.removeAll();
 		_itemInfoBox.setLocation(15, 460);
 		_itemInfoBox.setSize(144, 340);
-		_itemInfoBox.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		Insets inset = new Insets(5, 5, 5, 5);
+		_itemInfoBox.setOpaque(false);
+		_itemInfoBox.setLayout(new BorderLayout());
+//		GridBagConstraints c = new GridBagConstraints();
 		JLabel profile = new JLabel(new ImageIcon(item.getImage()));
-		profile.setSize(75, 75);
-//		profile.setPreferredSize(new Dimension(150,150));
-//		profile.setMaximumSize(new Dimension(150, 150));
+		profile.setSize(65, 65);
+//		c.fill = GridBagConstraints.BOTH;
+//		c.weighty = 0.5;
+//		c.gridx = 0;
+//		c.gridy = 0;
 		profile.setVisible(true);
-		c.fill = GridBagConstraints.BOTH;
-		c.weighty = 0.5;
-		c.insets = inset;
-		c.gridx = 0;
-		c.gridy = 0;
-		_itemInfoBox.add(profile, c);
+		_itemInfoBox.add(profile, BorderLayout.NORTH);
+		if (item.isEquip()) {
+			
+		}
+		else {
+			JTextArea description = new JTextArea(5, 5);
+			description.setOpaque(false);
+			description.setFont(new Font("Tahoma", Font.BOLD, 14));
+			description.setForeground(java.awt.Color.BLACK);
+			description.setText(item.getDescription());
+			description.setSize(130, 250);
+			description.setVisible(true);
+			description.setLineWrap(true);
+			description.setWrapStyleWord(true);
+			description.revalidate();
+//			c.fill = GridBagConstraints.BOTH;
+//			c.gridx = 0;
+//			c.gridy = 1;
+			_itemInfoBox.add(description, BorderLayout.CENTER);
+		}
 		_itemInfoBox.setVisible(true);
 		this.add(_itemInfoBox);
 	}
@@ -769,29 +779,16 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	}
 	
 	private class itemInfoBox extends JPanel {
-		public itemInfoBox(Item myItem) {
-			this.setLayout(new GridBagLayout());
-			GridBagConstraints constraint = new GridBagConstraints();
-			java.awt.Dimension panelSize = new java.awt.Dimension(730,200);
-			this.setPreferredSize(panelSize);
-			this.setSize(730,200);
-			this.setLocation(15, 15);
-//			this.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-						
+		
+		public itemInfoBox() {
 			this.setOpaque(false);
-			
-//			JLabel profile = new JLabel(new ImageIcon(chrter.getProfileImage()));
-//			profile.setSize(150, 150);
-//			profile.setPreferredSize(new Dimension(150,150));
-//			profile.setMaximumSize(new Dimension(150, 150));
-//			profile.setVisible(true);
 		}
 		
-		public void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			Image box = (new ImageIcon(_charBoxImage)).getImage();
-//			g.drawImage(bg, (this.getWidth()/2) - (bg.getWidth(this) / 2),(this.getHeight()/2) - (bg.getHeight(this) / 2),bg.getWidth(this),bg.getHeight(this),this);
-		}
+//		public void paintComponent(Graphics g) {
+//			super.paintComponent(g);
+////			Image box = (new ImageIcon(_infoBoxImage)).getImage();
+////			g.drawImage(box, (this.getWidth()/2) - (box.getWidth(this) / 2),(this.getHeight()/2) - (box.getHeight(this) / 2),box.getWidth(this),box.getHeight(this),this);
+//		}
 	}
 	
 	private class itemListener implements MouseListener, MouseMotionListener {
@@ -840,7 +837,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			if (_currClicked == 1) {
+			if (_currClicked == 1 && !_showingItemOptions) {
 //				if (!_showingItemOptions) {
 				Item clickedItem = GameMenuScreen.this.checkItemContains(e.getPoint());
 //				}

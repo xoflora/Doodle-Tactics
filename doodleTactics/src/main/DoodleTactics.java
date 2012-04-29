@@ -18,7 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
 import controller.Controller;
-import controller.combatController.PlayerCombatController;
+import controller.combatController.player.PlayerCombatController;
 
 import character.Archer;
 import character.Character;
@@ -69,14 +69,18 @@ public class DoodleTactics extends JFrame {
 				"src/graphics/characters/warrior_back.png", "Dude", 10, 10);
 		try {
 			BufferedImage pot = importImage("src/graphics/items/donut.png");
-			_char1.addToInventory(new HealthPotion(pot, 10));
+			HealthPotion potion = new HealthPotion(pot, 10);
+			_char1.addToInventory(potion);
+			potion.setDescription("This enchanted sprinkled doughnut heals your character for 10 HP.");
 			_char1.updateHP(-10);
 		} catch (ItemException e) {
 			e.printStackTrace();
 		}
 		try {
 			BufferedImage pot2 = importImage("src/graphics/items/donut.png");
-			_char1.addToInventory(new HealthPotion(pot2, 10));
+			HealthPotion pot = new HealthPotion(pot2, 10);
+			_char1.addToInventory(pot);
+			pot.setDescription("This enchanted sprinkled doughnut heals your character for 10 HP.");
 		}  catch (ItemException e) {
 			e.printStackTrace();
 		}

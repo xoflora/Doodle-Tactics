@@ -141,17 +141,16 @@ public class GameScreen extends Screen<GameScreenController> {
 			
 			
 			_currMap = map;
+			_xRef = _currMap.getPrevXRef();
+			_yRef = _currMap.getPrevYRef();
 			_currMap.clearRandomBattleMaps();
 			_currMap.assignRandomEnemies();
 			Character prevCharacter = _currentCharacter;
 			_currentCharacter = _currMap.getMainCharacter();
 			_terrainToPaint = _currMap.getTerrain();
 			//set + reset xref and yref
-			_xRef = _currMap.getPrevXRef();
-			_yRef = _currMap.getPrevYRef();
-			System.out.println("XREF:" + _xRef + " and YREF: " + _yRef);
+			System.out.println("XREF: " + _xRef + " YREF: " + _yRef);
 			if(prevCharacter != null){
-				System.out.println("GO!");
 				_currentCharacter.setDirection(prevCharacter.getDirection());
 			}
 			// set all of the locations of the tiles relative to xref and yref
@@ -288,12 +287,12 @@ public class GameScreen extends Screen<GameScreenController> {
 	}
 
 	public void mapUpdate(int x, int y) {
-
+		
 		/* if in the bounds of the map, specifically in relation to the main character,
 		 * update the screen reference points and animate the map */
-		/*System.out.println("--------MAP UPDATE---------");
+		System.out.println("--------MAP UPDATE---------");
 		System.out.println("xRef: " + _xRef);
-		System.out.println("YRef: " + _yRef);	*/
+		System.out.println("YRef: " + _yRef);	
 
 		if((_xRef + x + 11) <= MAP_WIDTH && (_xRef + x + 11) > 0 && (_yRef + y + 9) <= MAP_HEIGHT && (_yRef + y + 9) > 0) {
 
@@ -304,6 +303,10 @@ public class GameScreen extends Screen<GameScreenController> {
 
 			_xRef += x;
 			_yRef += y;
+			
+			System.out.println("xRef: " + _xRef);
+			System.out.println("YRef: " + _yRef);	
+			System.out.println("--------END MAP UPDATE---------");
 		}
 	}
 
