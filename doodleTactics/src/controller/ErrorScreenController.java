@@ -1,5 +1,7 @@
 package controller;
 
+import graphics.MenuItem;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
@@ -8,86 +10,57 @@ import main.ErrorScreen;
 
 public class ErrorScreenController extends Controller {
 
-	public ErrorScreenController(DoodleTactics dt) {
+	private ErrorScreen _errorScreen;
+	
+	public ErrorScreenController(DoodleTactics dt, ErrorScreen screen) {
 		super(dt);
+		_errorScreen = screen;
 	}
 
 	@Override
 	public ErrorScreen getScreen() {
-		// TODO Auto-generated method stub
-		return null;
+		return _errorScreen;
 	}
 
 	@Override
-	public void release() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void release() { }
 
 	@Override
-	public void take() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void take() { }
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		MenuItem m = _errorScreen.checkContains(e.getPoint());
+		if (m != null)
+			m.activate(e.getButton());
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseEntered(MouseEvent e) { }
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent e) { }
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mousePressed(MouseEvent e) { }
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseReleased(MouseEvent e) { }
 
 	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyPressed(KeyEvent e) { }
 
 	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyReleased(KeyEvent e) { }
 
 	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyTyped(KeyEvent e) { }
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseDragged(MouseEvent e) { }
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		_errorScreen.checkContains(e.getPoint());
 	}
-
 }
