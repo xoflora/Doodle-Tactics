@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import character.Archer;
@@ -148,7 +147,7 @@ public class Dialogue extends Event {
 			if(_phrases == null)
 				parseMap();
 			System.out.println("Start Dialogue!");
-			BufferedImage img = ImageIO.read(new File("src/graphics/menu/dialogue_box.png"));
+			BufferedImage img = _dt.importImage("src/graphics/menu/dialogue_box.png");
 
 			_db = new DialogueBox(_gameScreen, img,img,_dt,5);
 			_gameScreen.addMenuItem(_db);
