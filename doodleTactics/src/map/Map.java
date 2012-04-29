@@ -56,7 +56,7 @@ public class Map implements Serializable {
 	private static final int DEFAULT_YREF = 5;
 
 	//Random Battle
-	private static final int CUTOFF = 100;
+	private static final int CUTOFF = 50;
 
 	private DoodleTactics _dt;
 	private BufferedImage _overflow;
@@ -833,6 +833,7 @@ public class Map implements Serializable {
 	 * @param A list of tiles that can potentially store Random Enemies
 	 */
 	public void assignRandomEnemies(){
+
 		Random r = new Random();
 		for(Tile  t : _randBattles){
 			if(r.nextInt(100) < CUTOFF){
