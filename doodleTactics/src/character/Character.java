@@ -205,25 +205,31 @@ public abstract class Character extends Rectangle{
 	 */
 	public void moveToTile(Tile t) {
 		
-		int xDiff = (int) (t.getX() - this.getX());
-		int yDiff = (int) (t.getY() - this.getY());
+		int xDiff = (int) ((t.getX() - this.getX()) / Tile.TILE_SIZE);
+		int yDiff = (int) ((t.getY() - this.getY()) / Tile.TILE_SIZE);
+		
+		System.out.println("xDiff: " + xDiff);
+		System.out.println("yDiff: " + yDiff);
 		
 		MoveTimer mt = new MoveTimer(_container, xDiff, yDiff);
 		
 		/* determine which orientation to set the character to */
-		if(xDiff > 0) {
+		if(xDiff < 0) {
 			this.setRight();
-		} else {
+		} else if (xDiff > 0) {
 			this.setLeft();
 		}
 		
-		if(yDiff > 0) {
+		if(yDiff < 0) {
 			this.setDown();
-		} else {
+		} else if (yDiff > 0) {
 			this.setUp();
 		}
 		
 		_isAnimating = true;
+		
+		
+		
 		mt.start();
 	}
 
@@ -256,6 +262,28 @@ public abstract class Character extends Rectangle{
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					
 					Character.this.setLocation((Character.this.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), Character.this.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
+					
+					switch(_cnt) {
+					case 0:
+						Character.this.setRotation(-10);
+						break;
+					case 1:
+						Character.this.setRotation(-5);
+						break;
+					case 2:
+						Character.this.setRotation(0);
+						break;
+					case 3:
+						Character.this.setRotation(5);
+						break;
+					case 4:
+						Character.this.setRotation(10);
+						break;
+					case 5:
+						Character.this.setRotation(0);
+						break;
+					}
+					
 					_container.repaint();
 					
 					_cnt+=1;

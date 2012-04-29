@@ -62,7 +62,6 @@ public class DoodleTactics extends JFrame {
 		this.setResizable(false);
 		this.setVisible(true);
 		_game.setMap("src/tests/data/testMapDemo");
-
 		
 		Archer _char1 = new Archer(this,_game, 
 				"src/graphics/characters/pokeball.png", "src/graphics/characters/warrior_back.png",

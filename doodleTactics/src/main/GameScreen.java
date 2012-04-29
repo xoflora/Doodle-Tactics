@@ -406,62 +406,64 @@ public class GameScreen extends Screen<GameScreenController> {
 
 		super.paintComponent(g);
 
-		// paint all of the tiles first
-		for(int i = 0; i < MAP_WIDTH; i++) {
-			for(int j = 0; j < MAP_HEIGHT; j++) {
-				// check that the given tile is within the bounds before painting it 
-				//if((i < _xRef + 22 && i >= _xRef - 1) && (j < (_yRef + 18) && j >= (_yRef - 1))) {
-					_currMap.getTile(i,j).paint(g, _currMap.getTile(i,j).getImage());
-				//}
+		if(_currMap != null) {
+		
+			// paint all of the tiles first
+			for(int i = 0; i < MAP_WIDTH; i++) {
+				for(int j = 0; j < MAP_HEIGHT; j++) {
+					// check that the given tile is within the bounds before painting it 
+					//if((i < _xRef + 22 && i >= _xRef - 1) && (j < (_yRef + 18) && j >= (_yRef - 1))) {
+						_currMap.getTile(i,j).paint(g, _currMap.getTile(i,j).getImage());
+					//}
+				}
 			}
-		}
-
-		// add all Characters to PriorityQueue
-		List<Character> charsToPaint = this.getController().getCharactersToDisplay();
-
-		//	System.out.println("====print characters====");
-		for(Character c : charsToPaint) {
-			//		System.out.println("name: " + c.getName());
-			_characterTerrainQueue.add(c);
-			//int overflow = (c.getImage().getWidth() - Tile.TILE_SIZE) / 2;
-			//c.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
-		}
-
-		// add all Terrain to PriorityQueue
-		for(Terrain t : _terrainToPaint){
-			//		System.out.println("Priority : " + (t.getPaintPriority()));
-			//		System.out.println("Adding Terrain");
-			_characterTerrainQueue.add(t);
-		}
-
-		// add the main character to the queue
-		_characterTerrainQueue.add(_currentCharacter);
-
-		//	System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
-
-		// paint all characters and terrains
-		while(!_characterTerrainQueue.isEmpty()) {
-			Rectangle toPaint = _characterTerrainQueue.poll();
-			//		System.out.println("Painted: " + toPaint.getPaintPriority());
-			toPaint.setVisible(true);
-			toPaint.paint(g, toPaint.getImage());				
-		}
-
-		//print all the menu items
-		List<MenuItem> items = new LinkedList<MenuItem>();
-		synchronized (_menuQueue) {
-			while (!_menuQueue.isEmpty()) {
-				items.add(_menuQueue.poll());
+	
+			// add all Characters to PriorityQueue
+			List<Character> charsToPaint = this.getController().getCharactersToDisplay();
+	
+			//	System.out.println("====print characters====");
+			for(Character c : charsToPaint) {
+				//		System.out.println("name: " + c.getName());
+				_characterTerrainQueue.add(c);
+				//int overflow = (c.getImage().getWidth() - Tile.TILE_SIZE) / 2;
+				//c.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
+			}
+	
+			// add all Terrain to PriorityQueue
+			for(Terrain t : _terrainToPaint){
+				//		System.out.println("Priority : " + (t.getPaintPriority()));
+				//		System.out.println("Adding Terrain");
+				_characterTerrainQueue.add(t);
+			}
+	
+			// add the main character to the queue
+			_characterTerrainQueue.add(_currentCharacter);
+	
+			//	System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
+	
+			// paint all characters and terrains
+			while(!_characterTerrainQueue.isEmpty()) {
+				Rectangle toPaint = _characterTerrainQueue.poll();
+				//		System.out.println("Painted: " + toPaint.getPaintPriority());
+				toPaint.setVisible(true);
+				toPaint.paint(g, toPaint.getImage());				
+			}
+	
+			//print all the menu items
+			List<MenuItem> items = new LinkedList<MenuItem>();
+			synchronized (_menuQueue) {
+				while (!_menuQueue.isEmpty()) {
+					items.add(_menuQueue.poll());
+				}
+	
+				for (MenuItem m : items) {
+					m.paint(g, m.getImage());
+					_menuQueue.add(m);
+				}
 			}
 
-			for (MenuItem m : items) {
-				m.paint(g, m.getImage());
-				_menuQueue.add(m);
-			}
 		}
-
-
-
+		
 		//		if (_currentCharacter != null) {
 		//			int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
 		//			_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);

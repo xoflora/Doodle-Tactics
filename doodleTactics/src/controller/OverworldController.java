@@ -35,7 +35,7 @@ public class OverworldController extends GameScreenController {
 	private class RandomMoveTimer extends Timer {
 		
 		public RandomMoveTimer() {
-			super(500, null);
+			super(4000, null);
 			this.addActionListener(new RandomMoveListener());
 		}
 		
@@ -50,11 +50,15 @@ public class OverworldController extends GameScreenController {
 						// provided this character is not the main character
 						if(! c.equals(_gameScreen.getMainChar())) {
 							
+							System.out.println("character at " + c.getX() + ", " + c.getY());
+							
 							//generate a random direction to move in
 							Random r = new Random();
 							int direction = r.nextInt(4);
-							Tile src = _gameScreen.getMap().getTile(_gameScreen.getMapX((int) c.getX()),_gameScreen.getMapY((int) c.getY()));
-						
+							// retrieve the tile that corresponds to the given character
+							Tile src = _gameScreen.getTile((int) c.getX(), (int) c.getY());
+							System.out.println("src, x: " + src.x() + ", y:" + src.y());
+							
 							if(src != null) {
 								
 								System.out.println("character moving: " + c.getName() + " in direction " + direction + 
@@ -67,28 +71,28 @@ public class OverworldController extends GameScreenController {
 									switch(direction) {
 										case 0:
 											dest = _gameScreen.getMap().getNorth(src);
-											if(dest != null) {
+											if(dest != null && dest.canMove(Map.NORTH) && !dest.isOccupied()) {
 												System.out.println(dest.getX() + "," + dest.getY());
 												c.moveToTile(dest);
 											}
 											break;
 										case 1:
 											dest = _gameScreen.getMap().getSouth(src);
-											if(dest != null) {
+											if(dest != null && dest.canMove(Map.SOUTH) && !dest.isOccupied()) {
 												System.out.println(dest.getX() + "," + dest.getY());
 												c.moveToTile(dest);
 											}
 											break;
 										case 2:
 											dest = _gameScreen.getMap().getEast(src);
-											if(dest != null) {
+											if(dest != null && dest.canMove(Map.EAST)) {
 												System.out.println(dest.getX() + "," + dest.getY());
 												c.moveToTile(dest);
 											}
 											break;
 										case 3:
 											dest = _gameScreen.getMap().getWest(src);
-											if(dest != null) {
+											if(dest != null && dest.canMove(Map.WEST)) {
 												System.out.println(dest.getX() + "," + dest.getY());
 												c.moveToTile(dest);
 											}
@@ -111,7 +115,8 @@ public class OverworldController extends GameScreenController {
 	@Override
 	public void take() {
 		// TODO : center the map around the main character
-		_randomMoveTimer.start();
+		System.out.println("OVERWORLD TAKES CONTROL");
+		//_randomMoveTimer.start();
 	}
 
 	@Override
