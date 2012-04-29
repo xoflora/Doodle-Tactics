@@ -32,11 +32,11 @@ public class OverworldController extends GameScreenController {
 		_gameScreen = game;
 		//_randomMoveTimer = new RandomMoveTimer();
 	}
-
+//
 //	private class RandomMoveTimer extends Timer {
 //		
 //		public RandomMoveTimer() {
-//			super(4000, null);
+//			super(5000, null);
 //			this.addActionListener(new RandomMoveListener());
 //		}
 //		
@@ -74,28 +74,36 @@ public class OverworldController extends GameScreenController {
 //											dest = _gameScreen.getMap().getNorth(src);
 //											if(dest != null && dest.canMove(Map.NORTH) && !dest.isOccupied()) {
 //												System.out.println(dest.getX() + "," + dest.getY());
-//												c.moveToTile(dest);
+//												src.removeOccupant();
+//												c.moveToTile(src, dest);
+//												dest.setOccupant(c);
 //											}
 //											break;
 //										case 1:
 //											dest = _gameScreen.getMap().getSouth(src);
 //											if(dest != null && dest.canMove(Map.SOUTH) && !dest.isOccupied()) {
 //												System.out.println(dest.getX() + "," + dest.getY());
-//												c.moveToTile(dest);
+//												src.removeOccupant();
+//												c.moveToTile(src, dest);
+//												dest.setOccupant(c);
 //											}
 //											break;
 //										case 2:
 //											dest = _gameScreen.getMap().getEast(src);
-//											if(dest != null && dest.canMove(Map.EAST)) {
+//											if(dest != null && dest.canMove(Map.EAST) && !dest.isOccupied()) {
 //												System.out.println(dest.getX() + "," + dest.getY());
-//												c.moveToTile(dest);
+//												src.removeOccupant();
+//												c.moveToTile(src, dest);
+//												dest.setOccupant(c);
 //											}
 //											break;
 //										case 3:
 //											dest = _gameScreen.getMap().getWest(src);
-//											if(dest != null && dest.canMove(Map.WEST)) {
+//											if(dest != null && dest.canMove(Map.WEST) && !dest.isOccupied()) {
 //												System.out.println(dest.getX() + "," + dest.getY());
-//												c.moveToTile(dest);
+//												src.removeOccupant();
+//												c.moveToTile(src, dest);
+//												dest.setOccupant(c);
 //											}
 //											break;
 //									}
@@ -116,7 +124,6 @@ public class OverworldController extends GameScreenController {
 	@Override
 	public void take() {
 		// TODO : center the map around the main character
-		System.out.println("OVERWORLD TAKES CONTROL");
 		//_randomMoveTimer.start();
 	}
 

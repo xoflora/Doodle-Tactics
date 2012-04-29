@@ -11,6 +11,8 @@ import java.util.PriorityQueue;
 
 import javax.swing.JPanel;
 
+import controller.combatController.player.PlayerCombatController;
+
 import main.DoodleTactics;
 import main.GameScreen;
 import graphics.MenuItem;
