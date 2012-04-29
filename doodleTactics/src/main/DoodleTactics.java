@@ -68,9 +68,16 @@ public class DoodleTactics extends JFrame {
 				"src/graphics/characters/warrior_back.png", "src/graphics/characters/warrior_back.png",
 				"src/graphics/characters/warrior_back.png", "Dude", 10, 10);
 		try {
-			BufferedImage pot = ImageIO.read(new File("src/graphics/characters/warrior_left.png"));
-			BufferedImage pot2 = ImageIO.read(new File("src/graphics/characters/warrior_right.png"));
+			BufferedImage pot = ImageIO.read(new File("src/graphics/items/donut.png"));
 			_char1.addToInventory(new HealthPotion(pot, 10));
+			_char1.updateHP(-10);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ItemException e) {
+			e.printStackTrace();
+		}
+		try {
+			BufferedImage pot2 = ImageIO.read(new File("src/graphics/items/donut.png"));
 			_char1.addToInventory(new HealthPotion(pot2, 10));
 		} catch (IOException e) {
 			e.printStackTrace();
