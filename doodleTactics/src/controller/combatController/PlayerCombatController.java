@@ -27,6 +27,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		CHARACTER_OPTION_MENU
 	}
 	
+	private Tile _attackTile;
 	private Tile _destTile;
 	private Tile _selectedTile;
 	private Character _selectedCharacter;
@@ -52,6 +53,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public PlayerCombatController(DoodleTactics dt, List<Character> units) {
 		super(dt, units);
 
+		_attackTile = null;
 		_destTile = null;
 		_selectedTile = null;
 		_selectedCharacter = null;
@@ -109,6 +111,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		for (Tile t : _enemyAttackRange)
 			t.setInEnemyAttackRange(false);
 		
+		_attackTile = null;
 		_selectedTile = null;
 		_selectedCharacter = null;
 		_destTile = null;
@@ -165,8 +168,14 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void move(Character c, List<Tile> path) {
 		super.move(c, path);
 		
-		boolean attack = false;
-	//	_optionWindow = new CombatOptionWindow(_dt, _gameScreen, );
+		try {
+			_attackTile = nearestAttackTile((int)_destTile.getX(), (int)_destTile.getY());
+			_optionWindow = new CombatOptionWindow(_dt, _gameScreen, true, false, false, false, this);
+			_gameScreen.addMenuItem(_optionWindow);
+			_gameScreen.setVisible(true);
+		} catch(IOException e) {
+			_dt.error("Error finding combat window files.");
+		}
 	}
 
 	@Override
@@ -271,6 +280,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				_cachePath = null;
 				_cacheCost = 0;
 				_cacheDestTile = null;
+				
+				_hasMoved.put(_selectedCharacter, false);
 				
 				_state = State.CHARACTER_SELECTED;
 			}

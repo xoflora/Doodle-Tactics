@@ -20,7 +20,7 @@ import graphics.Rectangle;
  * @author rroelke
  *
  */
-public class CombatOptionWindow extends Rectangle {
+public class CombatOptionWindow extends MenuItem {
 	
 	private static final String MENU_IMAGE_PATH = "src/graphics/characters/pokeball.png";
 	private static final String ATTACK_IMAGE = "src/graphics/menu/attack.png";
@@ -54,16 +54,14 @@ public class CombatOptionWindow extends Rectangle {
 		}
 	}
 	
-	private BufferedImage _img;
 	private List<CombatOption> _options;
 	
 	public CombatOptionWindow(DoodleTactics dt, JPanel container, boolean attack, boolean special, boolean item, boolean talk,
 			PlayerCombatController source) throws IOException {
 		
-		super(container);
+		super(container, ImageIO.read(new File(MENU_IMAGE_PATH)), ImageIO.read(new File(MENU_IMAGE_PATH)), dt);
 		_options = new ArrayList<CombatOption>();
 		
-		_img = ImageIO.read(new File(MENU_IMAGE_PATH));
 		if (attack) {
 			_options.add(new CombatOption(container, ImageIO.read(new File(ATTACK_IMAGE)),
 					ImageIO.read(new File(ATTACK_HOVER)), dt, source, ActionType.ATTACK));
@@ -82,13 +80,5 @@ public class CombatOptionWindow extends Rectangle {
 		}
 		_options.add(new CombatOption(container, ImageIO.read(new File(WAIT_IMAGE)),
 				ImageIO.read(new File(WAIT_HOVER)), dt, source, ActionType.WAIT));
-	}
-
-	@Override
-	/**
-	 * @return the image corresponding to the CombatOptionWindow
-	 */
-	public BufferedImage getImage() {
-		return _img;
 	}
 }
