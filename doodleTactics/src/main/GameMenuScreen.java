@@ -35,6 +35,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private MenuItem _options;
 	private MenuItem _title;
 	private MenuItem _infoBoxTitle;
+	private MenuItem _staticMap;
+	private MenuItem _downArrow;
 	public int _currClicked = 0;
 	private DoodleTactics _dt;
 	private LinkedList<CharInfo> _charInfoList;
@@ -78,6 +80,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		BufferedImage quitH = _dt.importImage("src/graphics/menu/quit_game_menu_hovered.png");
 		BufferedImage titleD = _dt.importImage("src/graphics/menu/overlay.png");
 		BufferedImage infoBoxTitle = _dt.importImage("src/graphics/menu/item_info_label.png");
+		BufferedImage staticMapImg = _dt.importImage("src/graphics/menu/static_map.png");
+		BufferedImage downArrow = _dt.importImage("src/graphics/menu/downarrow.gif");
 		_charBoxImage = _dt.importImage("src/graphics/menu/units_box.png");
 		_infoBoxImage = _dt.importImage("src/graphics/menu/item_label_box.png");
 		_units = new MenuItem(this, unitsD,unitsH, dt);
@@ -87,6 +91,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_quit = new MenuItem(this, quitD, quitH,dt);
 		_title = new MenuItem(this, titleD, titleD, dt);
 		_infoBoxTitle = new MenuItem(this, infoBoxTitle, infoBoxTitle, dt);
+		_staticMap = new MenuItem(this, staticMapImg, staticMapImg, dt);
+		_downArrow = new MenuItem(this, downArrow, downArrow, dt);
 		
 		int buttonHeight = _units.getImage().getHeight();
 		int buffer = 5;
@@ -98,6 +104,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_save.setLocation(left, top+(buttonHeight*2)+(buffer*2));
 		_options.setLocation(left, top+(buttonHeight*3)+(buffer*3));
 		_quit.setLocation(left, top+(buttonHeight*4)+(buffer*4));
+		_staticMap.setLocation(200, 120);
 		
 		_units.setVisible(true);
 		_map.setVisible(true);
@@ -173,24 +180,29 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 	public void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);
-		if (_showingItemOptions) {
-//			System.out.println("X: " + _itemOptBoxX + "; Y: " + _itemOptBoxY);
-			for (int i=0; i<_buttonList.size(); i++) {
-//				System.out.println("button x: " + _buttonList.get(i).getX() + "; y: " + _buttonList.get(i).getY());
-				_buttonList.get(i).repaint();
+		if (_currClicked == 1) {
+			if (_showingItemOptions) {
+	//			System.out.println("X: " + _itemOptBoxX + "; Y: " + _itemOptBoxY);
+				for (int i=0; i<_buttonList.size(); i++) {
+	//				System.out.println("button x: " + _buttonList.get(i).getX() + "; y: " + _buttonList.get(i).getY());
+					_buttonList.get(i).repaint();
+				}
 			}
+			_itemInfoBox.setLocation(15, 570);
+			_itemInfoBox.setSize(144, 230);
+	//		_itemInfoBox.revalidate();
+	//		_scrollBar.setSize(new Dimension(748, 660));
+			_scrollBar.setLocation(new Point(200, 120));
 		}
-		_itemInfoBox.setLocation(15, 570);
-		_itemInfoBox.setSize(144, 230);
-//		_itemInfoBox.revalidate();
-//		_scrollBar.setSize(new Dimension(748, 660));
-		_scrollBar.setLocation(new Point(200, 120));
 		_title.paint((Graphics2D) g, _title.getImage());
 		_units.paint((Graphics2D) g, _units.getImage());
 		_save.paint((Graphics2D) g, _save.getImage());
 		_quit.paint((Graphics2D) g, _quit.getImage());
 		_options.paint((Graphics2D) g, _options.getImage());
 		_map.paint((Graphics2D) g, _map.getImage());
+		_staticMap.paint((Graphics2D) g, _staticMap.getImage());
+		_downArrow.setLocation(_dt.getGameScreen().getMap().getMapCords().getX(), _dt.getGameScreen().getMap().getMapCords().getY());
+		_downArrow.paint((Graphics2D) g, _downArrow.getImage());
 		_infoBoxTitle.paint((Graphics2D) g, _infoBoxTitle.getImage());
 	}
 	
@@ -209,6 +221,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		
 		/* check if the point is in any of the buttons */
 		MenuItem clicked = null;
+		_staticMap.setVisible(false);
+		_downArrow.setVisible(false);
 		
 		if(_units.contains(point)) {
 			this.removeAll();
@@ -248,6 +262,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			this.setDefault();
 			_map.setHovered();
 			clicked = _map;
+			_staticMap.setVisible(true);
+			_downArrow.setVisible(true);
 			_currClicked = 2;
 		}
 		

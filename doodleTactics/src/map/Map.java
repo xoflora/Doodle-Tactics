@@ -6,6 +6,7 @@ import event.Warp;
 import graphics.Rectangle;
 import graphics.Terrain;
 
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -70,6 +71,8 @@ public class Map implements Serializable {
 	private HashMap<Tile,List<Character>> _tileToEnemies;
 	private LinkedList<Tile> _randBattles;
 	String _name;
+	
+	private static Point _mapCords;
 
 	public Map(DoodleTactics dt, Tile[][] tiles, String name, BufferedImage overflow,
 			LinkedList<Terrain> terrain,
@@ -113,7 +116,7 @@ public class Map implements Serializable {
 	 */
 	public static Map map(DoodleTactics dt, JPanel container, String path)
 	throws InvalidMapException {
-		int count = 2;
+		int count = 3;
 		LinkedList<Terrain> terrainList = new LinkedList<Terrain>();
 		LinkedList<Character> chars = new LinkedList<Character>();
 		LinkedList<Tile> randBattles = new LinkedList<Tile>();
@@ -122,10 +125,22 @@ public class Map implements Serializable {
 			// Parse initial data
 			BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
 			String[] splitLine = reader.readLine().split(",");
+			
+			if (splitLine.length!=3) {
+				throw new InvalidMapException("(line 1) Incorrect amount of data");
+			}
+			
+			if (splitLine[0].equals("mapCords")) {
+				throw new InvalidMapException("(line 1) Incorrect map file format");
+			}
+			
+			_mapCords = new Point(Integer.parseInt(splitLine[1]), Integer.parseInt(splitLine[2]));
 
+			splitLine = reader.readLine().split(",");
+			
 			if (splitLine.length != 3)
 				throw new InvalidMapException(
-				"(line 1) Incorrect amount of data");
+				"(line 2) Incorrect amount of data");
 
 			String name = splitLine[0];
 			BufferedImage defaultImage = dt.importImage(splitLine[1]);
@@ -134,7 +149,7 @@ public class Map implements Serializable {
 			// parse the dimensions of the map
 			splitLine = reader.readLine().split(",");
 			if (splitLine.length != 2)
-				throw new InvalidMapException("(line 2) Incorrect amount of data");
+				throw new InvalidMapException("(line 3) Incorrect amount of data");
 			int numX = Integer.parseInt(splitLine[0]);
 			int numY = Integer.parseInt(splitLine[1]);
 
@@ -330,6 +345,10 @@ public class Map implements Serializable {
 		}
 
 		return build;
+	}
+	
+	public Point getMapCords() {
+		return _mapCords;
 	}
 
 	public Tile getTile(int x, int y) {
