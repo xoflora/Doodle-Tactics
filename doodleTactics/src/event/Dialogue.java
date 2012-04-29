@@ -55,8 +55,8 @@ public class Dialogue extends Event {
 			System.out.println("INIT DIALOGUE");
 			_background = new MenuItem(_gameScreen,img,img,_dt,10);
 			_background.setVisible(true);
-			_background.setSize(700, 200);
-			_background.setLocation(185,620);
+			//_background.setSize(10, 200);
+			_background.setLocation(0,550);
 
 			_gameScreen.repaint();
 
@@ -148,7 +148,7 @@ public class Dialogue extends Event {
 			if(_phrases == null)
 				parseMap();
 			System.out.println("Start Dialogue!");
-			BufferedImage img = ImageIO.read(new File("src/graphics/menu/dialogue_box.jpg"));
+			BufferedImage img = ImageIO.read(new File("src/graphics/menu/dialogue_box.png"));
 
 			_db = new DialogueBox(_gameScreen, img,img,_dt,5);
 			_gameScreen.addMenuItem(_db);

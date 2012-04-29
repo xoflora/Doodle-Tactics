@@ -860,6 +860,15 @@ public class Map implements Serializable {
 			if(r.nextInt(100) < CUTOFF){
 				//An enemy will be placed
 				Character enemy = Character.generateRandomCharacter(_dt.getGameScreen(),t.getX(),t.getY());
+			int overflow = 0;
+				BufferedImage img = enemy.getDownImage();
+				if(img.getWidth() - Tile.TILE_SIZE <= 25.0)
+					overflow = (img.getWidth() - Tile.TILE_SIZE) / 2;
+			/*	System.out.println("X LOC: " + t.x() + " Y LOC: " + t.y()); 
+				addCharacter(t.x(),t.y(),enemy);
+				enemy.setLocation(t.x() - overflow, t.y() - img.getHeight() + Tile.TILE_SIZE);*/
+				_activeCharacters.add(enemy);
+
 				if(_tileToEnemies.containsKey(t))
 					_tileToEnemies.get(t).add(enemy);
 				else{
@@ -867,6 +876,7 @@ public class Map implements Serializable {
 					toAdd.add(enemy);
 					_tileToEnemies.put(t,toAdd);
 				}
+				System.out.println("ENEMY ADDED, mvmt range: " + enemy.getMovementRange() + " tiles");
 				List<Tile> mvmtRange = getMovementRange(t,enemy.getMovementRange());
 				for(Tile inRange : mvmtRange){
 					if(_tileToEnemies.containsKey(inRange))
