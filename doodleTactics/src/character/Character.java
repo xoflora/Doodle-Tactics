@@ -27,7 +27,7 @@ import graphics.Rectangle;
 import graphics.Shape;
 import items.*;
 public abstract class Character extends Rectangle{
-	
+
 	/**
 	 * @author czchapma
 	 */
@@ -77,18 +77,18 @@ public abstract class Character extends Rectangle{
 	private BufferedImage _down;
 
 	private CombatController _affiliation; //player/AI etc
-	
+
 	private FloatTimer _floatTimer; // internal timer used to animate floating
 	private JPanel _container;
 	private boolean _isAnimating;
-	
+
 	public static enum CharacterDirection{
 		LEFT,RIGHT,UP,DOWN
 	}
-	
-	public Character(JPanel container, String profile, String left, String right,
+
+	public Character(DoodleTactics dt, JPanel container, String profile, String left, String right,
 			String up, String down, String name,double x, double y) {
-		
+
 		super(container);
 		_container = container;
 		_BASE_STATS = new int[NUM_STATS];
@@ -97,25 +97,21 @@ public abstract class Character extends Rectangle{
 		YIELD = new int[NUM_STATS];
 		_id = numCharacters;
 		numCharacters++;
-		
+
 		_name = name;
 		_level = 1;
 		_inventory	= new HashMap<Integer, Item>();
 		_capacity = 5;
-		
+
 		_affiliation = null;
-		
-		try {
-			_profile = ImageIO.read(new File(profile));
-			_left = ImageIO.read(new File(left));
-			_right = ImageIO.read(new File(right));
-			_up = ImageIO.read(new File(up));
-			_down = ImageIO.read(new File(down));
-			_currentImage = _down;
-		} catch(IOException e) {
-			System.out.println("Bad file path!");
-		}
-		
+
+		_profile = dt.importImage(profile);
+		_left = dt.importImage(left);
+		_right = dt.importImage(right);
+		_up = dt.importImage(up);
+		_down = dt.importImage(down);
+		_currentImage = _down;
+
 		this.setSize(_down.getWidth(), _down.getHeight());
 		int overflow = 0;
 		if(_down.getWidth() - Tile.TILE_SIZE <= 25.0)
@@ -124,23 +120,23 @@ public abstract class Character extends Rectangle{
 		_floatTimer = new FloatTimer(container);
 		this.startHovering();
 	}
-	
+
 	private class FloatTimer extends Timer {
-		
+
 		private FloatListener _listener;
-		
+
 		public FloatTimer(JPanel container) {
 			super(75, null);
 			_listener = new FloatListener(this, container);
 			this.addActionListener(_listener);
 		}
-		
+
 		public void reset() {
 			Character.this.setLocation(Character.this.getX(), Character.this.getY() - _listener.getOffset());
 		}
 
 		private class FloatListener implements java.awt.event.ActionListener {
-			
+
 			private Timer _timer;
 			private int _cnt;
 			private JPanel _container;
@@ -152,57 +148,57 @@ public abstract class Character extends Rectangle{
 				_cnt = 0;
 				_offset = 0;
 			}
-			
+
 			public float getOffset() {
 				_cnt = 0;
 				return _offset;
 			}
 
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				
+
 				_cnt = (_cnt + 1) % 8;
-				
+
 				switch(_cnt) {
-				
-					case 0:
-						Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1.5);
-						_offset += 1.5;
-						break;
-					case 1:
-						Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1);
-						_offset += 1;
-						break;
-					case 2:
-						Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1);
-						_offset += 1;
-						break;
-					case 3:
-						Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1);
-						_offset += 1;
-						break;
-					case 4:
-						Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1);
-						_offset -= 1;
-						break;
-					case 5:
-						Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1);
-						_offset -= 1;
-						break;
-					case 6:
-						Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1);
-						_offset -= 1;
-						break;
-					case 7:
-						Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1.5);
-						_offset -= 1.5;
-						break;
+
+				case 0:
+					Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1.5);
+					_offset += 1.5;
+					break;
+				case 1:
+					Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1);
+					_offset += 1;
+					break;
+				case 2:
+					Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1);
+					_offset += 1;
+					break;
+				case 3:
+					Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1);
+					_offset += 1;
+					break;
+				case 4:
+					Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1);
+					_offset -= 1;
+					break;
+				case 5:
+					Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1);
+					_offset -= 1;
+					break;
+				case 6:
+					Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1);
+					_offset -= 1;
+					break;
+				case 7:
+					Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1.5);
+					_offset -= 1.5;
+					break;
 				}
-				
+
 				_container.repaint();
 			}
 		}
 	}
-	
+
 	/**
 	 * moves the character to the given tile provided that it is valid to move to that tile
 	 * @param t the desired tile to move the character to
@@ -230,18 +226,32 @@ public abstract class Character extends Rectangle{
 		_isAnimating = true;
 		mt.start();
 	}
-	
+
 	private class MoveTimer extends Timer {
-			
-			private int _deltaX;
-			private int _deltaY;
-			
-			public MoveTimer(JPanel container, int deltaX, int deltaY) {
-				super(50, null);
-				_deltaX = deltaX;
-				_deltaY = deltaY;
-				this.addActionListener(new MoveListener(this, container));
+
+		private int _deltaX;
+		private int _deltaY;
+
+		public MoveTimer(JPanel container, int deltaX, int deltaY) {
+			super(50, null);
+			_deltaX = deltaX;
+			_deltaY = deltaY;
+			this.addActionListener(new MoveListener(this, container));
+		}
+
+		private class MoveListener implements java.awt.event.ActionListener {
+
+			private Timer _timer;
+			private int _cnt;
+			private int _numSteps;
+			private JPanel _container;
+
+			public MoveListener (Timer t, JPanel container) {
+				_container = container;
+				_timer = t;
+				_cnt = 0;
 			}
+<<<<<<< HEAD
 			
 			private class MoveListener implements java.awt.event.ActionListener {
 				
@@ -272,31 +282,49 @@ public abstract class Character extends Rectangle{
 					}
 					
 					_container.repaint();
+=======
+
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+
+				Character.this.setLocation((Character.this.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), Character.this.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
+				_container.repaint();
+
+				_cnt+=1;
+
+				/* if we've incremented numSteps times, then we should stop */
+				/* otherwise, continue incrementing */
+				if (_cnt == _numSteps) {
+					_timer.stop();
+					Character.this._isAnimating = false;
+>>>>>>> 67b4e04bb31334e57b91edcd8ce02e7e36bd9604
 				}
+
+				_container.repaint();
 			}
 		}
-	
+	}
+
 	/**
 	 * Generates a Random Character, simple for now, perhaps random statistics in the future
 	 */
-	public static Character generateRandomCharacter(GameScreen gs, double tileX, double tileY){
+	public static Character generateRandomCharacter(DoodleTactics dt, GameScreen gs, double tileX, double tileY){
 		Random r = new Random();
 		String begin = "src/graphics/characters/";
 		switch(r.nextInt(4)){
 		case 0:
-			return new Archer(gs, begin + "pokeball.png",begin + "knight_left.png",begin + "knight_right.png",begin + "knight_back.png",begin + "knight_front.png","RandomEnemy",tileX,tileY);
+			return new Archer(dt,gs, begin + "pokeball.png",begin + "knight_left.png",begin + "knight_right.png",begin + "knight_back.png",begin + "knight_front.png","RandomEnemy",tileX,tileY);
 		case 1:
-			return new Warrior(gs, begin + "pokeball.png",begin + "warrior_left_color.png",begin + "warrior_right_color.png",begin + "warrior_back_color.png",begin + "warrior_front_color.png","RandomEnemy",tileX,tileY);
+			return new Warrior(dt,gs, begin + "pokeball.png",begin + "warrior_left_color.png",begin + "warrior_right_color.png",begin + "warrior_back_color.png",begin + "warrior_front_color.png","RandomEnemy",tileX,tileY);
 		case 2:
-			return new Mage(gs, begin + "pokeball.png",begin + "mage_left.png",begin + "mage_right.png",begin + "mage_back.png",begin + "mage_front.png","RandomEnemy",tileX,tileY);
+			return new Mage(dt,gs, begin + "pokeball.png",begin + "mage_left.png",begin + "mage_right.png",begin + "mage_back.png",begin + "mage_front.png","RandomEnemy",tileX,tileY);
 		case 3:
-			return new Thief(gs, begin + "pokeball.png",begin + "thief_left.png",begin + "thief_right.png",begin + "thief_back.png",begin + "thief_front.png","RandomEnemy",tileX,tileY);
+			return new Thief(dt,gs, begin + "pokeball.png",begin + "thief_left.png",begin + "thief_right.png",begin + "thief_back.png",begin + "thief_front.png","RandomEnemy",tileX,tileY);
 		default:
 			System.out.println("Character Generator failed!");
 			return null;
 		}
 	}
-	
+
 	/**
 	 * getters and setters
 	 */
@@ -331,15 +359,15 @@ public abstract class Character extends Rectangle{
 	public Shield getShield(){
 		return _shield;
 	}
-	
+
 	public Footgear getFootgear(){
 		return _footgear;
 	}
-	
+
 	public boolean isAnimating() {
 		return _isAnimating;
 	}
-	
+
 	/**
 	 * 
 	 * @return the Direction that the character is currently facing
@@ -354,7 +382,7 @@ public abstract class Character extends Rectangle{
 		else
 			return CharacterDirection.DOWN;
 	}
-	
+
 	/**
 	 * Sets the Character to the input direction
 	 */
@@ -374,27 +402,27 @@ public abstract class Character extends Rectangle{
 			break;
 		}
 	}
-	
+
 	@Override
 	public int getPaintPriority(){
 		return (int) this.getY();
 	}
-	
+
 	/**
 	 * @return whether or not the Character has dialogue
 	 */
-/*	public boolean canConverse(){
+	/*	public boolean canConverse(){
 		return _dialogue == null;
 	}*/
-	
+
 	/**
 	 * @return the Dialogue Event for the Character
 	 * Guaranteed to be non-null ONLY if canConverse() returns true
 	 */
-//	public Dialogue converse(){
-//		return _dialogue;
-//	}
-	
+	//	public Dialogue converse(){
+	//		return _dialogue;
+	//	}
+
 	/**
 	 * Initializes Current Stats to Base Stats
 	 */
@@ -484,7 +512,7 @@ public abstract class Character extends Rectangle{
 		_equipped = w;
 		return old;
 	}
-	
+
 	/**
 	 * Swaps the current Footgear for  new one
 	 * @param f - Footgear to add
@@ -557,7 +585,7 @@ public abstract class Character extends Rectangle{
 		else
 			return 1;
 	}
-	
+
 	public int getMaxAttackRange() {
 		if (_equipped != null)
 			return _equipped.getMaxAttackRange();
@@ -571,7 +599,7 @@ public abstract class Character extends Rectangle{
 	public void startHovering() {
 		_floatTimer.start();
 	}
-	
+
 	/**
 	 * tells the character to stop hovering by stopping its internal timer
 	 */
@@ -579,7 +607,7 @@ public abstract class Character extends Rectangle{
 		_floatTimer.stop();
 		_floatTimer.reset();
 	}
-	
+
 	/**
 	 * paintProfile
 	 * @author jeshapir
@@ -623,24 +651,24 @@ public abstract class Character extends Rectangle{
 	public void setDown(){
 		_currentImage = _down;
 	}
-	
+
 	/**
 	 * accessor method for the current image
 	 * @return the current image on the game map
 	 */
-	
+
 	public BufferedImage getImage() {
 		return _currentImage;
 	}
-	
+
 	public BufferedImage getProfileImage() {
 		return _profile;
 	}
-	
+
 	public BufferedImage getDownImage() {
 		return _down;
 	}
-	
+
 	public BufferedImage getRightImage() {
 		return _right;
 	}
@@ -702,14 +730,14 @@ public abstract class Character extends Rectangle{
 
 		return true;
 	}
-	
+
 	@Override 
 	public void paint(java.awt.Graphics2D brush, BufferedImage img) {
 		brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		super.paint(brush,img);
 		brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 	}
-	
+
 	/**
 	 * @return the combat controller this unit is affiliated with
 	 * @author rroelke
@@ -717,7 +745,7 @@ public abstract class Character extends Rectangle{
 	public CombatController getAffiliation() {
 		return _affiliation;
 	}
-	
+
 	/**
 	 * affiliates the character with the given combat controller
 	 * @author rroelke
@@ -725,7 +753,7 @@ public abstract class Character extends Rectangle{
 	public void affiliate(CombatController aff) {
 		_affiliation = aff;
 	}
-	
+
 	public HashMap<Integer, Item> getInventory() {
 		return _inventory;
 	}
@@ -754,18 +782,18 @@ public abstract class Character extends Rectangle{
 			System.out.println("Shield: " + _shield._id);
 		if(_cuirass != null)
 			System.out.println("Cuirass: " + _cuirass._id);
-//		if(_inventory.size() > 0)
-//			System.out.println("inventory:");
-//		for(Entry<Integer, Item> entry : _inventory.entrySet())
-//				System.out.println(entry.getValue()._id);
+		//		if(_inventory.size() > 0)
+		//			System.out.println("inventory:");
+		//		for(Entry<Integer, Item> entry : _inventory.entrySet())
+		//				System.out.println(entry.getValue()._id);
 		System.out.println("-------------------");
 
 	}
-	
+
 	public int getCapacity() {
 		return _capacity;
 	}
-	
+
 	@Override
 	public void setLocation(double x, double y){
 		super.setLocation(x, y);
@@ -776,7 +804,7 @@ public abstract class Character extends Rectangle{
 		_affiliation = combatControl;
 	}
 
-/*	public static void testPreSerialize(){
+	/*	public static void testPreSerialize(){
 		try{
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			System.out.println("Character Demo:");
@@ -807,7 +835,7 @@ public abstract class Character extends Rectangle{
 			}
 			br.readLine();
 			katniss.printStats();
-			
+
 			//Battles
 			System.out.println("Battle Simulation");
 			br.readLine();
@@ -816,7 +844,7 @@ public abstract class Character extends Rectangle{
 			jace.printStats(); 
 			sebastian.printStats();
 			br.readLine();
-			
+
 			jace.attack(sebastian);
 			br.readLine();
 			System.out.println("Suppose Sebastian takes 10 damage");
@@ -829,7 +857,7 @@ public abstract class Character extends Rectangle{
 			jace.updateHP(-5);
 			jace.printStats();
 			br.readLine();
-			
+
 			//Items
 			System.out.println("Items--Equipment");
 			Footgear f = new Footgear();
@@ -837,41 +865,41 @@ public abstract class Character extends Rectangle{
 			br.read();
 			f.exert(sebastian);
 			sebastian.printStats();
-			
+
 			Shield s = new Shield();
 			System.out.println("Shield " + s._id + "  added to Jace");
 			br.read();
 			s.exert(jace);
 			jace.printStats();
-			
+
 			Cuirass c = new Cuirass();
 			System.out.println("Cuirass " + c._id + " added to Jace");
 			br.read();
 			c.exert(jace);
 			jace.printStats();
 			br.readLine();
-			
+
 			Axe a = new Axe();
 			System.out.println("Sebastian takes an Axe " + a._id);
 			a.exert(sebastian);
 			br.readLine();
 			sebastian.printStats();
 			br.readLine();
-			
+
 			Bow b = new Bow();
 			System.out.println("Sebastian decides he prefers a Bow " + b._id);
 			br.readLine();
 			b.exert(sebastian);
 			sebastian.printStats();
 			br.readLine();
-			
+
 			Staff staff = new Staff();
 			System.out.println("Jace takes a Staff " + staff._id);
 			br.readLine();
 			staff.exert(jace);
 			jace.printStats();
 			br.readLine();
-			
+
 			System.out.println("\n\nItems-- non-Equipment");
 			HealthPotion hp = new HealthPotion();
 			System.out.println("Sebastian's Health is pretty low, luckily he found a Health Potion " + hp._id);
@@ -881,7 +909,7 @@ public abstract class Character extends Rectangle{
 			hp.exert(sebastian);
 			sebastian.printStats();
 			br.readLine();
-			
+
 			System.out.println("Now we want to save the game...");
 			br.readLine();
 			jace.serialize("src/character/" + jace._name + jace._id);
@@ -899,8 +927,8 @@ public abstract class Character extends Rectangle{
 		Mage sebastian =  (Mage) restore("src/character/Sebastian2");
 		jace.printStats();
 		sebastian.printStats();
-		
-		
+
+
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			br.readLine();
@@ -924,8 +952,8 @@ public abstract class Character extends Rectangle{
 			e.printStackTrace();
 		}
 	}	*/
-	
-/*	public static void main(String[] args){
+
+	/*	public static void main(String[] args){
 		testPreSerialize();
 		testPostSerialize();
 	}	*/

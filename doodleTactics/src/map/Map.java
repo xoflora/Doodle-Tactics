@@ -181,22 +181,22 @@ public class Map implements Serializable {
 
 					// check which type of character toAdd is
 					if (splitLine[1].equals("Archer")) { 
-						toAdd = new Archer(container, splitLine[3],
+						toAdd = new Archer(dt,container, splitLine[3],
 								splitLine[4], splitLine[5], splitLine[6],
 								splitLine[7], splitLine[2], xLoc,yLoc);
 
 					} else if (splitLine[1].equals("Mage")) {
-						toAdd = new Mage(container, splitLine[3], splitLine[4],
+						toAdd = new Mage(dt,container, splitLine[3], splitLine[4],
 								splitLine[5], splitLine[6], splitLine[7],
 								splitLine[2], xLoc,yLoc);
 
 					} else if (splitLine[1].equals("Thief")) {
-						toAdd = new Thief(container, splitLine[3],
+						toAdd = new Thief(dt,container, splitLine[3],
 								splitLine[4], splitLine[5], splitLine[6],
 								splitLine[7], splitLine[2], xLoc,yLoc);
 
 					} else if (splitLine[1].equals("Warrior")) {
-						toAdd = new Warrior(container, splitLine[3],
+						toAdd = new Warrior(dt,container, splitLine[3],
 								splitLine[4], splitLine[5], splitLine[6],
 								splitLine[7],  splitLine[2], xLoc,yLoc);
 					} else
@@ -842,7 +842,7 @@ public class Map implements Serializable {
 				double yLoc = Tile.TILE_SIZE * (t.y() - DEFAULT_YREF);
 				System.out.println("**XLOC" + t.x() + " YLOC: " + t.y());
 				int overflow = 0;
-				Character enemy = Character.generateRandomCharacter(_dt.getGameScreen(),xLoc,yLoc);
+				Character enemy = Character.generateRandomCharacter(_dt,_dt.getGameScreen(),xLoc,yLoc);
 				
 				/*if(enemy.getDownImage().getWidth() - Tile.TILE_SIZE <= 25.0)
 					overflow = (enemy.getDownImage().getWidth() - Tile.TILE_SIZE) / 2;

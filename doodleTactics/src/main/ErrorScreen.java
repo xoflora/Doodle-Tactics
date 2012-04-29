@@ -9,56 +9,49 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 import controller.ErrorScreenController;
 
 public class ErrorScreen extends Screen<ErrorScreenController> {
-	
+
 	private MenuItem _title;
 	private MenuItem _quit;
 
 	public ErrorScreen(DoodleTactics dt, String message) {
 		super(dt);
 
-		try {
-			setBackground(Color.GRAY);
+		setBackground(Color.GRAY);
 
-			BufferedImage titleImage = ImageIO.read(new File("src/graphics/menu/title.png"));
+		BufferedImage titleImage = dt.importImage("src/graphics/menu/title.png");
 
-			_title = new MenuItem(this, titleImage, titleImage, dt);
+		_title = new MenuItem(this, titleImage, titleImage, dt);
 
-			_quit = new MenuItem(this, ImageIO.read(new File("src/graphics/menu/quit.png")),
-					ImageIO.read(new File("src/graphics/menu/quit_hovered.png")), dt);
-			
-			_title.setSize(_title.getImage().getWidth(), _title.getImage().getHeight());
-			_quit.setSize(_quit.getImage().getWidth(), _quit.getImage().getHeight());
-			
-			_title.setLocation(((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _title.getImage().getWidth())/2, 50);
-			_quit.setLocation(80, 600);
-			
-			
-			
-			_title.setVisible(true);
-			_quit.setVisible(true);
-			
-			setVisible(true);
+		_quit = new MenuItem(this, dt.importImage("src/graphics/menu/quit.png"),
+				dt.importImage("src/graphics/menu/quit_hovered.png"), dt);
 
-		} catch(IOException e) {
-			System.out.println("Fatal error.");
-			System.exit(1);
-		}	
+		_title.setSize(_title.getImage().getWidth(), _title.getImage().getHeight());
+		_quit.setSize(_quit.getImage().getWidth(), _quit.getImage().getHeight());
+
+		_title.setLocation(((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _title.getImage().getWidth())/2, 50);
+		_quit.setLocation(80, 600);
+
+
+
+		_title.setVisible(true);
+		_quit.setVisible(true);
+
+		setVisible(true);
+
 	}
 
 	@Override
 	protected ErrorScreenController defaultController() {
 		return new ErrorScreenController(_dt, this);
 	}
-	
+
 	public MenuItem checkContains(java.awt.Point point) {
 		_title.setDefault();
 		_quit.setDefault();
-		
+
 		if (_title.contains(point)) {
 			_title.setHovered();
 			repaint();
@@ -69,18 +62,18 @@ public class ErrorScreen extends Screen<ErrorScreenController> {
 			repaint();
 			return _quit;
 		}
-		
+
 		return null;
 	}
-	
+
 	@Override
 	public void paint(Graphics brush) {
 		super.paint(brush);
 		Graphics2D g = (Graphics2D) brush;
-		
+
 		_title.setSize(_title.getImage().getWidth(), _title.getImage().getHeight());
 		_quit.setSize(_quit.getImage().getWidth(), _quit.getImage().getHeight());
-		
+
 		_title.paint(g, _title.getImage());
 		_quit.paint(g, _quit.getImage());
 	}

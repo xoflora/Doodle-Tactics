@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import main.DoodleTactics;
@@ -39,6 +38,9 @@ public class CombatOptionWindow extends MenuItem {
 	private static final int MENU_PRIORITY = 3;
 	private static final int OPTION_PRIORITY = 50;
 	
+	private static final int HORZ_BUFFER = 4;
+	private static final int VERT_BUFFER = 3;
+	
 	private class CombatOption extends MenuItem {
 		
 		private PlayerCombatController _source;
@@ -47,7 +49,6 @@ public class CombatOptionWindow extends MenuItem {
 		public CombatOption(JPanel container, BufferedImage defltPath, BufferedImage hoveredPath,
 				DoodleTactics dt, PlayerCombatController source, ActionType action) {
 			super(container, defltPath, hoveredPath, dt, OPTION_PRIORITY);
-			System.out.println(_paintPriority);
 			_source = source;
 			_action = action;
 		}
@@ -66,37 +67,39 @@ public class CombatOptionWindow extends MenuItem {
 	public CombatOptionWindow(DoodleTactics dt, GameScreen container, boolean special, boolean item, boolean talk,
 			PlayerCombatController source) throws IOException {
 		
-		super(container, ImageIO.read(new File(MENU_IMAGE_PATH)),
-				ImageIO.read(new File(MENU_IMAGE_PATH)), dt, MENU_PRIORITY);
-		System.out.println(_paintPriority);
+		super(container, dt.importImage(MENU_IMAGE_PATH),
+				dt.importImage(MENU_IMAGE_PATH), dt, MENU_PRIORITY);
 		_options = new ArrayList<CombatOption>();
 		
 		if (special) {
-			_options.add(new CombatOption(container, ImageIO.read(new File(SPECIAL_IMAGE)),
-					ImageIO.read(new File(SPECIAL_HOVER)), dt, source, ActionType.SPECIAL));
+			_options.add(new CombatOption(container, dt.importImage(SPECIAL_IMAGE),
+					dt.importImage(SPECIAL_HOVER), dt, source, ActionType.SPECIAL));
 		}
 		if (item) {
-			_options.add(new CombatOption(container, ImageIO.read(new File(ITEM_IMAGE)),
-					ImageIO.read(new File(ITEM_HOVER)), dt, source, ActionType.ITEM));
+			_options.add(new CombatOption(container, dt.importImage(ITEM_IMAGE),
+					dt.importImage(ITEM_HOVER), dt, source, ActionType.ITEM));
 		}
 		if (talk) {
-			_options.add(new CombatOption(container, ImageIO.read(new File(TALK_IMAGE)),
-					ImageIO.read(new File(TALK_HOVER)), dt, source, ActionType.TALK));
+			_options.add(new CombatOption(container, dt.importImage(TALK_IMAGE),
+					dt.importImage(TALK_HOVER), dt, source, ActionType.TALK));
 		}
-		_options.add(new CombatOption(container, ImageIO.read(new File(WAIT_IMAGE)),
-				ImageIO.read(new File(WAIT_HOVER)), dt, source, ActionType.WAIT));
+		_options.add(new CombatOption(container, dt.importImage(WAIT_IMAGE),
+				dt.importImage(WAIT_HOVER), dt, source, ActionType.WAIT));
 		
 		_gameScreen = container;
 	}
 	
+	/**
+	 * adds the option window and its components to the game screen drawing queue
+	 */
 	public void addToDrawingQueue() {
 		_gameScreen.addMenuItem(this);
 		
-		double y = getY();
+		double y = getY() + VERT_BUFFER;
 		for (MenuItem m : _options) {
 			_gameScreen.addMenuItem(m);
-			m.setLocation(getX(), y);
-			y += m.getImage().getHeight();
+			m.setLocation(getX() + HORZ_BUFFER, y);
+			y += m.getImage().getHeight() + VERT_BUFFER;
 			m.setVisible(true);
 		}
 		
@@ -104,6 +107,9 @@ public class CombatOptionWindow extends MenuItem {
 		setSize(getImage().getWidth(), y - getY());
 	}
 	
+	/**
+	 * removes the option window and its components from the game screen drawing queue
+	 */
 	public void removeFromDrawingQueue() {
 		for (MenuItem m : _options) {
 			_gameScreen.removeMenuItem(m);

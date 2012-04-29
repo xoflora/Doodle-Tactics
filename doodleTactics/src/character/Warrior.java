@@ -6,8 +6,8 @@ import main.DoodleTactics;
 
 public class Warrior extends Character{
 
-	public Warrior(JPanel container,  String profile, String left, String right, String up, String down, String name, double x, double y){
-		super(container, profile, left, right, up, down, name,x,y);
+	public Warrior(DoodleTactics dt, JPanel container,  String profile, String left, String right, String up, String down, String name, double x, double y){
+		super(dt,container, profile, left, right, up, down, name,x,y);
 		
 		//set base stats
 		_BASE_STATS[STRENGTH] = 8;
