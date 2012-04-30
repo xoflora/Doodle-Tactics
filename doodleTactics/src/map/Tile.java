@@ -63,11 +63,11 @@ public class Tile extends graphics.Rectangle {
 	private int _x;
 	private int _y;
 	
-	private BufferedImage _image;
+	private transient BufferedImage _image;
 	private float _opacity;
 	private Color _overlay;
 	
-	private Event _event;
+	private transient Event _event;
 	private Character _character;
 	private String _warpFilePath;
 	

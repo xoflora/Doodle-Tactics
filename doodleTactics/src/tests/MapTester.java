@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import org.junit.*;
 
+import main.DoodleTactics;
 import map.*;
 /**
  * 
@@ -169,7 +170,21 @@ public class MapTester {
 		}
     }	*/
     
-  
+    @Test
+    /**
+     * Tests Map Serialization
+     */
+    public void testSerialization(){
+    	DoodleTactics dt = new DoodleTactics();
+    	try {
+    		String filepath = "src/tests/data/MapSerialized.ser";
+			Map m = Map.map(dt, dt.getGameScreen(), "src/tests/data/testMapDemo");
+			m.serialize(filepath);
+		} catch (InvalidMapException e) {
+			System.out.println(e.getMessage());
+		}
+    }
+    
     @Test
     /**
      * tests the map's distance estimation
