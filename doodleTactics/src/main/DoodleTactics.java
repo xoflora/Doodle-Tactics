@@ -49,13 +49,12 @@ public class DoodleTactics extends JFrame {
 		super("Doodle Tactics");
 		this.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
 		this.setSize(TILE_COLS*map.Tile.TILE_SIZE+13,TILE_ROWS*map.Tile.TILE_SIZE+33);
+		_screens = new Stack<Screen<?>>();
 		_allChars = new HashMap<String,Character>();
 		_images = new HashMap<String,BufferedImage>();
-
 		_gameMenu = new GameMenuScreen(this);
 		_game = new GameScreen(this);
 		_mainMenu = new MainMenuScreen(this);
-		_screens = new Stack<Screen<?>>();
 		_party = new ArrayList<Character>();
 		this.changeScreens(_mainMenu);
 		this.setFocusable(false);
