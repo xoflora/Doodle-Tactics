@@ -196,7 +196,7 @@ public class Map implements Serializable {
 					double xLoc = Tile.TILE_SIZE * (xTile  - main.getTileX());
 					double yLoc = Tile.TILE_SIZE * (yTile - main.getTileY());
 					tiles[xTile][yTile].setTilePermissions((splitLine[4]).charAt(0));
-					Terrain t = new Terrain(container, splitLine[1], xLoc, yLoc);
+					Terrain t = new Terrain(dt,container, splitLine[1], xLoc, yLoc);
 					terrainList.add(t);
 
 					// Character Case

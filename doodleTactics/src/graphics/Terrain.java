@@ -12,8 +12,9 @@ public class Terrain extends Rectangle{
 	private transient BufferedImage _img;
 	protected transient DoodleTactics _dt;
 	
-	public Terrain(JPanel container, String path,double x, double y) {
+	public Terrain(DoodleTactics dt, JPanel container, String path,double x, double y) {
 		super(container);
+		_dt = dt;
 		parseImage(path);
 		this.setSize(_img.getWidth(), _img.getHeight());
 		this.setVisible(true);
