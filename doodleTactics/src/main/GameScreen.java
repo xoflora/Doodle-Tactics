@@ -70,13 +70,13 @@ public class GameScreen extends Screen<GameScreenController> {
 	private PriorityQueue<MenuItem> _menuQueue;
 	private List<Terrain> _terrainToPaint;
 	private HashMap<String, Map> _mapCache; // a hash map representing the cache of all of the maps in the game, maps file paths to maps
-	
+
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
 		this.setBackground(java.awt.Color.BLACK);
 		MAP_WIDTH = 20;
 		MAP_HEIGHT = 20;
-		
+
 		_currentCharacter = parseMainChar("src/tests/data/MainCharacterDemo");
 
 		//	_gameMenuController = _dt.getGameMenuScreen().getController();
@@ -86,7 +86,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		//select a tile to go at the top left of the screen
 		_isAnimating = false;
 		_mapCache = new HashMap<String, Map>();
-		
+
 		this.repaint();
 	}
 
@@ -114,7 +114,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * sets the current map of the game screen to the map specified by the path.
 	 * if the path was already in the cache, it loads the map from there, otherwise
@@ -142,8 +142,8 @@ public class GameScreen extends Screen<GameScreenController> {
 				prevMap.setPrevYRef(_yRef);
 				//Remove references to previous randomBattle
 			}
-			
-			
+
+
 			_currMap = map;
 			_xRef = _currMap.getPrevXRef();
 			_yRef = _currMap.getPrevYRef();
@@ -223,9 +223,9 @@ public class GameScreen extends Screen<GameScreenController> {
 
 				/* if the camera is panning, then all of the characters including
 				 * the character in control should move */
-//				if(_isPan) {
-//					_currentCharacter.setLocation((_currentCharacter.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), _currentCharacter.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
-//				}
+				//				if(_isPan) {
+				//					_currentCharacter.setLocation((_currentCharacter.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), _currentCharacter.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
+				//				}
 
 				for(Character c : charsToPaint) {
 					c.setLocation((c.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), c.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
@@ -272,7 +272,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	public MainCharacter getMainChar() {
 		return _currentCharacter;
 	}
-	
+
 	/**
 	 * sets the given character as the focus of the camera
 	 * @param c the character to center the camera around
@@ -280,7 +280,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	public void centerCamera(Character c) {
 		int charX = (int) c.getX() / Tile.TILE_SIZE;
 		int charY = (int) c.getY() / Tile.TILE_SIZE;
-		
+
 		_xRef = charX - 10;
 		_yRef = charY - 8;
 	}
@@ -291,7 +291,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	}
 
 	public void mapUpdate(int x, int y) {
-		
+
 		/* if in the bounds of the map, specifically in relation to the main character,
 		 * update the screen reference points and animate the map */
 		System.out.println("--------MAP UPDATE---------");
@@ -307,7 +307,7 @@ public class GameScreen extends Screen<GameScreenController> {
 
 			_xRef += x;
 			_yRef += y;
-			
+
 			System.out.println("xRef: " + _xRef);
 			System.out.println("YRef: " + _yRef);	
 			System.out.println("--------END MAP UPDATE---------");
@@ -414,20 +414,20 @@ public class GameScreen extends Screen<GameScreenController> {
 		super.paintComponent(g);
 
 		if(_currMap != null) {
-		
+
 			// paint all of the tiles first
 			for(int i = 0; i < MAP_WIDTH; i++) {
 				for(int j = 0; j < MAP_HEIGHT; j++) {
 					// check that the given tile is within the bounds before painting it 
 					//if((i < _xRef + 22 && i >= _xRef - 1) && (j < (_yRef + 18) && j >= (_yRef - 1))) {
-						_currMap.getTile(i,j).paint(g, _currMap.getTile(i,j).getImage());
+					_currMap.getTile(i,j).paint(g, _currMap.getTile(i,j).getImage());
 					//}
 				}
 			}
-	
+
 			// add all Characters to PriorityQueue
 			List<Character> charsToPaint = this.getController().getCharactersToDisplay();
-	
+
 			//	System.out.println("====print characters====");
 			for(Character c : charsToPaint) {
 				//		System.out.println("name: " + c.getName());
@@ -435,19 +435,19 @@ public class GameScreen extends Screen<GameScreenController> {
 				//int overflow = (c.getImage().getWidth() - Tile.TILE_SIZE) / 2;
 				//c.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
 			}
-	
+
 			// add all Terrain to PriorityQueue
 			for(Terrain t : _terrainToPaint){
 				//		System.out.println("Priority : " + (t.getPaintPriority()));
 				//		System.out.println("Adding Terrain");
 				_characterTerrainQueue.add(t);
 			}
-	
+
 			// add the main character to the queue
 			_characterTerrainQueue.add(_currentCharacter);
-	
+
 			//	System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
-	
+
 			// paint all characters and terrains
 			while(!_characterTerrainQueue.isEmpty()) {
 				Rectangle toPaint = _characterTerrainQueue.poll();
@@ -455,14 +455,14 @@ public class GameScreen extends Screen<GameScreenController> {
 				toPaint.setVisible(true);
 				toPaint.paint(g, toPaint.getImage());				
 			}
-	
+
 			//print all the menu items
 			List<MenuItem> items = new LinkedList<MenuItem>();
 			synchronized (_menuQueue) {
 				while (!_menuQueue.isEmpty()) {
 					items.add(_menuQueue.poll());
 				}
-	
+
 				for (MenuItem m : items) {
 					m.paint(g, m.getImage());
 					_menuQueue.add(m);
@@ -470,7 +470,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			}
 
 		}
-		
+
 		//		if (_currentCharacter != null) {
 		//			int overflow = (_currentCharacter.getImage().getWidth() - Tile.TILE_SIZE) / 2;
 		//			_currentCharacter.setLocation(10*Tile.TILE_SIZE-overflow, 8*Tile.TILE_SIZE);
@@ -568,29 +568,37 @@ public class GameScreen extends Screen<GameScreenController> {
 	public void addCharacter(Character c) {
 		_currMap.getCharactersToDisplay().add(c);
 	}
-	
+
 	/**
 	 * removes a character from the gamescreen for display
 	 */
 	public void removeCharacter(Character c) {
 		_currMap.getCharactersToDisplay().remove(c);
 	}
-	
-	
+
+
 	public void saveGame(String filename){
 		System.out.println("Saving game!");
 		FileOutputStream fos;
 		ObjectOutputStream out;
+
+		//Store XRef and YRef
+		_currMap.setPrevXRef(_xRef);
+		_currMap.setPrevYRef(_yRef);
+
 		try {
 			fos = new FileOutputStream(filename);
 			out = new ObjectOutputStream(fos);
 			out.writeObject(_mapCache);
+			out.writeObject(_currMap);
+			out.writeInt(_xRef);
+			out.writeInt(_yRef);
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void loadGame(String filepath){
 		System.out.println("Loading game!");
 		FileInputStream fis;
@@ -599,7 +607,17 @@ public class GameScreen extends Screen<GameScreenController> {
 			fis = new FileInputStream(filepath);
 			in = new ObjectInputStream(fis);
 			_mapCache =  (HashMap<String,Map>) in.readObject();
+			_currMap = (Map) in.readObject();
+			_xRef =in.readInt();
+			_yRef = in.readInt();
+			for(String path : _mapCache.keySet()){
+				Map m = _mapCache.get(path);
+				m.load(_dt);
+			}
+			
 			in.close();
+			
+			_terrainToPaint = _currMap.getTerrain();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {

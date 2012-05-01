@@ -40,7 +40,7 @@ public class MainMenuScreen extends Screen<MainMenuController> {
 		_title = new MenuItem(this, titleD, titleD, dt);
 		_newGame = new ScreenChangeMenuItem(this, newGameD,newGameH, dt, dt.getGameScreen());
 
-		_continue = new MenuItem(this, continueD,continueH, dt);
+		_continue = new LoadGameMenuItem(this, continueD,continueH, dt);
 		_quit = new QuitMenuButton(this, quitD,quitH, dt);
 		_title.setLocation(((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _title.getImage().getWidth())/2, 50);
 		int offset = ((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - _newGame.getImage().getWidth())/2;

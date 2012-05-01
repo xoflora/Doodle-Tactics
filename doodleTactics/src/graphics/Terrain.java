@@ -11,11 +11,13 @@ public class Terrain extends Rectangle{
 
 	private transient BufferedImage _img;
 	protected transient DoodleTactics _dt;
+	String _imgPath;
 	
 	public Terrain(DoodleTactics dt, JPanel container, String path,double x, double y) {
 		super(container);
 		_dt = dt;
-		parseImage(path);
+		_imgPath = path;
+		parseImage();
 		this.setSize(_img.getWidth(), _img.getHeight());
 		this.setVisible(true);
 		int overflow = 0;
@@ -33,10 +35,18 @@ public class Terrain extends Rectangle{
 	}
 	
 	/**
+	 * Load image
+	 */
+	public void load(DoodleTactics dt){
+		_dt = dt;
+		parseImage();
+	}
+	
+	/**
 	 * parses an image
 	 */
-	public void parseImage(String path){
-		_img = _dt.importImage(path);
+	public void parseImage(){
+		_img = _dt.importImage(_imgPath);
 	}
 	
 	@Override

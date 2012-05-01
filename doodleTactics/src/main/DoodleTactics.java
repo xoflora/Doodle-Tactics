@@ -244,10 +244,11 @@ public class DoodleTactics extends JFrame {
 				return img;
 			} catch (IOException e) {
 				error("File " + path + " could not be parsed.");
+				System.out.println("Returning Null");
+				return null;
+
 			}
 		}
-		System.out.println("Returning Null");
-		return null;
 	}
 	
 	/**
@@ -311,7 +312,6 @@ public class DoodleTactics extends JFrame {
 	 * indicates that an error has occurred and sets the game to an error screen
 	 */
 	public void error(String message) {
-		System.out.println("We're here");
 		changeScreens(new ErrorScreen(this, message));
 	}
 	

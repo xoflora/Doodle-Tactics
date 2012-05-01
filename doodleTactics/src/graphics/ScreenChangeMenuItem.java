@@ -24,6 +24,7 @@ public class ScreenChangeMenuItem extends MenuItem {
 	public void activate(int type) {		
 		_dt.changeScreens(_nextScreen);
 		_dt.getGameScreen().setMap("src/tests/data/testMapDemo");
+		_nextScreen.repaint();
 
 	}
 }
