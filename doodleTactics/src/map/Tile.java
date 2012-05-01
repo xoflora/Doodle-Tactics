@@ -10,6 +10,8 @@ import java.io.IOException;
 
 import javax.swing.JPanel;
 
+import main.DoodleTactics;
+
 import util.Util;
 
 import event.Dialogue;
@@ -64,6 +66,7 @@ public class Tile extends graphics.Rectangle {
 	private int _y;
 	
 	private transient BufferedImage _image;
+	private String _imgPath;
 	private float _opacity;
 	private Color _overlay;
 	
@@ -89,13 +92,13 @@ public class Tile extends graphics.Rectangle {
 	 * @param height
 	 * @param cost
 	 */
-	public Tile(JPanel container, BufferedImage img, int x, int y, int cost) 
+	public Tile(JPanel container, BufferedImage img, String imgPath, int x, int y, int cost) 
 			throws InvalidTileException {
 		super(container);
 		this.setSize(TILE_SIZE,TILE_SIZE);
 		
 		_image = img;
-				
+		_imgPath = imgPath;		
 		_canMove = new boolean[4];
 		_cost = cost;
 		_x = x;
@@ -244,11 +247,18 @@ public class Tile extends graphics.Rectangle {
 	 * @param tileString the string representing the tile
 	 * @return a new tile given by the string
 	 */
-	public static Tile tile(JPanel container,BufferedImage img, char permissions,
+	public static Tile tile(JPanel container,String imgPath, BufferedImage img, char permissions,
 			int x, int y, int cost) throws InvalidTileException {
-		Tile t = new Tile(container, img, x, y,cost);
+		Tile t = new Tile(container, img, imgPath, x, y,cost);
 		t.setTilePermissions(permissions);
 		return t;
+	}
+	
+	/**
+	 * Loads a tile (re-imports the image)
+	 */
+	public void load(DoodleTactics dt){
+		_image = dt.importImage(_imgPath);
 	}
 	
 	/**

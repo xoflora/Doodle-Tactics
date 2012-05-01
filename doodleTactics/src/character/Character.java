@@ -415,6 +415,7 @@ public abstract class Character extends Rectangle{
 		_right = dt.importImage(_rightFile);
 		_up = dt.importImage(_upFile);
 		_down = dt.importImage(_downFile);
+		_currentImage = _down;
 		
 		new FloatTimer(dt.getGameScreen());
 	}

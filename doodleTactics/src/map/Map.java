@@ -159,7 +159,8 @@ public class Map implements Serializable {
 				throw new InvalidMapException("(line 2) Incorrect amount of data");
 
 			String name = splitLine[0];
-			BufferedImage defaultImage = dt.importImage(splitLine[1]);
+			String defaultPath = splitLine[1];
+			BufferedImage defaultImage = dt.importImage(defaultPath);
 			String overflowPath = splitLine[2];
 
 			// parse the dimensions of the map
@@ -174,7 +175,7 @@ public class Map implements Serializable {
 			for (int x = 0; x < numX; x++) {
 				for (int y = 0; y < numY; y++) {
 					if (tiles[x][y] == null)
-						tiles[x][y] = Tile.tile(container, defaultImage, 'F', x,
+						tiles[x][y] = Tile.tile(container, defaultPath,defaultImage, 'F', x,
 								y, 1);
 				}
 			}
@@ -266,7 +267,7 @@ public class Map implements Serializable {
 					BufferedImage img = dt.importImage(splitLine[3]);
 
 
-					tiles[x][y] = Tile.tile(container, img,
+					tiles[x][y] = Tile.tile(container, splitLine[3],img,
 							splitLine[2].charAt(0), x, y, Integer
 							.parseInt(splitLine[4]));
 
@@ -340,6 +341,13 @@ public class Map implements Serializable {
 		for(Character c : _activeCharacters){
 			c.load(dt);
 		}
+		
+		for(int i=0; i<_map.length; i++)
+			for(int j=0; j<_map[0].length; j++)
+				_map[i][j].load(dt);
+		
+		for(Terrain t: _terrain)
+			t.load(_dt);
 	}
 
 	public String toString() {

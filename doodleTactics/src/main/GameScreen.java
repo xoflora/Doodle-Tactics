@@ -590,6 +590,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			fos = new FileOutputStream(filename);
 			out = new ObjectOutputStream(fos);
 			out.writeObject(_mapCache);
+			out.writeObject(_currMap);
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -604,12 +605,15 @@ public class GameScreen extends Screen<GameScreenController> {
 			fis = new FileInputStream(filepath);
 			in = new ObjectInputStream(fis);
 			_mapCache =  (HashMap<String,Map>) in.readObject();
+			_currMap = (Map) in.readObject();
 			for(String path : _mapCache.keySet()){
 				Map m = _mapCache.get(path);
 				m.load(_dt);
 			}
 			
 			in.close();
+			
+			_terrainToPaint = _currMap.getTerrain();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {

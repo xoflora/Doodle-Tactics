@@ -23,7 +23,7 @@ public class LoadGameMenuItem extends MenuItem{
 	@Override
 	public void activate(int type) {
 		_dt.getGameScreen().loadGame("src/tests/data/testSave");
-		_dt.setScreen(_dt.getGameScreen());
+		_dt.changeScreens(_dt.getGameScreen());
 		_dt.getGameScreen().repaint();
 		
 	}
