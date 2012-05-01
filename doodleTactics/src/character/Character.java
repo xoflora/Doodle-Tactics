@@ -81,12 +81,12 @@ public abstract class Character extends Rectangle{
 
 	private  CombatController _affiliation; //player/AI etc
 
-	private FloatTimer _floatTimer; // internal timer used to animate floating
+	private transient FloatTimer _floatTimer; // internal timer used to animate floating
 	private transient JPanel _container;
 	private boolean _isAnimating;
 	
-	private PathTimer _pathTimer;
-	private MoveTimer _moveTimer;
+	private transient PathTimer _pathTimer;
+	private transient MoveTimer _moveTimer;
 
 	public static enum CharacterDirection{
 		LEFT,RIGHT,UP,DOWN

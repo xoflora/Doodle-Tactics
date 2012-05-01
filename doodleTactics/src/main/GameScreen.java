@@ -577,10 +577,10 @@ public class GameScreen extends Screen<GameScreenController> {
 	}
 	
 	
-/*	public void saveGame(String filename){
+	public void saveGame(String filename){
 		System.out.println("Saving game!");
-		FileOutputStream fos = null;
-		ObjectOutputStream out = null;
+		FileOutputStream fos;
+		ObjectOutputStream out;
 		try {
 			fos = new FileOutputStream(filename);
 			out = new ObjectOutputStream(fos);
@@ -589,12 +589,12 @@ public class GameScreen extends Screen<GameScreenController> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}*/
+	}
 	
-/*	public void loadGame(String filepath){
+	public void loadGame(String filepath){
 		System.out.println("Loading game!");
-		FileInputStream fis = null;
-		ObjectInputStream in = null;
+		FileInputStream fis;
+		ObjectInputStream in;
 		try {
 			fis = new FileInputStream(filepath);
 			in = new ObjectInputStream(fis);
@@ -606,5 +606,5 @@ public class GameScreen extends Screen<GameScreenController> {
 			e.printStackTrace();
 		}
 
-	}*/
+	}
 }

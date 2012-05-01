@@ -67,12 +67,12 @@ public class Map implements Serializable {
 
 	private transient DoodleTactics _dt;
 	private transient BufferedImage _overflow;
-	private Tile[][] _map;
-	private LinkedList<Terrain> _terrain;
+	private transient Tile[][] _map;
+	private transient LinkedList<Terrain> _terrain;
 	private LinkedList<Character> _activeCharacters;
 	private MainCharacter _mainChar;
-	private Stack<Integer> _prevXRef;
-	private Stack<Integer> _prevYRef;
+	private  Stack<Integer> _prevXRef;
+	private  Stack<Integer> _prevYRef;
 	
 	/**
 	 * fields used to generate random battles;
