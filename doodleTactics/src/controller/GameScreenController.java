@@ -116,9 +116,8 @@ public abstract class GameScreenController extends Controller {
 					this.removeUnitStats();
 				
 					_unitStats = new UnitStatMenu(_gameScreen, _dt.importImage("src/graphics/menu/unit_stats_box.png"),
-							_dt.importImage("src/graphics/menu/unit_stats_box.png"), _dt, c);
+							_dt.importImage("src/graphics/menu/unit_stats_box_left.png"), _dt, c, false);
 					_gameScreen.addMenuItem(_unitStats);
-					_unitStats.setLocation(c.getX() + 40, c.getY() - 60);
 					_unitStats.setVisible(true);
 			} else {
 					this.removeUnitStats();

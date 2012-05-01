@@ -70,8 +70,8 @@ public class DoodleTactics extends JFrame {
 		try {
 			BufferedImage pot = importImage("src/graphics/items/donut.png");
 			HealthPotion potion = new HealthPotion(pot, 10);
-			_char1.addToInventory(potion);
 			potion.setDescription("Sup bro");
+			_char1.addToInventory(potion);
 			_char1.updateHP(-10);
 		} catch (ItemException e) {
 			e.printStackTrace();
@@ -79,8 +79,8 @@ public class DoodleTactics extends JFrame {
 		try {
 			BufferedImage pot2 = importImage("src/graphics/items/donut.png");
 			HealthPotion pot = new HealthPotion(pot2, 10);
-			_char1.addToInventory(pot);
 			pot.setDescription("This enchanted sprinkled doughnut heals your character for 10 HP.");
+			_char1.addToInventory(pot);
 		}  catch (ItemException e) {
 			e.printStackTrace();
 		}

@@ -48,14 +48,19 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private boolean _showingItemOptions, _beingHovered;
 	private unitsBoxListener _unitsBoxListener;
 	private int _itemOptBoxX, _itemOptBoxY, _numOptions;
+	private JLabel _selectedIcon;
 	private Item _selectedItem;
 	private Character _selectedChar;
-	private HashMap<JButton, Character> _buttonToChar;
+	private HashMap<optionButton, Character> _buttonToChar;
 	private ArrayList<optionButton> _buttonList;
-	private BufferedImage _charBoxImage, _infoBoxImage;
+	private BufferedImage _charBoxImage, _infoBoxImage, _listItem, _listItemHovered;
+	
+	private JLayeredPane _layers;
+	private buttonPanel _buttons;
+	
+	private int SCROLLBOX_X, SCROLLBOX_Y;
 	
 	public GameMenuScreen(DoodleTactics dt) {
-		
 		super(dt);
 		this.setBackground(java.awt.Color.DARK_GRAY);
 		this.setVisible(true);
@@ -63,11 +68,11 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_dt = dt;
 		_labelToCharacter = new HashMap<JLabel, Character>();
 		_labelToItem = new HashMap<JLabel, Item>();
-		System.out.println("set to false");
+//		System.out.println("set to false");
 		_showingItemOptions = false;
 		_beingHovered = false;
 		_buttonList = new ArrayList<optionButton>();
-		_buttonToChar = new HashMap<JButton, Character>();
+		_buttonToChar = new HashMap<optionButton, Character>();
 		BufferedImage unitsD = _dt.importImage("src/graphics/menu/units.png");
 		BufferedImage unitsH = _dt.importImage("src/graphics/menu/units_hovered.png");
 		BufferedImage mapD = _dt.importImage("src/graphics/menu/map.png");
@@ -82,8 +87,12 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		BufferedImage infoBoxTitle = _dt.importImage("src/graphics/menu/item_info_label.png");
 		BufferedImage staticMapImg = _dt.importImage("src/graphics/menu/static_map.png");
 		BufferedImage downArrow = _dt.importImage("src/graphics/menu/downarrow.gif");
+		
 		_charBoxImage = _dt.importImage("src/graphics/menu/units_box.png");
 		_infoBoxImage = _dt.importImage("src/graphics/menu/item_label_box.png");
+		_listItem = _dt.importImage("src/graphics/menu/game_menu_option_hovered.png");
+		_listItemHovered = _dt.importImage("src/graphics/menu/game_menu_option.png");
+		
 		_units = new MenuItem(this, unitsD,unitsH, dt);
 		_map = new MenuItem(this, mapD,mapH,dt);
 		_save = new MenuItem(this, saveD, saveH,dt);
@@ -113,13 +122,44 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_quit.setVisible(true);
 		_title.setVisible(true);
 		
-		_charInfoList = new LinkedList<CharInfo>();		
+		_charInfoList = new LinkedList<CharInfo>();
 		
 		_unitsBox = new JPanel();
 		_unitsBox.setBackground(java.awt.Color.DARK_GRAY);
+		_unitsBox.setLocation(0,0);
+//		_unitsBox.setSize(760, 1000);
+//		_unitsBox.setOpaque(false);
+//		_unitsBox.setBounds(0,0,760,1000);
 		
-		_unitsBox.setSize(750,660);
-		_unitsBox.setLocation(1,0);
+		_layers = new JLayeredPane();
+		_layers.setBackground(java.awt.Color.DARK_GRAY);
+		_layers.setLayout(null);
+//		_layers.setOpaque(false);
+//		_layers.setBounds(0, 0, 0, 0);
+		_layers.add(_unitsBox, new Integer(0), 0);
+		
+		_buttons = new buttonPanel(new ArrayList<optionButton>());
+		_buttons.setVisible(true);
+		_buttons.setBackground(java.awt.Color.MAGENTA);
+		_buttons.setVisible(true);
+		_layers.add(_buttons, new Integer(1), 0);
+		_layers.setVisible(true);
+		
+		_scrollBar = new JScrollPane(_layers, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		_scrollBar.setBackground(java.awt.Color.DARK_GRAY);
+		Dimension d = new Dimension(760, 660);
+		_scrollBar.setSize(d);
+		_scrollBar.setPreferredSize(d);
+		_scrollBar.setMaximumSize(d);
+		_scrollBar.setMinimumSize(d);
+		SCROLLBOX_X = 190;
+		SCROLLBOX_Y = 120;
+		_scrollBar.setLocation(new Point(SCROLLBOX_X, SCROLLBOX_Y));
+		_scrollBar.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+		_scrollBar.setOpaque(false);
+		_numOptions = 0;
+		_itemOptBoxX = 0;
+		_itemOptBoxY = 0;
 		
 		_itemInfoBox = new JPanel();
 		_itemInfoBox.setVisible(true);
@@ -128,20 +168,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_itemInfoBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 		_itemInfoBox.setLocation(15, 460);
 		_itemInfoBox.setSize(144, 340);
-		
-		_scrollBar = new JScrollPane(_unitsBox, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		_scrollBar.setBackground(java.awt.Color.DARK_GRAY);
-		Dimension d = new Dimension(748, 660);
-		_scrollBar.setSize(d);
-		_scrollBar.setPreferredSize(d);
-		_scrollBar.setMaximumSize(d);
-		_scrollBar.setMinimumSize(d);
-		_scrollBar.setLocation(new Point(200, 120));
-		_scrollBar.setOpaque(false);
-		
-		_numOptions = 0;
-		_itemOptBoxX = 0;
-		_itemOptBoxY = 0;
 		
 		_unitsBoxListener = new unitsBoxListener();
 	}
@@ -154,7 +180,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_units.setHovered();
 		_currClicked = 1;
 		_unitsBox.removeAll();
-		_unitsBox.setLayout(new GridLayout(_dt.getParty().size(), 0, 10, 10));
+		_unitsBox.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		int counter = 0;
+//		_dt.getParty().size(), 0, 10, 10)
 		_unitsBox.addMouseMotionListener(_unitsBoxListener);
 		_unitsBox.addMouseListener(_unitsBoxListener);
 		_labelToCharacter = new HashMap<JLabel, Character>();
@@ -165,9 +194,17 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		for (Character chrter: _dt.getParty()) {
 			CharInfo toAdd = new CharInfo(this, chrter);
 			toAdd.setVisible(true);
-			_unitsBox.add(toAdd);
+			c.fill = GridBagConstraints.BOTH;
+			c.insets = new Insets(0,0,10,10);
+			c.gridx = 0;
+			c.gridy = counter;
+			_unitsBox.add(toAdd, c);
 			_charInfoList.add(toAdd);
+			counter+=1;
 		}
+		_unitsBox.setBounds(0,0,760,counter*(200+10));
+//		_unitsBox.setPreferredSize(new Dimension(760, counter*(200+10)-10));
+		_layers.setPreferredSize(new Dimension(760, counter*(200+10)-10));
 		_unitsBox.revalidate();
 		this.add(_scrollBar);
 		_scrollBar.revalidate();
@@ -181,18 +218,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	public void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);
 		if (_currClicked == 1) {
-			if (_showingItemOptions) {
-	//			System.out.println("X: " + _itemOptBoxX + "; Y: " + _itemOptBoxY);
-				for (int i=0; i<_buttonList.size(); i++) {
-	//				System.out.println("button x: " + _buttonList.get(i).getX() + "; y: " + _buttonList.get(i).getY());
-					_buttonList.get(i).repaint();
-				}
-			}
 			_itemInfoBox.setLocation(15, 570);
 			_itemInfoBox.setSize(144, 230);
-	//		_itemInfoBox.revalidate();
-	//		_scrollBar.setSize(new Dimension(748, 660));
-			_scrollBar.setLocation(new Point(200, 120));
+			_itemInfoBox.revalidate();
+			_scrollBar.setLocation(new Point(SCROLLBOX_X, SCROLLBOX_Y));
 		}
 		_title.paint((Graphics2D) g, _title.getImage());
 		_units.paint((Graphics2D) g, _units.getImage());
@@ -224,6 +253,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_staticMap.setVisible(false);
 		_downArrow.setVisible(false);
 		
+		System.out.println("curr clicked: " + _currClicked);
+		
 		if(_units.contains(point)) {
 			this.removeAll();
 			this.setDefault();
@@ -235,23 +266,25 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_unitsBox.addMouseListener(_unitsBoxListener);
 			_infoBoxTitle.setLocation(12, 460);
 			_infoBoxTitle.setVisible(true);
-//			_scrollBar.removeAll();
-			_unitsBox.setLayout(new GridLayout(_dt.getParty().size(), 0, 10, 10));
+			_unitsBox.setLayout(new GridBagLayout());
+			GridBagConstraints c = new GridBagConstraints();
 			_labelToCharacter = new HashMap<JLabel, Character>();
 			_labelToItem = new HashMap<JLabel, Item>();
 			_charInfoList = new LinkedList<CharInfo>();
-//			_scrollBar.setVisible(true);
+			int counter = 0;
 			for (Character chrter: _dt.getParty()) {
 				CharInfo toAdd = new CharInfo(this, chrter);
 				toAdd.setVisible(true);
-				_unitsBox.add(toAdd);
+				c.fill = GridBagConstraints.BOTH;
+				c.insets = new Insets(0,0,10,10);
+				c.gridx = 0;
+				c.gridy = counter;
+				_unitsBox.add(toAdd, c);
 				_charInfoList.add(toAdd);
+				counter+=1;
 			}
 			_unitsBox.revalidate();
-//			_unitsBox.addMouseListener(this.getController());
-//			_scrollBar.getViewport().add(_unitsBox);
-//			this.add(_unitsBox);
-//			_scrollBar.add(_unitsBox);
+			_layers.revalidate();
 			this.add(_scrollBar);
 			_scrollBar.revalidate();
 			this.revalidate();
@@ -295,7 +328,9 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		this.remove(_itemInfoBox);
 		_itemInfoBox.setVisible(false);
 		for (JLabel label: _labelToCharacter.keySet()) {
-			if (label.contains(point)) {
+//			System.out.println("Point X: " + point.getX() + "; Y: " + point.getY());
+//			System.out.println("Label X: " + label.getLocationOnScreen().getX() + "; Y: " + label.getLocationOnScreen().getY());
+			if (point.getX() > label.getLocationOnScreen().getX() && point.getY()+_scrollBar.getVerticalScrollBar().getValue() > label.getLocationOnScreen().getY() && label.getLocationOnScreen().getX()+label.getWidth() > point.getX() && label.getLocationOnScreen().getY()+label.getHeight() > point.getY()+_scrollBar.getVerticalScrollBar().getValue()) {
 				_beingHovered = true;
 				this.showItemInfo(_labelToItem.get(label));
 				_itemInfoBox.revalidate();
@@ -322,39 +357,57 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	
 	public void checkStopShowingOptionsBox(java.awt.Point point) {
 		this.grabFocus();
+//		System.out.println("check stop showing point x: " + point.getX() + "; y: " + point.getY());
+//		System.out.println("_buttons location on screen x: " + _buttons.getLocationOnScreen().getX() + "; y: " + _buttons.getLocationOnScreen().getY());
 		if (_showingItemOptions) {
 			/**
 			 * point.getX() and point.getY() get the X and Y coordinates only relative to the units box, 
 			 * so these values get the location of the units box added to them before checking
 			 */
-			if (point.getX()+200 < _itemOptBoxX || point.getX()+200 > _itemOptBoxX+200 || point.getY()+120 < _itemOptBoxY+_scrollBar.getVerticalScrollBar().getValue() || point.getY()+120 > _itemOptBoxY+200+_scrollBar.getVerticalScrollBar().getValue()) {
-				for (int i=0; i<_buttonList.size(); i++) {
-					this.remove(_buttonList.get(i));
+			
+//			System.out.println("_buttons width: " + _buttons.getWidth() + "height: " + _buttons.getHeight());
+			
+			
+			if (_buttons.getLocationOnScreen().getX() < point.getX() && _buttons.getLocationOnScreen().getY() < point.getY() && _buttons.getLocationOnScreen().getX()+_buttons.getWidth()>point.getX() && (_buttons.getLocationOnScreen().getY()+_buttons.getHeight())>point.getY()) {
+				
+				int buttonNum = (int)((point.getY()-_buttons.getLocationOnScreen().getY())/27);
+				for (optionButton button: _buttonList) {
+//					System.out.println("button y: " + button.getY());
+					_buttonList.get(buttonNum).activate(_buttonList.get(buttonNum));
+					_buttons.removeAll();
+					_layers.remove(_buttons);
+					_showingItemOptions = false;
+					this.repaint();
+					break;
 				}
-				System.out.println("set to false");
+			}
+			else {
+				_buttons.removeAll();
+				_layers.remove(_buttons);
 				_showingItemOptions = false;
 				this.repaint();
 			}
-			else {
-				Point np = new Point();
-				np.setLocation(point.getX()+200, point.getY()+120);
-				for (int i=0; i<_buttonList.size(); i++) {
-//					System.out.println("--------------");
-//					System.out.println("X: " + np.getX() + "; Y: " + np.getY());
-//					System.out.println("HERE X: " + _buttonList.get(i).getX() + "; Y: " + _buttonList.get(i).getY());
-//					System.out.println(_buttonList.get(i).getSize());
-					if (np.getX() > _buttonList.get(i).getX() && np.getY() > _buttonList.get(i).getY()+_scrollBar.getVerticalScrollBar().getValue() && np.getX() < _buttonList.get(i).getX()+200 && np.getY() < _buttonList.get(i).getY()+15+_scrollBar.getVerticalScrollBar().getValue()) {
+//			else {
+//				Point np = new Point();
+//				np.setLocation(point.getX()+200, point.getY()+120);
+////				System.out.println();
+//				for (int i=0; i<_buttonList.size(); i++) {
+////					System.out.println("--------------");
+////					System.out.println("X: " + np.getX() + "; Y: " + np.getY());
+////					System.out.println("HERE X: " + _buttonList.get(i).getX() + "; Y: " + _buttonList.get(i).getY());
+////					System.out.println(_buttonList.get(i).getSize());
+//					if (np.getX() > _buttonList.get(i).getX() && np.getY() > _buttonList.get(i).getY()+_scrollBar.getVerticalScrollBar().getValue() && np.getX() < _buttonList.get(i).getX()+200 && np.getY() < _buttonList.get(i).getY()+15+_scrollBar.getVerticalScrollBar().getValue()) {
 //						System.out.println("HERE X: " + _buttonList.get(i).getX() + "; Y: " + _buttonList.get(i).getY());
-						_buttonList.get(i).activate(_buttonList.get(i));
-						for (int j=0; j<_buttonList.size(); j++) {
-							this.remove(_buttonList.get(j));
-						}
-						_showingItemOptions = false;
-						this.repaint();
-						break;
-					}
-				}
-			}
+//						_buttonList.get(i).activate(_buttonList.get(i));
+//						for (int j=0; j<_buttonList.size(); j++) {
+//							_buttonList.get(i).setVisible(false);
+//						}
+//						_showingItemOptions = false;
+//						this.repaint();
+//						break;
+//					}
+//				}
+//			}
 		}
 	}
 	
@@ -422,7 +475,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		System.out.println("should not get here in checkItemClicked. set to false");
 		_showingItemOptions = false;
 		for (int i=0; i<_buttonList.size(); i++) {
-			this.remove(_buttonList.get(i));
+			_buttonList.get(i).setVisible(false);
 		}
 		repaint();
 	}
@@ -432,21 +485,19 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		/**
 		 * number of options is set by the #of people in the party -1, plus 3 options for each item
 		 */
-		
-		System.out.println("whee");
-		
 		Item item = _labelToItem.get(label);
 		Character character = _labelToCharacter.get(label);
 		
-		int labelWidth = 200;
-		int labelHeight = 15;
-//		label.revalidate();
+		_buttons.removeAll();
+		
+		int labelWidth = 152;
+		int labelHeight = 27;
 		for (int i=0; i<_buttonList.size(); i++) {
-			this.remove(_buttonList.get(i));
+			_buttonList.get(i).setVisible(false);
 		}
 		
+		_buttonToChar = new HashMap<optionButton, Character>();
 		_buttonList = new ArrayList<optionButton>();
-		_buttonToChar = new HashMap<JButton, Character>();
 		
 		System.out.println("Label Location on Screen X: " + label.getLocationOnScreen().getX() + "; Y: " + label.getLocationOnScreen().getY());
 		
@@ -455,6 +506,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				
 		int numOptionsInserted = 1;
 		
+		_selectedIcon = label;
 		_selectedItem = _labelToItem.get(label);
 		_selectedChar = character;
 		
@@ -463,26 +515,27 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		if (_labelToItem.get(label).isEquip()) {
 			for (int i=0; i<character.getInventory().size(); i++) {
 				if (character.getInventory().get(i).equals(item)) {
-					unequipButton _unequip = new unequipButton("Unequip from " + character.getName());
-					
-					_unequip.setSize(labelWidth, labelHeight);
-					_unequip.setVisible(true);
-					_unequip.setLocation(_itemOptBoxX, _itemOptBoxY);
-					_buttonList.add(_unequip);
-					break;
+//					unequipButton _unequip = new unequipButton(this, _dt.importImage("src/graphics/menu/game_menu_option.png"), _dt.importImage("src/graphics/menu/game_menu_option_hovered.png"), _dt);
+////					_unequip.addLabel("Unequip from " + character.getName());
+//					_unequip.setSize(labelWidth, labelHeight);
+//					_unequip.setVisible(true);
+//					_unequip.setLocation(_itemOptBoxX, _itemOptBoxY);
+//					_buttonList.add(_unequip);
+//					break;
 				}
 				if (i==character.getInventory().size()) {
-					equipButton _equip = new equipButton("Equip to " + character.getName());
-					_equip.setSize(labelWidth, labelHeight);
-					_equip.setPreferredSize(new Dimension(labelWidth, labelHeight));
-					_equip.setVisible(true);
-					_equip.setLocation(_itemOptBoxX, _itemOptBoxY);
-					_buttonList.add(_equip);
+//					equipButton _equip = new equipButton(this, _dt.importImage("src/graphics/menu/game_menu_option.png"), _dt.importImage("src/graphics/menu/game_menu_option_hovered.png"), _dt);
+////					_equip.addLabel("Equip from " + character.getName());
+//					_equip.setSize(labelWidth, labelHeight);
+//					_equip.setVisible(true);
+//					_equip.setLocation(_itemOptBoxX, _itemOptBoxY);
+//					_buttonList.add(_equip);
 				}
 			}
 		}
 		else {
-			useButton _use = new useButton("Use on " + character.getName());
+			useButton _use = new useButton(this, _listItem, _listItemHovered, _dt);
+			_use.addLabel("Use on " + character.getName());
 			_use.setSize(labelWidth, labelHeight);
 			_use.setVisible(true);
 			_use.setLocation(_itemOptBoxX, _itemOptBoxY);
@@ -490,10 +543,12 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_buttonList.add(_use);
 		}
 		if (_dt.getParty().size() > 0) {
+			System.out.println("Party size: " + _dt.getParty().size());
 			for (int i=0; i<_dt.getParty().size(); i++) {
 				if (!_dt.getParty().get(i).equals(_labelToCharacter.get(label))) {
 					if (_dt.getParty().get(i).getInventory().size() != _dt.getParty().get(i).getCapacity()) {
-						giveToCharButton _giveToChar = new giveToCharButton("Give to " + _dt.getParty().get(i).getName());
+						giveToCharButton _giveToChar = new giveToCharButton(this, _listItem, _listItemHovered, _dt);
+						_giveToChar.addLabel("Give to " + _dt.getParty().get(i).getName());
 						_giveToChar.setSize(labelWidth, labelHeight);
 						_giveToChar.setVisible(true);
 						_giveToChar.setLocation(_itemOptBoxX, _itemOptBoxY+(numOptionsInserted*labelHeight));
@@ -504,7 +559,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				}
 			}
 		}
-		dropButton _drop = new dropButton("Drop item");
+		dropButton _drop = new dropButton(this, _listItem, _listItemHovered, _dt);
+		_drop.addLabel("Drop Item");
 		_drop.setSize(labelWidth, labelHeight);
 		_drop.setVisible(true);
 		_drop.setLocation(_itemOptBoxX, _itemOptBoxY+(numOptionsInserted*labelHeight));
@@ -513,7 +569,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		
 		boolean canPutRight;
 		boolean canPutDown;
-		label.setVisible(true);
 		if (label.getLocationOnScreen().getX()+labelWidth < 800) {
 			canPutRight = true;
 		}
@@ -536,17 +591,17 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		
 		for (int i=0; i<_buttonList.size(); i++) {
 			_buttonList.get(i).setVisible(true);
-			this.add(_buttonList.get(i));
 		}
 		
-//		System.out.println("X Pos: " + _itemOptBoxX + "; Y Pos: " + _itemOptBoxY);
 		_showingItemOptions = true;
-//		this.add(_itemOptionsBox);
-//		_itemOptionsBox.repaint();
+		System.out.println("_buttons location x: " + (int)label.getLocationOnScreen().getX() + "; y: " + (int)label.getLocationOnScreen().getY());
+//		_buttons.setLocation((int)label.getLocationOnScreen().getX(), (int)label.getLocationOnScreen().getY());
+		_buttons.setButtonList(_buttonList);
+//		System.out.println("Size: " + _buttonList.size());
+		_buttons.setBounds(_itemOptBoxX-SCROLLBOX_X,_itemOptBoxY-SCROLLBOX_Y,labelWidth, labelHeight*_buttonList.size());
+		_layers.add(_buttons, new Integer(1), 0);
 		this.repaint();
 		_unitsBox.grabFocus();
-//		this.grabFocus();
-//		_buttonList.get(3).grabFocus();
 	}
 	
 	public void switchToGameScreen() {
@@ -816,10 +871,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		public void mouseClicked(MouseEvent e) {
 			System.out.println("clicked in itemListener");
 			if (_currClicked == 1) {
-				showingMenu = true;
+//				showingMenu = true;
 				GameMenuScreen.this.checkItemClicked(e.getPoint(), _itemPic);
-				showingMenu = false;
-				Item clickedItem = GameMenuScreen.this.checkItemContains(e.getPoint());
+//				showingMenu = false;
+//				Item clickedItem = GameMenuScreen.this.checkItemContains(e.getPoint());
 			}
 		}
 
@@ -856,7 +911,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		@Override
 		public void mouseMoved(MouseEvent e) {
 			if (_currClicked == 1 && !_showingItemOptions && !showingMenu) {
-				Item clickedItem = GameMenuScreen.this.checkItemContains(e.getPoint());
+				Item clickedItem = GameMenuScreen.this.checkItemContains(e.getLocationOnScreen());
 			}
 		}
 	}
@@ -876,7 +931,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		public void mouseClicked(MouseEvent e) {
 			if (_showingItemOptions) {
-				GameMenuScreen.this.checkStopShowingOptionsBox(e.getPoint());
+				GameMenuScreen.this.checkStopShowingOptionsBox(e.getLocationOnScreen());
 			}
 		}
 
@@ -905,19 +960,36 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 	}
 	
-	private abstract class optionButton extends JButton {
+	private abstract class optionButton extends MenuItem {
 		
-		public optionButton(String string) {
-			super(string);
+		JLabel _label;
+//		Point _point;
+		
+		public optionButton(JPanel panel, BufferedImage curr, BufferedImage hovered, DoodleTactics dt) {
+			super(panel, curr, hovered, dt);
+			this.setSize(152, 27);
 		}
 		public abstract void activate(optionButton button);
+		
+		public void addLabel(String words) {
+			_label = new JLabel(words);
+//			_label.setLocation((int)this.getX(), (int)this.getY());
+			_label.setSize(152, 27);
+			_label.setVisible(false);
+			_label.setOpaque(false);
+			_label.setFont(new Font("Arial", Font.BOLD, 12));
+		}
+		
+		public JLabel getLabel() {
+			return _label;
+		}
 	}
 	
 	
 	private class giveToCharButton extends optionButton {
 		
-		public giveToCharButton(String string) {
-			super(string);
+		public giveToCharButton(JPanel panel, BufferedImage curr, BufferedImage hovered, DoodleTactics dt) {
+			super(panel, curr, hovered, dt);
 		}
 		
 		public void activate(optionButton button) {
@@ -927,12 +999,12 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 					myChar.addToInventory(_selectedItem);
 					_selectedChar.removeFromInventory(_selectedItem);
 					for (int i=0; i<_buttonList.size(); i++) {
-						this.remove(_buttonList.get(i));
+						_buttonList.get(i).setVisible(false);
 					}
 					GameMenuScreen.this.setDefaultTabToUnits();
 					System.out.println("set to false");
 					_showingItemOptions = false;
-					this.repaint();
+					GameMenuScreen.this.repaint();
 				}
 			} catch (ItemException e1) {
 				System.out.println("Something bad happened in the Game Menu Screen");
@@ -942,21 +1014,20 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	
 	private class dropButton extends optionButton {
 
-		public dropButton(String string) {
-			super(string);
+		public dropButton(JPanel panel, BufferedImage curr, BufferedImage hovered, DoodleTactics dt) {
+			super(panel, curr, hovered, dt);
 		}
 
 		public void activate(optionButton button) {
 			try {
 				_selectedChar.removeFromInventory(_selectedItem);
 				for (int i=0; i<_buttonList.size(); i++) {
-					this.remove(_buttonList.get(i));
 					_buttonList.get(i).setVisible(false);
 				}
 				GameMenuScreen.this.setDefaultTabToUnits();
 				System.out.println("set to false");
 				_showingItemOptions = false;
-				this.repaint();
+				GameMenuScreen.this.repaint();
 			} catch (ItemException e1) {
 				System.out.println("Something bad happened in the Game Menu Screen");
 			}
@@ -965,8 +1036,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	
 	private class unequipButton extends optionButton {
 
-		public unequipButton(String string) {
-			super(string);
+		public unequipButton(JPanel panel, BufferedImage curr, BufferedImage hovered, DoodleTactics dt) {
+			super(panel, curr, hovered, dt);
 			// TODO Auto-generated constructor stub
 		}
 
@@ -980,11 +1051,13 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	
 	private class equipButton extends optionButton {
 
-		public equipButton(String string) {
-			super(string);
+		JLabel _label;
+		
+		public equipButton(JPanel panel, BufferedImage curr, BufferedImage hovered, DoodleTactics dt) {
+			super(panel, curr, hovered, dt);
 			// TODO Auto-generated constructor stub
 		}
-
+		
 		public void activate(optionButton button) {
 			// TODO Auto-generated method stub
 			
@@ -993,21 +1066,55 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	
 	private class useButton extends optionButton {
 
-		public useButton(String string) {
-			super(string);
-			// TODO Auto-generated constructor stub
+		public useButton(JPanel panel, BufferedImage curr, BufferedImage hovered, DoodleTactics dt) {
+			super(panel, curr, hovered, dt);
 		}
 
 		public void activate(optionButton button) {
 			_selectedItem.exert(_selectedChar);
 			for (int i=0; i<_buttonList.size(); i++) {
-				this.remove(_buttonList.get(i));
 				_buttonList.get(i).setVisible(false);
 			}
 			GameMenuScreen.this.setDefaultTabToUnits();
 			System.out.println("set to false");
 			_showingItemOptions = false;
-			this.repaint();
+			GameMenuScreen.this.repaint();
+		}
+	}
+	
+	private class buttonPanel extends JPanel {
+		
+		private ArrayList<optionButton> _list;
+		private boolean _visible;
+		
+		public buttonPanel (ArrayList<optionButton> list) {
+			_list = list;
+		}
+		
+		public void setButtonList(ArrayList<optionButton> list) {
+			_list = list;
+		}
+		
+		public void setVisible(boolean bool) {
+			super.setVisible(bool);
+			_visible = bool;
+		}
+		
+		public void paintComponent(java.awt.Graphics g) {
+			super.paintComponent(g);
+			if (_visible) {
+				for (int i=0; i<_list.size(); i++) {
+					if (_list.get(i) != null) {
+//						System.out.println("X: " + x.getX() + "; Y: " + x.getY());
+						_list.get(i).setLocation(0,i*27);
+						_list.get(i).setVisible(true);
+						_list.get(i).paint((Graphics2D) g, _list.get(i).getImage());
+						this.add(_list.get(i).getLabel());
+						_list.get(i).getLabel().setLocation(10, (i*27)+5);
+						_list.get(i).getLabel().setVisible(true);
+					}
+				}
+			}
 		}
 	}
 }
