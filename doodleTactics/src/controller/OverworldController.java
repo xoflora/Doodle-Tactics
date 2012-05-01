@@ -36,7 +36,7 @@ public class OverworldController extends GameScreenController {
 	private class RandomMoveTimer extends Timer {
 		
 		public RandomMoveTimer() {
-			super(5000, null);
+			super(30000, null);
 			this.addActionListener(new RandomMoveListener());
 		}
 		
@@ -49,7 +49,7 @@ public class OverworldController extends GameScreenController {
 					for(Character c : _gameScreen.getMap().getCharactersToDisplay()) {
 						
 						// provided this character is not the main character
-						if(! c.equals(_gameScreen.getMainChar())) {
+						if(! c.equals(_gameScreen.getMainChar()) && c.getName().equals("Thighs")) {
 							
 							System.out.println("character at " + c.getX() + ", " + c.getY());
 							
@@ -73,7 +73,8 @@ public class OverworldController extends GameScreenController {
 										case 0:
 											dest = _gameScreen.getMap().getNorth(src);
 											if(dest != null && dest.canMove(Map.NORTH) && !dest.isOccupied()) {
-												System.out.println(dest.getX() + "," + dest.getY());
+												System.out.println("MOVE NORTH");
+												System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
 												src.removeOccupant();
 												c.moveToTile(src, dest);
 												dest.setOccupant(c);
@@ -82,7 +83,8 @@ public class OverworldController extends GameScreenController {
 										case 1:
 											dest = _gameScreen.getMap().getSouth(src);
 											if(dest != null && dest.canMove(Map.SOUTH) && !dest.isOccupied()) {
-												System.out.println(dest.getX() + "," + dest.getY());
+												System.out.println("MOVE SOUTH");
+												System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
 												src.removeOccupant();
 												c.moveToTile(src, dest);
 												dest.setOccupant(c);
@@ -91,7 +93,8 @@ public class OverworldController extends GameScreenController {
 										case 2:
 											dest = _gameScreen.getMap().getEast(src);
 											if(dest != null && dest.canMove(Map.EAST) && !dest.isOccupied()) {
-												System.out.println(dest.getX() + "," + dest.getY());
+												System.out.println("MOVE EAST");
+												System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
 												src.removeOccupant();
 												c.moveToTile(src, dest);
 												dest.setOccupant(c);
@@ -100,7 +103,8 @@ public class OverworldController extends GameScreenController {
 										case 3:
 											dest = _gameScreen.getMap().getWest(src);
 											if(dest != null && dest.canMove(Map.WEST) && !dest.isOccupied()) {
-												System.out.println(dest.getX() + "," + dest.getY());
+												System.out.println("MOVE WEST");
+												System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
 												src.removeOccupant();
 												c.moveToTile(src, dest);
 												dest.setOccupant(c);
