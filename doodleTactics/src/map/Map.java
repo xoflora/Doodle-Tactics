@@ -88,11 +88,11 @@ public class Map implements Serializable {
 	
 	String _name;
 	
-	private static Point _mapCords;
+	private Point _mapCords;
 
 	public Map(DoodleTactics dt, Tile[][] tiles, String name, BufferedImage overflow,
 			LinkedList<Terrain> terrain,
-			LinkedList<Character> chars, LinkedList<Tile> randBattles, MainCharacter main) {
+			LinkedList<Character> chars, LinkedList<Tile> randBattles, MainCharacter main,Point mapCords) {
 		_map = tiles;
 		_overflow = overflow;
 		_name = "";
@@ -101,7 +101,7 @@ public class Map implements Serializable {
 		_mainChar = main;
 		_dt = dt;
 		_randBattles = randBattles;
-
+		_mapCords = mapCords;
 
 		//Random Battle data structures:
 		_enemyTiles = new HashMap<Character, Tile>();
@@ -151,7 +151,7 @@ public class Map implements Serializable {
 				throw new InvalidMapException("(line 1) Incorrect map file format");
 			}
 			
-			_mapCords = new Point(Integer.parseInt(splitLine[1]), Integer.parseInt(splitLine[2]));
+			Point mapCords = new Point(Integer.parseInt(splitLine[1]), Integer.parseInt(splitLine[2]));
 
 			splitLine = reader.readLine().split(",");
 			
@@ -294,7 +294,7 @@ public class Map implements Serializable {
 			if (main == null)
 				throw new InvalidMapException("Main Character not specified");
 			Map m = new Map(dt,tiles, name, dt.importImage(overflowPath),
-					terrainList, chars, randBattles,main); 
+					terrainList, chars, randBattles,main,mapCords); 
 			
 			return m;
 		} catch (FileNotFoundException e) {
