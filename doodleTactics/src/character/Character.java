@@ -405,6 +405,19 @@ public abstract class Character extends Rectangle{
 			return null;
 		}
 	}
+	
+	/**
+	 * Loads a Character during deserialization
+	 */
+	public void load(DoodleTactics dt){
+		_profile = dt.importImage(_profileFile);
+		_left = dt.importImage(_leftFile);
+		_right = dt.importImage(_rightFile);
+		_up = dt.importImage(_upFile);
+		_down = dt.importImage(_downFile);
+		
+		new FloatTimer(dt.getGameScreen());
+	}
 
 	/**
 	 * getters and setters

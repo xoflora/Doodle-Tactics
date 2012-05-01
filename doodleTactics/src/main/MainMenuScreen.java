@@ -94,6 +94,9 @@ public MenuItem checkContains(java.awt.Point point) {
 
 	if(_continue.contains(point)) {
 		_continue.setHovered();
+		_dt.getGameScreen().loadGame("src/tests/data/testSave");
+	//	_dt.setScreen(_dt.getGameScreen());
+	//	_dt.getGameScreen().defaultController();
 		this.repaint();
 		return _continue;
 	}

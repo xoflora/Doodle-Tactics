@@ -67,8 +67,8 @@ public class Map implements Serializable {
 
 	private transient DoodleTactics _dt;
 	private transient BufferedImage _overflow;
-	private transient Tile[][] _map;
-	private transient LinkedList<Terrain> _terrain;
+	private Tile[][] _map;
+	private LinkedList<Terrain> _terrain;
 	private LinkedList<Character> _activeCharacters;
 	private MainCharacter _mainChar;
 	private  Stack<Integer> _prevXRef;
@@ -329,6 +329,17 @@ public class Map implements Serializable {
 			throw new InvalidMapException("(line " + count + ") Invalid Event Specified");
 		}
 
+	}
+	/**
+	 * Method used to reset all transient data structures after deserialization
+	 * @param dt
+	 */
+	public void load(DoodleTactics dt){
+		//TODO handle overflow tile, if necessary
+		_dt = dt;
+		for(Character c : _activeCharacters){
+			c.load(dt);
+		}
 	}
 
 	public String toString() {
