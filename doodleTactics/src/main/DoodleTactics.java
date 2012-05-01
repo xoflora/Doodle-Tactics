@@ -6,7 +6,9 @@ import items.ItemException;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.HashMap;
@@ -291,12 +293,17 @@ public class DoodleTactics extends JFrame {
 	
 	public void saveGame(String filename){
 		Character current;
-		for(String s : _allChars.keySet()){
-			current = _allChars.get(s);
-			current.serialize("src/tests/data/character");
-			
+		FileOutputStream fos = null;
+		ObjectOutputStream out = null;
+		try {
+			fos = new FileOutputStream(filename);
+			out = new ObjectOutputStream(fos);
+			out.writeObject(this);
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-			
+
 	}
 	
 	

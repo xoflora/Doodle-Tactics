@@ -67,12 +67,12 @@ public class Map implements Serializable {
 
 	private transient DoodleTactics _dt;
 	private transient BufferedImage _overflow;
-	private transient Tile[][] _map;
-	private transient LinkedList<Terrain> _terrain;
+	private Tile[][] _map;
+	private LinkedList<Terrain> _terrain;
 	private LinkedList<Character> _activeCharacters;
-	private transient MainCharacter _mainChar;
-	private transient Stack<Integer> _prevXRef;
-	private transient Stack<Integer> _prevYRef;
+	private MainCharacter _mainChar;
+	private Stack<Integer> _prevXRef;
+	private Stack<Integer> _prevYRef;
 	
 	/**
 	 * fields used to generate random battles;
@@ -81,10 +81,10 @@ public class Map implements Serializable {
 	 *  - _tileToEnemies maps a tile to the enemies whose movement range contains that tile
 	 *  - _randBattles is a list of possible sites of random enemies
 	 */
-	private transient HashMap<Character, Tile> _enemyTiles;
-	private transient HashMap<Character, List<Tile>> _enemyToTiles;
-	private transient HashMap<Tile,List<Character>> _tileToEnemies;
-	private transient LinkedList<Tile> _randBattles;
+	private HashMap<Character, Tile> _enemyTiles;
+	private HashMap<Character, List<Tile>> _enemyToTiles;
+	private HashMap<Tile,List<Character>> _tileToEnemies;
+	private LinkedList<Tile> _randBattles;
 	
 	String _name;
 	
@@ -190,14 +190,13 @@ public class Map implements Serializable {
 				if (splitLine.length == 5 && splitLine[0].equals("img")) {
 					if(main == null)
 						throw new InvalidMapException("(line " + count + ") Main Character must be parsed before images");
-					BufferedImage img = dt.importImage(splitLine[1]);
 					int xTile = Integer.parseInt(splitLine[2]);
 					int yTile = Integer.parseInt(splitLine[3]);
 					System.out.println(main.getTileX() + ": " + main.getTileY());
 					double xLoc = Tile.TILE_SIZE * (xTile  - main.getTileX());
 					double yLoc = Tile.TILE_SIZE * (yTile - main.getTileY());
 					tiles[xTile][yTile].setTilePermissions((splitLine[4]).charAt(0));
-					Terrain t = new Terrain(container, img, xLoc, yLoc);
+					Terrain t = new Terrain(container, splitLine[1], xLoc, yLoc);
 					terrainList.add(t);
 
 					// Character Case

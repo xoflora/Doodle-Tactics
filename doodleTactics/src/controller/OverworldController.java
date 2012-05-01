@@ -302,7 +302,7 @@ public class OverworldController extends GameScreenController {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		super.mouseMoved(e);
+		//super.mouseMoved(e);
 	}
 
 	@Override
