@@ -591,6 +591,8 @@ public class GameScreen extends Screen<GameScreenController> {
 			out = new ObjectOutputStream(fos);
 			out.writeObject(_mapCache);
 			out.writeObject(_currMap);
+			out.writeInt(_xRef);
+			out.writeInt(_yRef);
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -606,6 +608,8 @@ public class GameScreen extends Screen<GameScreenController> {
 			in = new ObjectInputStream(fis);
 			_mapCache =  (HashMap<String,Map>) in.readObject();
 			_currMap = (Map) in.readObject();
+			_xRef =in.readInt();
+			_yRef = in.readInt();
 			for(String path : _mapCache.keySet()){
 				Map m = _mapCache.get(path);
 				m.load(_dt);
