@@ -44,6 +44,10 @@ import util.Heap;
  *         purposes
  */
 public class Map implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final int NORTH = 0;
 	public static final int EAST = 1;
 	public static final int SOUTH = 2;
@@ -61,8 +65,8 @@ public class Map implements Serializable {
 	//Random Battle
 	private static final int CUTOFF = 100;
 
-	private DoodleTactics _dt;
-	private BufferedImage _overflow;
+	private transient DoodleTactics _dt;
+	private transient BufferedImage _overflow;
 	private Tile[][] _map;
 	private LinkedList<Terrain> _terrain;
 	private LinkedList<Character> _activeCharacters;
