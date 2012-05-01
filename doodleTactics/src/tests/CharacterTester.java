@@ -20,7 +20,7 @@ public class CharacterTester {
 		//Archer, leveled up
 		String filename = "testCharSerial1.ser";
 		DoodleTactics dt = new DoodleTactics();
-		Archer a = new Archer(dt, container,"src/graphics/characters/pokeball.png","src/graphics/characters/pokeball.png","src/graphics/characters/knight_front.png","src/graphics/characters/knight_back.png","src/graphics/characters/knight_left.png","src/graphics/characters/knight_right.png",0,0);
+		Archer a = new Archer(dt, dt.getGameScreen(),"src/graphics/characters/pokeball.png","src/graphics/characters/pokeball.png","src/graphics/characters/knight_front.png","src/graphics/characters/knight_back.png","src/graphics/characters/knight_left.png","src/graphics/characters/knight_right.png",0,0);
 		try {
 			a.levelUp();
 		} catch (InvalidLevelException e) {

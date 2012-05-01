@@ -22,7 +22,7 @@ public abstract class Shape implements Serializable{
 		private java.awt.geom.RectangularShape _shape;
 
 		/** Reference to containing subclass of JPanel. */
-		private javax.swing.JPanel _container;
+		private transient javax.swing.JPanel _container;
 
 		/** Border and Fill Colors. */
 		private java.awt.Color _borderColor, _fillColor;

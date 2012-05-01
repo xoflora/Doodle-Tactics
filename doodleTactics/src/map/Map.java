@@ -67,12 +67,12 @@ public class Map implements Serializable {
 
 	private transient DoodleTactics _dt;
 	private transient BufferedImage _overflow;
-	private Tile[][] _map;
-	private LinkedList<Terrain> _terrain;
+	private transient Tile[][] _map;
+	private transient LinkedList<Terrain> _terrain;
 	private LinkedList<Character> _activeCharacters;
-	private MainCharacter _mainChar;
-	private Stack<Integer> _prevXRef;
-	private Stack<Integer> _prevYRef;
+	private transient MainCharacter _mainChar;
+	private transient Stack<Integer> _prevXRef;
+	private transient Stack<Integer> _prevYRef;
 	
 	/**
 	 * fields used to generate random battles;
@@ -81,10 +81,10 @@ public class Map implements Serializable {
 	 *  - _tileToEnemies maps a tile to the enemies whose movement range contains that tile
 	 *  - _randBattles is a list of possible sites of random enemies
 	 */
-	private HashMap<Character, Tile> _enemyTiles;
-	private HashMap<Character, List<Tile>> _enemyToTiles;
-	private HashMap<Tile,List<Character>> _tileToEnemies;
-	private LinkedList<Tile> _randBattles;
+	private transient HashMap<Character, Tile> _enemyTiles;
+	private transient HashMap<Character, List<Tile>> _enemyToTiles;
+	private transient HashMap<Tile,List<Character>> _tileToEnemies;
+	private transient LinkedList<Tile> _randBattles;
 	
 	String _name;
 	
