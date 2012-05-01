@@ -160,7 +160,6 @@ public class Map implements Serializable {
 
 			String name = splitLine[0];
 			String defaultPath = splitLine[1];
-			BufferedImage defaultImage = dt.importImage(defaultPath);
 			String overflowPath = splitLine[2];
 
 			// parse the dimensions of the map
@@ -175,7 +174,7 @@ public class Map implements Serializable {
 			for (int x = 0; x < numX; x++) {
 				for (int y = 0; y < numY; y++) {
 					if (tiles[x][y] == null)
-						tiles[x][y] = Tile.tile(container, defaultPath,defaultImage, 'F', x,
+						tiles[x][y] = Tile.tile(dt,container, defaultPath, 'F', x,
 								y, 1);
 				}
 			}
@@ -264,10 +263,7 @@ public class Map implements Serializable {
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
 
-					BufferedImage img = dt.importImage(splitLine[3]);
-
-
-					tiles[x][y] = Tile.tile(container, splitLine[3],img,
+					tiles[x][y] = Tile.tile(dt,container, splitLine[3],
 							splitLine[2].charAt(0), x, y, Integer
 							.parseInt(splitLine[4]));
 
