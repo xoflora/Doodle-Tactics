@@ -371,6 +371,7 @@ public class Map implements Serializable {
 		try {
 			return _map[x][y];
 		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out.println("ARRAY OUT OF BOUNDS NOO");
 			return null;
 		}
 	}

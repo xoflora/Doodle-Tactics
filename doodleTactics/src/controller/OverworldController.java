@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import controller.combatController.RandomBattleAI;
+import controller.combatController.UnitStatMenu;
 import character.Character;
 import character.Character.CharacterDirection;
 
@@ -36,7 +37,7 @@ public class OverworldController extends GameScreenController {
 	private class RandomMoveTimer extends Timer {
 		
 		public RandomMoveTimer() {
-			super(30000, null);
+			super(500, null);
 			this.addActionListener(new RandomMoveListener());
 		}
 		
@@ -51,13 +52,13 @@ public class OverworldController extends GameScreenController {
 						// provided this character is not the main character
 						if(! c.equals(_gameScreen.getMainChar()) && c.getName().equals("Thighs")) {
 							
-							System.out.println("character at " + c.getX() + ", " + c.getY());
+							System.out.println("character at " + c.getCenterX()/Tile.TILE_SIZE + ", " + c.getCenterY()/Tile.TILE_SIZE);
 							
 							//generate a random direction to move in
 							Random r = new Random();
 							int direction = r.nextInt(4);
 							// retrieve the tile that corresponds to the given character
-							Tile src = _gameScreen.getTile((int) c.getX(), (int) c.getY());
+							Tile src = _gameScreen.getTile((int) c.getCenterX(), (int) c.getCenterY());
 							System.out.println("src, x: " + src.x() + ", y:" + src.y());
 							
 							if(src != null) {
@@ -72,42 +73,68 @@ public class OverworldController extends GameScreenController {
 									switch(direction) {
 										case 0:
 											dest = _gameScreen.getMap().getNorth(src);
+											
+											System.out.println("============MOVE NORTH============");
+											System.out.println("dest is null? " + (dest == null));
+											System.out.println("has permission to move to tile? " + dest.canMove(Map.NORTH));
+											System.out.println("dest is occupied? " + dest.isOccupied());
+											System.out.println("==================================");
+											
 											if(dest != null && dest.canMove(Map.NORTH) && !dest.isOccupied()) {
-												System.out.println("MOVE NORTH");
-												System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
+												
+												System.out.println(dest.x() + ", " + dest.y());
 												src.removeOccupant();
-												c.moveToTile(src, dest);
 												dest.setOccupant(c);
+												c.moveToTile(src, dest);
 											}
 											break;
 										case 1:
 											dest = _gameScreen.getMap().getSouth(src);
+											
+											System.out.println("============MOVE SOUTH============");
+											System.out.println("dest is null? " + (dest == null));
+											System.out.println("has permission to move to tile? " + dest.canMove(Map.SOUTH));
+											System.out.println("dest is occupied? " + dest.isOccupied());		
+											System.out.println("==================================");
+											
 											if(dest != null && dest.canMove(Map.SOUTH) && !dest.isOccupied()) {
-												System.out.println("MOVE SOUTH");
-												System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
+												System.out.println(dest.x() + ", " + dest.y());												
 												src.removeOccupant();
-												c.moveToTile(src, dest);
 												dest.setOccupant(c);
+												c.moveToTile(src, dest);
 											}
 											break;
 										case 2:
+											
 											dest = _gameScreen.getMap().getEast(src);
+											
+											System.out.println("============MOVE EAST============");
+											System.out.println("dest is null? " + (dest == null));
+											System.out.println("has permission to move to tile? " + dest.canMove(Map.EAST));
+											System.out.println("dest is occupied? " + dest.isOccupied());	
+											System.out.println("==================================");
+											
 											if(dest != null && dest.canMove(Map.EAST) && !dest.isOccupied()) {
-												System.out.println("MOVE EAST");
-												System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
+												System.out.println(dest.x() + ", " + dest.y());												
 												src.removeOccupant();
-												c.moveToTile(src, dest);
 												dest.setOccupant(c);
+												c.moveToTile(src, dest);
 											}
 											break;
 										case 3:
 											dest = _gameScreen.getMap().getWest(src);
+											
+											System.out.println("============MOVE WEST============");
+											System.out.println("dest is null? " + (dest == null));
+											System.out.println("has permission to move to tile? " + dest.canMove(Map.WEST));
+											System.out.println("dest is occupied? " + dest.isOccupied());	
+											System.out.println("==================================");
+											
 											if(dest != null && dest.canMove(Map.WEST) && !dest.isOccupied()) {
-												System.out.println("MOVE WEST");
-												System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
+												System.out.println(dest.x() + ", " + dest.y());												
 												src.removeOccupant();
-												c.moveToTile(src, dest);
 												dest.setOccupant(c);
+												c.moveToTile(src, dest);
 											}
 											break;
 									}
@@ -115,7 +142,7 @@ public class OverworldController extends GameScreenController {
 									System.out.println("-------");
 								
 								} catch (ArrayIndexOutOfBoundsException ex) {
-									
+									System.out.println("OUT OF BOUNDS IN RANDOM MOVER");
 								}
 							}
 						}	
@@ -128,13 +155,13 @@ public class OverworldController extends GameScreenController {
 	@Override
 	public void take() {
 		// TODO : center the map around the main character
-		//_randomMoveTimer.start();
+		_randomMoveTimer.start();
 	}
 
 	@Override
 	public void release() {
 		// TODO Auto-generated method stub
-		//_randomMoveTimer.stop();
+		_randomMoveTimer.stop();
 	}
 
 	@Override
@@ -299,14 +326,34 @@ public class OverworldController extends GameScreenController {
 	}	*/
 
 	@Override
-	public void mousePressed(MouseEvent e) { }
-
+	public void mousePressed(MouseEvent e) {
+		_randomMoveTimer.stop();
+		Tile t = _gameScreen.getTile(e.getX(), e.getY());
+		System.out.println("----------------------");
+		System.out.println("Tile " + t.x() + ", " +t.y());
+		System.out.println("Occupied?" + t.isOccupied());
+		System.out.println("Can Move:");
+		System.out.println("NORTH:" + t.canMove(Map.NORTH));
+		System.out.println("SOUTH:" + t.canMove(Map.NORTH));
+		System.out.println("EAST:" + t.canMove(Map.NORTH));
+		System.out.println("WEST:" + t.canMove(Map.NORTH));
+		System.out.println("----------------------");
+	}
+	
 	@Override
 	public void mouseDragged(MouseEvent e) { }
 
-	@Override
 	public void mouseMoved(MouseEvent e) {
-		super.mouseMoved(e);
+
+	}
+	
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		_randomMoveTimer.start();
+	}
+	
+	public void mouseClicked(MouseEvent e) {
+
 	}
 
 	@Override
