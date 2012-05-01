@@ -45,15 +45,14 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private HashMap<JLabel, Character> _labelToCharacter; //stores who each item belongs to
 	private HashMap<JLabel, Item> _labelToItem; //stores each item image to the actual item to holds
 	private JScrollPane _scrollBar;
-	private boolean _showingItemOptions, _beingHovered;
+	private boolean _showingItemOptions;
 	private unitsBoxListener _unitsBoxListener;
 	private int _itemOptBoxX, _itemOptBoxY, _numOptions;
-	private JLabel _selectedIcon;
 	private Item _selectedItem;
 	private Character _selectedChar;
 	private HashMap<optionButton, Character> _buttonToChar;
 	private ArrayList<optionButton> _buttonList;
-	private BufferedImage _charBoxImage, _infoBoxImage, _listItem, _listItemHovered;
+	private BufferedImage _charBoxImage, _listItem, _listItemHovered;
 	
 	private JLayeredPane _layers;
 	private buttonPanel _buttons;
@@ -70,7 +69,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_labelToItem = new HashMap<JLabel, Item>();
 //		System.out.println("set to false");
 		_showingItemOptions = false;
-		_beingHovered = false;
 		_buttonList = new ArrayList<optionButton>();
 		_buttonToChar = new HashMap<optionButton, Character>();
 		BufferedImage unitsD = _dt.importImage("src/graphics/menu/units.png");
@@ -89,7 +87,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		BufferedImage downArrow = _dt.importImage("src/graphics/menu/downarrow.gif");
 		
 		_charBoxImage = _dt.importImage("src/graphics/menu/units_box.png");
-		_infoBoxImage = _dt.importImage("src/graphics/menu/item_label_box.png");
 		_listItem = _dt.importImage("src/graphics/menu/game_menu_option_hovered.png");
 		_listItemHovered = _dt.importImage("src/graphics/menu/game_menu_option.png");
 		
@@ -235,6 +232,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_infoBoxTitle.paint((Graphics2D) g, _infoBoxTitle.getImage());
 	}
 	
+	/**
+	 * sets all the menu items (left bar) back to their default images
+	 */
+	
 	public void setDefault() {
 		_units.setDefault();
 		_map.setDefault();
@@ -331,7 +332,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 //			System.out.println("Point X: " + point.getX() + "; Y: " + point.getY());
 //			System.out.println("Label X: " + label.getLocationOnScreen().getX() + "; Y: " + label.getLocationOnScreen().getY());
 			if (point.getX() > label.getLocationOnScreen().getX() && point.getY()+_scrollBar.getVerticalScrollBar().getValue() > label.getLocationOnScreen().getY() && label.getLocationOnScreen().getX()+label.getWidth() > point.getX() && label.getLocationOnScreen().getY()+label.getHeight() > point.getY()+_scrollBar.getVerticalScrollBar().getValue()) {
-				_beingHovered = true;
 				this.showItemInfo(_labelToItem.get(label));
 				_itemInfoBox.revalidate();
 				_itemInfoBox.repaint();
@@ -339,19 +339,18 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				return _labelToItem.get(label);
 			}
 		}
-		_beingHovered = false;
 		this.repaint();
 		return null;
 	}
 	
-	public void checkStopHovering(java.awt.Point point) {
+	public void checkStopHovering(MouseEvent e) {
+		Point point = e.getPoint();
 		for (JLabel label: _labelToCharacter.keySet()) {
 			if (label.contains(point)) {
 				return;
 			}
 		}
 		this.remove(_itemInfoBox);
-		_beingHovered = false;
 		this.repaint();
 	}
 	
@@ -371,15 +370,12 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			if (_buttons.getLocationOnScreen().getX() < point.getX() && _buttons.getLocationOnScreen().getY() < point.getY() && _buttons.getLocationOnScreen().getX()+_buttons.getWidth()>point.getX() && (_buttons.getLocationOnScreen().getY()+_buttons.getHeight())>point.getY()) {
 				
 				int buttonNum = (int)((point.getY()-_buttons.getLocationOnScreen().getY())/27);
-				for (optionButton button: _buttonList) {
 //					System.out.println("button y: " + button.getY());
-					_buttonList.get(buttonNum).activate(_buttonList.get(buttonNum));
-					_buttons.removeAll();
-					_layers.remove(_buttons);
-					_showingItemOptions = false;
-					this.repaint();
-					break;
-				}
+				_buttonList.get(buttonNum).activate(_buttonList.get(buttonNum));
+				_buttons.removeAll();
+				_layers.remove(_buttons);
+				_showingItemOptions = false;
+				this.repaint();
 			}
 			else {
 				_buttons.removeAll();
@@ -409,6 +405,29 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 //				}
 //			}
 		}
+	}
+	
+	public void checkOptionHovered(MouseEvent e) {
+		Point point = e.getLocationOnScreen();
+		if (_buttons.getLocationOnScreen().getX() < point.getX() && _buttons.getLocationOnScreen().getY() < point.getY() && _buttons.getLocationOnScreen().getX()+_buttons.getWidth()>point.getX() && (_buttons.getLocationOnScreen().getY()+_buttons.getHeight())>point.getY()) {
+			int buttonNum = (int)((point.getY()-_buttons.getLocationOnScreen().getY())/27);
+//				System.out.println("button y: " + button.getY());
+//			System.out.println("whee");
+			for (int i=0; i<_buttonList.size(); i++) {
+				if (i==buttonNum) {
+					_buttonList.get(buttonNum).setHovered();
+				}
+				else {
+					_buttonList.get(i).setDefault();
+				}
+			}
+		}
+		else {
+			for (int i=0; i<_buttonList.size(); i++) {
+				_buttonList.get(i).setDefault();
+			}
+		}
+		this.repaint();
 	}
 	
 	/**
@@ -506,7 +525,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				
 		int numOptionsInserted = 1;
 		
-		_selectedIcon = label;
 		_selectedItem = _labelToItem.get(label);
 		_selectedChar = character;
 		
@@ -925,7 +943,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		public void mouseMoved(MouseEvent e) {
 			if (!_showingItemOptions) {
-				GameMenuScreen.this.checkStopHovering(e.getPoint());
+				GameMenuScreen.this.checkStopHovering(e);
+			}
+			else {
+				GameMenuScreen.this.checkOptionHovered(e);
 			}
 		}
 
