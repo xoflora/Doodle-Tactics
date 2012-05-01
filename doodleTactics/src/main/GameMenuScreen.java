@@ -230,6 +230,14 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_downArrow.setLocation(_dt.getGameScreen().getMap().getMapCords().getX(), _dt.getGameScreen().getMap().getMapCords().getY());
 		_downArrow.paint((Graphics2D) g, _downArrow.getImage());
 		_infoBoxTitle.paint((Graphics2D) g, _infoBoxTitle.getImage());
+		  if(_currClicked == 5){
+			  ((Graphics2D) g).setRenderingHint(
+						RenderingHints.KEY_TEXT_ANTIALIASING,
+						RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+				((Graphics2D) g).setFont(new Font("M",Font.BOLD,25));
+				((Graphics2D) g).setColor(new Color(1,1,1));
+				((Graphics2D) g).drawString("Would you like to save your game?",200,150);
+		 }
 	}
 	
 	/**
@@ -317,6 +325,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			this.removeAll();
 			this.setDefault();
 			_save.setHovered();
+			_dt.getGameScreen().saveGame("src/tests/data/testSave");	
 			clicked = _save;
 			_currClicked = 5;
 		}

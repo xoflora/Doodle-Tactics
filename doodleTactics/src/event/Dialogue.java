@@ -83,7 +83,7 @@ public class Dialogue extends Event {
 	 * @throws IOException, FileNotFoundException 
 	 */
 	public Dialogue(DoodleTactics dt,  String filename)
-			throws InvalidEventException, IOException, FileNotFoundException{
+	throws InvalidEventException, IOException, FileNotFoundException{
 		super(dt);
 		_filename = filename;
 	}
@@ -108,6 +108,7 @@ public class Dialogue extends Event {
 		if(e.getKeyCode() == KeyEvent.VK_SPACE){
 			System.out.println("SPACE!");
 			_currIndex++;
+			_gameScreen.repaint();
 
 			if(_currIndex >= _characters.size())
 				_gameScreen.popControl();
@@ -129,6 +130,14 @@ public class Dialogue extends Event {
 		brush.setFont(new Font("M",Font.BOLD,25));
 		brush.setColor(new Color(0,0,1));
 		brush.drawString(_phrases.get(_currIndex), 450,665);
+		if(_phrases.get(_currIndex).startsWith("http://")){
+			try {
+				Runtime.getRuntime().exec("google-chrome " + _phrases.get(_currIndex));
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+
 	}
 
 	@Override
@@ -187,6 +196,7 @@ public class Dialogue extends Event {
 			_phrases.add(split[1].trim());
 			line = br.readLine();
 		}
+
 
 	}
 

@@ -8,7 +8,7 @@ import main.GameOverScreen;
 @SuppressWarnings("serial")
 public class MainCharacter extends Character{
 	
-	private DoodleTactics _dt;
+	private transient DoodleTactics _dt;
 	
 	private int _tileX, _tileY;
 	public MainCharacter(DoodleTactics dt, JPanel container, String profile, String left, String right, String up, String down, String name, int x, int y){

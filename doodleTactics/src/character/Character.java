@@ -63,11 +63,11 @@ public abstract class Character extends Rectangle{
 	protected double _tileX,_tileY;
 
 	//items
-	protected transient Weapon _equipped;
-	protected transient Cuirass _cuirass;
-	protected transient Shield _shield;
-	protected transient Footgear _footgear;
-	protected transient HashMap<Integer, Item> _inventory; //items not being worn
+	protected Weapon _equipped;
+	protected Cuirass _cuirass;
+	protected Shield _shield;
+	protected Footgear _footgear;
+	protected HashMap<Integer, Item> _inventory; //items not being worn
 	protected int _capacity; //max number of items the character can carry
 
 	//images
@@ -79,7 +79,7 @@ public abstract class Character extends Rectangle{
 	private transient BufferedImage _down;
 	private String _profileFile,_leftFile,_rightFile,_upFile,_downFile;
 
-	private transient CombatController _affiliation; //player/AI etc
+	private  CombatController _affiliation; //player/AI etc
 
 	private transient FloatTimer _floatTimer; // internal timer used to animate floating
 	private transient JPanel _container;

@@ -344,7 +344,6 @@ public class OverworldController extends GameScreenController {
 	public void mouseDragged(MouseEvent e) { }
 
 	public void mouseMoved(MouseEvent e) {
-
 	}
 	
 	@Override
@@ -353,7 +352,7 @@ public class OverworldController extends GameScreenController {
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-
+		//super.mouseMoved(e);
 	}
 
 	@Override

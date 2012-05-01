@@ -9,12 +9,13 @@ import map.Tile;
 
 public class Terrain extends Rectangle{
 
-	private BufferedImage _img;
-	protected DoodleTactics _dt;
+	private transient BufferedImage _img;
+	protected transient DoodleTactics _dt;
 	
-	public Terrain(JPanel container, BufferedImage img,double x, double y) {
+	public Terrain(DoodleTactics dt, JPanel container, String path,double x, double y) {
 		super(container);
-		_img = img;
+		_dt = dt;
+		parseImage(path);
 		this.setSize(_img.getWidth(), _img.getHeight());
 		this.setVisible(true);
 		int overflow = 0;
@@ -31,6 +32,12 @@ public class Terrain extends Rectangle{
 		return _img;
 	}
 	
+	/**
+	 * parses an image
+	 */
+	public void parseImage(String path){
+		_img = _dt.importImage(path);
+	}
 	
 	@Override
 	public void setLocation(double x, double y) {
