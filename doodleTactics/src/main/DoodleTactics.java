@@ -289,6 +289,16 @@ public class DoodleTactics extends JFrame {
 		return true;
 	}
 	
+	public void saveGame(String filename){
+		Character current;
+		for(String s : _allChars.keySet()){
+			current = _allChars.get(s);
+			current.serialize("src/tests/data/character");
+			
+		}
+			
+	}
+	
 	
 	/**
 	 * indicates that an error has occurred and sets the game to an error screen

@@ -12,14 +12,11 @@ import java.util.Random;
 import java.util.Map.Entry;
 import event.Dialogue;
 import event.InvalidEventException;
-
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-
 import controller.combatController.CombatController;
 import controller.combatController.player.PlayerCombatController;
-
 import main.DoodleTactics;
 import main.GameScreen;
 import map.Tile;
@@ -27,6 +24,11 @@ import graphics.Rectangle;
 import graphics.Shape;
 import items.*;
 public abstract class Character extends Rectangle{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @author czchapma
@@ -69,16 +71,17 @@ public abstract class Character extends Rectangle{
 	protected int _capacity; //max number of items the character can carry
 
 	//images
-	private BufferedImage _profile;
-	private BufferedImage _currentImage;
-	private BufferedImage _left;
-	private BufferedImage _right;
-	private BufferedImage _up;
-	private BufferedImage _down;
+	private transient BufferedImage _profile;
+	private transient BufferedImage _currentImage;
+	private transient BufferedImage _left;
+	private transient BufferedImage _right;
+	private transient BufferedImage _up;
+	private transient BufferedImage _down;
+	private String _profileFile,_leftFile,_rightFile,_upFile,_downFile;
 
 	private CombatController _affiliation; //player/AI etc
 
-	private FloatTimer _floatTimer; // internal timer used to animate floating
+	private transient FloatTimer _floatTimer; // internal timer used to animate floating
 	private JPanel _container;
 	private boolean _isAnimating;
 	
@@ -100,19 +103,20 @@ public abstract class Character extends Rectangle{
 		YIELD = new int[NUM_STATS];
 		_id = numCharacters;
 		numCharacters++;
-
+		
 		_name = name;
 		_level = 1;
 		_inventory	= new HashMap<Integer, Item>();
 		_capacity = 5;
 
 		_affiliation = null;
-
-		_profile = dt.importImage(profile);
-		_left = dt.importImage(left);
-		_right = dt.importImage(right);
-		_up = dt.importImage(up);
-		_down = dt.importImage(down);
+		
+		_profileFile = profile;
+		_leftFile = left;
+		_rightFile = right;
+		_upFile = up;
+		_downFile = down;
+		initImages(dt);
 		_currentImage = _down;
 
 		this.setSize(_down.getWidth(), _down.getHeight());
@@ -125,7 +129,9 @@ public abstract class Character extends Rectangle{
 		
 		_pathTimer = null;
 		_moveTimer = null;
+		
 	}
+
 
 	private class FloatTimer extends Timer {
 
@@ -835,7 +841,7 @@ public abstract class Character extends Rectangle{
 		try{
 			fis = new FileInputStream(filepath);
 			in = new ObjectInputStream(fis);
-			c = (Character)in.readObject();
+			in.readObject();
 			in.close();
 		} catch(IOException e){
 			e.printStackTrace();
@@ -843,6 +849,14 @@ public abstract class Character extends Rectangle{
 			e.printStackTrace();
 		}
 		return c;
+	}
+	
+	public void initImages(DoodleTactics dt){
+		_profile = dt.importImage(_profileFile);
+		_left = dt.importImage(_leftFile);
+		_right = dt.importImage(_rightFile);
+		_up = dt.importImage(_upFile);
+		_down = dt.importImage(_downFile);
 	}
 
 	/**
