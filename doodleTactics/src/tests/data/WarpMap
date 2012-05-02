@@ -32,7 +32,6 @@ DemoMap,src/graphics/tiles/light_blue.png,src/graphics/tiles/grass.png
 11,19,F,src/graphics/tiles/grass.png,1,0,0
 12,19,F,src/graphics/tiles/grass.png,1,0,0
 13,19,F,src/graphics/tiles/grass.png,1,0,0
-14,19,F,src/graphics/tiles/grass.png,0,0,2,src/tests/data/testMapDemo
 15,19,F,src/graphics/tiles/grass.png,1,0,0
 16,19,F,src/graphics/tiles/grass.png,1,0,0
 17,19,F,src/graphics/tiles/grass.png,1,0,0

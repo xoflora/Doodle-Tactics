@@ -6,8 +6,8 @@ import character.Character;
 
 public abstract class Equipment extends Item{
 	
-	public Equipment(BufferedImage image) {
-		super(image);
+	public Equipment(BufferedImage image, String name) {
+		super(image, name);
 	}
 
 	/**

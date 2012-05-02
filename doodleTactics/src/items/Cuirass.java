@@ -6,8 +6,8 @@ import character.Character;
 
 public class Cuirass extends Equipment{
 	
-	public Cuirass(BufferedImage image) {
-		super(image);
+	public Cuirass(BufferedImage image, String name) {
+		super(image, name);
 	}
 
 
