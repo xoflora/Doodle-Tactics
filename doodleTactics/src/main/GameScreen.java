@@ -33,9 +33,11 @@ import controller.combatController.CombatController;
 import controller.combatController.CombatOrchestrator;
 import controller.combatController.RandomBattleAI;
 
+import character.Archer;
 import character.Character;
 import character.Mage;
 import character.MainCharacter;
+import character.Warrior;
 import graphics.Rectangle;
 
 import map.InvalidMapException;
@@ -78,7 +80,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		MAP_WIDTH = 20;
 		MAP_HEIGHT = 20;
 
-		_currentCharacter = parseMainChar("src/tests/data/MainCharacterDemo");
+		parseParty("src/tests/data/PartyDemo");
 
 		//	_gameMenuController = _dt.getGameMenuScreen().getController();
 		_characterTerrainQueue = new PriorityQueue<Rectangle>(5, new Rectangle.RectangleComparator());
@@ -94,26 +96,50 @@ public class GameScreen extends Screen<GameScreenController> {
 	/**
 	 * Parses the Main Character from the given file
 	 */
-	public MainCharacter parseMainChar(String filePath){
+	public void parseParty(String filePath){
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(new File(filePath)));
 			String[] split = br.readLine().split(",");
 			if(split.length != 7){
-				System.out.println("Invalid Main Character File");
+				System.out.println("Invalid Party File");
 			} else{
+				//Parse Main Character
 				MainCharacter main =  new MainCharacter(_dt,this,split[2],split[3],split[4],split[5],split[6],split[1],5,5);
 				int overflow = (main.getImage().getWidth() - Tile.TILE_SIZE) / 2;
 				double x = 10*Tile.TILE_SIZE-overflow;
 				double y=  8*Tile.TILE_SIZE - main.getImage().getHeight() + Tile.TILE_SIZE;
 				main.setLocation(x, y);
-				return main;
+				_currentCharacter =  main;
+				_dt.addCharacterToParty(_currentCharacter);
+				//parse party
+				String line = br.readLine();
+				while(line != null){
+					split =  line.split(",");
+					if(split.length != 7){
+						System.out.println("Failed to parse party, length " +split.length);
+						return;
+					}
+					else{
+						if(split[0].equals("Archer"))
+							_dt.addCharacterToParty((new Archer(_dt,this,split[2],split[3],split[4],split[5],split[6],split[1],0,0)));
+						else if(split[0].equals("Warrior"))
+							_dt.addCharacterToParty((new Warrior(_dt,this,split[2],split[3],split[4],split[5],split[6],split[1],0,0)));
+						else if(split[0].equals("Mage"))
+							_dt.addCharacterToParty(new Mage(_dt,this,split[2],split[3],split[4],split[5],split[6],split[1],0,0));
+						else if(split[0].equals("Thief"))
+							_dt.addCharacterToParty(new Archer(_dt,this,split[2],split[3],split[4],split[5],split[6],split[1],0,0));
+						else
+							System.out.println("Invalid Character Type");
+					}
+						
+					line = br.readLine();
+				}
 			}
 		} catch (FileNotFoundException e) {
-			_dt.error("Invalid main character file path.");
+			_dt.error("Invalid party file path.");
 		} catch (IOException e) {
-			_dt.error("Invalid main character file.");
+			_dt.error("Invalid party file.");
 		}
-		return null;
 	}
 
 	/**

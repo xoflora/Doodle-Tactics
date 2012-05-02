@@ -133,7 +133,7 @@ public class Map implements Serializable {
 	 */
 	public static Map map(DoodleTactics dt, JPanel container, String path)
 	throws InvalidMapException {
-		int count = 3;
+		int count =4;
 		LinkedList<Terrain> terrainList = new LinkedList<Terrain>();
 		LinkedList<Character> chars = new LinkedList<Character>();
 		LinkedList<Tile> randBattles = new LinkedList<Tile>();
@@ -148,7 +148,7 @@ public class Map implements Serializable {
 			}
 			
 			if (splitLine[0].equals("mapCords")) {
-				throw new InvalidMapException("(line 1) Incorrect map file format");
+				throw new InvalidMapException("(line 2) Incorrect map file format");
 			}
 			
 			Point mapCords = new Point(Integer.parseInt(splitLine[1]), Integer.parseInt(splitLine[2]));
@@ -156,7 +156,7 @@ public class Map implements Serializable {
 			splitLine = reader.readLine().split(",");
 			
 			if (splitLine.length != 3)
-				throw new InvalidMapException("(line 2) Incorrect amount of data");
+				throw new InvalidMapException("(line 3) Incorrect amount of data");
 
 			String name = splitLine[0];
 			String defaultPath = splitLine[1];
