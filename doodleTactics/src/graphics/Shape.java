@@ -238,5 +238,13 @@ public abstract class Shape implements Serializable{
 	      return _shape.contains(p);
 	}
 
+	/**
+	 * translates the shape by a given coordinate
+	 * @param x the x-distance to translate
+	 * @param y the y-distance to translate
+	 */
+	public void updateLocation(double x, double y) {
+		setLocation(getX() + x, getY() + y);
+	}
 }
 

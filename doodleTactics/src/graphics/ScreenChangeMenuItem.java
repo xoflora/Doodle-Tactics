@@ -10,6 +10,10 @@ import main.DoodleTactics;
 import main.Screen;
 
 public class ScreenChangeMenuItem extends MenuItem {
+	
+	private static final String DEFAULT_MAP_PATH = "src/tests/data/testMapDemo";
+	private static final int DEFAULT_X = 15;
+	private static final int DEFAULT_Y = 15;
 
 	private Screen<? extends Controller> _nextScreen;
 	
@@ -23,7 +27,7 @@ public class ScreenChangeMenuItem extends MenuItem {
 	@Override
 	public void activate(int type) {		
 		_dt.changeScreens(_nextScreen);
-		_dt.getGameScreen().setMap("src/tests/data/testMapDemo");
+		_dt.getGameScreen().setMap(DEFAULT_MAP_PATH, DEFAULT_X, DEFAULT_Y);
 		_nextScreen.repaint();
 
 	}
