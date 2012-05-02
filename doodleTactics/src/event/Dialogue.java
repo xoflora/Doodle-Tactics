@@ -82,11 +82,29 @@ public class Dialogue extends Event {
 	 * @throws InvalidFileException --if something goes wrong during csv file parsing
 	 * @throws IOException, FileNotFoundException 
 	 */
+	
+	/**
+	 * Default Constructor (new game)
+	 */
 	public Dialogue(DoodleTactics dt,  String filename)
 	throws InvalidEventException, IOException, FileNotFoundException{
-		super(dt);
+		super(dt,false);
 		_filename = filename;
 	}
+	/**
+	 * Load game constructor
+	 */
+	public Dialogue(DoodleTactics dt,  String filename,boolean hasOccured)
+	throws InvalidEventException, IOException, FileNotFoundException{
+		super(dt,hasOccured);
+		_filename = filename;
+	}
+	
+	@Override
+	public String save() {
+		return "dialogue," + _filename + "," + Boolean.toString(this._hasOccurred);
+	}
+
 
 	public void print(){
 		for(int i=0; i<_phrases.size(); i++){
@@ -199,6 +217,4 @@ public class Dialogue extends Event {
 
 
 	}
-
-
 }

@@ -330,8 +330,11 @@ public class Map implements Serializable {
 	/**
 	 * Method used to reset all transient data structures after deserialization
 	 * @param dt
+	 * @throws IOException 
+	 * @throws InvalidEventException 
+	 * @throws FileNotFoundException 
 	 */
-	public void load(DoodleTactics dt){
+	public void load(DoodleTactics dt) throws FileNotFoundException, InvalidEventException, IOException{
 		//TODO handle overflow tile, if necessary
 		_dt = dt;
 		for(Character c : _activeCharacters){

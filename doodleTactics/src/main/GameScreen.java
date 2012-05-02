@@ -1,4 +1,5 @@
 package main;
+import event.InvalidEventException;
 import graphics.MenuItem;
 import graphics.Rectangle;
 import graphics.Terrain;
@@ -621,6 +622,8 @@ public class GameScreen extends Screen<GameScreenController> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch(InvalidEventException e){
 			e.printStackTrace();
 		}
 

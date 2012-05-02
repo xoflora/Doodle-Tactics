@@ -11,8 +11,15 @@ public class Warp extends Event {
 	private Tile _tile;
 	private String _eventPath;
 	
+	//Constructor used during normal gameplay
 	public Warp(DoodleTactics dt, Tile tile, String eventPath) {
-		super(dt);
+		super(dt,false);
+		_tile = tile;
+		_eventPath = eventPath;
+	}
+	
+	public Warp(DoodleTactics dt, Tile tile, String eventPath,boolean hasOccured) {
+		super(dt,hasOccured);
 		_tile = tile;
 		_eventPath = eventPath;
 	}
@@ -24,65 +31,10 @@ public class Warp extends Event {
 		_tile.removeOccupant();
 		_gameScreen.popControl();
 	}
-	
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+	public String save() {
+		return "warp," + _eventPath + "," + Boolean.toString(this._hasOccurred);
 	}
 
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-//switching maps
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 }

@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.JPanel;
@@ -16,6 +17,7 @@ import util.Util;
 
 import event.Dialogue;
 import event.Event;
+import event.InvalidEventException;
 import character.Character;
 
 /**
@@ -71,6 +73,7 @@ public class Tile extends graphics.Rectangle {
 	private Color _overlay;
 	
 	private transient Event _event;
+	private String _eventString;
 	private Character _character;
 	private String _warpFilePath;
 	
@@ -256,9 +259,14 @@ public class Tile extends graphics.Rectangle {
 	
 	/**
 	 * Loads a tile (re-imports the image)
+	 * @throws IOException 
+	 * @throws InvalidEventException 
+	 * @throws FileNotFoundException 
 	 */
-	public void load(DoodleTactics dt){
+	public void load(DoodleTactics dt) throws FileNotFoundException, InvalidEventException, IOException{
 		_image = dt.importImage(_imgPath);
+		if(_eventString != null)
+			_event = Event.load(dt, this, _eventString);
 	}
 	
 	/**
@@ -306,6 +314,7 @@ public class Tile extends graphics.Rectangle {
 	 */
 	public void setEvent(Event e){
 		_event = e;
+		_eventString = _event.save();
 	}
 
 	/**
