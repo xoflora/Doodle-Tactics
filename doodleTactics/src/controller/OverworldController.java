@@ -220,7 +220,7 @@ public class OverworldController extends GameScreenController {
 					if (newTile.canMove(Map.NORTH)) {
 						_moveThread = new OverworldMover(_gameScreen, oldTile, newTile, _gameScreen.getMainChar());
 						_moveThread.start();
-						while (!_moveThread.moveCompleted());
+					//	while (!_moveThread.moveCompleted());
 					}
 				}
 				
