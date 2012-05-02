@@ -62,7 +62,11 @@ public class DoodleTactics extends JFrame {
 		this.setFocusable(false);
 		this.setResizable(false);
 		this.setVisible(true);
-	//	_game.setMap("src/tests/data/testMapDemo");
+		
+		
+		//	_game.setMap("src/tests/data/testMapDemo");
+		
+		
 		
 	/*	Archer _char1 = new Archer(this,_game, 
 				"src/graphics/characters/doodle_knight_portrait.png", "src/graphics/characters/warrior_left_color.png",
@@ -291,23 +295,7 @@ public class DoodleTactics extends JFrame {
 			return false;
 		return true;
 	}
-	
-	public void saveGame(String filename){
-		Character current;
-		FileOutputStream fos = null;
-		ObjectOutputStream out = null;
-		try {
-			fos = new FileOutputStream(filename);
-			out = new ObjectOutputStream(fos);
-			out.writeObject(this);
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
-	}
-	
-	
 	/**
 	 * indicates that an error has occurred and sets the game to an error screen
 	 */

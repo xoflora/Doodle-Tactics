@@ -618,6 +618,22 @@ public abstract class Character extends Rectangle{
 		_footgear = f;
 		return old;
 	}
+	
+	public void removeWeapon() {
+		_equipped = null;
+	}
+	
+	public void removeFootgear() {
+		_footgear = null;
+	}
+	
+	public void removeCuirass() {
+		_cuirass = null;
+	}
+	
+	public void removeShield() {
+		_shield = null;
+	}
 
 
 	/**

@@ -16,12 +16,14 @@ public abstract class Item implements Serializable{
 	public final int _id;
 	private String _description;
 	private boolean _isEquip = false;
+	private String _name;
 		
-	public Item(BufferedImage image){
+	public Item(BufferedImage image, String name){
 		//The Id makes each item unique
 		_image = image;
 		_id = numItems;
 		numItems++;
+		_name = name;
 	}
 	
 	/**
