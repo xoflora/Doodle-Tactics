@@ -6,8 +6,8 @@ import character.Character;
 
 public class Shield extends Equipment{
 	
-	public Shield(BufferedImage image) {
-		super(image);
+	public Shield(BufferedImage image, String name) {
+		super(image, name);
 	}
 
 	/**

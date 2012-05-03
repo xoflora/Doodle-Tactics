@@ -54,17 +54,21 @@ public class DoodleTactics extends JFrame {
 		_screens = new Stack<Screen<?>>();
 		_allChars = new HashMap<String,Character>();
 		_images = new HashMap<String,BufferedImage>();
+		_party = new ArrayList<Character>();
 		_gameMenu = new GameMenuScreen(this);
 		_game = new GameScreen(this);
 		_mainMenu = new MainMenuScreen(this);
-		_party = new ArrayList<Character>();
 		this.changeScreens(_mainMenu);
 		this.setFocusable(false);
 		this.setResizable(false);
 		this.setVisible(true);
-	//	_game.setMap("src/tests/data/testMapDemo");
 		
-		Archer _char1 = new Archer(this,_game, 
+		
+		//	_game.setMap("src/tests/data/testMapDemo");
+		
+		
+		
+	/*	Archer _char1 = new Archer(this,_game, 
 				"src/graphics/characters/doodle_knight_portrait.png", "src/graphics/characters/warrior_left_color.png",
 				"src/graphics/characters/warrior_right_color.png", "src/graphics/characters/warrior_back_color.png",
 				"src/graphics/characters/warrior_front_color.png", "Dude", 10, 10);
@@ -101,7 +105,7 @@ public class DoodleTactics extends JFrame {
 		addCharacterToParty(new Warrior(this,_game, 
 				"src/graphics/characters/warrior_portrait.png", "src/graphics/characters/warrior_left_color.png",
 				"src/graphics/characters/warrior_right_color.png", "src/graphics/characters/warrior_back_color.png",
-				"src/graphics/characters/warrior_front_color.png", "Bob", 20, 10));
+				"src/graphics/characters/warrior_front_color.png", "Bob", 20, 10));*/
 	}
 	
 	/**
@@ -291,23 +295,7 @@ public class DoodleTactics extends JFrame {
 			return false;
 		return true;
 	}
-	
-	public void saveGame(String filename){
-		Character current;
-		FileOutputStream fos = null;
-		ObjectOutputStream out = null;
-		try {
-			fos = new FileOutputStream(filename);
-			out = new ObjectOutputStream(fos);
-			out.writeObject(this);
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
-	}
-	
-	
 	/**
 	 * indicates that an error has occurred and sets the game to an error screen
 	 */

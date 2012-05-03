@@ -8,8 +8,8 @@ public class HealthPotion extends Item{
 	
 	int _HPupdate;
 	
-	public HealthPotion(BufferedImage image, int HPupdate) {
-		super(image);
+	public HealthPotion(BufferedImage image, String name, int HPupdate) {
+		super(image, name);
 		_HPupdate = HPupdate;
 	}
 

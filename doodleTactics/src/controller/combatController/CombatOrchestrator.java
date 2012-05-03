@@ -181,8 +181,9 @@ public class CombatOrchestrator extends GameScreenController {
 	public List<Character> getCharactersToDisplay() {
 		List<List<Character>> c = new ArrayList<List<Character>>();
 		c.add(super.getCharactersToDisplay());
-		for (CombatController faction : _factions)
-			c.add(faction.getUnits());
+		if (_factions != null)
+			for (CombatController faction : _factions)
+				c.add(faction.getUnits());
 		return Util.union(c);
 	}
 

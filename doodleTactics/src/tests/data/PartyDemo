@@ -1,0 +1,5 @@
+Main,MainCharacter,src/graphics/characters/doodle_knight_portrait.png,src/graphics/characters/knight_left.png,src/graphics/characters/knight_right.png,src/graphics/characters/knight_back.png,src/graphics/characters/knight_front.png
+Archer,Dude,src/graphics/characters/doodle_knight_portrait.png,src/graphics/characters/warrior_left_color.png,src/graphics/characters/warrior_right_color.png,src/graphics/characters/warrior_back_color.png,src/graphics/characters/warrior_front_color.png
+Mage,Whee,src/graphics/characters/mage_portrait.png,src/graphics/characters/mage_left.png,src/graphics/characters/mage_right.png,src/graphics/characters/mage_back.png,src/graphics/characters/mage_front.png
+Thief,Thighs,src/graphics/characters/thief_portrait.png,src/graphics/characters/thief_left.png,src/graphics/characters/thief_right.png,src/graphics/characters/thief_back.png,src/graphics/characters/thief_front.png
+Warrior,Bob,src/graphics/characters/warrior_portrait.png,src/graphics/characters/warrior_left_color.png,src/graphics/characters/warrior_right_color.png,src/graphics/characters/warrior_back_color.png,src/graphics/characters/warrior_front_color.png

@@ -12,8 +12,8 @@ public abstract class Weapon extends Equipment{
 	private double _accuracy;
 	private int _attackPower;
 	
-	public Weapon(BufferedImage image) {
-		super(image);
+	public Weapon(BufferedImage image, String name) {
+		super(image, name);
 	}
 	
 	BufferedImage _displayImage;

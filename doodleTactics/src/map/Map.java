@@ -61,6 +61,9 @@ public class Map implements Serializable {
 
 	private static final int DEFAULT_XREF = 5;
 	private static final int DEFAULT_YREF = 5;
+	
+	private static final int DEFAULT_X_WINDOW_OFFSET = 0;
+	private static final int DEFAULT_Y_WINDOW_OFFSET = 0;
 
 	//Random Battle
 	private static final int CUTOFF = 100;
@@ -73,6 +76,9 @@ public class Map implements Serializable {
 	private MainCharacter _mainChar;
 	private  Stack<Integer> _prevXRef;
 	private  Stack<Integer> _prevYRef;
+	
+	private Stack<Integer> _prevXWindowOffset;
+	private Stack<Integer> _prevYWindowOffset;
 	
 	/**
 	 * fields used to generate random battles;
@@ -113,6 +119,11 @@ public class Map implements Serializable {
 		_prevYRef = new Stack<Integer>();
 		_prevXRef.push(DEFAULT_XREF);
 		_prevYRef.push(DEFAULT_YREF);
+		
+		_prevXWindowOffset = new Stack<Integer>();
+		_prevYWindowOffset = new Stack<Integer>();
+		_prevXWindowOffset.push(DEFAULT_X_WINDOW_OFFSET);
+		_prevYWindowOffset.push(DEFAULT_Y_WINDOW_OFFSET);
 	}
 
 	/**
@@ -133,7 +144,7 @@ public class Map implements Serializable {
 	 */
 	public static Map map(DoodleTactics dt, JPanel container, String path)
 	throws InvalidMapException {
-		int count = 3;
+		int count =4;
 		LinkedList<Terrain> terrainList = new LinkedList<Terrain>();
 		LinkedList<Character> chars = new LinkedList<Character>();
 		LinkedList<Tile> randBattles = new LinkedList<Tile>();
@@ -148,7 +159,7 @@ public class Map implements Serializable {
 			}
 			
 			if (splitLine[0].equals("mapCords")) {
-				throw new InvalidMapException("(line 1) Incorrect map file format");
+				throw new InvalidMapException("(line 2) Incorrect map file format");
 			}
 			
 			Point mapCords = new Point(Integer.parseInt(splitLine[1]), Integer.parseInt(splitLine[2]));
@@ -156,7 +167,7 @@ public class Map implements Serializable {
 			splitLine = reader.readLine().split(",");
 			
 			if (splitLine.length != 3)
-				throw new InvalidMapException("(line 2) Incorrect amount of data");
+				throw new InvalidMapException("(line 3) Incorrect amount of data");
 
 			String name = splitLine[0];
 			String defaultPath = splitLine[1];
@@ -193,8 +204,8 @@ public class Map implements Serializable {
 					int xTile = Integer.parseInt(splitLine[2]);
 					int yTile = Integer.parseInt(splitLine[3]);
 					System.out.println(main.getTileX() + ": " + main.getTileY());
-					double xLoc = Tile.TILE_SIZE * (xTile  - main.getTileX());
-					double yLoc = Tile.TILE_SIZE * (yTile - main.getTileY());
+					double xLoc = Tile.TILE_SIZE * xTile; //(xTile  - main.getTileX());
+					double yLoc = Tile.TILE_SIZE * yTile; //(yTile - main.getTileY());
 					tiles[xTile][yTile].setTilePermissions((splitLine[4]).charAt(0));
 					Terrain t = new Terrain(dt,container, splitLine[1], xLoc, yLoc);
 					terrainList.add(t);
@@ -208,8 +219,8 @@ public class Map implements Serializable {
 					Character toAdd = null;
 					Tile target = tiles[Integer.parseInt(splitLine[8])][Integer.parseInt(splitLine[9])]; 
 
-					double xLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[8])  - main.getTileX());
-					double yLoc = Tile.TILE_SIZE * (Integer.parseInt(splitLine[9]) - main.getTileY());
+					double xLoc = Tile.TILE_SIZE * Integer.parseInt(splitLine[8]);//(Integer.parseInt(splitLine[8])  - main.getTileX());
+					double yLoc = Tile.TILE_SIZE * Integer.parseInt(splitLine[9]);//(Integer.parseInt(splitLine[9]) - main.getTileY());
 
 					// check which type of character toAdd is
 					if (splitLine[1].equals("Archer")) { 
@@ -259,7 +270,9 @@ public class Map implements Serializable {
 
 				// Tile case
 				// 7 if no event specified, 8 otherwise
-				else if (((splitLine.length == 7) && Integer.parseInt(splitLine[6]) == NO_EVENT) || splitLine.length == 8) {
+				else if (((splitLine.length == 7) && Integer.parseInt(splitLine[6]) == NO_EVENT) ||
+						(splitLine.length == 8 && Integer.parseInt(splitLine[6]) == DIALOGUE)
+								|| (splitLine.length == 10 && Integer.parseInt(splitLine[6]) == WARP)) {
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
 
@@ -272,7 +285,8 @@ public class Map implements Serializable {
 						tiles[x][y].setEvent(new Dialogue(dt,splitLine[7]));
 						tiles[x][y].setInteractible();
 					} else if(Integer.parseInt(splitLine[6]) == WARP){
-						tiles[x][y].setEvent(new Warp(dt,tiles[x][y],splitLine[7]));
+						tiles[x][y].setEvent(new Warp(dt,tiles[x][y],splitLine[7],
+								Integer.parseInt(splitLine[8]), Integer.parseInt(splitLine[9])));
 						tiles[x][y].setEnterEvent();
 					}
 					//add others in the future perhaps
@@ -330,8 +344,11 @@ public class Map implements Serializable {
 	/**
 	 * Method used to reset all transient data structures after deserialization
 	 * @param dt
+	 * @throws IOException 
+	 * @throws InvalidEventException 
+	 * @throws FileNotFoundException 
 	 */
-	public void load(DoodleTactics dt){
+	public void load(DoodleTactics dt) throws FileNotFoundException, InvalidEventException, IOException{
 		//TODO handle overflow tile, if necessary
 		_dt = dt;
 		for(Character c : _activeCharacters){
@@ -877,6 +894,19 @@ public class Map implements Serializable {
 	public void setPrevYRef(int y){
 		_prevYRef.push(y);
 	}
+	
+	public int getPrevXWindowOffset() {
+		return _prevXWindowOffset.pop();
+	}
+	public int getPrevYWindowOffset() {
+		return _prevYWindowOffset.pop();
+	}
+	public void setPrevXWindowOffset(int x) {
+		_prevXWindowOffset.push(x);
+	}
+	public void setPrevYWindowOffset(int y) {
+		_prevYWindowOffset.push(y);
+	}
 
 	/**
 	 * Assign Random Enemies to Tiles
@@ -888,9 +918,11 @@ public class Map implements Serializable {
 		for(Tile  t : _randBattles){
 			if(r.nextInt(100) < CUTOFF){
 				//An enemy will be placed
-				double xLoc = Tile.TILE_SIZE * (t.x() - _dt.getGameScreen().getXRef());
-				double yLoc = Tile.TILE_SIZE * (t.y() - _dt.getGameScreen().getYRef());
-				System.out.println("**XREF" + _dt.getGameScreen().getXRef() + " YREF: " +_dt.getGameScreen().getYRef() + "TIle x: " + t.x() + " Y: " + t.y());
+		//		double xLoc = Tile.TILE_SIZE * (t.x() - _dt.getGameScreen().getXRef());
+		//		double yLoc = Tile.TILE_SIZE * (t.y() - _dt.getGameScreen().getYRef());
+				double xLoc = Tile.TILE_SIZE * (t.x()) - _dt.getGameScreen().getXWindowOffset();
+				double yLoc = Tile.TILE_SIZE * (t.y()) - _dt.getGameScreen().getYWindowOffset();
+		//		System.out.println("**XREF" + _dt.getGameScreen().getXRef() + " YREF: " +_dt.getGameScreen().getYRef() + "TIle x: " + t.x() + " Y: " + t.y());
 
 				Character enemy = Character.generateRandomCharacter(_dt,_dt.getGameScreen(),xLoc,yLoc);
 				

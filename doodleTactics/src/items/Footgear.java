@@ -7,8 +7,8 @@ import character.Character;
 
 public class Footgear extends Equipment {
 	
-	public Footgear(BufferedImage image) {
-		super(image);
+	public Footgear(BufferedImage image, String name) {
+		super(image, name);
 	}
 
 	int _speedEffect;

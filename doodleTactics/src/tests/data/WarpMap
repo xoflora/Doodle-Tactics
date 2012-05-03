@@ -32,7 +32,7 @@ DemoMap,src/graphics/tiles/light_blue.png,src/graphics/tiles/grass.png
 11,19,F,src/graphics/tiles/grass.png,1,0,0
 12,19,F,src/graphics/tiles/grass.png,1,0,0
 13,19,F,src/graphics/tiles/grass.png,1,0,0
-14,19,F,src/graphics/tiles/grass.png,0,0,2,src/tests/data/testMapDemo
+14,19,F,src/graphics/tiles/grass.png,0,0,2,src/tests/data/testMapDemo,5,13
 15,19,F,src/graphics/tiles/grass.png,1,0,0
 16,19,F,src/graphics/tiles/grass.png,1,0,0
 17,19,F,src/graphics/tiles/grass.png,1,0,0
@@ -97,5 +97,5 @@ DemoMap,src/graphics/tiles/light_blue.png,src/graphics/tiles/grass.png
 5,5,F,src/graphics/tiles/grass.png,1,0,0
 4,5,F,src/graphics/tiles/grass.png,1,0,0
 6,5,0,src/graphics/tiles/grass.png,1,0,0
-14,14,F,src/graphics/tiles/door.jpg,1,0,2,src/tests/data/testMapDemo
+14,14,F,src/graphics/tiles/door.jpg,1,0,2,src/tests/data/testMapDemo,5,13
 char,Thief,Thighs,src/graphics/characters/sampleProfile.gif,src/graphics/characters/thief_left.png,src/graphics/characters/thief_right.png,src/graphics/characters/thief_back.png,src/graphics/characters/thief_front.png,8,1
