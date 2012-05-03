@@ -162,6 +162,8 @@ public class OverworldController extends GameScreenController {
 			Character main = _gameScreen.getMainChar();
 			Tile oldTile = _gameScreen.getTile((int)main.getX(),
 					(int)main.getY());
+			System.out.println(main.getX() + " " + main.getY());
+			System.out.println(oldTile);
 			Tile newTile = null;
 
 			switch(_gameScreen.getMainChar().getDirection()){

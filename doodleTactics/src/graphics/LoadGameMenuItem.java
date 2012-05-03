@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import main.DoodleTactics;
+import main.LoadGameScreen;
 import main.Screen;
 import controller.Controller;
 
@@ -22,11 +23,9 @@ public class LoadGameMenuItem extends MenuItem{
 	 */
 	@Override
 	public void activate(int type) {
-		_dt.getGameScreen().loadGame("src/tests/data/testSave");
-		_dt.changeScreens(_dt.getGameScreen());
-		_dt.getGameScreen().repaint();
-		
+	//	_dt.getGameScreen().loadGame("src/tests/data/testSave");
+	//	_dt.changeScreens(_dt.getGameScreen());
+		//_dt.getGameScreen().repaint();
+		_dt.changeScreens(new LoadGameScreen(_dt));
 	}
-
-
 }

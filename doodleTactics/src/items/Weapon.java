@@ -2,6 +2,8 @@ package items;
 
 import java.awt.image.BufferedImage;
 
+import main.DoodleTactics;
+
 import character.Character;
 
 public abstract class Weapon extends Equipment{
@@ -12,8 +14,8 @@ public abstract class Weapon extends Equipment{
 	private double _accuracy;
 	private int _attackPower;
 	
-	public Weapon(BufferedImage image, String name) {
-		super(image, name);
+	public Weapon(DoodleTactics dt, String imagePath, String name) {
+		super(dt,imagePath, name);
 	}
 	
 	BufferedImage _displayImage;

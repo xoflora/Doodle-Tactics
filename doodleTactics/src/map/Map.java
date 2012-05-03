@@ -355,6 +355,11 @@ public class Map implements Serializable {
 			c.load(dt);
 		}
 		
+		System.out.println("Main Char X: " + _mainChar.getX() + " Y:" + _mainChar.getY()); 
+	//	System.out.println("Other CHAR X: " + _activeCharacters.get(1).getX() +
+	//			" Y: " + _activeCharacters.get(1).getY());
+
+		
 		for(int i=0; i<_map.length; i++)
 			for(int j=0; j<_map[0].length; j++)
 				_map[i][j].load(dt);
@@ -425,7 +430,11 @@ public class Map implements Serializable {
 	 * @return the tile to the north of the source tile
 	 */
 	public Tile getNorth(Tile source) {
-		return _map[source.x()][source.y() - 1];
+		try{
+			return _map[source.x()][source.y() - 1];
+		} catch(ArrayIndexOutOfBoundsException e){
+			return null;
+		}
 	}
 
 	/**
@@ -433,7 +442,11 @@ public class Map implements Serializable {
 	 * @return the tile to the east of the source tile
 	 */
 	public Tile getEast(Tile source) {
-		return _map[source.x() + 1][source.y()];
+		try{
+			return _map[source.x() + 1][source.y()];
+		} catch(ArrayIndexOutOfBoundsException e){
+			return null;
+		}
 	}
 
 	/**
@@ -441,7 +454,11 @@ public class Map implements Serializable {
 	 * @return the tile to the south of the source tile
 	 */
 	public Tile getSouth(Tile source) {
-		return _map[source.x()][source.y() + 1];
+		try{
+			return _map[source.x()][source.y() + 1];
+		} catch(ArrayIndexOutOfBoundsException e){
+			return null;			
+		}
 	}
 
 	/**
@@ -449,7 +466,11 @@ public class Map implements Serializable {
 	 * @return the tile to the west of the source tile
 	 */
 	public Tile getWest(Tile source) {
-		return _map[source.x() - 1][source.y()];
+		try{
+			return _map[source.x() - 1][source.y()];
+		} catch(ArrayIndexOutOfBoundsException e){
+			return null;
+		}
 	}
 
 	/**

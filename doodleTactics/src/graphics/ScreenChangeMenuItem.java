@@ -33,15 +33,15 @@ public class ScreenChangeMenuItem extends MenuItem {
 		_dt.getGameScreen().setMap(DEFAULT_MAP_PATH, DEFAULT_X, DEFAULT_Y);
 		
 		//Modify Character
-		HealthPotion potion = new HealthPotion(_dt.importImage("src/graphics/items/donut.png"), "Magical Sprinkle Donut", 10);
+		HealthPotion potion = new HealthPotion(_dt,"src/graphics/items/donut.png", "Magical Sprinkle Donut", 10);
 		potion.setDescription("Sup bro");
-		HealthPotion pot2 = new HealthPotion(_dt.importImage("src/graphics/items/purple_potion.png"), "Effervescent Potion", 1000);
+		HealthPotion pot2 = new HealthPotion(_dt, "src/graphics/items/purple_potion.png", "Effervescent Potion", 1000);
 		pot2.setDescription("Poisonous. Do not use.");
-		HealthPotion pot3 = new HealthPotion(_dt.importImage("src/graphics/items/purple_potion.png"), "Effervescent Potion", 1000);
+		HealthPotion pot3 = new HealthPotion(_dt, "src/graphics/items/purple_potion.png", "Effervescent Potion", 1000);
 		pot3.setDescription("Use me.");
-		HealthPotion pot4 = new HealthPotion(_dt.importImage("src/graphics/items/purple_potion.png"), "Effervescent Potion", 1000);
+		HealthPotion pot4 = new HealthPotion(_dt, "src/graphics/items/purple_potion.png", "Effervescent Potion", 1000);
 		pot4.setDescription("Fun stuff.");
-		HealthPotion pot5 = new HealthPotion(_dt.importImage("src/graphics/items/purple_potion.png"), "Effervescent Potion", 1000);
+		HealthPotion pot5 = new HealthPotion(_dt, "src/graphics/items/purple_potion.png", "Effervescent Potion", 1000);
 		pot5.setDescription("A normal healing potion.");
 		try {
 			_dt.getParty().get(1).addToInventory(potion);
