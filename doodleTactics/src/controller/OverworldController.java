@@ -207,7 +207,7 @@ public class OverworldController extends GameScreenController {
 			case 'w':
 				newTile = _gameScreen.getMap().getNorth(oldTile);
 				
-				if (_moveThread != null)
+		/*		if (_moveThread != null)
 					if (_moveThread.moveCompleted()) {
 						try {
 							_moveThread.join();
@@ -215,20 +215,20 @@ public class OverworldController extends GameScreenController {
 							_dt.error("Threading error during movement.");
 						}
 						_moveThread = null;
-					}
+					}		*/
 				
-				if(newTile != null && (_moveThread == null || !_moveThread.isAlive())){
+		/*		if(newTile != null && (_moveThread == null || !_moveThread.isAlive())){
 					main.setUp();
 					if (newTile.canMove(Map.NORTH)) {
 						_moveThread = new OverworldMover(_gameScreen, oldTile, newTile, _gameScreen.getMainChar());
 						_moveThread.start();
 					//	while (!_moveThread.moveCompleted());
 					}
-				}
+				}		*/
 				
 				
-	/*			if(newTile != null && newTile.canMove(Map.SOUTH)){			
-					if(newTile.hasEnterEvent()){
+				if (newTile != null){			
+				/*	if(newTile.hasEnterEvent()){
 						_gameScreen.pushControl(newTile.getEvent());
 						break;
 					} else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
@@ -238,13 +238,16 @@ public class OverworldController extends GameScreenController {
 						newTile.setOccupant(_gameScreen.getMainChar());
 						oldTile.removeOccupant();
 						_gameScreen.mapUpdate(0, -1);
-					}
-				}			*/
+					}	*/
+					main.setUp();
+					if (newTile.canMove(Map.SOUTH))
+						_gameScreen.moveMainCharacter(oldTile, newTile);
+				}
 				break;
 			case 'a':
 				newTile = _gameScreen.getMap().getWest(oldTile);
 				
-				if (_moveThread != null)
+			/*	if (_moveThread != null)
 					if (_moveThread.moveCompleted()) {
 						try {
 							_moveThread.join();
@@ -259,10 +262,10 @@ public class OverworldController extends GameScreenController {
 					if (newTile.canMove(Map.EAST)) {
 						_moveThread = new OverworldMover(_gameScreen, oldTile, newTile, _gameScreen.getMainChar());
 						_moveThread.start();
-					}
+					}		*/
 					
-					
-				/*	if(newTile.hasEnterEvent()) {
+				if (newTile != null) {
+				/*	if (newTile.hasEnterEvent()) {
 						_gameScreen.pushControl(newTile.getEvent());
 						break;
 					}
@@ -274,12 +277,15 @@ public class OverworldController extends GameScreenController {
 						_gameScreen.mapUpdate(-1, 0);
 						oldTile.removeOccupant();
 					}	*/
+					main.setLeft();
+					if (newTile.canMove(Map.EAST))
+						_gameScreen.moveMainCharacter(oldTile, newTile);
 				}
 				break;
 			case 's':
 				newTile = _gameScreen.getMap().getSouth(oldTile);
 				
-				if (_moveThread != null)
+			/*	if (_moveThread != null)
 					if (_moveThread.moveCompleted()) {
 						try {
 							_moveThread.join();
@@ -295,27 +301,31 @@ public class OverworldController extends GameScreenController {
 						_moveThread = new OverworldMover(_gameScreen, oldTile, newTile, _gameScreen.getMainChar());
 						_moveThread.start();
 					}
-				}
+				}	*/
 
-			/*	if(newTile != null && newTile.canMove(Map.NORTH)){			
-					if(newTile.hasEnterEvent()){
+				if (newTile != null){			
+					/*if(newTile.hasEnterEvent()){
 						_gameScreen.pushControl(newTile.getEvent());
 						break;
 					}
 					else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
 						_dt.getGameScreen().getMap().startBattle(newTile);
 					}
-					else {
+					else {	
 						newTile.setOccupant(_gameScreen.getMainChar());
 						_gameScreen.mapUpdate(0, 1);
 						oldTile.removeOccupant();
-					}
-				}		*/
+					}	*/
+					main.setDown();
+					
+					if (newTile.canMove(Map.NORTH))
+						_gameScreen.moveMainCharacter(oldTile, newTile);
+				}
 				break;
 			case 'd':
 				newTile = _gameScreen.getMap().getEast(oldTile);
 				
-				if (_moveThread != null)
+			/*	if (_moveThread != null)
 					if (_moveThread.moveCompleted()) {
 						try {
 							_moveThread.join();
@@ -331,11 +341,11 @@ public class OverworldController extends GameScreenController {
 						_moveThread = new OverworldMover(_gameScreen, oldTile, newTile, _gameScreen.getMainChar());
 						_moveThread.start();
 					}
-				}
+				}		*/
 				
 				
-		/*		if(newTile != null && newTile.canMove(Map.WEST)){
-					if(newTile.hasEnterEvent()) {
+				if (newTile != null){
+				/*	if(newTile.hasEnterEvent()) {
 						_gameScreen.pushControl(newTile.getEvent());
 						break;
 					}
@@ -346,8 +356,11 @@ public class OverworldController extends GameScreenController {
 						newTile.setOccupant(_gameScreen.getMainChar());
 						_gameScreen.mapUpdate(1, 0);
 						oldTile.removeOccupant();
-					}
-				}			*/
+					}	*/
+					main.setRight();
+					if (newTile.canMove(Map.WEST))
+						_gameScreen.moveMainCharacter(oldTile, newTile);
+				}
 				break;
 			case 'f':
 
@@ -388,10 +401,4 @@ public class OverworldController extends GameScreenController {
 	public void mouseMoved(MouseEvent e) {
 		super.mouseMoved(e);
 	}
-
-	@Override
-	public LinkedList<Character> getCharactersToDisplay() {
-		return _gameScreen.getMap().getCharactersToDisplay();
-	}
-
 }
