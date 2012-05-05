@@ -24,10 +24,13 @@ public class Warp extends Event {
 		_newY = y;
 	}
 	
-	public Warp(DoodleTactics dt, Tile tile, String eventPath, boolean hasOccured) {
+	public Warp(DoodleTactics dt, Tile tile, String eventPath, boolean hasOccured, int x, int y) {
 		super(dt,hasOccured);
 		_tile = tile;
 		_eventPath = eventPath;
+		_newX = x;
+		_newY = y;
+
 	}
 
 	@Override
@@ -40,7 +43,8 @@ public class Warp extends Event {
 
 	@Override
 	public String save() {
-		return "warp," + _eventPath + "," + Boolean.toString(this._hasOccurred);
+		return "warp," + _eventPath + "," + Boolean.toString(this._hasOccurred)
+		 + "," + _newX + "," + _newY;
 	}
 
 }
