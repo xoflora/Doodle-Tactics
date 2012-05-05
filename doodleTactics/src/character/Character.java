@@ -898,6 +898,10 @@ public abstract class Character extends Rectangle{
 	public BufferedImage getRightImage() {
 		return _right;
 	}
+	
+	public BufferedImage getLeftImage() {
+		return _left;
+	}
 
 	/**
 	 * flattens a Character to a file (using serialization), for saving purposes

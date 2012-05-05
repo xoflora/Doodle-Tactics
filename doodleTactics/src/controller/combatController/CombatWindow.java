@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import character.Character;
+
 import main.DoodleTactics;
 import main.GameScreen;
 import map.Tile;
@@ -29,9 +31,12 @@ public class CombatWindow {
 		_moveUpTimer = new moveUpTimer();
 	}
 	
-	public void prepareWindow(Character attacker, Character victim) {
-		_attacker = attacker;
-		_victim = victim;
+	public void prepareWindow(Character src, Character dest) {
+		_attacker = src;
+		_victim = dest;
+		_attacker.getLeftImage();
+		_gs.addCharacter(_attacker);
+		_gs.addCharacter(_victim);
 	}
 
 	public void animate() {
@@ -43,7 +48,7 @@ public class CombatWindow {
 	private class moveUpTimer extends Timer {
 		
 		public moveUpTimer() {
-			super(5, null);
+			super(1, null);
 			this.addActionListener(new moveUpListener(this));
 		}
 		
@@ -57,17 +62,17 @@ public class CombatWindow {
 			}
 			
 			public void actionPerformed(ActionEvent e) {
-				if (count < 13) {
-					_combatBox.setLocation(0, _combatBox.getY()-25);
+				if (count < 11) {
+					_combatBox.setLocation(0, _combatBox.getY()-30);
 					count++;
-					if (count == 13) {
-						_combatBox.setLocation(0, _combatBox.getY()-10);
+					if (count == 11) {
+						_combatBox.setLocation(0, _combatBox.getY()-5);
 					}
 					_gs.repaint();
 				}
 				else {
 					//do weapon animations
-					if (count == 13) {
+					if (count == 11) {
 						try {
 							Thread.sleep(2000);
 						} catch (InterruptedException e1) {
@@ -75,11 +80,13 @@ public class CombatWindow {
 							System.out.println("THREAD ISSUES");
 						}
 					}
-					_combatBox.setLocation(0, _combatBox.getY()+25);
+					_combatBox.setLocation(0, _combatBox.getY()+30);
 					count++;
-					if (count == 26) {
-						_combatBox.setLocation(0, _combatBox.getY()+10);
+					if (count == 22) {
+						_combatBox.setLocation(0, _combatBox.getY()+5);
 						count = 0;
+						_gs.removeCharacter(_attacker);
+						_gs.removeCharacter(_victim);
 						_timer.stop();
 					}
 					_gs.repaint();

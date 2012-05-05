@@ -287,6 +287,7 @@ public abstract class CombatController extends GameScreenController {
 	 */
 	public void attack(Character src, Character dest) {
 		System.out.println("DOING THE ANIMATION");
+		_dt.getGameScreen().getPopUpCombat().prepareWindow(src, dest);
 		_dt.getGameScreen().getPopUpCombat().animate();
 		src.attack(dest, r);
 		System.out.println(src.getName() + " has " + src.getHP() + " HP remaining.");
