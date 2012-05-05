@@ -124,6 +124,9 @@ public class Map implements Serializable {
 		_prevYWindowOffset = new Stack<Integer>();
 		_prevXWindowOffset.push(DEFAULT_X_WINDOW_OFFSET);
 		_prevYWindowOffset.push(DEFAULT_Y_WINDOW_OFFSET);
+		
+		System.out.println("Tile 14, 14: X-" +_map[0][0].getX() + " Y- " + _map[14][14].getY());
+
 	}
 
 	/**
@@ -358,11 +361,15 @@ public class Map implements Serializable {
 		System.out.println("Main Char X: " + _mainChar.getX() + " Y:" + _mainChar.getY()); 
 	//	System.out.println("Other CHAR X: " + _activeCharacters.get(1).getX() +
 	//			" Y: " + _activeCharacters.get(1).getY());
-
 		
-		for(int i=0; i<_map.length; i++)
-			for(int j=0; j<_map[0].length; j++)
-				_map[i][j].load(dt);
+		
+		for(int i=0; i<_map.length; i++){
+			for(int j=0; j<_map[0].length; j++){
+						_map[i][j].load(dt);
+			}
+		}
+		
+
 		
 		for(Terrain t: _terrain)
 			t.load(_dt);

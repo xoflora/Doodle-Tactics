@@ -173,8 +173,8 @@ public class GameScreen extends Screen<GameScreenController> {
 			//Store XRef and YRef
 			Map prevMap = _currMap;
 			if(prevMap != null){
-				prevMap.setPrevXRef(_xRef);
-				prevMap.setPrevYRef(_yRef);
+				//prevMap.setPrevXRef(_xRef);
+				//prevMap.setPrevYRef(_yRef);
 				//Remove references to previous randomBattle
 				
 				
@@ -187,8 +187,8 @@ public class GameScreen extends Screen<GameScreenController> {
 
 
 			_currMap = map;
-			_xRef = _currMap.getPrevXRef();
-			_yRef = _currMap.getPrevYRef();
+			//_xRef = _currMap.getPrevXRef();
+			//_yRef = _currMap.getPrevYRef();
 			
 			_xWindowOffset = _currMap.getPrevXWindowOffset();
 			_yWindowOffset = _currMap.getPrevYWindowOffset();
@@ -642,6 +642,9 @@ public class GameScreen extends Screen<GameScreenController> {
 		//		m.setSize(65, 50);
 		//		m.paint((Graphics2D) g,m.getImage());
 		//		_currentCharacter = m;
+		
+		System.out.println("Main Character: X-" +_currMap.getMainCharacter().getX() + " Y:" +_currMap.getMainCharacter().getY());
+
 
 	}
 
@@ -740,6 +743,7 @@ public class GameScreen extends Screen<GameScreenController> {
 
 
 	public void saveGame(String filename){
+		String filepath =  "src/tests/data/" + filename;
 		System.out.println("Saving game!");
 		FileOutputStream fos;
 		ObjectOutputStream out;
@@ -753,10 +757,10 @@ public class GameScreen extends Screen<GameScreenController> {
 	//			" Y: " + _currMap.getCharactersToDisplay().get(1).getY());
 		
 		
-		_dt.addSavedGame(filename, filename);
+		_dt.addSavedGame(filename, filepath);
 		writeFilepathsFile();
 		try {
-			fos = new FileOutputStream(filename);
+			fos = new FileOutputStream(filepath);
 			out = new ObjectOutputStream(fos);
 			out.writeObject(_mapCache);
 			out.writeObject(_currMap);
@@ -822,9 +826,6 @@ public class GameScreen extends Screen<GameScreenController> {
 				Map m = _mapCache.get(path);
 				m.load(_dt);
 			}
-			
-			
-		//	setMap(path, _currMap.getMainCharacter().getX(), _currMap.getMainCharacter().getY());
 			
 			_terrainToPaint = _currMap.getTerrain();
 		} catch (IOException e) {

@@ -321,6 +321,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		if(_currClicked == 4){
 			//Options
+			this.grabFocus();
 			int y = 1;
 			((Graphics2D) g).setRenderingHint(
 					RenderingHints.KEY_TEXT_ANTIALIASING,
@@ -450,7 +451,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 
 		if(_saveMenuItem.contains(point) && _saveMenuItem.containsText()){
-			String filepath = "src/tests/data/" + _typeText.getText();
+			String filepath = _typeText.getText();
 			_dt.getGameScreen().saveGame(filepath);	
 		}
 
