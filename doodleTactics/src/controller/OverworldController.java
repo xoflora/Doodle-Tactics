@@ -149,7 +149,6 @@ public class OverworldController extends GameScreenController {
 			_gameScreen.switchToGameMenu();
 			_dt.getGameMenuScreen().setDefaultTabToUnits();
 			break;
-
 			/*	TEST COMBAT CONTROLLER STUFF:
 			 *  REMOVE WHEN DONE WITH ALL THAT
 			 */
@@ -366,9 +365,13 @@ public class OverworldController extends GameScreenController {
 
 				try {
 					Runtime.getRuntime().exec("google-chrome www.foodler.com");
+					break;
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+			case 'g':
+				_gameScreen.switchToClassChooserMenu();
+				break;
 			}
 		}
 		_gameScreen.repaint();
