@@ -123,7 +123,7 @@ public abstract class Character extends Rectangle{
 		this.setLocation(x, y);
 //		this.setLocation(x - overflow,y - _down.getHeight() + Tile.TILE_SIZE);
 		_floatTimer = new FloatTimer(container);
-		this.startHovering();
+	//	this.startHovering();
 		
 		_pathTimer = null;
 		_moveTimer = null;
