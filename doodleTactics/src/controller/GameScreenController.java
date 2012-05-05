@@ -123,7 +123,7 @@ public abstract class GameScreenController extends Controller {
 						_unitStats = null;
 					}
 				
-					_unitStats = new UnitStatWindow(_gameScreen, _dt, c, false);
+					_unitStats = new UnitStatWindow(_gameScreen, _dt, c, c.getX() + c.getWidth()/2 > _gameScreen.getWidth()/2);
 					_gameScreen.addMenuItem(_unitStats);
 					_unitStats.setVisible(true);
 			} else {

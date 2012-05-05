@@ -145,20 +145,19 @@ public class OverworldController extends GameScreenController {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		switch (e.getKeyCode()){
-		case KeyEvent.VK_CONTROL:
+		if(e.getKeyCode() == KeyEvent.VK_CONTROL){
 			//do stuff
 			_gameScreen.switchToGameMenu();
 			_dt.getGameMenuScreen().setDefaultTabToUnits();
-			break;
-			/*	TEST COMBAT CONTROLLER STUFF:
-			 *  REMOVE WHEN DONE WITH ALL THAT
-			 */
-		case KeyEvent.VK_ENTER: 
+		}
+		/*	TEST COMBAT CONTROLLER STUFF:
+		 *  REMOVE WHEN DONE WITH ALL THAT
+		 */
+		else if(e.getKeyCode() == KeyEvent.VK_ENTER){ 
 			_gameScreen.enterCombat(new HashMap<Character, Tile>());
-			break;
+		}
 
-		case KeyEvent.VK_SPACE:
+		else if(e.getKeyCode() == KeyEvent.VK_SPACE){
 			System.out.println("Space");
 			Character main = _gameScreen.getMainChar();
 			Tile oldTile = _gameScreen.getTile((int)main.getX(),
@@ -186,11 +185,55 @@ public class OverworldController extends GameScreenController {
 				System.out.println("Here");
 				_gameScreen.pushControl(newTile.getEvent());
 			}
-			break;
 		}
-		
-		
+
+		//Character Movement
+		else if(e.getKeyCode() == _dt.getLeftKey() || e.getKeyCode() == _dt.getRightKey() || e.getKeyCode() == _dt.getUpKey() || e.getKeyCode() == _dt.getDownKey()){
+			if(!_gameScreen.isAnimating()) {	
+
+				Character main = _gameScreen.getMainChar();
+
+				Tile oldTile = _gameScreen.getTile((int)main.getX(),
+						(int)main.getY());
+				Tile newTile = null;
+				if(e.getKeyCode() == _dt.getUpKey()) {
+
+					newTile = _gameScreen.getMap().getNorth(oldTile);
+
+					if (newTile != null){			
+						main.setUp();
+						if (newTile.canMove(Map.SOUTH))
+							_gameScreen.moveMainCharacter(oldTile, newTile);
+					}			
+				} else if(e.getKeyCode() == _dt.getLeftKey()){
+					newTile = _gameScreen.getMap().getWest(oldTile);
+					if (newTile != null) {
+						main.setLeft();
+						if (newTile.canMove(Map.EAST))
+							_gameScreen.moveMainCharacter(oldTile, newTile);
+					}
+				} else if(e.getKeyCode() == _dt.getDownKey()){
+					newTile = _gameScreen.getMap().getSouth(oldTile);
+					if (newTile != null){			
+						main.setDown();
+
+						if (newTile.canMove(Map.NORTH))
+							_gameScreen.moveMainCharacter(oldTile, newTile);
+					}
+				} else if (e.getKeyCode() == _dt.getRightKey()){
+					newTile = _gameScreen.getMap().getEast(oldTile);
+					if (newTile != null){
+						main.setRight();
+						if (newTile.canMove(Map.WEST))
+							_gameScreen.moveMainCharacter(oldTile, newTile);
+					}
+				}
+			}
+			_gameScreen.repaint();
+
+		}
 	}
+
 
 	@Override
 	public void keyTyped(KeyEvent e) { 
@@ -205,42 +248,11 @@ public class OverworldController extends GameScreenController {
 					(int)main.getY());
 			Tile newTile = null;
 
-			if(e.getKeyChar() == 'w') {
+	/*		if(e.getKeyChar() == 'w') {
 
 				newTile = _gameScreen.getMap().getNorth(oldTile);
 
-				/*		if (_moveThread != null)
-					if (_moveThread.moveCompleted()) {
-						try {
-							_moveThread.join();
-						} catch (InterruptedException e1) {
-							_dt.error("Threading error during movement.");
-						}
-						_moveThread = null;
-					}		*/
-
-				/*		if(newTile != null && (_moveThread == null || !_moveThread.isAlive())){
-					main.setUp();
-					if (newTile.canMove(Map.NORTH)) {
-						_moveThread = new OverworldMover(_gameScreen, oldTile, newTile, _gameScreen.getMainChar());
-						_moveThread.start();
-					//	while (!_moveThread.moveCompleted());
-					}
-				}		*/
-
-
 				if (newTile != null){			
-					/*	if(newTile.hasEnterEvent()){
-						_gameScreen.pushControl(newTile.getEvent());
-						break;
-					} else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
-						_dt.getGameScreen().getMap().startBattle(newTile);
-					}
-					else {
-						newTile.setOccupant(_gameScreen.getMainChar());
-						oldTile.removeOccupant();
-						_gameScreen.mapUpdate(0, -1);
-					}	*/
 					main.setUp();
 					if (newTile.canMove(Map.SOUTH))
 						_gameScreen.moveMainCharacter(oldTile, newTile);
@@ -249,37 +261,7 @@ public class OverworldController extends GameScreenController {
 
 			else if(e.getKeyChar() == 'a'){
 				newTile = _gameScreen.getMap().getWest(oldTile);
-
-				/*	if (_moveThread != null)
-					if (_moveThread.moveCompleted()) {
-						try {
-							_moveThread.join();
-						} catch (InterruptedException e1) {
-							_dt.error("Threading error during movement.");
-						}
-						_moveThread = null;
-					}
-
-				if(newTile != null && (_moveThread == null || !_moveThread.isAlive())){
-					main.setLeft();
-					if (newTile.canMove(Map.EAST)) {
-						_moveThread = new OverworldMover(_gameScreen, oldTile, newTile, _gameScreen.getMainChar());
-						_moveThread.start();
-					}		*/
-
 				if (newTile != null) {
-					/*	if (newTile.hasEnterEvent()) {
-						_gameScreen.pushControl(newTile.getEvent());
-						break;
-					}
-					else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
-						_dt.getGameScreen().getMap().startBattle(newTile);
-					}
-					else {
-						newTile.setOccupant(_gameScreen.getMainChar());
-						_gameScreen.mapUpdate(-1, 0);
-						oldTile.removeOccupant();
-					}	*/
 					main.setLeft();
 					if (newTile.canMove(Map.EAST))
 						_gameScreen.moveMainCharacter(oldTile, newTile);
@@ -287,38 +269,7 @@ public class OverworldController extends GameScreenController {
 			}
 			else if(e.getKeyChar() == 's'){
 				newTile = _gameScreen.getMap().getSouth(oldTile);
-
-				/*	if (_moveThread != null)
-					if (_moveThread.moveCompleted()) {
-						try {
-							_moveThread.join();
-						} catch (InterruptedException e1) {
-							_dt.error("Threading error during movement.");
-						}
-						_moveThread = null;
-					}
-
-				if(newTile != null && (_moveThread == null || !_moveThread.isAlive())){
-					main.setDown();
-					if (newTile.canMove(Map.NORTH)) { 
-						_moveThread = new OverworldMover(_gameScreen, oldTile, newTile, _gameScreen.getMainChar());
-						_moveThread.start();
-					}
-				}	*/
-
 				if (newTile != null){			
-					/*if(newTile.hasEnterEvent()){
-						_gameScreen.pushControl(newTile.getEvent());
-						break;
-					}
-					else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
-						_dt.getGameScreen().getMap().startBattle(newTile);
-					}
-					else {	
-						newTile.setOccupant(_gameScreen.getMainChar());
-						_gameScreen.mapUpdate(0, 1);
-						oldTile.removeOccupant();
-					}	*/
 					main.setDown();
 
 					if (newTile.canMove(Map.NORTH))
@@ -327,45 +278,13 @@ public class OverworldController extends GameScreenController {
 			}
 			else if(e.getKeyChar() == 'd'){
 				newTile = _gameScreen.getMap().getEast(oldTile);
-
-				/*	if (_moveThread != null)
-					if (_moveThread.moveCompleted()) {
-						try {
-							_moveThread.join();
-						} catch (InterruptedException e1) {
-							_dt.error("Threading error during movement.");
-						}
-						_moveThread = null;
-					}
-
-				if(newTile != null && (_moveThread == null || !_moveThread.isAlive())){
-					main.setRight();
-					if (newTile.canMove(Map.WEST)) { 
-						_moveThread = new OverworldMover(_gameScreen, oldTile, newTile, _gameScreen.getMainChar());
-						_moveThread.start();
-					}
-				}		*/
-
-
 				if (newTile != null){
-					/*	if(newTile.hasEnterEvent()) {
-						_gameScreen.pushControl(newTile.getEvent());
-						break;
-					}
-					else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
-						_dt.getGameScreen().getMap().startBattle(newTile);
-					}
-					else {
-						newTile.setOccupant(_gameScreen.getMainChar());
-						_gameScreen.mapUpdate(1, 0);
-						oldTile.removeOccupant();
-					}	*/
 					main.setRight();
 					if (newTile.canMove(Map.WEST))
 						_gameScreen.moveMainCharacter(oldTile, newTile);
 				}
-			}
-			else if(e.getKeyChar() == 'f'){
+			}*/
+			if(e.getKeyChar() == 'f'){
 
 				try {
 					Runtime.getRuntime().exec("google-chrome www.foodler.com");

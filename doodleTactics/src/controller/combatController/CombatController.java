@@ -1,14 +1,10 @@
 package controller.combatController;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
-
-import javax.swing.Timer;
 
 import controller.GameScreenController;
 
@@ -22,6 +18,32 @@ import map.*;
  * abstract interface for regulating combat
  */
 public abstract class CombatController extends GameScreenController {
+	
+	protected enum State {
+		START,
+		CHARACTER_SELECTED,
+		CHARACTER_OPTION_MENU,
+		SELECTING_ITEM,
+		ITEM_MENU;
+		
+		public String toString() {
+			switch (this) {
+			case START:
+				return "START";
+			case CHARACTER_SELECTED:
+				return "CHARACTER_SELECTED";
+			case CHARACTER_OPTION_MENU:
+				return "CHARACTER_OPTION_MENU";
+			case SELECTING_ITEM:
+				return "SELECTING_ITEM";
+			case ITEM_MENU:
+				return "ITEM_MENU";
+			default:
+				return "";
+			}
+		}
+	}
+	
 	protected List<Character> _units;
 	private ListIterator<Character> _unitCycle;
 	protected HashMap<Character, Boolean> _hasMoved;
@@ -48,6 +70,14 @@ public abstract class CombatController extends GameScreenController {
 		
 		for (Character c : _units)
 			c.affiliate(this);
+	}
+	
+	/**
+	 * @param c a character
+	 * @return whether the given character is affiliated with this combat controller
+	 */
+	public boolean containsCharacter(Character c) {
+		return _units.contains(c);
 	}
 	
 	/**

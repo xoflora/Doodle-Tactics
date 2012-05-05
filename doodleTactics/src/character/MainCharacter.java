@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 
 import main.DoodleTactics;
 import main.GameOverScreen;
+import map.Tile;
 
 public class MainCharacter extends Character{
 	
