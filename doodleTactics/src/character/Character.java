@@ -80,6 +80,8 @@ public abstract class Character extends Rectangle{
 	private transient JPanel _container;
 	private boolean _isAnimating;
 	
+	private int _currDirection = 1; //1 = front, 2 = back, 3 = left, 4 = right 
+	
 	private transient PathTimer _pathTimer;
 	private transient MoveTimer _moveTimer;
 
@@ -800,6 +802,7 @@ public abstract class Character extends Rectangle{
 	 * @author jeshapir
 	 */
 	public void setLeft(){
+		_currDirection = 3;
 		_currentImage = _left;
 	}
 
@@ -809,6 +812,7 @@ public abstract class Character extends Rectangle{
 	 * @author jeshapir
 	 */
 	public void setRight(){
+		_currDirection = 4;
 		_currentImage = _right;
 	}
 
@@ -818,6 +822,7 @@ public abstract class Character extends Rectangle{
 	 * @author jeshapir
 	 */
 	public void setUp(){
+		_currDirection = 2;
 		_currentImage = _up;
 	}
 
@@ -827,6 +832,7 @@ public abstract class Character extends Rectangle{
 	 * @author jeshapir
 	 */
 	public void setDown(){
+		_currDirection = 1;
 		_currentImage = _down;
 	}
 
@@ -992,6 +998,20 @@ public abstract class Character extends Rectangle{
 		_right = right;
 		_up = up;
 		_down = down;
+		switch(_currDirection) {
+			case 1:
+				_currentImage = _down;
+				break;
+			case 2: 
+				_currentImage = _up;
+				break;
+			case 3:
+				_currentImage = _left;
+				break;
+			case 4:
+				_currentImage = _right;
+				break;
+		}
 	}
 	
 	public void setStats(int strength, int def, int special, int resistance, int speed, int acc, int luck, int max_hp) {

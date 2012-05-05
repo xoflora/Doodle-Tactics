@@ -6,7 +6,7 @@ import main.DoodleTactics;
 import main.GameOverScreen;
 import map.Tile;
 
-public class MainCharacter extends Character{
+public class MainCharacter extends Character {
 	
 	/**
 	 * 

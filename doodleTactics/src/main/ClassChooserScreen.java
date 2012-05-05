@@ -6,9 +6,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -25,6 +27,7 @@ public class ClassChooserScreen extends Screen {
 
 	DoodleTactics _dt;
 	MenuItem _bg, _mage, _warrior, _thief, _archer, _name, _done;
+	charBox _warriorBox, _mageBox, _thiefBox, _archerBox;
 	int _chosenClass;
 	String _charName;
 	JTextField _typeText;
@@ -43,6 +46,11 @@ public class ClassChooserScreen extends Screen {
 		_name = new MenuItem(this, _dt.importImage("src/graphics/menu/char_selection_name.png"), _dt.importImage("src/graphics/menu/char_selection_name.png"), _dt);
 		_done = new MenuItem(this, _dt.importImage("src/graphics/menu/char_selection_done_default.png"), _dt.importImage("src/graphics/menu/char_selection_done_hovered.png"), _dt);
 		
+		_warriorBox = new charBox(this, _dt.importImage("src/graphics/menu/char_selection_box.png"), _dt.importImage("src/graphics/menu/char_selection_box_hovered.png"), _dt.importImage("src/graphics/menu/char_selection_box_clicked.png"), _dt);
+		_mageBox = new charBox(this, _dt.importImage("src/graphics/menu/char_selection_box.png"), _dt.importImage("src/graphics/menu/char_selection_box_hovered.png"), _dt.importImage("src/graphics/menu/char_selection_box_clicked.png"), _dt);
+		_thiefBox = new charBox(this, _dt.importImage("src/graphics/menu/char_selection_box.png"), _dt.importImage("src/graphics/menu/char_selection_box_hovered.png"), _dt.importImage("src/graphics/menu/char_selection_box_clicked.png"), _dt);
+		_archerBox = new charBox(this, _dt.importImage("src/graphics/menu/char_selection_box.png"), _dt.importImage("src/graphics/menu/char_selection_box_hovered.png"), _dt.importImage("src/graphics/menu/char_selection_box_clicked.png"), _dt);
+		
 		_bg.setLocation(0, 0);
 		_bg.setVisible(true);
 		
@@ -54,6 +62,15 @@ public class ClassChooserScreen extends Screen {
 		
 		_mage.setLocation(50, 423);
 		_mage.setVisible(true);
+		
+		_warriorBox.setLocation(50, 125);
+		_warriorBox.setVisible(true);
+		
+		_thiefBox.setLocation(520, 125);
+		_thiefBox.setVisible(true);
+		
+		_mageBox.setLocation(50, 423);
+		_mageBox.setVisible(true);
 		
 		_name.setLocation(30, 725);
 		_name.setVisible(true);
@@ -83,6 +100,9 @@ public class ClassChooserScreen extends Screen {
 		super.paintComponent(g);
 		Graphics2D brush = (Graphics2D) g;
 		_bg.paint(brush, _bg.getImage());
+		_warriorBox.paint(brush, _warriorBox.getImage());
+		_thiefBox.paint(brush, _thiefBox.getImage());
+		_mageBox.paint(brush, _mageBox.getImage());
 		_warrior.paint(brush, _warrior.getImage());
 		_thief.paint(brush, _thief.getImage());
 		_mage.paint(brush, _mage.getImage());
@@ -93,6 +113,15 @@ public class ClassChooserScreen extends Screen {
 	
 	public void setDefault() {
 		_done.setDefault();
+		if (_chosenClass != 1) {
+			_warriorBox.setDefault();
+		}
+		if (_chosenClass != 2) {
+			_thiefBox.setDefault();
+		}
+		if (_chosenClass != 3) {
+			_mageBox.setDefault();
+		}
 	}
 	
 	public void checkContains(java.awt.Point p) {
@@ -102,10 +131,26 @@ public class ClassChooserScreen extends Screen {
 		if (_done.contains(p)) {
 			_done.setHovered();
 		}
+		else if (_warriorBox.contains(p)) {
+			if (_chosenClass != 1) {
+				_warriorBox.setHovered();
+			}
+		}
+		else if (_thiefBox.contains(p)) {
+			if (_chosenClass != 2) {
+				_thiefBox.setHovered();
+			}
+		}
+		else if (_mageBox.contains(p)) {
+			if (_chosenClass != 3) {
+				_mageBox.setHovered();
+			}
+		}
 		this.repaint();
 	}
 	
 	public void checkClicked (java.awt.Point p) {
+		
 		if (_done.contains(p)) {
 			if (_typeText.getText().equals("")) {
 				_typeText.setBackground(java.awt.Color.CYAN);
@@ -142,20 +187,26 @@ public class ClassChooserScreen extends Screen {
 				_dt.getGameScreen().getMainChar().setName(_typeText.getText());
 				_dt.getGameScreen().repaint();
 				_dt.setScreen(_dt.getGameScreen());
+				return;
 			}
 		}
 		else if (_warrior.contains(p)) {
 			_chosenClass = 1;
+			_warriorBox.setClicked();
 		}
 		else if (_thief.contains(p)) {
 			_chosenClass = 2;
+			_thiefBox.setClicked();
 		}
 		else if (_mage.contains(p)) {
 			_chosenClass = 3;
+			_mageBox.setClicked();
 		}
 //		else if (_archer.contains(p)) {
 //			_chosenClass = 4;
 //		}
+		this.setDefault();
+		this.repaint();
 	}
 
 	@Override
@@ -176,7 +227,22 @@ public class ClassChooserScreen extends Screen {
 				}
 			}
 		}
+	}
+	
+	private class charBox extends MenuItem {
+
+		BufferedImage _clicked;
 		
+		public charBox(JPanel container, BufferedImage defltPath,
+				BufferedImage hoveredPath, BufferedImage clicked, DoodleTactics dt) {
+			super(container, defltPath, hoveredPath, dt);
+			// TODO Auto-generated constructor stub
+			_clicked = clicked;
+		}
+		
+		public void setClicked() {			
+			_current = _clicked;
+		}
 	}
 
 }
