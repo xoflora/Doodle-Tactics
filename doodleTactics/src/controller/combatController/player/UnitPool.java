@@ -12,6 +12,8 @@ import java.util.PriorityQueue;
 
 import javax.swing.JPanel;
 
+import controller.UnitStatWindow;
+
 
 import main.DoodleTactics;
 import main.GameScreen;
@@ -59,12 +61,27 @@ public class UnitPool extends MenuItem {
 	private class CharacterSelect extends MenuItem {
 
 		private Character _c;
+		private UnitStatWindow _m;
 
 		public CharacterSelect(JPanel container, BufferedImage defltPath,
 				BufferedImage hoveredPath, DoodleTactics dt, Character c) {
 			super(container, defltPath, hoveredPath, dt, CHARACTER_SELECT_PRIORITY);
 			setVisible(true);
 			_c = c;
+			_m = null;
+		}
+		
+		@Override
+		public void setDefault() {
+			if (_m != null) {
+				_m.removeFromDrawingQueue();
+				_m = null;
+			}
+		}
+		
+		@Override
+		public void setHovered() {
+			_m = new UnitStatWindow(_gameScreen, _dt, _c, false);
 		}
 
 		@Override
