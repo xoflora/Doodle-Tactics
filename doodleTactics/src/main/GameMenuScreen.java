@@ -60,6 +60,9 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private int[] _keyCodes;
 	private String[] _keys = {"A","D","W","S","Space"};
 	private final static int NUM_OPTIONS = 5;
+	
+	//Save game
+	private BufferedImage _saveBg;
 
 	
 	private JLayeredPane _layers;
@@ -186,6 +189,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_keyCodes[2] = _dt.getUpKey();
 		_keyCodes[3] = _dt.getDownKey();
 		_keyCodes[4] = _dt.getInteractKey();
+		
+		//save
+		_saveBg = _dt.importImage("src/graphics/menu/save_menu.png");
+		
 	}
 	
 	/**
