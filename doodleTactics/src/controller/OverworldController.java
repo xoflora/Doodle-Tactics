@@ -188,6 +188,8 @@ public class OverworldController extends GameScreenController {
 			}
 			break;
 		}
+		
+		
 	}
 
 	@Override
@@ -323,7 +325,7 @@ public class OverworldController extends GameScreenController {
 						_gameScreen.moveMainCharacter(oldTile, newTile);
 				}
 			}
-			else if(e.getKeyCode() == KeyEvent.VK_D){
+			else if(e.getKeyChar() == 'd'){
 				newTile = _gameScreen.getMap().getEast(oldTile);
 
 				/*	if (_moveThread != null)
