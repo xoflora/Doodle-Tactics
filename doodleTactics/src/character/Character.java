@@ -123,7 +123,7 @@ public abstract class Character extends Rectangle{
 		this.setLocation(x, y);
 //		this.setLocation(x - overflow,y - _down.getHeight() + Tile.TILE_SIZE);
 		_floatTimer = new FloatTimer(container);
-		//this.startHovering();
+		this.startHovering();
 		
 		_pathTimer = null;
 		_moveTimer = null;
@@ -144,6 +144,10 @@ public abstract class Character extends Rectangle{
 		public void reset() {
 			Character.this.setLocation(Character.this.getX(), Character.this.getY() - _listener.getOffset());
 		}
+		
+		public float getListenerOffset(){
+			return _listener.getOffset();
+		}
 
 		private class FloatListener implements java.awt.event.ActionListener {
 
@@ -160,7 +164,7 @@ public abstract class Character extends Rectangle{
 			}
 
 			public float getOffset() {
-				_cnt = 0;
+				//_cnt = 0;
 				return _offset;
 			}
 
@@ -930,7 +934,7 @@ public abstract class Character extends Rectangle{
 		double oldY = this.getY();
 		int overflowX = (this.getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
 		int overflowY = (this.getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
-		this.setLocation(this.getX() - overflowX,this.getY() - this.getDownImage().getHeight() + Tile.TILE_SIZE);
+		this.setLocation(this.getX() - overflowX,this.getY() - overflowY);
 		super.paint(brush,img);
 		this.setLocation(oldX, oldY);
 		brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
@@ -1065,6 +1069,12 @@ public abstract class Character extends Rectangle{
 	public void setLocation(double x, double y){
 		super.setLocation(x, y);
 		this.setPaintPriority((int) y + _down.getHeight());
+	}
+	
+	
+	@Override
+	public double getY(){
+		return super.getY();
 	}
 
 	public void setAffiliation(CombatController combatControl) {

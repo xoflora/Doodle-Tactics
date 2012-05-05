@@ -257,11 +257,11 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 						RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 				((Graphics2D) g).setFont(new Font("M",Font.BOLD,30));
 				((Graphics2D) g).setColor(new Color(64,224,208));
-				((Graphics2D) g).drawString("Change Controls (Arrows to Move)",200,150);
-				((Graphics2D) g).setColor(new Color(1,1,1));
+				((Graphics2D) g).drawString("Change Controls (Up/Down to Move)",200,150);
 				((Graphics2D) g).setFont(new Font("M",Font.BOLD,20));
-
+				g.drawLine(190, 160, 780, 160);
 				//draw other strings
+				((Graphics2D) g).setColor(new Color(1,1,1));
 				y = 2;
 				for(int i=0; i< NUM_OPTIONS; i++){
 					y++;
@@ -278,6 +278,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				((Graphics2D) g).setFont(new Font("M",Font.BOLD,30));
 				((Graphics2D) g).setColor(new Color(64,224,208));
 				((Graphics2D) g).drawString("Autosaving",200,500);
+				g.drawLine(190, 515, 385, 515);
 
 
 
