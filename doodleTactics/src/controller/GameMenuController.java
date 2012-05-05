@@ -122,7 +122,13 @@ public class GameMenuController extends Controller {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
+		if(_gameMenu.getSaveMenuItem().contains(e.getPoint()) && _gameMenu.getSaveMenuItem().containsText()){
+			_gameMenu.getSaveMenuItem().setHovered();
+		} else{
+			_gameMenu.getSaveMenuItem().setDefault();
+		}
+		_gameMenu.repaint();
+
 	}
 
 }
