@@ -112,6 +112,7 @@ public class GameScreen extends Screen<GameScreenController> {
 				_currentCharacter =  main;
 				_dt.addCharacterToParty(_currentCharacter);
 				//parse party
+				
 				String line = br.readLine();
 				while(line != null){
 					split =  line.split(",");
@@ -637,6 +638,10 @@ public class GameScreen extends Screen<GameScreenController> {
 
 	public void switchToGameMenu() {
 		_dt.changeScreens(_dt.getGameMenuScreen());
+	}
+	
+	public void switchToClassChooserMenu() {
+		_dt.changeScreens(_dt.getClassChoserScreen());
 	}
 
 	/**

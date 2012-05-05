@@ -1,33 +1,26 @@
 package character;
 
-import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.Map.Entry;
-import event.Dialogue;
-import event.InvalidEventException;
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import controller.combatController.CombatController;
-import controller.combatController.player.PlayerCombatController;
 import main.DoodleTactics;
 import main.GameScreen;
 import map.Tile;
 import graphics.Rectangle;
-import graphics.Shape;
 import items.*;
+
 public abstract class Character extends Rectangle{
 
 	/**
 	 * 
 	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -42,15 +35,15 @@ public abstract class Character extends Rectangle{
 
 	//stats
 	//indices where stat is located in subsequent arrays
+	
 	protected final static int STRENGTH = 0;
 	protected final static int DEFENSE = 1;
 	protected final static int SPECIAL = 2;
 	protected final static int RESISTANCE = 3;
 	protected final static int SPEED = 4;
-	protected final static int SKILL = 5;
+	protected final static int ACCURACY = 5;
 	protected final static int LUCK =  6;
 	protected final static int MAX_HP =  7;
-
 
 	//stat arrays (indexed by type of stat, see above)
 	protected final int[] _BASE_STATS; //initial
@@ -677,7 +670,7 @@ public abstract class Character extends Rectangle{
 		boolean critical;
 		
 		if (r.nextInt(100) > (_equipped == null ? 90:_equipped.getAccuracy())
-				+ 2.5*_currentStats[SKILL] - opponent._currentStats[SKILL]) {
+				+ 2.5*_currentStats[ACCURACY] - opponent._currentStats[ACCURACY]) {
 			System.out.println("Attack missed!");
 		}		
 		else {
@@ -706,7 +699,7 @@ public abstract class Character extends Rectangle{
 		}
 		
 		if (r.nextInt(100) > (opponent._equipped == null ? 90:_equipped.getAccuracy())
-				+ 2.5*opponent._currentStats[SKILL] - _currentStats[SKILL]) {
+				+ 2.5*opponent._currentStats[ACCURACY] - _currentStats[ACCURACY]) {
 			System.out.println("Attack missed!");
 		}
 		else {
@@ -947,6 +940,74 @@ public abstract class Character extends Rectangle{
 	public HashMap<Integer, Item> getInventory() {
 		return _inventory;
 	}
+	
+	public int getStrength() {
+		return _BASE_STATS[0];
+	}
+	
+	public int getDefense() {
+		return _BASE_STATS[1];
+	}
+	
+	public int getSpecial() {
+		return _BASE_STATS[2];
+	}
+	
+	public int getResistance() {
+		return _BASE_STATS[3];
+	}
+	
+	public int getSpeed() {
+		return _BASE_STATS[4];
+	}
+	
+	public int getAccuracy() {
+		return _BASE_STATS[5];
+	}
+	
+	public int getLuck() {
+		return _BASE_STATS[6];
+	}
+	
+	public int getMAX_HP() {
+		return _BASE_STATS[7];
+	}
+	
+	public void setName(String name) {
+		_name = name;
+	}
+	
+	public void setStrength(int strength) {
+		_BASE_STATS[0] = strength;
+	}
+	
+	public void setDefense(int def) {
+		_BASE_STATS[1] = def;
+	}
+	
+	public void setSpecial(int special) {
+		_BASE_STATS[2] = special;
+	}
+	
+	public void setResistance(int resistance) {
+		_BASE_STATS[3] =resistance;
+	}
+	
+	public void setSpeed(int speed) {
+		_BASE_STATS[4] = speed;
+	}
+	
+	public void setAccuracy(int acc) {
+		_BASE_STATS[5] = acc;
+	}
+	
+	public void setLuck(int luck) {
+		_BASE_STATS[6] = luck;
+	}
+	
+	public void setMAX_HP(int max_hp) {
+		_BASE_STATS[7] = max_hp;
+	}
 
 	public void printStats(){
 		System.out.println("---------Character Info----------");
@@ -957,7 +1018,7 @@ public abstract class Character extends Rectangle{
 		System.out.println("-----\nStats:");
 		System.out.println("Strength: " + _currentStats[STRENGTH]);
 		System.out.println("Defense: " + _currentStats[DEFENSE]);
-		System.out.println("Skill: " + _currentStats[SKILL]);
+		System.out.println("Skill: " + _currentStats[ACCURACY]);
 		System.out.println("Speed: " + _currentStats[SPEED]);
 		System.out.println("Special: " + _currentStats[SPECIAL]);
 		System.out.println("Luck: " + _currentStats[LUCK]);
