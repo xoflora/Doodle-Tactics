@@ -369,23 +369,19 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		return clicked;
 	}
 	
-	public Item checkItemContains(java.awt.Point point) {
+	public void checkItemContains(java.awt.Point point, JLabel _label) {
 		_itemInfoBox.removeAll();
 		this.remove(_itemInfoBox);
 		_itemInfoBox.setVisible(false);
-		for (JLabel label: _labelToCharacter.keySet()) {
 //			System.out.println("Point X: " + point.getX() + "; Y: " + point.getY());
 //			System.out.println("Label X: " + label.getLocationOnScreen().getX() + "; Y: " + label.getLocationOnScreen().getY());
-			if (point.getX() > label.getLocationOnScreen().getX() && point.getY()+_scrollBar.getVerticalScrollBar().getValue() > label.getLocationOnScreen().getY() && label.getLocationOnScreen().getX()+label.getWidth() > point.getX() && label.getLocationOnScreen().getY()+label.getHeight() > point.getY()+_scrollBar.getVerticalScrollBar().getValue()) {
-				this.showItemInfo(_labelToItem.get(label));
-				_itemInfoBox.revalidate();
-				_itemInfoBox.repaint();
-//				this.repaint();
-				return _labelToItem.get(label);
-			}
+
+		if (_label.contains(point)) {
+			this.showItemInfo(_labelToItem.get(_label));
+			_itemInfoBox.revalidate();
+			_itemInfoBox.repaint();
 		}
 		this.repaint();
-		return null;
 	}
 	
 	public void checkStopHovering(MouseEvent e) {
@@ -1011,7 +1007,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		@Override
 		public void mouseMoved(MouseEvent e) {
 			if (_currClicked == 1 && !_showingItemOptions && !showingMenu) {
-				Item clickedItem = GameMenuScreen.this.checkItemContains(e.getLocationOnScreen());
+				GameMenuScreen.this.checkItemContains(e.getPoint(), _itemPic);
 			}
 		}
 	}
