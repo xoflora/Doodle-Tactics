@@ -19,7 +19,7 @@ import map.Tile;
 import character.Character;
 /**
  * 
- * @author rroelke
+ * @author rroelkedww
  *
  */
 public abstract class GameScreenController extends Controller {

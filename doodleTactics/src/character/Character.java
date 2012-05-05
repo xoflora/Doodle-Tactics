@@ -114,8 +114,8 @@ public abstract class Character extends Rectangle{
 
 		this.setSize(_down.getWidth(), _down.getHeight());
 		int overflow = 0;
-		if(_down.getWidth() - Tile.TILE_SIZE <= 25.0)
-			overflow = (_down.getWidth() - Tile.TILE_SIZE) / 2;
+//		if(_down.getWidth() - Tile.TILE_SIZE <= 25.0)
+		overflow = (_down.getWidth() - Tile.TILE_SIZE) / 2;
 		this.setLocation(x - overflow,y - _down.getHeight() + Tile.TILE_SIZE);
 		_floatTimer = new FloatTimer(container);
 		//this.startHovering();
@@ -977,35 +977,22 @@ public abstract class Character extends Rectangle{
 		_name = name;
 	}
 	
-	public void setStrength(int strength) {
+	public void setImages(BufferedImage prof, BufferedImage left, BufferedImage right, BufferedImage up, BufferedImage down) {
+		_profile = prof;
+		_left = left;
+		_right = right;
+		_up = up;
+		_down = down;
+	}
+	
+	public void setStats(int strength, int def, int special, int resistance, int speed, int acc, int luck, int max_hp) {
 		_BASE_STATS[0] = strength;
-	}
-	
-	public void setDefense(int def) {
 		_BASE_STATS[1] = def;
-	}
-	
-	public void setSpecial(int special) {
 		_BASE_STATS[2] = special;
-	}
-	
-	public void setResistance(int resistance) {
 		_BASE_STATS[3] =resistance;
-	}
-	
-	public void setSpeed(int speed) {
 		_BASE_STATS[4] = speed;
-	}
-	
-	public void setAccuracy(int acc) {
 		_BASE_STATS[5] = acc;
-	}
-	
-	public void setLuck(int luck) {
 		_BASE_STATS[6] = luck;
-	}
-	
-	public void setMAX_HP(int max_hp) {
 		_BASE_STATS[7] = max_hp;
 	}
 
@@ -1058,6 +1045,11 @@ public abstract class Character extends Rectangle{
 	public void setDefeated() {
 		_affiliation.removeUnit(this);
 	}
+	
+//	public double getX() {
+//		
+//		return super.getX()-offset;
+//	}
 
 	/*	public static void testPreSerialize(){
 		try{
