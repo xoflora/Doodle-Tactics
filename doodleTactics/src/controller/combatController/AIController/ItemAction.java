@@ -2,6 +2,7 @@ package controller.combatController.AIController;
 
 import map.Tile;
 import controller.combatController.CombatController;
+import character.Character;
 
 /**
  * action class that corresponds to item use
@@ -10,8 +11,8 @@ import controller.combatController.CombatController;
  */
 public class ItemAction extends Action {
 
-	public ItemAction(CombatController src, Tile t) {
-		super(src, t);
+	public ItemAction(CombatController src, Character c, Tile t) {
+		super(src, c, t);
 	}
 
 	@Override
@@ -21,9 +22,9 @@ public class ItemAction extends Action {
 	}
 
 	@Override
-	public int evaluateMove() {
+	public double evaluateMove() {
 		// TODO Auto-generated method stub
-		return 0;
+		return Double.NEGATIVE_INFINITY;
 	}
 
 }

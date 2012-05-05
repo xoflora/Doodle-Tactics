@@ -43,6 +43,7 @@ public class ClassChooserScreen extends Screen {
 		_mage = new MenuItem(this, _dt.importImage("src/graphics/menu/char_selection_mage.png"), _dt.importImage("src/graphics/menu/char_selection_mage.png"), _dt);
 		_warrior = new MenuItem(this, _dt.importImage("src/graphics/menu/char_selection_warrior.png"), _dt.importImage("src/graphics/menu/char_selection_warrior.png"), _dt);
 		_thief = new MenuItem(this, _dt.importImage("src/graphics/menu/char_selection_thief.png"), _dt.importImage("src/graphics/menu/char_selection_thief.png"), _dt);
+		_archer = new MenuItem(this, _dt.importImage("src/graphics/menu/char_selection_archer.png"), _dt.importImage("src/graphics/menu/char_selection_archer.png"), _dt);
 		_name = new MenuItem(this, _dt.importImage("src/graphics/menu/char_selection_name.png"), _dt.importImage("src/graphics/menu/char_selection_name.png"), _dt);
 		_done = new MenuItem(this, _dt.importImage("src/graphics/menu/char_selection_done_default.png"), _dt.importImage("src/graphics/menu/char_selection_done_hovered.png"), _dt);
 		
@@ -63,6 +64,9 @@ public class ClassChooserScreen extends Screen {
 		_mage.setLocation(50, 423);
 		_mage.setVisible(true);
 		
+		_archer.setLocation(520, 423);
+		_archer.setVisible(true);
+		
 		_warriorBox.setLocation(50, 125);
 		_warriorBox.setVisible(true);
 		
@@ -71,6 +75,9 @@ public class ClassChooserScreen extends Screen {
 		
 		_mageBox.setLocation(50, 423);
 		_mageBox.setVisible(true);
+		
+		_archerBox.setLocation(520, 423);
+		_archerBox.setVisible(true);
 		
 		_name.setLocation(30, 725);
 		_name.setVisible(true);
@@ -103,9 +110,11 @@ public class ClassChooserScreen extends Screen {
 		_warriorBox.paint(brush, _warriorBox.getImage());
 		_thiefBox.paint(brush, _thiefBox.getImage());
 		_mageBox.paint(brush, _mageBox.getImage());
+		_archerBox.paint(brush, _archerBox.getImage());
 		_warrior.paint(brush, _warrior.getImage());
 		_thief.paint(brush, _thief.getImage());
 		_mage.paint(brush, _mage.getImage());
+		_archer.paint(brush, _archer.getImage());
 		_name.paint(brush, _name.getImage());
 		_done.paint(brush, _done.getImage());
 		_typeText.grabFocus();
@@ -121,6 +130,9 @@ public class ClassChooserScreen extends Screen {
 		}
 		if (_chosenClass != 3) {
 			_mageBox.setDefault();
+		}
+		if (_chosenClass != 4) {
+			_archerBox.setDefault();
 		}
 	}
 	
@@ -144,6 +156,11 @@ public class ClassChooserScreen extends Screen {
 		else if (_mageBox.contains(p)) {
 			if (_chosenClass != 3) {
 				_mageBox.setHovered();
+			}
+		}
+		else if (_archerBox.contains(p)) {
+			if (_chosenClass != 4) {
+				_archerBox.setHovered();
 			}
 		}
 		this.repaint();
@@ -181,7 +198,9 @@ public class ClassChooserScreen extends Screen {
 					mainChar.setSize(_dt.importImage("src/graphics/characters/mage_front.png").getWidth(), _dt.importImage("src/graphics/characters/mage_front.png").getHeight());
 					break;
 				case 4:
-					_dt.getGameScreen().getMainChar().setStats(7, 5, 5, 6, 9, 9, 3, 14);
+					mainChar.setStats(7, 5, 5, 6, 9, 9, 3, 14);
+					mainChar.setImages(_dt.importImage("src/graphics/characters/archer_portrait.png"), _dt.importImage("src/graphics/characters/archer_left.png"), _dt.importImage("src/graphics/characters/archer_right.png"), _dt.importImage("src/graphics/characters/archer_back.png"), _dt.importImage("src/graphics/characters/archer_front.png"));
+					mainChar.setSize(_dt.importImage("src/graphics/characters/archer_front.png").getWidth(), _dt.importImage("src/graphics/characters/archer_front.png").getHeight());
 					break;
 				}
 				_dt.getGameScreen().getMainChar().setName(_typeText.getText());
@@ -202,9 +221,11 @@ public class ClassChooserScreen extends Screen {
 			_chosenClass = 3;
 			_mageBox.setClicked();
 		}
-//		else if (_archer.contains(p)) {
-//			_chosenClass = 4;
-//		}
+		else if (_archer.contains(p)) {
+			_chosenClass = 4;
+			_archerBox.setClicked();
+		}
+		
 		this.setDefault();
 		this.repaint();
 	}

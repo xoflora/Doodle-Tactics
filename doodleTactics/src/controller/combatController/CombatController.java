@@ -174,8 +174,18 @@ public abstract class CombatController extends GameScreenController {
 		_state = State.CHARACTER_MOVING;
 	}
 	
+	/**
+	 * signifies that the character has finished moving along its path
+	 */
 	public void moveComplete() {
 		_state = State.CHARACTER_OPTION_MENU;
+	}
+	
+	/**
+	 * action corresponding to having a character wait
+	 */
+	public void characterWait() {
+		_state = State.START;
 	}
 	
 	@Override
@@ -277,6 +287,7 @@ public abstract class CombatController extends GameScreenController {
 	 */
 	public void attack(Character src, Character dest) {
 		System.out.println("DOING THE ANIMATION");
+		_dt.getGameScreen().getPopUpCombat().prepareWindow(src, dest);
 		_dt.getGameScreen().getPopUpCombat().animate();
 		src.attack(dest, r);
 		System.out.println(src.getName() + " has " + src.getHP() + " HP remaining.");

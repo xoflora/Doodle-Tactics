@@ -21,7 +21,11 @@ import character.Character;
 public class RandomBattleAI extends CombatController implements Runnable {
 	
 	public static final int RANDOM_BATTLE_NUM_UNITS = 3;
-	MenuItem _aiPhase;
+	
+	private MenuItem _aiPhase;
+	private Action _act;
+	
+	
 	public RandomBattleAI(DoodleTactics dt, HashMap<Character, Tile> random) {
 		super(dt, random);
 		BufferedImage img = dt.importImage("src/graphics/menu/enemy_phase.png");
@@ -29,7 +33,8 @@ public class RandomBattleAI extends CombatController implements Runnable {
 		_aiPhase.setLocation(1050,20);
 		_aiPhase.setVisible(true);
 		_dt.getGameScreen().addMenuItem(_aiPhase);
-
+		
+		_act = null;
 	}
 	
 	public void run() {
@@ -37,23 +42,39 @@ public class RandomBattleAI extends CombatController implements Runnable {
 		
 		PriorityQueue<Action> actions;
 		while ((toMove = nextUnit()) != null) {
-			actions = new PriorityQueue<Action>();
-			
-			for (Tile t : _gameScreen.getMap().getMovementRange(_locations.get(toMove), toMove.getMovementRange())) {
-				Action[] possible = {new AttackAction(this, t), new ItemAction(this, t),
-						new WaitAction(this, t)};
-				
-				actions.add(Collections.max(Arrays.asList(possible)));
+			if (_state == State.START) {
+				_state = State.CHARACTER_SELECTED;
+				actions = new PriorityQueue<Action>();
+
+				for (Tile t : _gameScreen.getMap().getMovementRange(_locations.get(toMove), toMove.getMovementRange())) {
+					Action[] possible = {new AttackAction(this, toMove, t), new ItemAction(this, toMove, t),
+							new WaitAction(this, toMove, t)};
+
+					actions.add(Collections.max(Arrays.asList(possible)));
+				}
+
+				_act = actions.poll();
+				if (_act != null) {
+					_state = State.CHARACTER_MOVING;
+					move(toMove, _locations.get(toMove),
+							_gameScreen.getMap().getPath(_locations.get(toMove), _act.getTile()));
+				}
+
+				_hasMoved.put(toMove, true);
 			}
-			
-			
-			_hasMoved.put(toMove, true);
 		}
 		
-		
-		
-		
 		_gameScreen.popControl();
+	}
+	
+	@Override
+	/**
+	 * signifies that the character has finished moving along its path
+	 */
+	public void moveComplete() {
+		super.moveComplete();
+		
+		_act.act();
 	}
 	
 	@Override
