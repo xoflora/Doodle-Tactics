@@ -4,6 +4,7 @@ import items.HealthPotion;
 import items.Item;
 import items.ItemException;
 
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,6 +40,12 @@ public class DoodleTactics extends JFrame {
 	public static final int TILE_COLS = 21;
 	public static final int NUM_SAVE_OPTIONS = 4;
 
+	public int _moveLeftKey;
+	public int _moveRightKey;
+	public int _moveUpKey;
+	public int _moveDownKey;
+	public int _menuKey;
+	public int _interactKey;
 	
 	private GameScreen _game;
 	private GameMenuScreen _gameMenu;
@@ -69,6 +76,12 @@ public class DoodleTactics extends JFrame {
 		this.setResizable(false);
 		this.setVisible(true);
 		
+		_moveLeftKey = KeyEvent.VK_A;
+		_moveRightKey = KeyEvent.VK_D;
+		_moveUpKey = KeyEvent.VK_W;
+		_moveDownKey = KeyEvent.VK_S;
+		_menuKey = KeyEvent.VK_CONTROL;
+		_interactKey = KeyEvent.VK_SPACE;
 		
 		//	_game.setMap("src/tests/data/testMapDemo");
 		
@@ -252,6 +265,28 @@ public class DoodleTactics extends JFrame {
 	public void setSavedFilePaths(HashMap<String,String> savedGames){
 		System.out.println("SETTING SAVED FILE PATHS");
 		_savedGames = savedGames;
+	}
+	
+	public int getLeftKey(){
+		return this._moveLeftKey;
+	}
+	
+	public int getRightKey(){
+		return this._moveRightKey;
+	}
+	public int getUpKey(){
+		return this._moveUpKey;
+	}
+	public int getDownKey(){
+		return this._moveDownKey;
+	}
+	
+	public int getInteractKey(){
+		return this._interactKey;
+	}
+	
+	public int getMenuKey(){
+		return this._menuKey;
 	}
 	
 	/**
