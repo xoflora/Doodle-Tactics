@@ -2,6 +2,7 @@ package controller.combatController.AIController;
 
 import map.Tile;
 import controller.combatController.CombatController;
+import character.Character;
 
 /**
  * action class that corresponds to an attack
@@ -10,8 +11,8 @@ import controller.combatController.CombatController;
  */
 public class AttackAction extends Action {
 
-	public AttackAction(CombatController src, Tile t) {
-		super(src, t);
+	public AttackAction(CombatController src, Character c, Tile t) {
+		super(src, c, t);
 	}
 
 	@Override
@@ -21,9 +22,9 @@ public class AttackAction extends Action {
 	}
 
 	@Override
-	public int evaluateMove() {
+	public double evaluateMove() {
 	//	List<Tile> attackSpots
-		return 0;
+		return Double.NEGATIVE_INFINITY;
 	}
 
 }

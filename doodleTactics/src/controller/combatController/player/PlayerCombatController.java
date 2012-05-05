@@ -249,7 +249,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						_pool.removeCharacter(_selectedCharacter);
 						
 						clear();
-						_state = State.START;
+						characterWait();
 					}
 				}
 			}

@@ -1,5 +1,6 @@
 package controller.combatController.AIController;
 
+import character.Character;
 import controller.combatController.CombatController;
 import map.Tile;
 
@@ -10,19 +11,28 @@ import map.Tile;
  */
 public abstract class Action implements Comparable<Action> {
 	protected CombatController _src;
+	protected Character _c;
 	protected Tile _destTile;
-	private int _value;
+	private double _value;
 	
-	public Action(CombatController src, Tile t) {
+	public Action(CombatController src, Character c, Tile t) {
 		_src = src;
+		_c = c;
 		_destTile = t;
 		_value = evaluateMove();
 	}
 	
 	/**
+	 * @return the destination tile corresponding to this action
+	 */
+	public Tile getTile() {
+		return _destTile;
+	}
+	
+	/**
 	 * @return the value of the move corresponding to this action
 	 */
-	public abstract int evaluateMove();
+	public abstract double evaluateMove();
 	
 	/**
 	 * compares two actions
@@ -31,7 +41,12 @@ public abstract class Action implements Comparable<Action> {
 	 * 		a negative number if the other action is better
 	 */
 	public int compareTo(Action other) {
-		return _value - other._value;
+		if (_value < other._value)
+			return -1;
+		else if (_value == other._value)
+			return 0;
+		else
+			return 1;
 	}
 	
 	/**

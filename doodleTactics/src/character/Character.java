@@ -46,6 +46,8 @@ public abstract class Character extends Rectangle{
 	public final static int SKILL = 5;
 	public final static int LUCK =  6;
 	public final static int MAX_HP =  7;
+	
+	public final static int CRITICAL_MULTIPLIER = 2;
 
 	//stat arrays (indexed by type of stat, see above)
 	protected final int[] _BASE_STATS; //initial
@@ -676,6 +678,9 @@ public abstract class Character extends Rectangle{
 		return _currentStats[STRENGTH] + (_equipped == null ? 0:_equipped.getPower());
 	}
 	
+	/**
+	 * @return the combat defense of this character (includes this equipment)
+	 */
 	public int getFullDefense() {
 		return _currentStats[DEFENSE] + (_shield == null ? 0:_shield.getDefense()) +
 			(_cuirass == null ? 0:_cuirass.getDefense());
@@ -688,6 +693,21 @@ public abstract class Character extends Rectangle{
 		return 2.5*_currentStats[SKILL] + (_equipped == null ? 90:_equipped.getAccuracy());
 	}
 	
+	/**
+	 * @param other another character
+	 * @return the probability (out of 100) that this character will connect when attacking the other
+	 */
+	public double getHitChance(Character other) {
+		return getFullAttackAccuracy() - other._currentStats[SKILL];
+	}
+	
+	/**
+	 * @param other another character
+	 * @return the probability (out of 100) of a critical hit occurring if this character attacks the other
+	 */
+	public double getCriticalChance(Character other) {
+		return _currentStats[LUCK] - other._currentStats[LUCK];
+	}
 	
 
 	/**
@@ -700,18 +720,17 @@ public abstract class Character extends Rectangle{
 		int offense, defense, damage;
 		boolean critical;
 		
-		if (r.nextInt(100) > getFullAttackAccuracy() - opponent._currentStats[SKILL]) {
+		if (r.nextInt(100) > getHitChance(opponent)) {
 			System.out.println("Attack missed!");
 		}		
 		else {
-			offense = _currentStats[STRENGTH] + (_equipped == null ? 0:_equipped.getPower());
-			defense = opponent.getFullDefense();
 
-			damage = Math.max(offense - defense + r.nextInt(Math.max((offense - defense)/4, 1)), 0);
+			damage = Math.max(getFullAttackStrength() - opponent.getFullDefense() +
+					r.nextInt(Math.max((getFullAttackStrength() - opponent.getFullDefense())/4, 1)), 0);
 
 			critical = (r.nextInt(100) <= (_currentStats[LUCK] - opponent._currentStats[LUCK]));
 			if (critical) {
-				damage *= 2;
+				damage *= CRITICAL_MULTIPLIER;
 				System.out.print("Critical hit! ");
 			}
 
@@ -739,7 +758,7 @@ public abstract class Character extends Rectangle{
 			damage = Math.max(offense - defense + r.nextInt(Math.max((offense - defense)/4, 1)), 0);
 			
 			if (critical) {
-				damage *= 2;
+				damage *= CRITICAL_MULTIPLIER;
 				System.out.println("Critical hit!");
 			}
 			
