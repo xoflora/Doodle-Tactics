@@ -66,21 +66,25 @@ public class CombatOrchestrator extends GameScreenController {
 		super.release();
 	}
 	
-	private void removeFaction(CombatController f) {
-		if (_enemies.remove(f))
+	/**
+	 * removes a defeated faction from this combat controller
+	 * @param f the faction to remove
+	 */
+	public void removeFaction(CombatController f) {
+		if (_enemies != null && _enemies.remove(f))
 			return;
-		else if (_partners.remove(f))
+		else if (_partners != null && _partners.remove(f))
 			return;
-		else if (_others.remove(f))
+		else if (_others != null && _others.remove(f))
 			return;
 		System.out.println("WTF");
 	}
 	
-	private boolean isWin() {
+	public boolean isWin() {
 		return _enemies.isEmpty();
 	}
 	
-	private boolean isLoss() {
+	public boolean isLoss() {
 		return !_partners.contains(_p);
 	}
 
@@ -92,15 +96,7 @@ public class CombatOrchestrator extends GameScreenController {
 	public void take() {
 		super.take();
 		
-		if (_state == State.BATTLING) {	//swap factions
-		/*	while (!_factionCycle.hasNext()) {
-				if (!_factions.isEmpty())
-					_factionCycle = _factions.listIterator();
-				else {
-					
-				}
-			}	*/
-			
+		if (_state == State.BATTLING) {			
 			
 			if (_factionCycle.hasNext()) {
 				CombatController f = _factionCycle.next();
@@ -148,6 +144,8 @@ public class CombatOrchestrator extends GameScreenController {
 				zip.add(_others);
 			
 			_factions = Util.zip(zip);
+			for (CombatController c : _factions)
+				c.setOrchestrator(this);
 			
 			
 			_factionCycle = _factions.listIterator();
@@ -165,10 +163,10 @@ public class CombatOrchestrator extends GameScreenController {
 	 * ends the combat with the player victorious
 	 */
 	private void victory() {
-		// TODO Auto-generated method stub
 		System.out.println("Player is victorious!");
 		while (!_p.getUnits().isEmpty())
-			_p.removeUnit(_p.getUnits().get(0));
+		//	if (_p.getUnits().get(0) != _gameScreen.getMainChar())
+				_p.removeUnit(_p.getUnits().get(0));
 		_gameScreen.popControl();
 	}
 	

@@ -151,6 +151,10 @@ public abstract class GameScreenController extends Controller {
 		MenuItem m = _gameScreen.checkContains(e.getPoint());
 		if (m != null)
 			m.activate(e.getButton());
+		
+	/*	Tile t = _gameScreen.getTile(e.getX(), e.getY());
+		if (t != null)
+			System.out.println("Tile " + t + ", Occupant " + t.getOccupant());	*/
 	}
 	
 /*	public void removeUnitStats() {

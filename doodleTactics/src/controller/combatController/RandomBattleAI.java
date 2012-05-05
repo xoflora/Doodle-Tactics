@@ -32,6 +32,13 @@ public class RandomBattleAI extends CombatController implements Runnable {
 		System.out.println("Enemy phase");
 		new Thread(this).start();
 	}
+	
+	@Override
+	public void removeUnit(Character c) {
+		super.removeUnit(c);
+		System.out.println("CRUCNH");
+		_gameScreen.getMap().removeRandomBattle(c);
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) { }

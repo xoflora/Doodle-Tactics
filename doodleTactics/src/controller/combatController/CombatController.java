@@ -48,6 +48,7 @@ public abstract class CombatController extends GameScreenController {
 	private ListIterator<Character> _unitCycle;
 	protected HashMap<Character, Boolean> _hasMoved;
 	protected HashMap<Character, Tile> _locations;
+	protected CombatOrchestrator _orch;
 	
 	protected List<CombatController> _enemyAffiliations;
 	
@@ -70,6 +71,8 @@ public abstract class CombatController extends GameScreenController {
 		
 		for (Character c : _units)
 			c.affiliate(this);
+		
+		_orch = null;
 	}
 	
 	/**
@@ -135,6 +138,9 @@ public abstract class CombatController extends GameScreenController {
 	public void take() {
 		super.take();
 		_hasMoved.clear();
+		
+		if (_orch == null)
+			_dt.error("Combat error: orchestrator unassigned.");
 	}
 	
 	@Override
@@ -213,6 +219,12 @@ public abstract class CombatController extends GameScreenController {
 		src.attack(dest, r);
 		System.out.println(src.getName() + " has " + src.getHP() + " HP remaining.");
 		System.out.println(dest.getName() + " has " + dest.getHP() + " HP remaining.");
+		
+		if (isDefeated())
+			defeat();
+		else if (dest.getAffiliation().isDefeated()) {
+			dest.getAffiliation().defeat();
+		}
 	}
 	
 	/**
@@ -222,9 +234,35 @@ public abstract class CombatController extends GameScreenController {
 		System.out.println("removeing" + c + " from tile " + _locations.get(c));
 		_units.remove(c);
 		_gameScreen.removeCharacter(c);
+		System.out.println(_locations == null);
+		System.out.println(c == null);
+		System.out.println(_locations.get(c) == null);
 		_locations.get(c).setOccupant(null);
 		_locations.remove(c);
 	///	if (t.occupant() == c)
 	//		t.setOccupant(null);
+	}
+	
+	/**
+	 * sets the orchestrator of this combat controller
+	 * @param o
+	 */
+	public void setOrchestrator(CombatOrchestrator o) {
+		_orch = o;
+	}
+	
+	/**
+	 * @return whether or not this combat controller has any units remaining
+	 */
+	public boolean isDefeated() {
+		return _units.isEmpty();
+	}
+	
+	/**
+	 * defeat action of this combat controller
+	 * calls whatever events or other functions are appropriate
+	 */
+	public void defeat() {
+		System.out.println("defeated");
 	}
 }
