@@ -753,6 +753,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			out.writeObject(_currMap);
 			out.writeObject(_dt.getCharacterMap());
 			out.writeObject(_dt.getParty());
+			out.writeObject(_dt.getGameMenuScreen().getKeyCodes());
 			out.writeInt(_xWindowOffset);
 			out.writeInt(_yWindowOffset);
 			out.close();
@@ -798,6 +799,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			_currMap = (Map) in.readObject();
 			_dt.setCharacterMap((HashMap<String,Character>) in.readObject());
 			_dt.setParty((List<Character>) in.readObject());
+			_dt.getGameMenuScreen().load((int[]) in.readObject());
 			_xWindowOffset  =in.readInt();
 			_yWindowOffset = in.readInt();
 			

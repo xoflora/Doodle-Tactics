@@ -83,7 +83,7 @@ public class GameMenuController extends Controller {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(_mode == State.LISTEN){
-			if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+			if (e.getKeyCode() == _dt.getMenuKey()) {
 				//do stuff
 				_gameMenu.setDefault();
 				_gameMenu.removeAll();
@@ -98,7 +98,7 @@ public class GameMenuController extends Controller {
 				_mode = State.RECORD;
 			}
 		} else if(_mode == State.RECORD){
-			_gameMenu.assignKey(e.getKeyCode());
+			_gameMenu.assignKey(e);
 			_mode = State.LISTEN;
 		}
 	}

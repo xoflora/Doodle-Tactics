@@ -55,9 +55,11 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private BufferedImage _charBoxImage, _listItem, _listItemHovered;
 	
 	//options vars
-	private String[] _optionsText = {"Overworld Move Left","Overworld Move Right", "Overworld Move Up","Overworld Move Down", "Interact","Menu"};
+	private String[] _optionsText = {"Overworld Move Left","Overworld Move Right", "Overworld Move Up","Overworld Move Down", "Interact"};
 	private int _currOption;
-	private final static int NUM_OPTIONS = 6;
+	private int[] _keyCodes;
+	private String[] _keys = {"A","D","W","S","Space"};
+	private final static int NUM_OPTIONS = 5;
 
 	
 	private JLayeredPane _layers;
@@ -177,6 +179,13 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		//options
 		_currOption = 0;
 		//_optionsText = new String[NUM_OPTIONS];
+		
+		_keyCodes  = new int[NUM_OPTIONS];
+		_keyCodes[0] = dt.getLeftKey();
+		_keyCodes[1] = _dt.getRightKey();
+		_keyCodes[2] = _dt.getUpKey();
+		_keyCodes[3] = _dt.getDownKey();
+		_keyCodes[4] = _dt.getInteractKey();
 	}
 	
 	/**
@@ -246,21 +255,30 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			  ((Graphics2D) g).setRenderingHint(
 						RenderingHints.KEY_TEXT_ANTIALIASING,
 						RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
-				((Graphics2D) g).setFont(new Font("M",Font.BOLD,25));
+				((Graphics2D) g).setFont(new Font("M",Font.BOLD,30));
+				((Graphics2D) g).setColor(new Color(64,224,208));
+				((Graphics2D) g).drawString("Change Controls (Arrows to Move)",200,150);
 				((Graphics2D) g).setColor(new Color(1,1,1));
-				
+				((Graphics2D) g).setFont(new Font("M",Font.BOLD,20));
+
 				//draw other strings
-				y = 1;
+				y = 2;
 				for(int i=0; i< NUM_OPTIONS; i++){
 					y++;
 					if(i == _currOption){
 						((Graphics2D) g).setColor(new Color(64,224,208));
-						((Graphics2D) g).drawString(_optionsText[i] + ": (Enter to Change)",200,y*50 + 50);
+						((Graphics2D) g).drawString(_optionsText[i] + ": " + _keys[i] + " " + "(Enter to Change)",200,y*50 + 50);
 						((Graphics2D) g).setColor(new Color(1,1,1));
 					} else{
-						((Graphics2D) g).drawString(_optionsText[i],200,y*50 + 50);
+						((Graphics2D) g).drawString(_optionsText[i] + ": " + _keys[i],200,y*50 + 50);
 					}
 				}
+				
+				
+				((Graphics2D) g).setFont(new Font("M",Font.BOLD,30));
+				((Graphics2D) g).setColor(new Color(64,224,208));
+				((Graphics2D) g).drawString("Autosaving",200,500);
+
 
 
 		}
@@ -369,23 +387,19 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		return clicked;
 	}
 	
-	public Item checkItemContains(java.awt.Point point) {
+	public void checkItemContains(java.awt.Point point, JLabel _label) {
 		_itemInfoBox.removeAll();
 		this.remove(_itemInfoBox);
 		_itemInfoBox.setVisible(false);
-		for (JLabel label: _labelToCharacter.keySet()) {
 //			System.out.println("Point X: " + point.getX() + "; Y: " + point.getY());
 //			System.out.println("Label X: " + label.getLocationOnScreen().getX() + "; Y: " + label.getLocationOnScreen().getY());
-			if (point.getX() > label.getLocationOnScreen().getX() && point.getY()+_scrollBar.getVerticalScrollBar().getValue() > label.getLocationOnScreen().getY() && label.getLocationOnScreen().getX()+label.getWidth() > point.getX() && label.getLocationOnScreen().getY()+label.getHeight() > point.getY()+_scrollBar.getVerticalScrollBar().getValue()) {
-				this.showItemInfo(_labelToItem.get(label));
-				_itemInfoBox.revalidate();
-				_itemInfoBox.repaint();
-//				this.repaint();
-				return _labelToItem.get(label);
-			}
+
+		if (_label.contains(point)) {
+			this.showItemInfo(_labelToItem.get(_label));
+			_itemInfoBox.revalidate();
+			_itemInfoBox.repaint();
 		}
 		this.repaint();
-		return null;
 	}
 	
 	public void checkStopHovering(MouseEvent e) {
@@ -1011,7 +1025,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		@Override
 		public void mouseMoved(MouseEvent e) {
 			if (_currClicked == 1 && !_showingItemOptions && !showingMenu) {
-				Item clickedItem = GameMenuScreen.this.checkItemContains(e.getLocationOnScreen());
+				GameMenuScreen.this.checkItemContains(e.getPoint(), _itemPic);
 			}
 		}
 	}
@@ -1246,7 +1260,14 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 	}
 	
-	public void assignKey(int key){
+	public void assignKey(KeyEvent e){
+		int key = e.getKeyCode();
+		String c = KeyEvent.getKeyText(e.getKeyCode());
+		for(int i=0; i< NUM_OPTIONS; i++)
+			if(_keys[i].equals(c))
+				return;
+		_keys[_currOption] = c;
+		_keyCodes[_currOption] = key;
 		if(_currOption == 0)
 			_dt.setLeftKey(key);
 		else if(_currOption == 1)
@@ -1259,7 +1280,44 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_dt.setInteractKey(key);
 		else if(_currOption == 5)
 			_dt.setMenuKey(key);
+		this.repaint();
 	}
+	
+	/**
+	 * Reset key names to old values
+	 */
+	public void load(int[] keycodes){
+		_keyCodes = keycodes;
+		for(int i=0; i<NUM_OPTIONS; i++){
+			_keys[i] = KeyEvent.getKeyText(_keyCodes[i]);
+		}
+		
+		_dt.setLeftKey(_keyCodes[0]);
+		_dt.setRightKey(_keyCodes[1]);
+		_dt.setUpKey(_keyCodes[2]);
+		_dt.setDownKey(_keyCodes[3]);
+		_dt.setInteractKey(_keyCodes[4]);
+	}
+	
+	public int[] getKeyCodes(){
+		return _keyCodes;
+	}
+	
+	/*public char getKey(int key){
+		if(_currOption == 0)
+			return _dt.getLeftKey();
+		else if(_currOption == 1)
+			_dt.setRightKey(key);
+		else if(_currOption == 2)
+			_dt.setUpKey(key);
+		else if(_currOption == 3)
+			_dt.setDownKey(key);
+		else if(_currOption == 4)
+			_dt.setInteractKey(key);
+		else if(_currOption == 5)
+			_dt.setMenuKey(key);
+
+	}*/
 	
 //	private class arrowTimer extends java.awt.Timer() {
 //		
