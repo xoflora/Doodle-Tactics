@@ -417,6 +417,19 @@ public abstract class Character extends Rectangle{
 		_down = dt.importImage(_downFile);
 		_currentImage = _down;
 		
+		for(Integer i : _inventory.keySet()){
+			_inventory.get(i).loadItem(dt);
+		}
+		
+		if(_equipped != null)
+			_equipped.loadItem(dt);
+		if(_cuirass != null)
+			_cuirass.loadItem(dt);
+		if(_shield != null)
+			_shield.loadItem(dt);
+		if(_footgear != null)
+			_footgear.loadItem(dt);
+		
 		new FloatTimer(dt.getGameScreen());
 	}
 

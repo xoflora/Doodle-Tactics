@@ -37,6 +37,8 @@ public class DoodleTactics extends JFrame {
 	
 	public static final int TILE_ROWS = 17;
 	public static final int TILE_COLS = 21;
+	public static final int NUM_SAVE_OPTIONS = 4;
+
 	
 	private GameScreen _game;
 	private GameMenuScreen _gameMenu;
@@ -46,6 +48,7 @@ public class DoodleTactics extends JFrame {
 	private HashMap<String, Character> _allChars;
 	private List<Character> _party;
 	private HashMap<String,BufferedImage> _images;
+	private HashMap<String,String> _savedGames;
 	
 	public DoodleTactics() {
 		super("Doodle Tactics");
@@ -54,6 +57,7 @@ public class DoodleTactics extends JFrame {
 		_screens = new Stack<Screen<?>>();
 		_allChars = new HashMap<String,Character>();
 		_images = new HashMap<String,BufferedImage>();
+		_savedGames = new HashMap<String,String>();
 		_party = new ArrayList<Character>();
 		_gameMenu = new GameMenuScreen(this);
 		_game = new GameScreen(this);
@@ -230,6 +234,9 @@ public class DoodleTactics extends JFrame {
 	public MainMenuScreen getMainMenuScreen() {
 		return _mainMenu;
 	}
+	public HashMap<String,String> getSavedFilePaths(){
+		return _savedGames;
+	}
 	
 	/**
 	 * Called by any method which imports an image
@@ -273,6 +280,13 @@ public class DoodleTactics extends JFrame {
 	public List<Character> getParty() {
 		return _party;
 	}
+	
+	/**
+	 * Called when loading the game to reset the party
+	 */
+	public void setParty(List<Character> party){
+		_party = party;
+	}
 		
 	/**
 	 * adds a character to the player's party
@@ -294,6 +308,16 @@ public class DoodleTactics extends JFrame {
 		if (!toReturn)
 			return false;
 		return true;
+	}
+	
+	public boolean addSavedGame(String title,String filepath){
+		if(_savedGames.size() >= NUM_SAVE_OPTIONS)
+			return false;
+		else{
+			_savedGames.put(title,filepath);
+			return true;
+		}
+			
 	}
 
 	/**

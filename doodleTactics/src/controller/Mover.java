@@ -80,7 +80,7 @@ public class Mover extends Thread {
 				int distAcc = 0;
 				
 				while (distAcc < Tile.TILE_SIZE) {
-					if ((new Date().getTime() - time) % 12 == 0) {
+					if ((new Date().getTime() - time) % 5 == 0) {
 						if (update) {
 							_c.setLocation(_c.getX() + dx, _c.getY() + dy);
 							distAcc += ADVANCE;

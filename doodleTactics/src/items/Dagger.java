@@ -2,11 +2,13 @@ package items;
 
 import java.awt.image.BufferedImage;
 
+import main.DoodleTactics;
+
 
 public class Dagger extends Weapon {
 
-	public Dagger(BufferedImage image, String name) {
-		super(image, name);
+	public Dagger(DoodleTactics dt, String imagePath, String name) {
+		super(dt,imagePath, name);
 	}
 	
 }

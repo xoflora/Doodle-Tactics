@@ -265,6 +265,7 @@ public class Tile extends graphics.Rectangle {
 	 */
 	public void load(DoodleTactics dt) throws FileNotFoundException, InvalidEventException, IOException{
 		_image = dt.importImage(_imgPath);
+		this.setHovered(false);
 		if(_eventString != null)
 			_event = Event.load(dt, this, _eventString);
 	}

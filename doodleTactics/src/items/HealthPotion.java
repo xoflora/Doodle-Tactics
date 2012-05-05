@@ -2,16 +2,20 @@ package items;
 
 import java.awt.image.BufferedImage;
 
+import main.DoodleTactics;
+
 import character.Character;
 
 public class HealthPotion extends Item{
 	
 	int _HPupdate;
 	
-	public HealthPotion(BufferedImage image, String name, int HPupdate) {
-		super(image, name);
+	
+	public HealthPotion(DoodleTactics dt, String imagePath, String name, int HPupdate) {
+		super(dt,imagePath, name);
 		_HPupdate = HPupdate;
 	}
+
 
 	@Override
 	public void exert(Character c) {

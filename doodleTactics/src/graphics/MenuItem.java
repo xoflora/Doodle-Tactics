@@ -19,9 +19,9 @@ public class MenuItem extends Rectangle {
 	
 	private static final int DEFAULT_PRIORITY = 0;
 
-	private BufferedImage _default;
-	private BufferedImage _hovered;
-	private BufferedImage _current;
+	protected BufferedImage _default;
+	protected BufferedImage _hovered;
+	protected BufferedImage _current;
 	protected DoodleTactics _dt;
 	
 	public MenuItem(JPanel container, BufferedImage defltPath, BufferedImage hoveredPath, DoodleTactics dt) {

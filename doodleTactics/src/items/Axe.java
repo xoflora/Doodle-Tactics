@@ -2,11 +2,14 @@ package items;
 
 import java.awt.image.BufferedImage;
 
+import main.DoodleTactics;
+
 
 public class Axe extends Weapon {
 
-	public Axe(BufferedImage image, String name) {
-		super(image, name);
+	public Axe(DoodleTactics dt, String imagePath, String name) {
+		super(dt,imagePath, name);
 	}
+
 
 }

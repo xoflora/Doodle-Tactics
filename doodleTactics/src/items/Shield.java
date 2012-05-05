@@ -2,13 +2,16 @@ package items;
 
 import java.awt.image.BufferedImage;
 
+import main.DoodleTactics;
+
 import character.Character;
 
 public class Shield extends Equipment{
 	
-	public Shield(BufferedImage image, String name) {
-		super(image, name);
+	public Shield(DoodleTactics dt, String imagePath, String name) {
+		super(dt,imagePath, name);
 	}
+
 
 	/**
 	 * 

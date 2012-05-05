@@ -5,9 +5,13 @@ import javax.swing.JPanel;
 import main.DoodleTactics;
 import main.GameOverScreen;
 
-@SuppressWarnings("serial")
 public class MainCharacter extends Character{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private transient DoodleTactics _dt;
 	
 	private int _tileX, _tileY;

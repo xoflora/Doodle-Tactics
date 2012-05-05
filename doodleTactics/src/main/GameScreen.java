@@ -685,16 +685,21 @@ public class GameScreen extends Screen<GameScreenController> {
 		ObjectOutputStream out;
 
 		//Store XRef and YRef
-		_currMap.setPrevXRef(_xRef);
-		_currMap.setPrevYRef(_yRef);
+		_currMap.setPrevXWindowOffset(_xWindowOffset);
+		_currMap.setPrevYWindowOffset(_yWindowOffset);
+		System.out.println("MAIN CHAR X: " + _currMap.getMainCharacter().getX() +
+				" Y: " + _currMap.getMainCharacter().getY());
+	//	System.out.println("Other CHAR X: " + _currMap.getCharactersToDisplay().get(1).getX() +
+	//			" Y: " + _currMap.getCharactersToDisplay().get(1).getY());
 
 		try {
 			fos = new FileOutputStream(filename);
 			out = new ObjectOutputStream(fos);
 			out.writeObject(_mapCache);
 			out.writeObject(_currMap);
-			out.writeInt(_xRef);
-			out.writeInt(_yRef);
+			out.writeObject(_dt.getParty());
+			out.writeInt(_xWindowOffset);
+			out.writeInt(_yWindowOffset);
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -710,14 +715,22 @@ public class GameScreen extends Screen<GameScreenController> {
 			in = new ObjectInputStream(fis);
 			_mapCache =  (HashMap<String,Map>) in.readObject();
 			_currMap = (Map) in.readObject();
-			_xRef =in.readInt();
-			_yRef = in.readInt();
+			_dt.setParty((List<Character>) in.readObject());
+			_xWindowOffset  =in.readInt();
+			_yWindowOffset = in.readInt();
+
+			//reload every map
 			for(String path : _mapCache.keySet()){
 				Map m = _mapCache.get(path);
 				m.load(_dt);
 			}
 			
+			//Reload all party characters
+			for(Character c : _dt.getParty())
+				c.load(_dt);
 			in.close();
+			
+		//	setMap(path, _currMap.getMainCharacter().getX(), _currMap.getMainCharacter().getY());
 			
 			_terrainToPaint = _currMap.getTerrain();
 		} catch (IOException e) {

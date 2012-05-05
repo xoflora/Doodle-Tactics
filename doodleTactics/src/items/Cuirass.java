@@ -2,12 +2,14 @@ package items;
 
 import java.awt.image.BufferedImage;
 
+import main.DoodleTactics;
+
 import character.Character;
 
 public class Cuirass extends Equipment{
 	
-	public Cuirass(BufferedImage image, String name) {
-		super(image, name);
+	public Cuirass(DoodleTactics dt, String imagePath, String name) {
+		super(dt,imagePath, name);
 	}
 
 
