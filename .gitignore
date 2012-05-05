@@ -2,4 +2,4 @@ bin
 *.class
 *~
 .metadata
-tests/data/testSave
+doodleTactics/src/tests/data/testSave
