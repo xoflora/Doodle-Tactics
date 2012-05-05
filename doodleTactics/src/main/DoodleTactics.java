@@ -43,6 +43,7 @@ public class DoodleTactics extends JFrame {
 	private GameScreen _game;
 	private GameMenuScreen _gameMenu;
 	private MainMenuScreen _mainMenu;
+	private ClassChooserScreen _classChooserMenu;
 	
 	private Stack<Screen<? extends Controller>> _screens;
 	private HashMap<String, Character> _allChars;
@@ -62,6 +63,7 @@ public class DoodleTactics extends JFrame {
 		_gameMenu = new GameMenuScreen(this);
 		_game = new GameScreen(this);
 		_mainMenu = new MainMenuScreen(this);
+		_classChooserMenu = new ClassChooserScreen(this);
 		this.changeScreens(_mainMenu);
 		this.setFocusable(false);
 		this.setResizable(false);
@@ -215,6 +217,10 @@ public class DoodleTactics extends JFrame {
 		return _allChars;
 	}
 	
+	public void setCharacterMap(HashMap<String,Character> map){
+		_allChars = map;
+	}
+	
 	/**
 	 * 
 	 * Adds a Name/Character pair to the Character Map
@@ -234,8 +240,18 @@ public class DoodleTactics extends JFrame {
 	public MainMenuScreen getMainMenuScreen() {
 		return _mainMenu;
 	}
+	
+	public ClassChooserScreen getClassChoserScreen() {
+		return _classChooserMenu;
+	}
+	
 	public HashMap<String,String> getSavedFilePaths(){
 		return _savedGames;
+	}
+	
+	public void setSavedFilePaths(HashMap<String,String> savedGames){
+		System.out.println("SETTING SAVED FILE PATHS");
+		_savedGames = savedGames;
 	}
 	
 	/**

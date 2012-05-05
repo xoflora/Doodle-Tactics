@@ -65,9 +65,7 @@ public abstract class GameScreenController extends Controller {
 	public List<Character> getCharactersToDisplay() {
 		List<Character> main = new LinkedList<Character>();
 		main.add(_gameScreen.getMainChar());
-	//	System.out.println("***Added Main");
 		List<Character> toReturn = Util.union(_gameScreen.getMap().getCharactersToDisplay(), main);
-	//	System.out.println(toReturn);
 		return toReturn;
 	}
 	

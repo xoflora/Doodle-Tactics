@@ -15,7 +15,7 @@ public class Mage extends Character{
 		_BASE_STATS[SPECIAL] = 9;
 		_BASE_STATS[RESISTANCE] = 8;
 		_BASE_STATS[SPEED] = 7;
-		_BASE_STATS[SKILL] = 5;
+		_BASE_STATS[ACCURACY] = 5;
 		_BASE_STATS[LUCK] = 5;
 		_BASE_STATS[MAX_HP] = 12;
 		initStats();

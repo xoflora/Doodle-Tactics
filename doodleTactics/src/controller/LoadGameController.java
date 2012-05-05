@@ -1,11 +1,14 @@
 package controller;
 
+import graphics.MenuItem;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import main.DoodleTactics;
 import main.LoadGameScreen;
 import main.Screen;
+import main.LoadGameScreen.LoadMenuItem;
 
 public class LoadGameController extends Controller{
 
@@ -30,7 +33,18 @@ public class LoadGameController extends Controller{
 
 
 	@Override
-	public void mouseClicked(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {
+		LoadMenuItem clicked = _loadScreen.checkContainsRadioButtons(e.getPoint());
+		if(clicked != null)
+			clicked.setHovered();
+		_loadScreen.repaint();
+		
+		MenuItem button = _loadScreen.checkContainsButton(e.getPoint());
+		if(button != null && _loadScreen.getCurrSelected() != null){
+			_dt.getGameScreen().loadGame(_loadScreen.getCurrSelected().getFilePath());
+			_dt.changeScreens(_dt.getGameScreen());
+		}
+	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {}
@@ -57,5 +71,9 @@ public class LoadGameController extends Controller{
 	public void mouseDragged(MouseEvent e) {}
 
 	@Override
-	public void mouseMoved(MouseEvent e) {}
+	public void mouseMoved(MouseEvent e) {
+		_loadScreen.checkContainsButton(e.getPoint());
+		_loadScreen.repaint();
+		
+	}
 }

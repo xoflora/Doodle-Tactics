@@ -112,6 +112,7 @@ public class GameScreen extends Screen<GameScreenController> {
 				_currentCharacter =  main;
 				_dt.addCharacterToParty(_currentCharacter);
 				//parse party
+				
 				String line = br.readLine();
 				while(line != null){
 					split =  line.split(",");
@@ -236,11 +237,30 @@ public class GameScreen extends Screen<GameScreenController> {
 
 		private int _deltaX, _deltaY;
 
-		public MapMoveTimer(int deltaX, int deltaY, boolean isPan) {
+	/*	public MapMoveTimer(int deltaX, int deltaY, boolean isPan) {
 			super(50, null);
 			this.addActionListener(new MyMoveListener(this, isPan));
 			_deltaX = deltaX;
 			_deltaY = deltaY;
+		}	*/
+		
+		public MapMoveTimer(Tile src, Tile dest) {
+			super(50, null);
+			addActionListener(new MyMoveListener(this, false, dest));
+			if (src.x() == dest.x()) {
+				_deltaX = 0;
+				if (src.y() < dest.y())
+					_deltaY = 1;
+				else
+					_deltaY = -1;
+			}
+			else {
+				_deltaY = 0;
+				if (src.x() < dest.x())
+					_deltaX = 1;
+				else
+					_deltaX = -1;
+			}
 		}
 
 		private class MyMoveListener implements java.awt.event.ActionListener {
@@ -249,28 +269,35 @@ public class GameScreen extends Screen<GameScreenController> {
 			private int _cnt = 0;
 			private final int _numSteps = 6;
 			private boolean _isPan;
+			
+			Tile _dest;
 
-			public MyMoveListener (Timer t, boolean isPan) {
+			public MyMoveListener (Timer t, boolean isPan, Tile dest) {
 				_timer = t;
 				_isPan = isPan;
+				_dest = dest;
 			}
 
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 
-				for(int i = 0; i < MAP_WIDTH; i++) {
+			/*	for(int i = 0; i < MAP_WIDTH; i++) {
 					for(int j = 0; j < MAP_HEIGHT; j++) {
 						Tile t = _currMap.getTile(i, j);
 						t.setLocation((t.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), t.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
 						repaint();
 					}
-				}
+				}	*/
+				
+				pan(-_deltaX*Tile.TILE_SIZE / _numSteps, -_deltaY*Tile.TILE_SIZE / _numSteps);
+				_currentCharacter.updateLocation(_deltaX*Tile.TILE_SIZE / _numSteps, _deltaY*Tile.TILE_SIZE / _numSteps);
+				repaint();
 
-				for(Rectangle r: _terrainToPaint){
+			/*	for(Rectangle r: _terrainToPaint){
 					r.setLocation((r.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), r.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
 					repaint();
-				}
+				}	*/
 
-				List <Character> charsToPaint = getController().getCharactersToDisplay();
+			//	List <Character> charsToPaint = getController().getCharactersToDisplay();
 
 				/* if the camera is panning, then all of the characters including
 				 * the character in control should move */
@@ -278,10 +305,10 @@ public class GameScreen extends Screen<GameScreenController> {
 				//					_currentCharacter.setLocation((_currentCharacter.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), _currentCharacter.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
 				//				}
 
-				for(Character c : charsToPaint) {
+		/*		for(Character c : charsToPaint) {
 					c.setLocation((c.getX() + (-_deltaX*Tile.TILE_SIZE / _numSteps)), c.getY() + (-_deltaY*Tile.TILE_SIZE / _numSteps));
 					repaint();
-				}
+				}		*/
 
 				/* if the camera is not panning, the main character is walking so do rotations
 				 * for animation appropriately */
@@ -315,6 +342,12 @@ public class GameScreen extends Screen<GameScreenController> {
 				if (_cnt == _numSteps) {
 					_isAnimating = false;
 					_timer.stop();
+					
+					if(_dest.hasEnterEvent())
+						pushControl(_dest.getEvent());
+					else if(_currMap.generatesRandomBattle(_dest)){
+						_currMap.startBattle(_dest);
+					}
 				}
 			}
 		}
@@ -340,30 +373,42 @@ public class GameScreen extends Screen<GameScreenController> {
 	public boolean isAnimating() {
 		return _isAnimating;
 	}
-
-/*	public void mapUpdate(int x, int y) {
+	
+	/**
+	 * old code; translates a character by the given amount of tiles
+	 * @param x the number of tiles in the x-direction to move the main character
+	 * @param y the number of tiles in the y-direction to move the main character
+	 */
+	public void mapUpdate(int x, int y) {
 
 	//	 if in the bounds of the map, specifically in relation to the main character,
 	//	 update the screen reference points and animate the map
-		System.out.println("--------MAP UPDATE---------");
-		System.out.println("xRef: " + _xRef);
-		System.out.println("YRef: " + _yRef);	
 
-		if((_xRef + x + 11) <= MAP_WIDTH && (_xRef + x + 11) > 0 && (_yRef + y + 9) <= MAP_HEIGHT && (_yRef + y + 9) > 0) {
+	//	if((_xRef + x + 11) <= MAP_WIDTH && (_xRef + x + 11) > 0 && (_yRef + y + 9) <= MAP_HEIGHT && (_yRef + y + 9) > 0) {
 
 			_isAnimating = true;
 
-			MapMoveTimer timer = new MapMoveTimer(x,y, false);
-			timer.start();
+//			MapMoveTimer timer = new MapMoveTimer(x,y, false);
+//			timer.start();
 
-			_xRef += x;
-			_yRef += y;
-
-			System.out.println("xRef: " + _xRef);
-			System.out.println("YRef: " + _yRef);	
-			System.out.println("--------END MAP UPDATE---------");
-		}
-	}	*/
+		//	_xRef += x;
+		//	_yRef += y;
+	//	}
+	}
+	
+	/**
+	 * moves the screen's main character from source to destination.  Assumes that the movement is valid
+	 * @param src the starting tile
+	 * @param dest the ending tile
+	 */
+	public void moveMainCharacter(Tile src, Tile dest) {
+		_isAnimating = true;
+		
+		src.setOccupant(null);
+		dest.setOccupant(_currentCharacter);
+		
+		new MapMoveTimer(src, dest).start();
+	}
 
 	public void pan(double x, double y) {
 		
@@ -383,7 +428,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		_xWindowOffset -= x;
 		_yWindowOffset -= y;
 		
-		_currentCharacter.updateLocation(x, y);
+	//	_currentCharacter.updateLocation(x, y);
 		
 		//update map locations
 		for(int i = 0; i < MAP_WIDTH; i++)
@@ -431,12 +476,12 @@ public class GameScreen extends Screen<GameScreenController> {
 	}
 
 	/**
-	 * @param x the window x-coordinate
-	 * @param y the window y-coordinate
+	 * @param d the window x-coordinate
+	 * @param e the window y-coordinate
 	 * @return the tile corresponding to the given (x,y) coordinate in the window
 	 * @author rroelke
 	 */
-	public Tile getTile(int x, int y) {
+	public Tile getTile(double x, double y) {
 		return _currMap.getTile(getMapX(x), getMapY(y));
 	}
 
@@ -445,10 +490,10 @@ public class GameScreen extends Screen<GameScreenController> {
 	 * @return the x-index of the tile in the map given the x-coordinate in the window
 	 * @author rroelke
 	 */
-	public int getMapX(int x) {
+	public int getMapX(double x) {
 		//	System.out.print("xRef: " + _xRef);
 	//	return (x / Tile.TILE_SIZE) + _xRef;
-		return (x + _xWindowOffset) / Tile.TILE_SIZE;
+		return (int)(x + _xWindowOffset) / Tile.TILE_SIZE;
 	}
 
 	/**
@@ -456,10 +501,10 @@ public class GameScreen extends Screen<GameScreenController> {
 	 * @return the y-index of the tile in the map given the y-coordinate in the window
 	 * @author rroelke
 	 */
-	public int getMapY(int y) {
+	public int getMapY(double y) {
 	//	return (y / Tile.TILE_SIZE) + _yRef;
 	//	System.out.println(y + " " + _yWindowOffset);
-		return ((y + _yWindowOffset) / Tile.TILE_SIZE);
+		return (int)(y + _yWindowOffset) / Tile.TILE_SIZE;
 	}
 
 	/**
@@ -547,7 +592,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			}
 
 			// add the main character to the queue
-			_characterTerrainQueue.add(_currentCharacter);
+		//	_characterTerrainQueue.add(_currentCharacter);
 
 			//	System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
 
@@ -594,6 +639,10 @@ public class GameScreen extends Screen<GameScreenController> {
 	public void switchToGameMenu() {
 		_dt.changeScreens(_dt.getGameMenuScreen());
 	}
+	
+	public void switchToClassChooserMenu() {
+		_dt.changeScreens(_dt.getClassChoserScreen());
+	}
 
 	/**
 	 * transitions the game to a new combat
@@ -624,7 +673,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	 * @author rroelke
 	 */
 	public List<Tile> getValidSetupTiles(int num) {
-		return _currMap.getValidSetupTiles(_currMap.getTile(getMapX(getWidth()/2), getMapY(getHeight()/2)), num);
+		return _currMap.getValidSetupTiles(getTile(_currentCharacter.getX(), _currentCharacter.getY()), num);
 	}
 
 	/**
@@ -691,12 +740,16 @@ public class GameScreen extends Screen<GameScreenController> {
 				" Y: " + _currMap.getMainCharacter().getY());
 	//	System.out.println("Other CHAR X: " + _currMap.getCharactersToDisplay().get(1).getX() +
 	//			" Y: " + _currMap.getCharactersToDisplay().get(1).getY());
-
+		
+		
+		_dt.addSavedGame(filename, filename);
+		writeFilepathsFile();
 		try {
 			fos = new FileOutputStream(filename);
 			out = new ObjectOutputStream(fos);
 			out.writeObject(_mapCache);
 			out.writeObject(_currMap);
+			out.writeObject(_dt.getCharacterMap());
 			out.writeObject(_dt.getParty());
 			out.writeInt(_xWindowOffset);
 			out.writeInt(_yWindowOffset);
@@ -706,6 +759,32 @@ public class GameScreen extends Screen<GameScreenController> {
 		}
 	}
 
+	public void writeFilepathsFile(){
+		FileOutputStream fos;
+		ObjectOutputStream out;
+		try {
+			fos = new FileOutputStream("src/tests/data/savedGames");
+			out = new ObjectOutputStream(fos);
+			out.writeObject(_dt.getSavedFilePaths());
+		}  catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void readFilepathsFile(){
+		FileInputStream fis;
+		ObjectInputStream in;
+		try {
+			fis = new FileInputStream("src/tests/data/savedGames");
+			in = new ObjectInputStream(fis);
+			_dt.setSavedFilePaths((HashMap<String,String>) in.readObject());
+		} catch(IOException e){
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void loadGame(String filepath){
 		System.out.println("Loading game!");
 		FileInputStream fis;
@@ -715,6 +794,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			in = new ObjectInputStream(fis);
 			_mapCache =  (HashMap<String,Map>) in.readObject();
 			_currMap = (Map) in.readObject();
+			_dt.setCharacterMap((HashMap<String,Character>) in.readObject());
 			_dt.setParty((List<Character>) in.readObject());
 			_xWindowOffset  =in.readInt();
 			_yWindowOffset = in.readInt();
