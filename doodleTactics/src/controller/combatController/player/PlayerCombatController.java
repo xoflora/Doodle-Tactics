@@ -3,6 +3,7 @@ package controller.combatController.player;
 import graphics.MenuItem;
 
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +51,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	private UnitPool _pool;
 	private CombatOptionWindow _optionWindow;
 	private ItemWindow _itemWindow;
+	private MenuItem _playerPhase;
 	private boolean _finalized;
 	
 	public PlayerCombatController(DoodleTactics dt, HashMap<Character, Tile> units) {
@@ -80,9 +82,16 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_menuDraggedy = 0;
 		_draggingMenu = false;
 		
+		BufferedImage img = _dt.importImage("src/graphics/menu/player_phase.png");
+		_playerPhase = new MenuItem(_dt.getGameScreen(),img,img,_dt,-10);
+		_playerPhase.setLocation(1050,20);
+		_playerPhase.setVisible(true);
+		_dt.getGameScreen().addMenuItem(_playerPhase);
+
 		clear();
 	}
 	
+
 	/**
 	 * sets the current movement path
 	 * @param source the starting tile
@@ -387,6 +396,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		// TODO Auto-generated method stub
 		super.release();
 		
+		new Thread(new SlideTimer(_playerPhase,-1050)).start();
 		clear();
 	}
 
@@ -397,7 +407,9 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void take() {
 		super.take();
 		System.out.println("Player phase!");
-		
+		_playerPhase.setLocation(1050,_playerPhase.getY());
+		new Thread(new SlideTimer(_playerPhase,250)).start();
+
 		initialize();
 	}
 

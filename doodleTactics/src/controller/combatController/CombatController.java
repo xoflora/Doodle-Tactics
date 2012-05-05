@@ -1,5 +1,7 @@
 package controller.combatController;
 
+import graphics.MenuItem;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,6 +76,28 @@ public abstract class CombatController extends GameScreenController {
 		
 		_orch = null;
 	}
+	
+	protected class SlideTimer implements Runnable{
+		private MenuItem _menu;
+		private int _stop;
+		public SlideTimer(MenuItem menu, int stop){
+			_menu = menu;
+			_stop = stop;
+		}
+		@Override
+		public void run() {
+			while(_menu.getX() > _stop){
+				try {
+					Thread.sleep(20);
+				} catch (InterruptedException e) {
+					//Do Nothing
+				}
+				_menu.setLocation(_menu.getX()  -20,_menu.getY());
+				_dt.getGameScreen().repaint();
+			}
+		}
+	}
+	
 	
 	/**
 	 * @param c a character
