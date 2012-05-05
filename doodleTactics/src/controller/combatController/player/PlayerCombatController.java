@@ -47,7 +47,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	private int _menuDraggedy;
 	private boolean _draggingMenu;
 	
-	private State _state;
 	private UnitPool _pool;
 	private CombatOptionWindow _optionWindow;
 	private ItemWindow _itemWindow;
@@ -169,18 +168,20 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	@Override
 	public void move(Character c, Tile source, List<Tile> path) {
 		super.move(c, source, path);
-		
+	}
+	
+	@Override
+	public void moveComplete() {
+		super.moveComplete();
+
 		try {
 			_optionWindow = new CombatOptionWindow(_dt, _gameScreen, false,
 					_selectedCharacter.getInventory().size() != 0, false, this);
 			_optionWindow.setLocation(_destTile.getX() + Tile.TILE_SIZE, _destTile.getY() - Tile.TILE_SIZE);
 			_optionWindow.addToDrawingQueue();
-			
 		} catch(IOException e) {
-			_dt.error("Error finding combat window files.");
+			_dt.error("");
 		}
-		
-		_state = State.CHARACTER_OPTION_MENU;
 	}
 
 	@Override
@@ -258,7 +259,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				clear();
 			else if (_state == State.CHARACTER_SELECTED)
 				clear();
-			else if (_state == State.CHARACTER_OPTION_MENU) {
+			else if (_state == State.CHARACTER_MOVING || _state == State.CHARACTER_OPTION_MENU) {
 				_selectedCharacter.stopMotion();
 				_destTile.setOccupant(null);
 				_selectedTile.setOccupant(_selectedCharacter);
@@ -287,8 +288,11 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				
 				_hasMoved.put(_selectedCharacter, false);
 				_locations.put(_selectedCharacter, _selectedTile);
-				_optionWindow.removeFromDrawingQueue();
-				_optionWindow = null;
+				
+				if (_optionWindow != null) {
+					_optionWindow.removeFromDrawingQueue();
+					_optionWindow = null;
+				}
 				
 				_state = State.CHARACTER_SELECTED;
 			}

@@ -341,7 +341,8 @@ public abstract class Character extends Rectangle{
 					/* otherwise, continue incrementing */
 					if (_cnt == _path.size() - 1) {
 						PathTimer.this.stop();
-						System.out.println("=========END FOLLOW PATH=========");
+					//	System.out.println("=========END FOLLOW PATH=========");
+						_affiliation.moveComplete();
 					}
 			}
 		}

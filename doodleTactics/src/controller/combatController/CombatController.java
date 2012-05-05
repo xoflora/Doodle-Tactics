@@ -24,6 +24,7 @@ public abstract class CombatController extends GameScreenController {
 	protected enum State {
 		START,
 		CHARACTER_SELECTED,
+		CHARACTER_MOVING,
 		CHARACTER_OPTION_MENU,
 		SELECTING_ITEM,
 		ITEM_MENU;
@@ -53,6 +54,7 @@ public abstract class CombatController extends GameScreenController {
 	protected CombatOrchestrator _orch;
 	
 	protected List<CombatController> _enemyAffiliations;
+	protected State _state;
 	
 	private Random r;
 	
@@ -75,6 +77,7 @@ public abstract class CombatController extends GameScreenController {
 			c.affiliate(this);
 		
 		_orch = null;
+		_state = State.START;
 	}
 	
 	protected class SlideTimer implements Runnable{
@@ -152,6 +155,11 @@ public abstract class CombatController extends GameScreenController {
 		//c.setLocation(dest.getX(), dest.getY());
 		_hasMoved.put(c, true);
 		_locations.put(c, path.get(path.size() - 1));
+		_state = State.CHARACTER_MOVING;
+	}
+	
+	public void moveComplete() {
+		_state = State.CHARACTER_OPTION_MENU;
 	}
 	
 	@Override
