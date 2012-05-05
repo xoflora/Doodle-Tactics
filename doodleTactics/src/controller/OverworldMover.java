@@ -1,9 +1,6 @@
 package controller;
 
-import java.util.Date;
-
 import main.GameScreen;
-import map.Map;
 import map.Tile;
 import character.Character;
 

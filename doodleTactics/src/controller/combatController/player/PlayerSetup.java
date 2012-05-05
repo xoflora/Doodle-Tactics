@@ -23,6 +23,17 @@ import character.Character;
  */
 public class PlayerSetup extends GameScreenController implements PoolDependent {
 	
+	/**
+	 * characterizes the state of the player setup controller
+	 * @author rroelke
+	 */
+	private enum State {
+		SELECTING,
+		SELECTED_EMPTY_TILE,
+		SELECTED_FROM_POOL,
+		SELECTED_FROM_TILE
+	}
+	
 	private List<Tile> _validTiles;
 	private List<Character> _units;
 	private List<Character> _toPlace;
@@ -32,7 +43,8 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	private boolean _finalized;
 	
 	private Character _selectedCharacter;
-	private boolean _selectedFromPool;
+	
+	private State _state;
 	
 	private CombatOrchestrator _orch;
 
@@ -42,14 +54,16 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		try {
 			_validTiles = validTiles;
 			_units = _dt.getParty();
+			_units.remove(_gameScreen.getMainChar());
 			
 			_toPlace = Util.clone(_units);
 			_inPlace = new HashMap<Character, Tile>();
 			
 			_selectedCharacter = null;
-			_selectedFromPool = false;
 			
 			_pool = new UnitPool(_dt, _gameScreen, this, _toPlace);
+			
+			_state = State.SELECTING;
 			
 			_finalized = false;
 			
@@ -67,7 +81,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 			_selectedTile.setInEnemyAttackRange(false);
 		_selectedTile = null;
 		_selectedCharacter = null;
-		_selectedFromPool = false;
+		_state = State.SELECTING;
 	}
 
 	@Override
@@ -75,7 +89,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		for (Tile t : _validTiles) {
 			t.setInMovementRange(false);
 		}
-		System.out.println("setup released");
+		clearSelection();
 		super.release();
 	}
 
@@ -94,66 +108,58 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
-
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
-		List<MenuItem> m = _gameScreen.checkContains(e.getPoint());
-		boolean valid = _validTiles.contains(t);
 		
-		if (e.getButton() == UnitPool.SELECT_BUTTON) {
-			if (valid && m.isEmpty()) {
-				if (_selectedTile != null)
-					_selectedTile.setInEnemyAttackRange(false);
-				_selectedTile = t;
-				_selectedTile.setInEnemyAttackRange(true);
-				
-				Character occupant = _selectedTile.getOccupant();
-				
-				_selectedCharacter = occupant;
-				_selectedFromPool = false;
-				System.out.println("occupant at selected tile: " + occupant);
+		if (_state == State.SELECTING) {
+			if (_validTiles.contains(t)) {
+				if (t.isOccupied()) {
+					_selectedTile = t;
+					_selectedTile.setInEnemyAttackRange(true);
+					_selectedCharacter = t.getOccupant();
+					_state = State.SELECTED_FROM_TILE;
+				}
+				else {
+					_selectedTile = t;
+					_selectedTile.setInEnemyAttackRange(true);
+					_state = State.SELECTED_EMPTY_TILE;
+				}
 			}
-		/*	else if (m != null) {
-				System.out.println("currently selected: " + _selectedCharacter);
-			}	*/
-			else if (m.isEmpty())
-				clearSelection();
 		}
-		else if (e.getButton() == UnitPool.ALT_BUTTON) {	//swap characters
-			System.out.println("selected character: " + _selectedCharacter);
-		
-			if (valid && m.isEmpty()) {
-				if (_selectedFromPool) {	//swap character out of pool into tile
-					Character c = t.getOccupant();
-					t.setOccupant(_selectedCharacter);
-					
-					if (_selectedCharacter != null) {
-						_gameScreen.addCharacter(_selectedCharacter);
-						_pool.removeCharacter(_selectedCharacter);
-						_selectedCharacter.setLocation(t.getX(), t.getY());
-						_selectedCharacter.setDown();
-						_inPlace.put(_selectedCharacter, t);
-					}
-					if (c != null) {
-						_gameScreen.getCharacterQueue().remove(c);
-						_pool.addCharacter(c);
-					}
-				}
-				else if (_selectedCharacter != null) {
-					Character c = t.getOccupant();
-					_selectedTile.setOccupant(c);
-					t.setOccupant(_selectedCharacter);
-					_selectedCharacter.setLocation(t.getX(), t.getY());
-					_inPlace.put(_selectedCharacter, t);
-					if (c != null) {
-						c.setLocation(_selectedTile.getX(), _selectedTile.getY());
-						_inPlace.put(c, _selectedTile);
-					}
-				}
+		else if (_state == State.SELECTED_EMPTY_TILE) {
+			if (_validTiles.contains(t) && t.isOccupied()) {	//move occupant into empty tile
+				
+				_selectedCharacter = t.getOccupant();
+				_selectedTile.setOccupant(_selectedCharacter);
+				t.setOccupant(null);
+				
+				_selectedCharacter.setLocation(_selectedTile.getX(), _selectedTile.getY());
+				_selectedCharacter.setVisible(true);
+				
+				clearSelection();
+				_state = State.SELECTING;
 			}
-			
-			clearSelection();
-			
-			System.out.println(_selectedCharacter + " " + _selectedFromPool);
+		}
+		else if (_state == State.SELECTED_FROM_POOL) {
+			if (_validTiles.contains(t)) {
+				swapUnitIntoPool(t.getOccupant(), _selectedCharacter, t);
+				clearSelection();
+				_state = State.SELECTING;
+			}
+		}
+		else {
+			if (_validTiles.contains(t)) {
+				Character sw = t.getOccupant();
+				_selectedTile.setOccupant(sw);
+				if (sw != null)
+					sw.setLocation(_selectedTile.getX(), _selectedTile.getY());
+				
+				t.setOccupant(_selectedCharacter);
+				_selectedCharacter.setLocation(t.getX(), t.getY());
+				_selectedCharacter.setVisible(true);
+				
+				clearSelection();
+				_state = State.SELECTING;
+			}
 		}
 	}
 	
@@ -170,13 +176,48 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 			_selectedFromPool = false;
 		}
 	}	*/
+	
+	/**
+	 * swaps a unit in the unit pool with a unit in the map
+	 */
+	private void swapUnitIntoPool(Character inMap, Character inPool, Tile t) {
+		if (inMap != null) {
+			addUnitToPool(inMap);
+			inMap.setVisible(false);
+			_inPlace.remove(inMap);
+			_gameScreen.removeCharacter(inMap);
+		}
+		
+		removeUnitFromPool(inPool);
+		t.setOccupant(inPool);
+		inPool.setVisible(true);
+		inPool.setLocation(t.getX(), t.getY());
+		inPool.setDown();
+		_inPlace.put(inPool, _selectedTile);
+		_gameScreen.addCharacter(inPool);
+		
+		_gameScreen.repaint();
+	}
 
 
 	@Override
 	public void getCharacterFromPool(Character c) {
-		_selectedCharacter = c;
-		_selectedFromPool = true;
-		System.out.println("selected character " + c);
+		if (_state == State.SELECTING) {
+			_selectedCharacter = c;
+			_state = State.SELECTED_FROM_POOL;
+		}
+		else if (_state == State.SELECTED_EMPTY_TILE) {
+			swapUnitIntoPool(null, c, _selectedTile);
+			clearSelection();
+			_state = State.SELECTING;
+		}
+		else if (_state == State.SELECTED_FROM_POOL)
+			_selectedCharacter = c;
+		else {
+			swapUnitIntoPool(_selectedCharacter, c, _selectedTile);
+			clearSelection();
+			_state = State.SELECTING;
+		}
 	}
 	
 	@Override
@@ -200,7 +241,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	 * @param c the character to swap
 	 */
 	public void alternateAction(Character c) {
-		if (!_selectedFromPool && _selectedTile != null && _selectedTile != null) {
+	/*	if (!_selectedFromPool && _selectedTile != null && _selectedTile != null) {
 			_selectedTile.setOccupant(c);
 			c.setLocation(_selectedTile.getX(), _selectedTile.getY());
 			c.setDown();
@@ -214,12 +255,31 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 			}
 			
 			_gameScreen.addCharacter(c);
-		}
+		}	*/
 	}
 
 	@Override
 	public void removeUnitFromPool(Character c) {
 		_pool.removeCharacter(c);
+	}
+	
+	@Override
+	public void unitPoolClicked(int type) {
+		if (_state == State.SELECTED_EMPTY_TILE) {
+			clearSelection();
+			_state = State.SELECTING;
+		}
+		else if (_state == State.SELECTED_FROM_TILE) {
+			_selectedTile.setOccupant(null);
+			
+			addUnitToPool(_selectedCharacter);
+			_selectedCharacter.setVisible(false);
+			_inPlace.remove(_selectedCharacter);
+			_gameScreen.removeCharacter(_selectedCharacter);
+			
+			clearSelection();
+			_state = State.SELECTING;
+		}
 	}
 	
 	@Override

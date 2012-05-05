@@ -2,14 +2,11 @@ package controller.combatController.player;
 
 import graphics.MenuItem;
 
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.swing.Timer;
 
 import controller.combatController.ActionType;
 import controller.combatController.CombatController;
@@ -373,8 +370,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 */
 	public void mousePressed(MouseEvent e) {
 		super.mousePressed(e);
-		List<MenuItem> m = _gameScreen.checkContains(e.getPoint());
-		if (m.contains(_optionWindow) || m.contains(_itemWindow)) {
+		MenuItem m = _gameScreen.checkContains(e.getPoint());
+		if (m == _optionWindow || m == _itemWindow) {
 			_menuDraggedx = e.getX();
 			_menuDraggedy = e.getY();
 			_draggingMenu = true;
@@ -434,10 +431,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * pans the camera to focus on the given character
 	 */
 	public void getCharacterFromPool(Character c) {
-		// TODO Auto-generated method stub
-		double x = c.getX();
-		double y = c.getY();
-		//pan to coordinates
+		_gameScreen.panToCoordinate(c.getX() - _pool.getWidth()/2, c.getY());
 	}
 
 	@Override
@@ -465,6 +459,14 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 */
 	public void removeUnitFromPool(Character c) {
 		_pool.removeCharacter(c);
+	}
+	
+	@Override
+	/**
+	 * 
+	 */
+	public void unitPoolClicked(int type) {
+		
 	}
 	
 	@Override

@@ -52,6 +52,7 @@ public abstract class GameScreenController extends Controller {
 	public void release() {
 		if (_hoveredTile != null)
 			_hoveredTile.setHovered(false);
+		removeUnitStats();
 	}
 	
 	@Override
@@ -131,11 +132,15 @@ public abstract class GameScreenController extends Controller {
 	 * clicks on a menu element of the game screen
 	 */
 	public void mouseClicked(MouseEvent e) {
-		List<MenuItem> _clickedButtons = _gameScreen.checkContains(e.getPoint());
+	/*	List<MenuItem> _clickedButtons = _gameScreen.checkContains(e.getPoint());
 		synchronized (_clickedButtons) {
 			for (MenuItem m : _clickedButtons)
 				m.activate(e.getButton());
-		}
+		}	*/
+		
+		MenuItem m = _gameScreen.checkContains(e.getPoint());
+		if (m != null)
+			m.activate(e.getButton());
 	}
 	
 	public void removeUnitStats() {
