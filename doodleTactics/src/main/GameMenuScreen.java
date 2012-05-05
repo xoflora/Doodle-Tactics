@@ -1246,6 +1246,21 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 	}
 	
+	public void assignKey(int key){
+		if(_currOption == 0)
+			_dt.setLeftKey(key);
+		else if(_currOption == 1)
+			_dt.setRightKey(key);
+		else if(_currOption == 2)
+			_dt.setUpKey(key);
+		else if(_currOption == 3)
+			_dt.setDownKey(key);
+		else if(_currOption == 4)
+			_dt.setInteractKey(key);
+		else if(_currOption == 5)
+			_dt.setMenuKey(key);
+	}
+	
 //	private class arrowTimer extends java.awt.Timer() {
 //		
 //	}
