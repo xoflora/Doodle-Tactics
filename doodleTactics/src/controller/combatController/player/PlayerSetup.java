@@ -13,6 +13,7 @@ import util.Util;
 import main.DoodleTactics;
 import map.Tile;
 import controller.GameScreenController;
+import controller.combatController.CombatController;
 import controller.combatController.CombatOrchestrator;
 import character.Character;
 
@@ -47,6 +48,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	private State _state;
 	
 	private CombatOrchestrator _orch;
+	private List<Tile> _enemyAttackRange;
 
 	public PlayerSetup(DoodleTactics dt, List<Tile> validTiles, CombatOrchestrator orch) {
 		super(dt);
@@ -68,8 +70,10 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 			_finalized = false;
 			
 			_orch = orch;
+			_enemyAttackRange = new ArrayList<Tile>();
+			
 		} catch(IOException e) {
-			_dt.error("");
+			_dt.error("Error initializing unit setup.");
 		}
 	}
 	
@@ -78,10 +82,16 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	 */
 	private void clearSelection() {
 		if (_selectedTile != null)
-			_selectedTile.setInEnemyAttackRange(false);
+			_selectedTile.setInMovementPath(false);
 		_selectedTile = null;
 		_selectedCharacter = null;
 		_state = State.SELECTING;
+	}
+	
+	private void clearEnemyAttackRange() {
+		for (Tile t : _enemyAttackRange)
+			t.setInEnemyAttackRange(false);
+		_enemyAttackRange = new ArrayList<Tile>();
 	}
 
 	@Override
@@ -90,6 +100,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 			t.setInMovementRange(false);
 		}
 		clearSelection();
+		clearEnemyAttackRange();
 		super.release();
 	}
 
@@ -109,57 +120,77 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
-		
-		if (_state == State.SELECTING) {
+
+		if (e.getButton() == MouseEvent.BUTTON1) {
 			if (_validTiles.contains(t)) {
-				if (t.isOccupied()) {
-					_selectedTile = t;
-					_selectedTile.setInEnemyAttackRange(true);
-					_selectedCharacter = t.getOccupant();
-					_state = State.SELECTED_FROM_TILE;
+				if (_state == State.SELECTING) {
+					if (t.isOccupied()) {
+						_selectedTile = t;
+						_selectedTile.setInMovementPath(true);
+						_selectedCharacter = t.getOccupant();
+						_state = State.SELECTED_FROM_TILE;
+					}
+					else {
+						_selectedTile = t;
+						_selectedTile.setInMovementPath(true);
+						_state = State.SELECTED_EMPTY_TILE;
+					}
+				}
+				else if (_state == State.SELECTED_EMPTY_TILE) {
+					if (t.isOccupied()) {	//move occupant into empty tile
+
+						_selectedCharacter = t.getOccupant();
+						_selectedTile.setOccupant(_selectedCharacter);
+						t.setOccupant(null);
+
+						_selectedCharacter.setLocation(_selectedTile.getX(), _selectedTile.getY());
+						_selectedCharacter.setVisible(true);
+
+						clearSelection();
+						_state = State.SELECTING;
+					}
+				}
+				else if (_state == State.SELECTED_FROM_POOL) {
+					swapUnitIntoPool(t.getOccupant(), _selectedCharacter, t);
+					clearSelection();
+					_state = State.SELECTING;
 				}
 				else {
-					_selectedTile = t;
-					_selectedTile.setInEnemyAttackRange(true);
-					_state = State.SELECTED_EMPTY_TILE;
+					Character sw = t.getOccupant();
+					_selectedTile.setOccupant(sw);
+					if (sw != null)
+						sw.setLocation(_selectedTile.getX(), _selectedTile.getY());
+
+					t.setOccupant(_selectedCharacter);
+					_selectedCharacter.setLocation(t.getX(), t.getY());
+					_selectedCharacter.setVisible(true);
+
+					clearSelection();
+					_state = State.SELECTING;
+				}
+			}
+			else {
+				Character occ = t.getOccupant();
+				if (occ != null) {
+					boolean isEnemy = false;
+					for (CombatController c : _orch.getEnemyAffiliations())
+						if (c.containsCharacter(occ)) {
+							isEnemy = true;
+							break;
+						}
+					if (isEnemy) {
+						List<Tile> add = _gameScreen.getMap().getAttackRange(t, occ.getMovementRange(),
+								occ.getMinAttackRange(), occ.getMaxAttackRange());
+						for (Tile toPaint : add)
+							toPaint.setInEnemyAttackRange(true);
+						_enemyAttackRange = Util.union(_enemyAttackRange, add);
+					}
 				}
 			}
 		}
-		else if (_state == State.SELECTED_EMPTY_TILE) {
-			if (_validTiles.contains(t) && t.isOccupied()) {	//move occupant into empty tile
-				
-				_selectedCharacter = t.getOccupant();
-				_selectedTile.setOccupant(_selectedCharacter);
-				t.setOccupant(null);
-				
-				_selectedCharacter.setLocation(_selectedTile.getX(), _selectedTile.getY());
-				_selectedCharacter.setVisible(true);
-				
-				clearSelection();
-				_state = State.SELECTING;
-			}
-		}
-		else if (_state == State.SELECTED_FROM_POOL) {
-			if (_validTiles.contains(t)) {
-				swapUnitIntoPool(t.getOccupant(), _selectedCharacter, t);
-				clearSelection();
-				_state = State.SELECTING;
-			}
-		}
-		else {
-			if (_validTiles.contains(t)) {
-				Character sw = t.getOccupant();
-				_selectedTile.setOccupant(sw);
-				if (sw != null)
-					sw.setLocation(_selectedTile.getX(), _selectedTile.getY());
-				
-				t.setOccupant(_selectedCharacter);
-				_selectedCharacter.setLocation(t.getX(), t.getY());
-				_selectedCharacter.setVisible(true);
-				
-				clearSelection();
-				_state = State.SELECTING;
-			}
+		else if (e.getButton() == MouseEvent.BUTTON3) {
+			clearSelection();
+			clearEnemyAttackRange();
 		}
 	}
 	
@@ -262,23 +293,25 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	public void removeUnitFromPool(Character c) {
 		_pool.removeCharacter(c);
 	}
-	
+
 	@Override
 	public void unitPoolClicked(int type) {
-		if (_state == State.SELECTED_EMPTY_TILE) {
-			clearSelection();
-			_state = State.SELECTING;
-		}
-		else if (_state == State.SELECTED_FROM_TILE) {
-			_selectedTile.setOccupant(null);
-			
-			addUnitToPool(_selectedCharacter);
-			_selectedCharacter.setVisible(false);
-			_inPlace.remove(_selectedCharacter);
-			_gameScreen.removeCharacter(_selectedCharacter);
-			
-			clearSelection();
-			_state = State.SELECTING;
+		if (type == MouseEvent.BUTTON1) {
+			if (_state == State.SELECTED_EMPTY_TILE) {
+				clearSelection();
+				_state = State.SELECTING;
+			}
+			else if (_state == State.SELECTED_FROM_TILE) {
+				_selectedTile.setOccupant(null);
+
+				addUnitToPool(_selectedCharacter);
+				_selectedCharacter.setVisible(false);
+				_inPlace.remove(_selectedCharacter);
+				_gameScreen.removeCharacter(_selectedCharacter);
+
+				clearSelection();
+				_state = State.SELECTING;
+			}
 		}
 	}
 	

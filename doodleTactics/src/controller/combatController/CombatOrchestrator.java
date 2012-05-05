@@ -49,6 +49,10 @@ public class CombatOrchestrator extends GameScreenController {
 		
 		_p = null;
 	}
+	
+	public List<CombatController> getEnemyAffiliations() {
+		return _enemies;
+	}
 
 	@Override
 	/**

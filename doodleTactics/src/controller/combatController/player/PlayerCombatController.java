@@ -25,31 +25,6 @@ import character.Character;
  */
 public class PlayerCombatController extends CombatController implements PoolDependent {
 	
-	private enum State {
-		START,
-		CHARACTER_SELECTED,
-		CHARACTER_OPTION_MENU,
-		SELECTING_ITEM,
-		ITEM_MENU;
-		
-		public String toString() {
-			switch (this) {
-			case START:
-				return "START";
-			case CHARACTER_SELECTED:
-				return "CHARACTER_SELECTED";
-			case CHARACTER_OPTION_MENU:
-				return "CHARACTER_OPTION_MENU";
-			case SELECTING_ITEM:
-				return "SELECTING_ITEM";
-			case ITEM_MENU:
-				return "ITEM_MENU";
-			default:
-				return "";
-			}
-		}
-	}
-	
 	private Tile _destTile;
 	private Tile _selectedTile;
 	private Character _selectedCharacter;
