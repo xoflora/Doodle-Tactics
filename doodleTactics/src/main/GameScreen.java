@@ -694,17 +694,19 @@ public class GameScreen extends Screen<GameScreenController> {
 
 	/**
 	 * @param point the location of the screen to check
-	 * @return the menu element of the screen that contains the given point, null if none exists
+	 * @return the menu element of highest paint priority the screen that contains the given point;
+	 * 	 null if none exists
 	 */
-	public List<MenuItem> checkContains(java.awt.Point point) {
+	public MenuItem checkContains(java.awt.Point point) {
 
-		List<MenuItem> toReturn = new ArrayList<MenuItem>();
+		MenuItem toReturn = null;
 		synchronized (_menuQueue) {
 			for (MenuItem r : _menuQueue) {
 				r.setDefault();
 				if (r.contains(point)) {
 					r.setHovered();
-					toReturn.add(r);
+					if (toReturn == null || r.getPaintPriority() > toReturn.getPaintPriority())
+						toReturn = r;
 				}
 			}
 		}

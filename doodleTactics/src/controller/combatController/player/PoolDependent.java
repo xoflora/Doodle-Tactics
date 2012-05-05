@@ -40,6 +40,12 @@ public interface PoolDependent {
 	public void alternateAction(Character c);
 	
 	/**
+	 * performs an action for clicking on the unit pool
+	 * @param type
+	 */
+	public void unitPoolClicked(int type);
+	
+	/**
 	 * begins use of the unit pool 
 	 */
 	public void initialize();

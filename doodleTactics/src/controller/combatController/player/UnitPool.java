@@ -214,4 +214,12 @@ public class UnitPool extends MenuItem {
 	public boolean isEmpty() {
 		return _numUnits == 0;
 	}
+	
+	@Override
+	/**
+	 * informs the source that the pool has been clicked on
+	 */
+	public void activate(int type) {
+		_source.unitPoolClicked(type);
+	}
 }
