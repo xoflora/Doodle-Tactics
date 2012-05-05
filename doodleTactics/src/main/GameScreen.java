@@ -24,6 +24,7 @@ import controller.GameScreenController;
 import controller.OverworldController;
 import controller.combatController.CombatController;
 import controller.combatController.CombatOrchestrator;
+import controller.combatController.CombatWindow;
 import controller.combatController.RandomBattleAI;
 
 import character.Archer;
@@ -70,6 +71,8 @@ public class GameScreen extends Screen<GameScreenController> {
 	
 	private int _xWindowOffset;
 	private int _yWindowOffset;
+	
+	private CombatWindow _popUpCombat;
 
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
@@ -89,6 +92,8 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 		_xWindowOffset = 0;
 		_yWindowOffset = 0;
+		
+		_popUpCombat = new CombatWindow(this, dt);
 
 		this.repaint();
 	}
@@ -531,6 +536,10 @@ public class GameScreen extends Screen<GameScreenController> {
 		synchronized(_menuQueue) {
 			_menuQueue.add(m);
 		}
+	}
+	
+	public CombatWindow getPopUpCombat() {
+		return _popUpCombat;
 	}
 
 	/**
