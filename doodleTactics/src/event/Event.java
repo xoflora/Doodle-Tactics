@@ -44,13 +44,9 @@ public abstract class Event extends GameScreenController {
 	public static Event load(DoodleTactics dt,Tile t,String eventToParse) 
 	throws InvalidEventException, FileNotFoundException, IOException{
 		String[] split = eventToParse.split(",");
-		if(split.length != 3){
-			System.out.println("Could not load event, expected 3 values");
-			throw new InvalidEventException("Could not load event, expected 3 values");
-		}
-		if(split[0].equals("warp"))
-			return new Warp(dt,t,split[1],Boolean.getBoolean(split[2]));
-		else if(split[0].equals("dialogue")){
+		if(split.length == 5 && split[0].equals("warp"))
+			return new Warp(dt,t,split[1],Boolean.getBoolean(split[2]),Integer.parseInt(split[3]),Integer.parseInt(split[4]));
+		else if(split.length == 3 && split[0].equals("dialogue")){
 			System.out.println("DIALOGUE EVENT");
 			System.out.println(eventToParse);
 			return new Dialogue(dt,split[1],Boolean.getBoolean(split[2]));

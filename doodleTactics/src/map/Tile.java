@@ -268,6 +268,8 @@ public class Tile extends graphics.Rectangle {
 		this.setHovered(false);
 		if(_eventString != null)
 			_event = Event.load(dt, this, _eventString);
+		if(_character != null)
+			_character.setLocation(getX(), getY());
 	}
 	
 	/**
