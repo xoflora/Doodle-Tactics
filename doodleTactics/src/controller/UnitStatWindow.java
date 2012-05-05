@@ -22,26 +22,25 @@ public class UnitStatWindow extends MenuItem {
 	private static final int BUFFER = 16;
 	
 	private Character _character;
-	private MenuItem _profile;
 	private GameScreen _screen;
 	
 	public UnitStatWindow(GameScreen container, DoodleTactics dt, Character c, boolean left) {
-		super(container, left ? dt.importImage(RIGHT_PATH) : dt.importImage(LEFT_PATH),
-				left ? dt.importImage(RIGHT_PATH) : dt.importImage(LEFT_PATH), dt);
+		super(container, left ? dt.importImage(LEFT_PATH) : dt.importImage(RIGHT_PATH),
+				left ? dt.importImage(LEFT_PATH) : dt.importImage(RIGHT_PATH), dt);
+
 		_screen = container;
 		_character = c;
-		_profile = new MenuItem(container, _character.getProfileImage(),_character.getProfileImage(), dt);
+		
 		if(left) {
-			this.setLocation(c.getX() - 100, c.getY() - 60);
+			setLocation(c.getX() - 100, c.getY() - 60);
 		} else {
-			this.setLocation(c.getX() + 40, c.getY() - 60);
+			setLocation(c.getX() + 40, c.getY() - 60);
 		}
 	}
 	
 	@Override
 	public void paint(Graphics2D brush, BufferedImage img) {
 		super.paint(brush, img);
-		_profile.paint(brush, img);
 		brush.setRenderingHint(
 				RenderingHints.KEY_TEXT_ANTIALIASING,
 				RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
@@ -57,8 +56,16 @@ public class UnitStatWindow extends MenuItem {
 	@Override
 	public void setLocation(double x, double y) {
 		super.setLocation(x, y);
-		_profile.setLocation(x + LEFT_MARGIN, y + TOP_MARGIN);
 		
+	}
+	
+	/**
+	 * adds this item to the game screen drawing queue
+	 */
+	public void addToDrawingQueue() {
+		_screen.addMenuItem(this);
+		setVisible(true);
+		_screen.repaint();
 	}
 	
 	/**

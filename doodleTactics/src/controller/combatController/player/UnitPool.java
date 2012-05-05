@@ -1,7 +1,9 @@
 package controller.combatController.player;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -41,6 +43,7 @@ public class UnitPool extends MenuItem {
 	private static final int DEFAULT_Y = 0;
 	private static final int DONE_X = 11;
 	private static final int DONE_Y = 746;
+	private static final int TEXT_X = 112;
 
 	public static final int SIDEBAR_PRIORITY = 0;
 	public static final int CHARACTER_SELECT_PRIORITY = 1;
@@ -59,38 +62,61 @@ public class UnitPool extends MenuItem {
 	 *
 	 */
 	private class CharacterSelect extends MenuItem {
+		
+		private static final int LEFT_MARGIN = 7;
+		private static final int TOP_MARGIN = 2;
+		private static final int BUFFER = 12;
 
 		private Character _c;
-		private UnitStatWindow _m;
+		private boolean _drawStats;
 
 		public CharacterSelect(JPanel container, BufferedImage defltPath,
 				BufferedImage hoveredPath, DoodleTactics dt, Character c) {
 			super(container, defltPath, hoveredPath, dt, CHARACTER_SELECT_PRIORITY);
 			setVisible(true);
 			_c = c;
-			_m = null;
+			_drawStats = false;
 		}
 		
 		@Override
 		public void setDefault() {
-			if (_m != null) {
-				_m.removeFromDrawingQueue();
-				_m = null;
-			}
+			super.setDefault();
+			_drawStats = false;
 		}
 		
 		@Override
 		public void setHovered() {
-			_m = new UnitStatWindow(_gameScreen, _dt, _c, false);
+			super.setHovered();
+			_drawStats = true;
 		}
 
 		@Override
 		public void activate(int type) {
-			//	System.out.println("activating on character " + _c);
 			if (type == SELECT_BUTTON)
 				_source.getCharacterFromPool(_c);
 			else if (type == ALT_BUTTON)
 				_source.alternateAction(_c);
+		}
+		
+		@Override
+		public void paint(Graphics2D brush, BufferedImage img) {
+			super.paint(brush, img);
+
+			if (_drawStats) {
+				int y = (int)getY() + TOP_MARGIN;
+				
+				brush.setRenderingHint(
+						RenderingHints.KEY_TEXT_ANTIALIASING,
+						RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+				brush.setFont(new Font("Arial", Font.BOLD, 14));
+				brush.setColor(new Color(0,0,1));
+				brush.drawString(_c.getName(), TEXT_X, y + BUFFER);
+				brush.drawString("HP: " + _c.getHP() + "/" + _c.getBaseStats()[7] +
+						", Lvl " + _c.getLevel(), TEXT_X, y + BUFFER*2);
+				brush.drawString("Atk: " + _c.getBaseStats()[0] + ", Def: "
+						+ _c.getBaseStats()[1], TEXT_X, y + BUFFER*3);
+				brush.drawString("Range: " + _c.getMovementRange(), TEXT_X, y + BUFFER*4);
+			}
 		}
 	}
 
