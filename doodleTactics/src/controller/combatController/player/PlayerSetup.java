@@ -120,77 +120,79 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
+		
+		if (t != null) {
+			if (e.getButton() == MouseEvent.BUTTON1) {
+				if (_validTiles.contains(t)) {
+					if (_state == State.SELECTING) {
+						if (t.isOccupied()) {
+							_selectedTile = t;
+							_selectedTile.setInMovementPath(true);
+							_selectedCharacter = t.getOccupant();
+							_state = State.SELECTED_FROM_TILE;
+						}
+						else {
+							_selectedTile = t;
+							_selectedTile.setInMovementPath(true);
+							_state = State.SELECTED_EMPTY_TILE;
+						}
+					}
+					else if (_state == State.SELECTED_EMPTY_TILE) {
+						if (t.isOccupied()) {	//move occupant into empty tile
 
-		if (e.getButton() == MouseEvent.BUTTON1) {
-			if (_validTiles.contains(t)) {
-				if (_state == State.SELECTING) {
-					if (t.isOccupied()) {
-						_selectedTile = t;
-						_selectedTile.setInMovementPath(true);
-						_selectedCharacter = t.getOccupant();
-						_state = State.SELECTED_FROM_TILE;
+							_selectedCharacter = t.getOccupant();
+							_selectedTile.setOccupant(_selectedCharacter);
+							t.setOccupant(null);
+
+							_selectedCharacter.setLocation(_selectedTile.getX(), _selectedTile.getY());
+							_selectedCharacter.setVisible(true);
+
+							clearSelection();
+							_state = State.SELECTING;
+						}
+					}
+					else if (_state == State.SELECTED_FROM_POOL) {
+						swapUnitIntoPool(t.getOccupant(), _selectedCharacter, t);
+						clearSelection();
+						_state = State.SELECTING;
 					}
 					else {
-						_selectedTile = t;
-						_selectedTile.setInMovementPath(true);
-						_state = State.SELECTED_EMPTY_TILE;
-					}
-				}
-				else if (_state == State.SELECTED_EMPTY_TILE) {
-					if (t.isOccupied()) {	//move occupant into empty tile
+						Character sw = t.getOccupant();
+						_selectedTile.setOccupant(sw);
+						if (sw != null)
+							sw.setLocation(_selectedTile.getX(), _selectedTile.getY());
 
-						_selectedCharacter = t.getOccupant();
-						_selectedTile.setOccupant(_selectedCharacter);
-						t.setOccupant(null);
-
-						_selectedCharacter.setLocation(_selectedTile.getX(), _selectedTile.getY());
+						t.setOccupant(_selectedCharacter);
+						_selectedCharacter.setLocation(t.getX(), t.getY());
 						_selectedCharacter.setVisible(true);
 
 						clearSelection();
 						_state = State.SELECTING;
 					}
 				}
-				else if (_state == State.SELECTED_FROM_POOL) {
-					swapUnitIntoPool(t.getOccupant(), _selectedCharacter, t);
-					clearSelection();
-					_state = State.SELECTING;
-				}
 				else {
-					Character sw = t.getOccupant();
-					_selectedTile.setOccupant(sw);
-					if (sw != null)
-						sw.setLocation(_selectedTile.getX(), _selectedTile.getY());
-
-					t.setOccupant(_selectedCharacter);
-					_selectedCharacter.setLocation(t.getX(), t.getY());
-					_selectedCharacter.setVisible(true);
-
-					clearSelection();
-					_state = State.SELECTING;
-				}
-			}
-			else {
-				Character occ = t.getOccupant();
-				if (occ != null) {
-					boolean isEnemy = false;
-					for (CombatController c : _orch.getEnemyAffiliations())
-						if (c.containsCharacter(occ)) {
-							isEnemy = true;
-							break;
+					Character occ = t.getOccupant();
+					if (occ != null) {
+						boolean isEnemy = false;
+						for (CombatController c : _orch.getEnemyAffiliations())
+							if (c.containsCharacter(occ)) {
+								isEnemy = true;
+								break;
+							}
+						if (isEnemy) {
+							List<Tile> add = _gameScreen.getMap().getAttackRange(t, occ.getMovementRange(),
+									occ.getMinAttackRange(), occ.getMaxAttackRange());
+							for (Tile toPaint : add)
+								toPaint.setInEnemyAttackRange(true);
+							_enemyAttackRange = Util.union(_enemyAttackRange, add);
 						}
-					if (isEnemy) {
-						List<Tile> add = _gameScreen.getMap().getAttackRange(t, occ.getMovementRange(),
-								occ.getMinAttackRange(), occ.getMaxAttackRange());
-						for (Tile toPaint : add)
-							toPaint.setInEnemyAttackRange(true);
-						_enemyAttackRange = Util.union(_enemyAttackRange, add);
 					}
 				}
 			}
-		}
-		else if (e.getButton() == MouseEvent.BUTTON3) {
-			clearSelection();
-			clearEnemyAttackRange();
+			else if (e.getButton() == MouseEvent.BUTTON3) {
+				clearSelection();
+				clearEnemyAttackRange();
+			}
 		}
 	}
 	

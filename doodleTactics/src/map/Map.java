@@ -514,7 +514,7 @@ public class Map implements Serializable {
 
 		try {
 			check = getNorth(search);
-			if (check.canMove(SOUTH) || !usePermissions) {
+			if (check != null && (check.canMove(SOUTH) || !usePermissions)) {
 				dist = distances.get(check);
 				compare = distances.get(search) + (useCost ? check.cost() : 1);
 
@@ -534,7 +534,7 @@ public class Map implements Serializable {
 
 		try {
 			check = getEast(search);
-			if (check.canMove(WEST) || !usePermissions) {
+			if (check != null && (check.canMove(WEST) || !usePermissions)) {
 				dist = distances.get(check);
 				compare = distances.get(search) + (useCost ? check.cost() : 1);
 
@@ -554,7 +554,7 @@ public class Map implements Serializable {
 
 		try {
 			check = getSouth(search);
-			if (check.canMove(NORTH) || !usePermissions) {
+			if (check != null && (check.canMove(NORTH) || !usePermissions)) {
 				dist = distances.get(check);
 				compare = distances.get(search) + (useCost ? check.cost() : 1);
 
@@ -574,7 +574,7 @@ public class Map implements Serializable {
 
 		try {
 			check = getWest(search);
-			if (check.canMove(EAST) || !usePermissions) {
+			if (check != null && (check.canMove(EAST) || !usePermissions)) {
 				dist = distances.get(check);
 				compare = distances.get(search) + (useCost ? check.cost() : 1);
 
@@ -983,7 +983,8 @@ public class Map implements Serializable {
 	 * @return true if the tile generates a random battle and false otherwise
 	 */
 	public boolean generatesRandomBattle(Tile t){
-		return _tileToEnemies.containsKey(t);
+	//	System.out.println("checking tile " + t);
+		return _tileToEnemies.get(t) != null && !_tileToEnemies.get(t).isEmpty();
 	}
 	
 	/**
@@ -998,6 +999,20 @@ public class Map implements Serializable {
 			controllerMap.put(c, _enemyTiles.get(c));
 		
 		_dt.getGameScreen().enterCombat(controllerMap);
+	}
+	
+	/**
+	 * indicates that a random battle has been cleared by removing it from this map
+	 * @param c
+	 */
+	public void removeRandomBattle(Character c) {
+		System.out.println("lulz");
+		for (Tile t : _enemyToTiles.remove(c)) {
+		//	System.out.print(t + "\t");
+		/*	System.out.println(*/_tileToEnemies.get(t).remove(c)/*)*/;
+		}
+		System.out.println(_enemyToTiles.get(c));
+		_enemyTiles.remove(c);
 	}
 	
 	/**
