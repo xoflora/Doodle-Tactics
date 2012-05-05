@@ -749,6 +749,8 @@ public class GameScreen extends Screen<GameScreenController> {
 		ObjectOutputStream out;
 
 		//Store XRef and YRef
+		System.out.println("Prev X Win Offset: " + _xWindowOffset);
+		System.out.println("Prev Y Win Offset: " + _yWindowOffset);
 		_currMap.setPrevXWindowOffset(_xWindowOffset);
 		_currMap.setPrevYWindowOffset(_yWindowOffset);
 		System.out.println("MAIN CHAR X: " + _currMap.getMainCharacter().getX() +
@@ -805,6 +807,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		System.out.println("Loading game!");
 		FileInputStream fis;
 		ObjectInputStream in;
+
 		try {
 			fis = new FileInputStream(filepath);
 			in = new ObjectInputStream(fis);
@@ -815,7 +818,10 @@ public class GameScreen extends Screen<GameScreenController> {
 			_dt.getGameMenuScreen().load((int[]) in.readObject());
 			_xWindowOffset  =in.readInt();
 			_yWindowOffset = in.readInt();
-			
+			//Load XRef and YRef
+			System.out.println("X Win Offset: " + _xWindowOffset);
+			System.out.println("Y Win Offset: " + _yWindowOffset);
+
 			//Reload all party characters
 			for(Character c : _dt.getParty())
 				c.load(_dt);
