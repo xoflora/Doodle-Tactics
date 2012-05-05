@@ -19,7 +19,7 @@ import map.Tile;
 import character.Character;
 /**
  * 
- * @author rroelke
+ * @author rroelkedww
  *
  */
 public abstract class GameScreenController extends Controller {
@@ -29,7 +29,7 @@ public abstract class GameScreenController extends Controller {
 	private int _draggedy;
 	
 	protected Tile _hoveredTile;
-	protected UnitStatMenu _unitStats;
+	protected UnitStatWindow _unitStats;
 	
 	public GameScreenController(DoodleTactics dt) {
 		super(dt);
@@ -51,7 +51,10 @@ public abstract class GameScreenController extends Controller {
 	public void release() {
 		if (_hoveredTile != null)
 			_hoveredTile.setHovered(false);
-		removeUnitStats();
+		if (_unitStats != null) {
+			_unitStats.removeFromDrawingQueue();
+			_unitStats = null;
+		}
 	}
 	
 	@Override
@@ -83,15 +86,18 @@ public abstract class GameScreenController extends Controller {
 	public void mouseDragged(MouseEvent e) {
 		int updatex = (e.getX() - _draggedx)/Tile.TILE_SIZE;
 		int updatey = (e.getY() - _draggedy)/Tile.TILE_SIZE;
-				
-	//	if (updatex != 0 || updatey != 0) {
-			_gameScreen.pan(e.getX() - _draggedx, e.getY() - _draggedy);
-			_draggedx = e.getX();
-			_draggedy = e.getY();
-			_gameScreen.repaint();
-	//	}
-		
-		this.removeUnitStats();
+
+		//	if (updatex != 0 || updatey != 0) {
+		_gameScreen.pan(e.getX() - _draggedx, e.getY() - _draggedy);
+		_draggedx = e.getX();
+		_draggedy = e.getY();
+		_gameScreen.repaint();
+		//	}
+
+		if (_unitStats != null) {
+			_unitStats.removeFromDrawingQueue();
+			_unitStats = null;
+		}
 	}
 	
 	/**
@@ -112,14 +118,19 @@ public abstract class GameScreenController extends Controller {
 			if (t.isOccupied()) {
 				Character c = t.getOccupant();
 				
-					this.removeUnitStats();
+					if (_unitStats != null) {
+						_unitStats.removeFromDrawingQueue();
+						_unitStats = null;
+					}
 				
-					_unitStats = new UnitStatMenu(_gameScreen, _dt.importImage("src/graphics/menu/unit_stats_box.png"),
-							_dt.importImage("src/graphics/menu/unit_stats_box_left.png"), _dt, c, false);
+					_unitStats = new UnitStatWindow(_gameScreen, _dt, c, false);
 					_gameScreen.addMenuItem(_unitStats);
 					_unitStats.setVisible(true);
 			} else {
-					this.removeUnitStats();
+				if (_unitStats != null) {
+					_unitStats.removeFromDrawingQueue();
+					_unitStats = null;
+				}
 			}
 		}
 		
@@ -142,14 +153,14 @@ public abstract class GameScreenController extends Controller {
 			m.activate(e.getButton());
 	}
 	
-	public void removeUnitStats() {
+/*	public void removeUnitStats() {
 		if(_unitStats != null) {
 			_gameScreen.removeMenuItem(_unitStats);
 			_unitStats.setVisible(false);
 			_unitStats = null;
 			_gameScreen.repaint();
 		}
-	}
+	}	*/
 	
 	@Override
 	public void mouseEntered(MouseEvent e) { }
