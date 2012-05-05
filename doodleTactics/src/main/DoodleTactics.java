@@ -215,6 +215,10 @@ public class DoodleTactics extends JFrame {
 		return _allChars;
 	}
 	
+	public void setCharacterMap(HashMap<String,Character> map){
+		_allChars = map;
+	}
+	
 	/**
 	 * 
 	 * Adds a Name/Character pair to the Character Map
@@ -236,6 +240,11 @@ public class DoodleTactics extends JFrame {
 	}
 	public HashMap<String,String> getSavedFilePaths(){
 		return _savedGames;
+	}
+	
+	public void setSavedFilePaths(HashMap<String,String> savedGames){
+		System.out.println("SETTING SAVED FILE PATHS");
+		_savedGames = savedGames;
 	}
 	
 	/**

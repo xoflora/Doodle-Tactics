@@ -206,9 +206,10 @@ public class Dialogue extends Event {
 			//Retrieve character from Hashmap
 			if(allChars.containsKey(split[0].trim()))
 				c = allChars.get(split[0].trim());
-			else
+			else{
 				//throw error if Character not found
 				throw new InvalidEventException(split[0], line);
+			}
 			_characters.add(c);
 
 			_phrases.add(split[1].trim());

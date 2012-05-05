@@ -735,12 +735,16 @@ public class GameScreen extends Screen<GameScreenController> {
 				" Y: " + _currMap.getMainCharacter().getY());
 	//	System.out.println("Other CHAR X: " + _currMap.getCharactersToDisplay().get(1).getX() +
 	//			" Y: " + _currMap.getCharactersToDisplay().get(1).getY());
-
+		
+		
+		_dt.addSavedGame(filename, filename);
+		writeFilepathsFile();
 		try {
 			fos = new FileOutputStream(filename);
 			out = new ObjectOutputStream(fos);
 			out.writeObject(_mapCache);
 			out.writeObject(_currMap);
+			out.writeObject(_dt.getCharacterMap());
 			out.writeObject(_dt.getParty());
 			out.writeInt(_xWindowOffset);
 			out.writeInt(_yWindowOffset);
@@ -750,6 +754,32 @@ public class GameScreen extends Screen<GameScreenController> {
 		}
 	}
 
+	public void writeFilepathsFile(){
+		FileOutputStream fos;
+		ObjectOutputStream out;
+		try {
+			fos = new FileOutputStream("src/tests/data/savedGames");
+			out = new ObjectOutputStream(fos);
+			out.writeObject(_dt.getSavedFilePaths());
+		}  catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void readFilepathsFile(){
+		FileInputStream fis;
+		ObjectInputStream in;
+		try {
+			fis = new FileInputStream("src/tests/data/savedGames");
+			in = new ObjectInputStream(fis);
+			_dt.setSavedFilePaths((HashMap<String,String>) in.readObject());
+		} catch(IOException e){
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void loadGame(String filepath){
 		System.out.println("Loading game!");
 		FileInputStream fis;
@@ -759,6 +789,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			in = new ObjectInputStream(fis);
 			_mapCache =  (HashMap<String,Map>) in.readObject();
 			_currMap = (Map) in.readObject();
+			_dt.setCharacterMap((HashMap<String,Character>) in.readObject());
 			_dt.setParty((List<Character>) in.readObject());
 			_xWindowOffset  =in.readInt();
 			_yWindowOffset = in.readInt();
