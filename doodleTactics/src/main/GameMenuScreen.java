@@ -27,7 +27,7 @@ import controller.GameMenuController;
 
 @SuppressWarnings("serial")
 public class GameMenuScreen extends Screen<GameMenuController> {
-
+	
 	private MenuItem _units;
 	private MenuItem _quit;
 	private MenuItem _save;
@@ -53,6 +53,12 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private HashMap<optionButton, Character> _buttonToChar;
 	private ArrayList<optionButton> _buttonList;
 	private BufferedImage _charBoxImage, _listItem, _listItemHovered;
+	
+	//options vars
+	private String[] _optionsText = {"Overworld Move Left","Overworld Move Right", "Overworld Move Up","Overworld Move Down", "Interact","Menu"};
+	private int _currOption;
+	private final static int NUM_OPTIONS = 6;
+
 	
 	private JLayeredPane _layers;
 	private buttonPanel _buttons;
@@ -167,6 +173,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_itemInfoBox.setSize(144, 340);
 		
 		_unitsBoxListener = new unitsBoxListener();
+		
+		//options
+		_currOption = 0;
+		//_optionsText = new String[NUM_OPTIONS];
 	}
 	
 	/**
@@ -230,13 +240,39 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_downArrow.setLocation(_dt.getGameScreen().getMap().getMapCords().getX(), _dt.getGameScreen().getMap().getMapCords().getY());
 		_downArrow.paint((Graphics2D) g, _downArrow.getImage());
 		_infoBoxTitle.paint((Graphics2D) g, _infoBoxTitle.getImage());
-		  if(_currClicked == 5){
+		if(_currClicked == 4){
+			//Options
+			int y = 1;
+			  ((Graphics2D) g).setRenderingHint(
+						RenderingHints.KEY_TEXT_ANTIALIASING,
+						RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+				((Graphics2D) g).setFont(new Font("M",Font.BOLD,25));
+				((Graphics2D) g).setColor(new Color(1,1,1));
+				
+				//draw other strings
+				y = 1;
+				for(int i=0; i< NUM_OPTIONS; i++){
+					y++;
+					if(i == _currOption){
+						((Graphics2D) g).setColor(new Color(64,224,208));
+						((Graphics2D) g).drawString(_optionsText[i] + ": (Enter to Change)",200,y*50 + 50);
+						((Graphics2D) g).setColor(new Color(1,1,1));
+					} else{
+						((Graphics2D) g).drawString(_optionsText[i],200,y*50 + 50);
+					}
+				}
+
+
+		}
+		
+		if(_currClicked == 5){
 			  ((Graphics2D) g).setRenderingHint(
 						RenderingHints.KEY_TEXT_ANTIALIASING,
 						RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 				((Graphics2D) g).setFont(new Font("M",Font.BOLD,25));
 				((Graphics2D) g).setColor(new Color(1,1,1));
 				((Graphics2D) g).drawString("Would you like to save your game?",200,150);
+				
 		 }
 	}
 	
@@ -1196,6 +1232,17 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 					}
 				}
 			}
+		}
+	}
+	
+	public void increaseCurrOption(){
+		_currOption  = (_currOption + 1)  % NUM_OPTIONS;
+	}
+	
+	public void decreaseCurrOption(){
+		_currOption = (_currOption - 1) % NUM_OPTIONS;
+		if(_currOption < 0){
+			_currOption = NUM_OPTIONS - 1;
 		}
 	}
 	

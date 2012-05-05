@@ -800,6 +800,11 @@ public class GameScreen extends Screen<GameScreenController> {
 			_dt.setParty((List<Character>) in.readObject());
 			_xWindowOffset  =in.readInt();
 			_yWindowOffset = in.readInt();
+			
+			//Reload all party characters
+			for(Character c : _dt.getParty())
+				c.load(_dt);
+			in.close();
 
 			//reload every map
 			for(String path : _mapCache.keySet()){
@@ -807,10 +812,6 @@ public class GameScreen extends Screen<GameScreenController> {
 				m.load(_dt);
 			}
 			
-			//Reload all party characters
-			for(Character c : _dt.getParty())
-				c.load(_dt);
-			in.close();
 			
 		//	setMap(path, _currMap.getMainCharacter().getX(), _currMap.getMainCharacter().getY());
 			

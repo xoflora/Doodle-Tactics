@@ -26,9 +26,9 @@ import map.Tile;
 public class OverworldController extends GameScreenController {
 
 	private RandomMoveTimer _randomMoveTimer;
-	
+
 	private OverworldMover _moveThread;
-	
+
 	public OverworldController(DoodleTactics dt, GameScreen game) {
 		super(dt);
 		_gameScreen = game;
@@ -37,88 +37,88 @@ public class OverworldController extends GameScreenController {
 	}
 
 	private class RandomMoveTimer extends Timer {
-		
+
 		public RandomMoveTimer() {
 			super(30000, null);
 			this.addActionListener(new RandomMoveListener());
 		}
-		
+
 		private class RandomMoveListener implements java.awt.event.ActionListener {
-			
+
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 
 				if(_gameScreen.getMap() != null) {
-				
+
 					for(Character c : _gameScreen.getMap().getCharactersToDisplay()) {
-						
+
 						// provided this character is not the main character
 						if(! c.equals(_gameScreen.getMainChar()) && c.getName().equals("Thighs")) {
-							
+
 							System.out.println("character at " + c.getX() + ", " + c.getY());
-							
+
 							//generate a random direction to move in
 							Random r = new Random();
 							int direction = r.nextInt(4);
 							// retrieve the tile that corresponds to the given character
 							Tile src = _gameScreen.getTile((int) c.getX(), (int) c.getY());
 							System.out.println("src, x: " + src.x() + ", y:" + src.y());
-							
+
 							if(src != null) {
-								
+
 								System.out.println("character moving: " + c.getName() + " in direction " + direction + 
 										" from " + src.getX() + "," + src.getY() + " to... ");
-								
+
 								try {
-							
+
 									Tile dest = null;
-									
+
 									switch(direction) {
-										case 0:
-											dest = _gameScreen.getMap().getNorth(src);
-											if(dest != null && dest.canMove(Map.NORTH) && !dest.isOccupied()) {
-												System.out.println("MOVE NORTH");
-												System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
-												src.removeOccupant();
-												c.moveToTile(src, dest);
-												dest.setOccupant(c);
-											}
-											break;
-										case 1:
-											dest = _gameScreen.getMap().getSouth(src);
-											if(dest != null && dest.canMove(Map.SOUTH) && !dest.isOccupied()) {
-												System.out.println("MOVE SOUTH");
-												System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
-												src.removeOccupant();
-												c.moveToTile(src, dest);
-												dest.setOccupant(c);
-											}
-											break;
-										case 2:
-											dest = _gameScreen.getMap().getEast(src);
-											if(dest != null && dest.canMove(Map.EAST) && !dest.isOccupied()) {
-												System.out.println("MOVE EAST");
-												System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
-												src.removeOccupant();
-												c.moveToTile(src, dest);
-												dest.setOccupant(c);
-											}
-											break;
-										case 3:
-											dest = _gameScreen.getMap().getWest(src);
-											if(dest != null && dest.canMove(Map.WEST) && !dest.isOccupied()) {
-												System.out.println("MOVE WEST");
-												System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
-												src.removeOccupant();
-												c.moveToTile(src, dest);
-												dest.setOccupant(c);
-											}
-											break;
+									case 0:
+										dest = _gameScreen.getMap().getNorth(src);
+										if(dest != null && dest.canMove(Map.NORTH) && !dest.isOccupied()) {
+											System.out.println("MOVE NORTH");
+											System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
+											src.removeOccupant();
+											c.moveToTile(src, dest);
+											dest.setOccupant(c);
+										}
+										break;
+									case 1:
+										dest = _gameScreen.getMap().getSouth(src);
+										if(dest != null && dest.canMove(Map.SOUTH) && !dest.isOccupied()) {
+											System.out.println("MOVE SOUTH");
+											System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
+											src.removeOccupant();
+											c.moveToTile(src, dest);
+											dest.setOccupant(c);
+										}
+										break;
+									case 2:
+										dest = _gameScreen.getMap().getEast(src);
+										if(dest != null && dest.canMove(Map.EAST) && !dest.isOccupied()) {
+											System.out.println("MOVE EAST");
+											System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
+											src.removeOccupant();
+											c.moveToTile(src, dest);
+											dest.setOccupant(c);
+										}
+										break;
+									case 3:
+										dest = _gameScreen.getMap().getWest(src);
+										if(dest != null && dest.canMove(Map.WEST) && !dest.isOccupied()) {
+											System.out.println("MOVE WEST");
+											System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
+											src.removeOccupant();
+											c.moveToTile(src, dest);
+											dest.setOccupant(c);
+										}
+										break;
 									}
-									
+
 									System.out.println("-------");
-								
+
 								} catch (ArrayIndexOutOfBoundsException ex) {
-									
+
 								}
 							}
 						}	
@@ -127,15 +127,17 @@ public class OverworldController extends GameScreenController {
 			}
 		}
 	}
-	
+
 	@Override
 	public void take() {
+		super.take();
 		// TODO : center the map around the main character
 		//_randomMoveTimer.start();
 	}
 
 	@Override
 	public void release() {
+		super.release();
 		// TODO Auto-generated method stub
 		//_randomMoveTimer.stop();
 	}
@@ -196,17 +198,16 @@ public class OverworldController extends GameScreenController {
 		if(!_gameScreen.isAnimating()) {	
 
 			Character main = _gameScreen.getMainChar();
-			
+
 			Tile oldTile = _gameScreen.getTile((int)main.getX(),
 					(int)main.getY());
 			Tile newTile = null;
 
-			switch(e.getKeyChar()) {
+			if(e.getKeyChar() == 'w') {
 
-			case 'w':
 				newTile = _gameScreen.getMap().getNorth(oldTile);
-				
-		/*		if (_moveThread != null)
+
+				/*		if (_moveThread != null)
 					if (_moveThread.moveCompleted()) {
 						try {
 							_moveThread.join();
@@ -215,8 +216,8 @@ public class OverworldController extends GameScreenController {
 						}
 						_moveThread = null;
 					}		*/
-				
-		/*		if(newTile != null && (_moveThread == null || !_moveThread.isAlive())){
+
+				/*		if(newTile != null && (_moveThread == null || !_moveThread.isAlive())){
 					main.setUp();
 					if (newTile.canMove(Map.NORTH)) {
 						_moveThread = new OverworldMover(_gameScreen, oldTile, newTile, _gameScreen.getMainChar());
@@ -224,10 +225,10 @@ public class OverworldController extends GameScreenController {
 					//	while (!_moveThread.moveCompleted());
 					}
 				}		*/
-				
-				
+
+
 				if (newTile != null){			
-				/*	if(newTile.hasEnterEvent()){
+					/*	if(newTile.hasEnterEvent()){
 						_gameScreen.pushControl(newTile.getEvent());
 						break;
 					} else if(_dt.getGameScreen().getMap().generatesRandomBattle(newTile)){
@@ -242,11 +243,12 @@ public class OverworldController extends GameScreenController {
 					if (newTile.canMove(Map.SOUTH))
 						_gameScreen.moveMainCharacter(oldTile, newTile);
 				}
-				break;
-			case 'a':
+			}
+
+			else if(e.getKeyChar() == 'a'){
 				newTile = _gameScreen.getMap().getWest(oldTile);
-				
-			/*	if (_moveThread != null)
+
+				/*	if (_moveThread != null)
 					if (_moveThread.moveCompleted()) {
 						try {
 							_moveThread.join();
@@ -255,16 +257,16 @@ public class OverworldController extends GameScreenController {
 						}
 						_moveThread = null;
 					}
-				
+
 				if(newTile != null && (_moveThread == null || !_moveThread.isAlive())){
 					main.setLeft();
 					if (newTile.canMove(Map.EAST)) {
 						_moveThread = new OverworldMover(_gameScreen, oldTile, newTile, _gameScreen.getMainChar());
 						_moveThread.start();
 					}		*/
-					
+
 				if (newTile != null) {
-				/*	if (newTile.hasEnterEvent()) {
+					/*	if (newTile.hasEnterEvent()) {
 						_gameScreen.pushControl(newTile.getEvent());
 						break;
 					}
@@ -280,11 +282,11 @@ public class OverworldController extends GameScreenController {
 					if (newTile.canMove(Map.EAST))
 						_gameScreen.moveMainCharacter(oldTile, newTile);
 				}
-				break;
-			case 's':
+			}
+			else if(e.getKeyChar() == 's'){
 				newTile = _gameScreen.getMap().getSouth(oldTile);
-				
-			/*	if (_moveThread != null)
+
+				/*	if (_moveThread != null)
 					if (_moveThread.moveCompleted()) {
 						try {
 							_moveThread.join();
@@ -293,7 +295,7 @@ public class OverworldController extends GameScreenController {
 						}
 						_moveThread = null;
 					}
-				
+
 				if(newTile != null && (_moveThread == null || !_moveThread.isAlive())){
 					main.setDown();
 					if (newTile.canMove(Map.NORTH)) { 
@@ -316,15 +318,15 @@ public class OverworldController extends GameScreenController {
 						oldTile.removeOccupant();
 					}	*/
 					main.setDown();
-					
+
 					if (newTile.canMove(Map.NORTH))
 						_gameScreen.moveMainCharacter(oldTile, newTile);
 				}
-				break;
-			case 'd':
+			}
+			else if(e.getKeyChar() == 'd'){
 				newTile = _gameScreen.getMap().getEast(oldTile);
-				
-			/*	if (_moveThread != null)
+
+				/*	if (_moveThread != null)
 					if (_moveThread.moveCompleted()) {
 						try {
 							_moveThread.join();
@@ -333,7 +335,7 @@ public class OverworldController extends GameScreenController {
 						}
 						_moveThread = null;
 					}
-				
+
 				if(newTile != null && (_moveThread == null || !_moveThread.isAlive())){
 					main.setRight();
 					if (newTile.canMove(Map.WEST)) { 
@@ -341,10 +343,10 @@ public class OverworldController extends GameScreenController {
 						_moveThread.start();
 					}
 				}		*/
-				
-				
+
+
 				if (newTile != null){
-				/*	if(newTile.hasEnterEvent()) {
+					/*	if(newTile.hasEnterEvent()) {
 						_gameScreen.pushControl(newTile.getEvent());
 						break;
 					}
@@ -360,45 +362,44 @@ public class OverworldController extends GameScreenController {
 					if (newTile.canMove(Map.WEST))
 						_gameScreen.moveMainCharacter(oldTile, newTile);
 				}
-				break;
-			case 'f':
+			}
+			else if(e.getKeyChar() == 'f'){
 
 				try {
 					Runtime.getRuntime().exec("google-chrome www.foodler.com");
-					break;
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-			case 'g':
+			}
+			else if(e.getKeyChar() == 'g'){
 				_gameScreen.switchToClassChooserMenu();
-				break;
 			}
 		}
 		_gameScreen.repaint();
 	}
 
 
-		@Override
+	@Override
 	public void mouseClicked(MouseEvent e) {
-			super.mouseClicked(e);
+		super.mouseClicked(e);
 		// TODO Auto-generated method stub
-	//	Tile t = _gameScreen.getTile(e.getX(), e.getY());
-	//	if (_validTiles.contains(t)) {
+		//	Tile t = _gameScreen.getTile(e.getX(), e.getY());
+		//	if (_validTiles.contains(t)) {
 		//	_selectedTile = t;
 
-	//		System.out.println(t.getOccupant());
-	//	}
-			
+		//		System.out.println(t.getOccupant());
+		//	}
+
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		if (t != null)
 			System.out.println(t.getOccupant());
 	}
 
-//	@Override
-//	public void mousePressed(MouseEvent e) { }
+	//	@Override
+	//	public void mousePressed(MouseEvent e) { }
 
-//	@Override
-//	public void mouseDragged(MouseEvent e) { }
+	//	@Override
+	//	public void mouseDragged(MouseEvent e) { }
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
