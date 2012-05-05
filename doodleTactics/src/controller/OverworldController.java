@@ -203,7 +203,7 @@ public class OverworldController extends GameScreenController {
 					(int)main.getY());
 			Tile newTile = null;
 
-			if(e.getKeyCode() == _dt.getUpKey()) {
+			if(e.getKeyChar() == 'w') {
 
 				newTile = _gameScreen.getMap().getNorth(oldTile);
 
@@ -245,7 +245,7 @@ public class OverworldController extends GameScreenController {
 				}
 			}
 
-			else if(e.getKeyCode() == _dt.getLeftKey()){
+			else if(e.getKeyChar() == 'a'){
 				newTile = _gameScreen.getMap().getWest(oldTile);
 
 				/*	if (_moveThread != null)
@@ -283,7 +283,7 @@ public class OverworldController extends GameScreenController {
 						_gameScreen.moveMainCharacter(oldTile, newTile);
 				}
 			}
-			else if(e.getKeyCode() == _dt.getDownKey()){
+			else if(e.getKeyChar() == 's'){
 				newTile = _gameScreen.getMap().getSouth(oldTile);
 
 				/*	if (_moveThread != null)
@@ -323,7 +323,7 @@ public class OverworldController extends GameScreenController {
 						_gameScreen.moveMainCharacter(oldTile, newTile);
 				}
 			}
-			else if(e.getKeyCode() == _dt.getRightKey()){
+			else if(e.getKeyChar() == 'd'){
 				newTile = _gameScreen.getMap().getEast(oldTile);
 
 				/*	if (_moveThread != null)

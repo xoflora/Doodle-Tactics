@@ -76,12 +76,13 @@ public class DoodleTactics extends JFrame {
 		this.setResizable(false);
 		this.setVisible(true);
 		
-		_moveLeftKey = KeyEvent.VK_A;
-		_moveRightKey = KeyEvent.VK_D;
+	/*	_moveLeftKey = 'a';
+		_moveRightKey = 'd';
 		_moveUpKey = KeyEvent.VK_W;
 		_moveDownKey = KeyEvent.VK_S;
 		_menuKey = KeyEvent.VK_CONTROL;
 		_interactKey = KeyEvent.VK_SPACE;
+		_moveLeftKey = KeyEvent.VK*/
 		
 		//	_game.setMap("src/tests/data/testMapDemo");
 		
