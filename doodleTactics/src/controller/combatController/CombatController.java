@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
 
+import util.Util;
+
 import controller.GameScreenController;
 
 import main.DoodleTactics;
@@ -127,11 +129,25 @@ public abstract class CombatController extends GameScreenController {
 	}
 	
 	/**
+	 * @return the mapping from characters to tiles of this controller
+	 */
+	public HashMap<Character, Tile> getTileMappings() {
+		return _locations;
+	}
+	
+	/**
 	 * sets the enemy affiliations of this combat controller
 	 * @param aff
 	 */
 	public void setEnemyAffiliations(List<CombatController> aff) {
 		_enemyAffiliations = aff;
+	}
+	
+	/**
+	 * @return all combat factions that are enemies of this one
+	 */
+	public List<CombatController> getEnemyAffiliations() {
+		return _enemyAffiliations;
 	}
 	
 	/**
@@ -170,6 +186,7 @@ public abstract class CombatController extends GameScreenController {
 	public void take() {
 		super.take();
 		_hasMoved.clear();
+		_unitCycle = _units.listIterator();
 		
 		if (_orch == null)
 			_dt.error("Combat error: orchestrator unassigned.");
@@ -204,6 +221,17 @@ public abstract class CombatController extends GameScreenController {
 			if (affiliation.isAffiliated(c))
 				return true;
 		return false;
+	}
+	
+	public List<Character> enemyUnits() {
+		if (_orch == null)
+			return new ArrayList<Character>();
+		
+		List<Character> enemies = new ArrayList<Character>();
+		for (CombatController aff : _enemyAffiliations)
+			enemies.addAll(aff.getUnits());
+		
+		return enemies;
 	}
 	
 	/**

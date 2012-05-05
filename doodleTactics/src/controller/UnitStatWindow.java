@@ -47,10 +47,10 @@ public class UnitStatWindow extends MenuItem {
 		brush.setFont(new Font("Arial", Font.BOLD, 14));
 		brush.setColor(new Color(0,0,1));
 		brush.drawString(_character.getName(), (int) this.getX() + LEFT_MARGIN, (int) (this.getY() + BUFFER));
-		brush.drawString("HP: " + _character.getHP() + "/" + _character.getBaseStats()[7] +
+		brush.drawString("HP: " + _character.getHP() + "/" + _character.getBaseStats()[Character.MAX_HP] +
 				", Lvl " + _character.getLevel(), (int) this.getX() + LEFT_MARGIN, (int) (this.getY() + BUFFER*2));
-		brush.drawString("Atk: " + _character.getBaseStats()[0] + ", Def: "
-				+ _character.getBaseStats()[1], (int) this.getX() + LEFT_MARGIN, (int) (this.getY() + BUFFER*3));
+		brush.drawString("Atk: " + _character.getFullAttackStrength() + ", Def: "
+				+ _character.getBaseStats()[Character.DEFENSE], (int) this.getX() + LEFT_MARGIN, (int) (this.getY() + BUFFER*3));
 	}
 	
 	@Override

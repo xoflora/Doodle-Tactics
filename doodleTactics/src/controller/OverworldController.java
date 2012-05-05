@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import controller.combatController.RandomBattleAI;
+import controller.combatController.AIController.RandomBattleAI;
 import character.Character;
 import character.Character.CharacterDirection;
 

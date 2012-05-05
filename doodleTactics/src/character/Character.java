@@ -29,8 +29,8 @@ public abstract class Character extends Rectangle{
 	 * @author czchapma
 	 */
 
-	final static int LEVELCAP = 99;
-	final static int NUM_STATS = 8;
+	public final static int LEVELCAP = 99;
+	public final static int NUM_STATS = 8;
 	protected String _name;
 	private static int numCharacters = 0;
 	protected final int _id;
@@ -38,14 +38,14 @@ public abstract class Character extends Rectangle{
 	//stats
 	//indices where stat is located in subsequent arrays
 	
-	protected final static int STRENGTH = 0;
-	protected final static int DEFENSE = 1;
-	protected final static int SPECIAL = 2;
-	protected final static int RESISTANCE = 3;
-	protected final static int SPEED = 4;
-	protected final static int ACCURACY = 5;
-	protected final static int LUCK =  6;
-	protected final static int MAX_HP =  7;
+	public final static int STRENGTH = 0;
+	public final static int DEFENSE = 1;
+	public final static int SPECIAL = 2;
+	public final static int RESISTANCE = 3;
+	public final static int SPEED = 4;
+	public final static int SKILL = 5;
+	public final static int LUCK =  6;
+	public final static int MAX_HP =  7;
 
 	//stat arrays (indexed by type of stat, see above)
 	protected final int[] _BASE_STATS; //initial
@@ -668,6 +668,27 @@ public abstract class Character extends Rectangle{
 		for(int i=0; i<NUM_STATS; i++)
 			_currentStats[i] = 10 * _BASE_STATS[i] + _level*_BASE_STATS[i] + _unitPoints[i]/12;
 	}
+	
+	/**
+	 * @return the attack strength of this enemy in combat
+	 */
+	public int getFullAttackStrength() {
+		return _currentStats[STRENGTH] + (_equipped == null ? 0:_equipped.getPower());
+	}
+	
+	public int getFullDefense() {
+		return _currentStats[DEFENSE] + (_shield == null ? 0:_shield.getDefense()) +
+			(_cuirass == null ? 0:_cuirass.getDefense());
+	}
+	
+	/**
+	 * @return the attack accuracy factoring in weapon accuracy, not factoring in opponent's
+	 */
+	public double getFullAttackAccuracy() {
+		return 2.5*_currentStats[SKILL] + (_equipped == null ? 90:_equipped.getAccuracy());
+	}
+	
+	
 
 	/**
 	 *  attacks an opponent character
@@ -679,14 +700,12 @@ public abstract class Character extends Rectangle{
 		int offense, defense, damage;
 		boolean critical;
 		
-		if (r.nextInt(100) > (_equipped == null ? 90:_equipped.getAccuracy())
-				+ 2.5*_currentStats[ACCURACY] - opponent._currentStats[ACCURACY]) {
+		if (r.nextInt(100) > getFullAttackAccuracy() - opponent._currentStats[SKILL]) {
 			System.out.println("Attack missed!");
 		}		
 		else {
 			offense = _currentStats[STRENGTH] + (_equipped == null ? 0:_equipped.getPower());
-			defense = opponent._currentStats[DEFENSE] + (opponent._cuirass == null ? 0:opponent._cuirass.getDefense())
-			+ (opponent._shield == null ? 0:opponent._shield.getDefense());
+			defense = opponent.getFullDefense();
 
 			damage = Math.max(offense - defense + r.nextInt(Math.max((offense - defense)/4, 1)), 0);
 
@@ -708,8 +727,7 @@ public abstract class Character extends Rectangle{
 			}
 		}
 		
-		if (r.nextInt(100) > (opponent._equipped == null ? 90:_equipped.getAccuracy())
-				+ 2.5*opponent._currentStats[ACCURACY] - _currentStats[ACCURACY]) {
+		if (r.nextInt(100) > opponent.getFullAttackAccuracy() - _currentStats[SKILL]) {
 			System.out.println("Attack missed!");
 		}
 		else {
@@ -962,35 +980,35 @@ public abstract class Character extends Rectangle{
 	}
 	
 	public int getStrength() {
-		return _BASE_STATS[0];
+		return _BASE_STATS[STRENGTH];
 	}
 	
 	public int getDefense() {
-		return _BASE_STATS[1];
+		return _BASE_STATS[DEFENSE];
 	}
 	
 	public int getSpecial() {
-		return _BASE_STATS[2];
+		return _BASE_STATS[SPECIAL];
 	}
 	
 	public int getResistance() {
-		return _BASE_STATS[3];
+		return _BASE_STATS[RESISTANCE];
 	}
 	
 	public int getSpeed() {
-		return _BASE_STATS[4];
+		return _BASE_STATS[SPEED];
 	}
 	
-	public int getAccuracy() {
-		return _BASE_STATS[5];
+	public int getSkill() {
+		return _BASE_STATS[SKILL];
 	}
 	
 	public int getLuck() {
-		return _BASE_STATS[6];
+		return _BASE_STATS[LUCK];
 	}
 	
 	public int getMAX_HP() {
-		return _BASE_STATS[7];
+		return _BASE_STATS[MAX_HP];
 	}
 	
 	public void setName(String name) {
@@ -1039,7 +1057,7 @@ public abstract class Character extends Rectangle{
 		System.out.println("-----\nStats:");
 		System.out.println("Strength: " + _currentStats[STRENGTH]);
 		System.out.println("Defense: " + _currentStats[DEFENSE]);
-		System.out.println("Skill: " + _currentStats[ACCURACY]);
+		System.out.println("Skill: " + _currentStats[SKILL]);
 		System.out.println("Speed: " + _currentStats[SPEED]);
 		System.out.println("Special: " + _currentStats[SPECIAL]);
 		System.out.println("Luck: " + _currentStats[LUCK]);

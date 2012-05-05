@@ -25,7 +25,7 @@ import controller.OverworldController;
 import controller.combatController.CombatController;
 import controller.combatController.CombatOrchestrator;
 import controller.combatController.CombatWindow;
-import controller.combatController.RandomBattleAI;
+import controller.combatController.AIController.RandomBattleAI;
 
 import character.Archer;
 import character.Character;
