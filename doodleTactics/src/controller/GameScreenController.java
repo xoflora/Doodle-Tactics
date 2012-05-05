@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import controller.combatController.UnitStatMenu;
 
 import util.Util;
 
