@@ -643,7 +643,6 @@ public class GameScreen extends Screen<GameScreenController> {
 		//		m.paint((Graphics2D) g,m.getImage());
 		//		_currentCharacter = m;
 		
-		System.out.println("Main Character: X-" +_currMap.getMainCharacter().getX() + " Y:" +_currMap.getMainCharacter().getY());
 
 
 	}
