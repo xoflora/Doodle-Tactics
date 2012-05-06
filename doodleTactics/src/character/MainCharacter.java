@@ -1,5 +1,7 @@
 package character;
 
+import java.awt.image.BufferedImage;
+
 import javax.swing.JPanel;
 
 import main.DoodleTactics;
@@ -45,5 +47,18 @@ public class MainCharacter extends Character {
 	@Override
 	public void setDefeated() {
 		_dt.changeScreens(new GameOverScreen(_dt));
+	}
+	
+	@Override
+	public void paint(java.awt.Graphics2D brush, BufferedImage img) {
+		super.paint(brush,img);
+		System.out.println("THE WORST x: " + this.getX() + ", " + "y: " + this.getY());
+	}
+	
+	@Override
+	public void setLocation(double x, double y) {
+		super.setLocation(x, y);
+		System.out.println("Setting location of main character to x: " + x + ", y:" + y);
+		System.out.println("Location is, x: " + this.getX() + ", " + "y: " + this.getY());
 	}
 }
