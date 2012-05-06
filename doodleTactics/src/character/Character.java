@@ -95,6 +95,7 @@ public abstract class Character extends Rectangle{
 			String up, String down, String name,double x, double y) {
 
 		super(container);
+		
 		_container = container;
 		_BASE_STATS = new int[NUM_STATS];
 		_currentStats = new int[NUM_STATS];
@@ -131,7 +132,6 @@ public abstract class Character extends Rectangle{
 		_moveTimer = null;
 		
 	}
-
 
 	private class FloatTimer extends Timer {
 
@@ -974,9 +974,9 @@ public abstract class Character extends Rectangle{
 		brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		double oldX = this.getX();
 		double oldY = this.getY();
-		//int overflowX = (this.getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
-	//	int overflowY = (this.getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
-		//this.setLocation(this.getX() - overflowX,this.getY()/* - overflowY*/);
+		int overflowX = (this.getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
+		int overflowY = (this.getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
+		this.setLocation(this.getX() - overflowX,this.getY()/* - overflowY*/);
 		super.paint(brush,img);
 		this.setLocation(oldX, oldY);
 		brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
