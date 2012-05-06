@@ -20,8 +20,8 @@ public class WaitAction extends Action {
 
 	@Override
 	public void act() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("HELLO");
+		_src.characterWait();
 	}
 
 	@Override
@@ -34,6 +34,8 @@ public class WaitAction extends Action {
 		
 		for (CombatController aff : _src.getEnemyAffiliations())
 			for (Character c : aff.getUnits()) {
+			//	System.out.println(c);
+			//	System.out.println(aff.getTileMappings().get(c) == null);
 				if (_src.getScreen().getMap().getAttackRange(aff.getTileMappings().get(c),
 						c.getMovementRange(), c.getMinAttackRange(),
 						c.getMaxAttackRange()).contains(_destTile)) {

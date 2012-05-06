@@ -582,10 +582,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		//		c.gridy = 0;
 		profile.setVisible(true);
 		_itemInfoBox.add(profile, BorderLayout.NORTH);
-		if (item.isEquip()) {
-
-		}
-		else {
+//		if (item.isEquip()) {
+//
+//		}
+//		else {
 			JTextArea description = new JTextArea(5, 5);
 			description.setOpaque(false);
 			description.setFont(new Font("Arial", Font.BOLD, 14));
@@ -600,7 +600,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			//			c.gridx = 0;
 			//			c.gridy = 1;
 			_itemInfoBox.add(description, BorderLayout.CENTER);
-		}
+//		}
 		_itemInfoBox.setVisible(true);
 		this.add(_itemInfoBox);
 	}
@@ -905,10 +905,11 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			row1.add(inventory, constraint);
 			System.out.println(chrter.getName() + " inventory size: " + chrter.getInventory().size());
 			int count = 0;
+			itemListener listener;
 			for (Item item: chrter.getInventory().values()) {
 				JLabel itemPic = new JLabel(new ImageIcon(item.getImage()));
 				//				item.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-				itemListener listener = new itemListener(itemPic);
+				listener = new itemListener(itemPic);
 				itemPic.addMouseMotionListener(listener);
 				itemPic.setSize(75,75);
 				itemPic.setVisible(true);
@@ -953,11 +954,15 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			constraint.weightx = 1.0;
 			row1.add(equipped, constraint);
 
-
 			JLabel weapon;
+			itemListener listener1;
 			if (chrter.getWeapon() != null) {
 				weapon = new JLabel(new ImageIcon(chrter.getWeapon().getImage()));
 				//			weapon.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+				listener1 = new itemListener(weapon);
+				weapon.addMouseMotionListener(listener1);
+				_labelToCharacter.put(weapon, chrter);
+				_labelToItem.put(weapon, chrter.getWeapon());
 			}
 			else {
 				weapon = new JLabel(new ImageIcon(_dt.importImage("src/graphics/items/empty_slot.png")));
@@ -974,6 +979,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			if (chrter.getCuirass() != null) {
 				cuirass = new JLabel(new ImageIcon(chrter.getCuirass().getImage()));
 				//				cuirass.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+				listener1 = new itemListener(cuirass);
+				cuirass.addMouseMotionListener(listener1);
+				_labelToCharacter.put(cuirass, chrter);
+				_labelToItem.put(cuirass, chrter.getCuirass());
 			}
 			else {
 				cuirass = new JLabel(new ImageIcon(_dt.importImage("src/graphics/items/empty_slot.png")));
@@ -988,6 +997,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			if (chrter.getShield() != null) {
 				shield = new JLabel(new ImageIcon(chrter.getShield().getImage()));
 				//				shield.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
+				listener1 = new itemListener(shield);
+				shield.addMouseMotionListener(listener1);
+				_labelToCharacter.put(shield, chrter);
+				_labelToItem.put(shield, chrter.getShield());
 			}
 			else {
 				shield = new JLabel(new ImageIcon(_dt.importImage("src/graphics/items/empty_slot.png")));
@@ -1003,7 +1016,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			if (chrter.getFootgear() != null) {
 				footgear = new JLabel(new ImageIcon(chrter.getFootgear().getImage()));
 				//				footgear.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-
+				listener1 = new itemListener(footgear);
+				footgear.addMouseMotionListener(listener1);
+				_labelToCharacter.put(footgear, chrter);
+				_labelToItem.put(footgear, chrter.getFootgear());
 			}
 			else {
 				footgear = new JLabel(new ImageIcon(_dt.importImage("src/graphics/items/empty_slot.png")));
@@ -1029,19 +1045,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			Image bg = (new ImageIcon(_charBoxImage)).getImage();
 			g.drawImage(bg, (this.getWidth()/2) - (bg.getWidth(this) / 2),(this.getHeight()/2) - (bg.getHeight(this) / 2),bg.getWidth(this),bg.getHeight(this),this);
 		}
-	}
-
-	private class itemInfoBox extends JPanel {
-
-		public itemInfoBox() {
-			this.setOpaque(false);
-		}
-
-		//		public void paintComponent(Graphics g) {
-		//			super.paintComponent(g);
-		////			Image box = (new ImageIcon(_infoBoxImage)).getImage();
-		////			g.drawImage(box, (this.getWidth()/2) - (box.getWidth(this) / 2),(this.getHeight()/2) - (box.getHeight(this) / 2),box.getWidth(this),box.getHeight(this),this);
-		//		}
 	}
 
 	private class itemListener implements MouseListener, MouseMotionListener {

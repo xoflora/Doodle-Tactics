@@ -52,6 +52,7 @@ public interface PoolDependent {
 	
 	/**
 	 * finalizes actions with the unit pool to indicate that it is no longer needed
+	 * @return whether finalization was successful
 	 */
-	public void finalize();
+	public boolean finish();
 }

@@ -2,6 +2,7 @@ package controller.combatController;
 
 import graphics.MenuItem;
 
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,8 @@ public abstract class CombatController extends GameScreenController {
 				return "START";
 			case CHARACTER_SELECTED:
 				return "CHARACTER_SELECTED";
+			case CHARACTER_MOVING:
+				return "CHARACTER_MOVING";
 			case CHARACTER_OPTION_MENU:
 				return "CHARACTER_OPTION_MENU";
 			case SELECTING_ITEM:
@@ -56,7 +59,8 @@ public abstract class CombatController extends GameScreenController {
 	protected CombatOrchestrator _orch;
 	
 	protected List<CombatController> _enemyAffiliations;
-	protected State _state;
+	
+	private State _state;
 	
 	private Random r;
 	
@@ -156,7 +160,6 @@ public abstract class CombatController extends GameScreenController {
 	 * @param path the path across which to move the character
 	 */
 	public void move(Character c, Tile source, List<Tile> path) {
-		//TODO draw the character moving along the path of tiles instead of just switching
 
 		Tile dest = path.get(0);
 		for (int i = 0; i < path.size(); i++) {
@@ -166,12 +169,13 @@ public abstract class CombatController extends GameScreenController {
 		source.setOccupant(null);
 		dest.setOccupant(c);
 		
+		_state = State.CHARACTER_MOVING;
 		c.followPath(path);
 		
 		//c.setLocation(dest.getX(), dest.getY());
 		_hasMoved.put(c, true);
 		_locations.put(c, path.get(path.size() - 1));
-		_state = State.CHARACTER_MOVING;
+		
 	}
 	
 	/**
@@ -337,5 +341,31 @@ public abstract class CombatController extends GameScreenController {
 	 */
 	public void defeat() {
 		System.out.println("defeated");
+	}
+	
+	public State getState() {
+		return _state;
+	}
+	public void setState(State st) {
+		_state = st;
+	}
+	
+	
+	
+	
+	public void mousePressed(MouseEvent e) {
+		super.mousePressed(e);
+	}
+	public void mouseDragged(MouseEvent e) {
+		super.mouseDragged(e);
+	}
+	public void mouseReleased(MouseEvent e) {
+		super.mouseReleased(e);
+	}
+	public void mouseMoved(MouseEvent e) {
+		super.mouseMoved(e);
+	}
+	public void mouseClicked(MouseEvent e) {
+		super.mouseClicked(e);
 	}
 }

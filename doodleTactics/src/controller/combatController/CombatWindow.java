@@ -16,33 +16,41 @@ import main.GameScreen;
 import map.Tile;
 import graphics.MenuItem;
 
-public class CombatWindow {
+public class CombatWindow extends MenuItem {
 
-	MenuItem _combatBox;
 	Character _attacker, _victim;
 	moveUpTimer _moveUpTimer;
 	GameScreen _gs;
+	boolean _isAnimating;
+	int _attackerX, _battlersY, _victimX, _victimY;
 	
-	public CombatWindow(GameScreen gs, DoodleTactics dt) {
-		_combatBox = new MenuItem(gs, dt.importImage("src/graphics/menu/combat_window.png"), dt.importImage("src/graphics/menu/combat_window.png"), dt, 100);
-		_combatBox.setLocation(0, 17*Tile.TILE_SIZE);
-		_gs = gs;
-		_gs.addMenuItem(_combatBox);
+	public CombatWindow(JPanel container, BufferedImage defaultPic, BufferedImage hoverPic, DoodleTactics dt, int priority) {
+		super(container, defaultPic, hoverPic, dt, priority);
+		this.setLocation(0, 17*Tile.TILE_SIZE);
+		_gs = (GameScreen) container;
+		_gs.addMenuItem(this);
 		_moveUpTimer = new moveUpTimer();
 	}
 	
 	public void prepareWindow(Character src, Character dest) {
 		_attacker = src;
 		_victim = dest;
-		_attacker.getLeftImage();
-		_gs.addCharacter(_attacker);
-		_gs.addCharacter(_victim);
 	}
 
 	public void animate() {
-		_combatBox.setLocation(0, 17*Tile.TILE_SIZE);
-		_combatBox.setVisible(true);
+		_isAnimating = true;
+		this.setLocation(0, 17*Tile.TILE_SIZE);
+		_battlersY = (17*Tile.TILE_SIZE)+215;
+		this.setVisible(true);
 		_moveUpTimer.start();
+	}
+	
+	public void paint(Graphics2D brush, BufferedImage img) {
+		super.paint(brush, img);
+		if (_isAnimating) {
+			brush.drawImage(_attacker.getLeftImage(), 700, _battlersY, _gs);
+			brush.drawImage(_victim.getRightImage(), 400, _battlersY, _gs);
+		}
 	}
 	
 	private class moveUpTimer extends Timer {
@@ -63,10 +71,11 @@ public class CombatWindow {
 			
 			public void actionPerformed(ActionEvent e) {
 				if (count < 11) {
-					_combatBox.setLocation(0, _combatBox.getY()-30);
+					CombatWindow.this.setLocation(0, CombatWindow.this.getY()-30);
+					_battlersY = _battlersY-30;
 					count++;
 					if (count == 11) {
-						_combatBox.setLocation(0, _combatBox.getY()-5);
+//						CombatWindow.this.setLocation(0, CombatWindow.this.getY()-5);
 					}
 					_gs.repaint();
 				}
@@ -76,17 +85,16 @@ public class CombatWindow {
 						try {
 							Thread.sleep(2000);
 						} catch (InterruptedException e1) {
-							// TODO Auto-generated catch block
 							System.out.println("THREAD ISSUES");
 						}
 					}
-					_combatBox.setLocation(0, _combatBox.getY()+30);
+					CombatWindow.this.setLocation(0, CombatWindow.this.getY()+30);
+					_battlersY = _battlersY+30;
 					count++;
 					if (count == 22) {
-						_combatBox.setLocation(0, _combatBox.getY()+5);
+//						CombatWindow.this.setLocation(0, CombatWindow.this.getY()+5);
 						count = 0;
-						_gs.removeCharacter(_attacker);
-						_gs.removeCharacter(_victim);
+						_isAnimating = false;
 						_timer.stop();
 					}
 					_gs.repaint();

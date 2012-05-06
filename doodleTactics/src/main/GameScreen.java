@@ -93,7 +93,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		_xWindowOffset = 0;
 		_yWindowOffset = 0;
 		
-		_popUpCombat = new CombatWindow(this, dt);
+		_popUpCombat = new CombatWindow(this, _dt.importImage("src/graphics/menu/combat_window.png"), _dt.importImage("src/graphics/menu/combat_window.png"), dt, 100);
 
 		this.repaint();
 	}

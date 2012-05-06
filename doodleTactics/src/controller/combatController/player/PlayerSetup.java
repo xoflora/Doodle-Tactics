@@ -224,7 +224,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		inPool.setVisible(true);
 		inPool.setLocation(t.getX(), t.getY());
 		inPool.setDown();
-		_inPlace.put(inPool, _selectedTile);
+		_inPlace.put(inPool, t);
 		_gameScreen.addCharacter(inPool);
 		
 		_gameScreen.repaint();
@@ -322,12 +322,14 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	}
 
 	@Override
-	public void finalize() {
+	public boolean finish() {
 		if (!_finalized) {
 			_finalized = true;
 			_pool.setInUse(false);
 			_orch.setPlayerUnits(_inPlace);
 			_gameScreen.popControl();
+			return true;
 		}
+		return false;
 	}
 }
