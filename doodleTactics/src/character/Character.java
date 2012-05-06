@@ -356,16 +356,20 @@ public abstract class Character extends Rectangle{
 	 */
 
 	public void followPath(List<Tile> tiles) {
-
-		System.out.println("=========START FOLLOW PATH=========");
+		
+	//	System.out.println("=========START FOLLOW PATH=========");
 		//tiles.remove(0);
-		for(Tile t : tiles) {
-			System.out.println("tile: " + t.getX() + "," + t.getY());
-		}
-		System.out.println("===================================");
+	//	for(Tile t : tiles) {
+	//		System.out.println("tile: " + t.getX() + "," + t.getY());
+	//	}
+	//	System.out.println("===================================");
 		if(tiles != null && tiles.size() > 1) {
 			_pathTimer = new PathTimer(tiles);
 			_pathTimer.start();
+		}
+		else {
+			System.out.println("Crunch");
+			_affiliation.moveComplete();
 		}
 	}
 

@@ -1,5 +1,6 @@
 package graphics;
 
+import items.Axe;
 import items.HealthPotion;
 import items.ItemException;
 
@@ -43,6 +44,9 @@ public class ScreenChangeMenuItem extends MenuItem {
 		pot4.setDescription("Fun stuff.");
 		HealthPotion pot5 = new HealthPotion(_dt, "src/graphics/items/purple_potion.png", "Effervescent Potion", 1000);
 		pot5.setDescription("A normal healing potion.");
+		Axe axe = new Axe(_dt, "src/graphics/items/key.png", "Shiny Axe");
+		axe.setDescription("An axe");
+		axe.setAsEquip(true);
 		try {
 			_dt.getParty().get(1).addToInventory(potion);
 			_dt.getParty().get(1).updateHP(-10);
@@ -50,6 +54,7 @@ public class ScreenChangeMenuItem extends MenuItem {
 			_dt.getParty().get(1).addToInventory(pot3);
 			_dt.getParty().get(1).addToInventory(pot4);
 			_dt.getParty().get(1).addToInventory(pot5);
+			_dt.getParty().get(2).changeWeapon(axe);
 
 		} catch (ItemException e) {
 			// TODO Auto-generated catch block

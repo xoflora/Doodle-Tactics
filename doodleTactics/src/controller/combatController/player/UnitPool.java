@@ -139,8 +139,7 @@ public class UnitPool extends MenuItem {
 		public void activate(int type) {
 			synchronized(this) {
 				if (!_complete) {
-					_complete = true;
-					_source.finalize();
+					_complete = _source.finish();
 				}
 			}
 		}

@@ -24,7 +24,7 @@ public class RandomBattleAI extends CombatController implements Runnable {
 	
 	private MenuItem _aiPhase;
 	private Action _act;
-	
+	private Character _current;
 	
 	public RandomBattleAI(DoodleTactics dt, HashMap<Character, Tile> random) {
 		super(dt, random);
@@ -38,31 +38,47 @@ public class RandomBattleAI extends CombatController implements Runnable {
 	}
 	
 	public void run() {
-		Character toMove = null;
 		
 		PriorityQueue<Action> actions;
-		while ((toMove = nextUnit()) != null) {
-			if (_state == State.START) {
-				_state = State.CHARACTER_SELECTED;
-				actions = new PriorityQueue<Action>();
+		
+	//	boolean done = false;
+		
+		_current = nextUnit();
+		System.out.println("start state" + getState() + " " + _current);
+		
+		while (_current != null) {
+			synchronized(_current) {
+				if (getState() == State.START) {
+					setState(State.CHARACTER_SELECTED);
+					actions = new PriorityQueue<Action>();
 
-				for (Tile t : _gameScreen.getMap().getMovementRange(_locations.get(toMove), toMove.getMovementRange())) {
-					Action[] possible = {new AttackAction(this, toMove, t), new ItemAction(this, toMove, t),
-							new WaitAction(this, toMove, t)};
+					for (Tile t : _gameScreen.getMap().getMovementRange(_locations.get(_current),
+							_current.getMovementRange())) {
+						Action[] possible = {/*new AttackAction(this, toMove, t), new ItemAction(this, toMove, t),*/
+								new WaitAction(this, _current, t)};
 
-					actions.add(Collections.max(Arrays.asList(possible)));
+						actions.add(Collections.max(Arrays.asList(possible)));
+					}
+
+					_hasMoved.put(_current, true);
+					_act = actions.poll();
+					if (_act != null) {
+					//	System.out.println("CRUNCH");
+						System.out.println(_act.getValue());
+						setState(State.CHARACTER_MOVING);
+						move(_current, _locations.get(_current),
+								_gameScreen.getMap().getPath(_locations.get(_current), _act.getTile()));
+					}
+					else {
+						setState(State.START);
+						_current = nextUnit();
+					}
 				}
-
-				_act = actions.poll();
-				if (_act != null) {
-					_state = State.CHARACTER_MOVING;
-					move(toMove, _locations.get(toMove),
-							_gameScreen.getMap().getPath(_locations.get(toMove), _act.getTile()));
-				}
-
-				_hasMoved.put(toMove, true);
+				System.out.println(getState());
 			}
 		}
+		
+		System.out.println("End state " + getState());
 		
 		_gameScreen.popControl();
 	}
@@ -74,7 +90,23 @@ public class RandomBattleAI extends CombatController implements Runnable {
 	public void moveComplete() {
 		super.moveComplete();
 		
-		_act.act();
+		System.out.println("OWEIURWEOIUR" + getState());
+		
+		if (_act != null)
+			_act.act();
+	}
+	
+	@Override
+	
+	public void characterWait() {
+		super.characterWait();
+		
+		if (_current != null)
+			synchronized(_current) {
+				_current = nextUnit();
+			}
+		
+		System.out.println("Waiting: " + getState() + " " + _current);
 	}
 	
 	@Override
@@ -99,13 +131,15 @@ public class RandomBattleAI extends CombatController implements Runnable {
 		System.out.println("Enemy phase");
 		_aiPhase.setLocation(1050,_aiPhase.getY());
 		new Thread(new SlideTimer(_aiPhase,250)).start();
+		
+		_act = null;
 		new Thread(this).start();
 	}
 	
 	@Override
 	public void removeUnit(Character c) {
 		super.removeUnit(c);
-		System.out.println("CRUCNH");
+	//	System.out.println("CRUCNH");
 		_gameScreen.getMap().removeRandomBattle(c);
 	}
 
@@ -137,5 +171,4 @@ public class RandomBattleAI extends CombatController implements Runnable {
 
 	@Override
 	public void mouseMoved(MouseEvent e) { }
-
 }

@@ -29,6 +29,10 @@ public abstract class Action implements Comparable<Action> {
 		return _destTile;
 	}
 	
+	public double getValue() {
+		return _value;
+	}
+	
 	/**
 	 * @return the value of the move corresponding to this action
 	 */
@@ -41,12 +45,13 @@ public abstract class Action implements Comparable<Action> {
 	 * 		a negative number if the other action is better
 	 */
 	public int compareTo(Action other) {
+		System.out.println("comparing " + _value + " to " + other._value);
 		if (_value < other._value)
-			return -1;
+			return 1;
 		else if (_value == other._value)
 			return 0;
 		else
-			return 1;
+			return -1;
 	}
 	
 	/**
