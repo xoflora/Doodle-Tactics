@@ -758,6 +758,11 @@ public class GameScreen extends Screen<GameScreenController> {
 	//			" Y: " + _currMap.getCharactersToDisplay().get(1).getY());
 		
 		
+		int overflowX = (_currMap.getMainCharacter().getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
+		int overflowY = (_currMap.getMainCharacter().getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
+		_currMap.getMainCharacter().setLocation(_currMap.getMainCharacter().getX() - overflowX,_currMap.getMainCharacter().getY() - overflowY);
+
+		
 		_dt.addSavedGame(filename, filepath);
 		writeFilepathsFile();
 		try {
@@ -817,9 +822,6 @@ public class GameScreen extends Screen<GameScreenController> {
 			_dt.getGameMenuScreen().load((int[]) in.readObject());
 			_xWindowOffset  =in.readInt();
 			_yWindowOffset = in.readInt();
-			//Load XRef and YRef
-			System.out.println("X Win Offset: " + _xWindowOffset);
-			System.out.println("Y Win Offset: " + _yWindowOffset);
 
 			//Reload all party characters
 			for(Character c : _dt.getParty())

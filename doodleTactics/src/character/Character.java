@@ -22,7 +22,7 @@ public abstract class Character extends Rectangle{
 	/**
 	 * 
 	 */
-	
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -37,7 +37,7 @@ public abstract class Character extends Rectangle{
 
 	//stats
 	//indices where stat is located in subsequent arrays
-	
+
 	public final static int STRENGTH = 0;
 	public final static int DEFENSE = 1;
 	public final static int SPECIAL = 2;
@@ -46,7 +46,7 @@ public abstract class Character extends Rectangle{
 	public final static int SKILL = 5;
 	public final static int LUCK =  6;
 	public final static int MAX_HP =  7;
-	
+
 	public final static int CRITICAL_MULTIPLIER = 2;
 
 	//stat arrays (indexed by type of stat, see above)
@@ -81,9 +81,9 @@ public abstract class Character extends Rectangle{
 	private transient FloatTimer _floatTimer; // internal timer used to animate floating
 	private transient JPanel _container;
 	private boolean _isAnimating;
-	
+
 	private int _currDirection = 1; //1 = front, 2 = back, 3 = left, 4 = right 
-	
+
 	private transient PathTimer _pathTimer;
 	private transient MoveTimer _moveTimer;
 
@@ -102,14 +102,14 @@ public abstract class Character extends Rectangle{
 		YIELD = new int[NUM_STATS];
 		_id = numCharacters;
 		numCharacters++;
-		
+
 		_name = name;
 		_level = 1;
 		_inventory	= new HashMap<Integer, Item>();
 		_capacity = 5;
 
 		_affiliation = null;
-		
+
 		_profileFile = profile;
 		_leftFile = left;
 		_rightFile = right;
@@ -119,17 +119,17 @@ public abstract class Character extends Rectangle{
 		_currentImage = _down;
 
 		this.setSize(_down.getWidth(), _down.getHeight());
-//		int overflow = 0;
-////		if(_down.getWidth() - Tile.TILE_SIZE <= 25.0)
-//		overflow = (_down.getWidth() - Tile.TILE_SIZE) / 2;
+		//		int overflow = 0;
+		////		if(_down.getWidth() - Tile.TILE_SIZE <= 25.0)
+		//		overflow = (_down.getWidth() - Tile.TILE_SIZE) / 2;
 		this.setLocation(x, y);
-//		this.setLocation(x - overflow,y - _down.getHeight() + Tile.TILE_SIZE);
+		//		this.setLocation(x - overflow,y - _down.getHeight() + Tile.TILE_SIZE);
 		_floatTimer = new FloatTimer(container);
-	//	this.startHovering();
-		
+		//	this.startHovering();
+
 		_pathTimer = null;
 		_moveTimer = null;
-		
+
 	}
 
 
@@ -146,7 +146,7 @@ public abstract class Character extends Rectangle{
 		public void reset() {
 			Character.this.setLocation(Character.this.getX(), Character.this.getY() - _listener.getOffset());
 		}
-		
+
 		public float getListenerOffset(){
 			return _listener.getOffset();
 		}
@@ -220,33 +220,33 @@ public abstract class Character extends Rectangle{
 	 * @param t the desired tile to move the character to
 	 */
 	public void moveToTile(Tile src, Tile dest) {
-		
+
 		System.out.println("---MOVE TO TILE---");
-		
+
 		System.out.println("xDiff before: " + (dest.getX() - src.getX()));
 		System.out.println("yDiff before: " + (dest.getY() - src.getY()));
-		
+
 		int xDiff = ((int)dest.getX() - (int) src.getX()) / Tile.TILE_SIZE;
 		int yDiff = ((int) dest.getY() - (int) src.getY()) / Tile.TILE_SIZE;
-		
+
 		System.out.println("xDiff: " + xDiff);
 		System.out.println("yDiff: " + yDiff);
-		
+
 		_moveTimer = new MoveTimer(_container, xDiff, yDiff);
-		
+
 		/* determine which orientation to set the character to */
 		if(xDiff > 0) {
 			this.setRight();
 		} else if (xDiff < 0) {
 			this.setLeft();
 		}
-		
+
 		if(yDiff > 0) {
 			this.setDown();
 		} else if (yDiff < 0) {
 			this.setUp();
 		}
-		
+
 		_isAnimating = true;
 		_moveTimer.start();
 	}
@@ -262,65 +262,65 @@ public abstract class Character extends Rectangle{
 			_deltaY = deltaY;
 			this.addActionListener(new MoveListener(this, container));
 		}
-			
-			private class MoveListener implements java.awt.event.ActionListener {
-				
-				private Timer _timer;
-				private int _cnt;
-				private int _numSteps;
-				private JPanel _container;
-	
-				public MoveListener (Timer t, JPanel container) {
-					_container = container;
-					_timer = t;
-					_cnt = 0;
-					_numSteps = 6;
-				}
-	
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					
-					Character.this.setLocation((Character.this.getX() + (_deltaX*Tile.TILE_SIZE / _numSteps)), Character.this.getY() + (_deltaY*Tile.TILE_SIZE / _numSteps));
-					
-					switch(_cnt) {
-					case 0:
-						Character.this.setRotation(-10);
-						break;
-					case 1:
-						Character.this.setRotation(-5);
-						break;
-					case 2:
-						Character.this.setRotation(0);
-						break;
-					case 3:
-						Character.this.setRotation(5);
-						break;
-					case 4:
-						Character.this.setRotation(10);
-						break;
-					case 5:
-						Character.this.setRotation(0);
-						break;
-					}
-					
-					_container.repaint();
-					
-					_cnt+=1;
 
-					/* if we've incremented numSteps times, then we should stop */
-					/* otherwise, continue incrementing */
-					if (_cnt == _numSteps) {
-						_timer.stop();
-						Character.this._isAnimating = false;
-						System.out.println("---END MOVE TO TILE---");
-					}
-					
-					_container.repaint();
+		private class MoveListener implements java.awt.event.ActionListener {
+
+			private Timer _timer;
+			private int _cnt;
+			private int _numSteps;
+			private JPanel _container;
+
+			public MoveListener (Timer t, JPanel container) {
+				_container = container;
+				_timer = t;
+				_cnt = 0;
+				_numSteps = 6;
+			}
+
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+
+				Character.this.setLocation((Character.this.getX() + (_deltaX*Tile.TILE_SIZE / _numSteps)), Character.this.getY() + (_deltaY*Tile.TILE_SIZE / _numSteps));
+
+				switch(_cnt) {
+				case 0:
+					Character.this.setRotation(-10);
+					break;
+				case 1:
+					Character.this.setRotation(-5);
+					break;
+				case 2:
+					Character.this.setRotation(0);
+					break;
+				case 3:
+					Character.this.setRotation(5);
+					break;
+				case 4:
+					Character.this.setRotation(10);
+					break;
+				case 5:
+					Character.this.setRotation(0);
+					break;
+				}
+
+				_container.repaint();
+
+				_cnt+=1;
+
+				/* if we've incremented numSteps times, then we should stop */
+				/* otherwise, continue incrementing */
+				if (_cnt == _numSteps) {
+					_timer.stop();
+					Character.this._isAnimating = false;
+					System.out.println("---END MOVE TO TILE---");
+				}
+
+				_container.repaint();
 			}
 		}
 	}
-	
+
 	private class PathTimer extends Timer {
-		
+
 		private List<Tile> _path;
 
 		public PathTimer(List<Tile> path) {
@@ -328,35 +328,35 @@ public abstract class Character extends Rectangle{
 			_path = path;
 			this.addActionListener(new PathListener());
 		}
-			
-			private class PathListener implements java.awt.event.ActionListener {
-	
-				private int _cnt = 0;
-				
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					
-					Character.this.moveToTile(_path.get(_cnt), _path.get(_cnt + 1));
-					
-					_cnt += 1;
 
-					/* if we've incremented numSteps times, then we should stop */
-					/* otherwise, continue incrementing */
-					if (_cnt == _path.size() - 1) {
-						PathTimer.this.stop();
+		private class PathListener implements java.awt.event.ActionListener {
+
+			private int _cnt = 0;
+
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+
+				Character.this.moveToTile(_path.get(_cnt), _path.get(_cnt + 1));
+
+				_cnt += 1;
+
+				/* if we've incremented numSteps times, then we should stop */
+				/* otherwise, continue incrementing */
+				if (_cnt == _path.size() - 1) {
+					PathTimer.this.stop();
 					//	System.out.println("=========END FOLLOW PATH=========");
-						_affiliation.moveComplete();
-					}
+					_affiliation.moveComplete();
+				}
 			}
 		}
 	}
-	
+
 	/**
 	 * animates the character along the given path of tiles
 	 * @param tiles a list of tiles to have the character follow, used for combat movement
 	 */
-	
+
 	public void followPath(List<Tile> tiles) {
-		
+
 		System.out.println("=========START FOLLOW PATH=========");
 		//tiles.remove(0);
 		for(Tile t : tiles) {
@@ -368,7 +368,7 @@ public abstract class Character extends Rectangle{
 			_pathTimer.start();
 		}
 	}
-	
+
 	/**
 	 * stops all motion of this character
 	 */
@@ -377,17 +377,17 @@ public abstract class Character extends Rectangle{
 			_pathTimer.stop();
 		if (_moveTimer != null && _moveTimer.isRunning())
 			_moveTimer.stop();
-		
+
 		_pathTimer = null;
 		_moveTimer = null;
 	}
-	
+
 	/**
 	 * @return whether the character is presently in motion
 	 */
 	public boolean isMoving() {
 		return (_pathTimer != null && _pathTimer.isRunning()) ||
-			(_moveTimer != null && _moveTimer.isRunning());
+		(_moveTimer != null && _moveTimer.isRunning());
 	}
 
 	/**
@@ -410,7 +410,7 @@ public abstract class Character extends Rectangle{
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Loads a Character during deserialization
 	 */
@@ -421,11 +421,17 @@ public abstract class Character extends Rectangle{
 		_up = dt.importImage(_upFile);
 		_down = dt.importImage(_downFile);
 		_currentImage = _down;
-		
+
+		int overflow = 0;
+		if(_down.getWidth() - Tile.TILE_SIZE <= 25.0)
+			overflow = (_down.getWidth() - Tile.TILE_SIZE) / 2;
+		this.setLocation(getX(),getY() - overflow);
+
+
 		for(Integer i : _inventory.keySet()){
 			_inventory.get(i).loadItem(dt);
 		}
-		
+
 		if(_equipped != null)
 			_equipped.loadItem(dt);
 		if(_cuirass != null)
@@ -434,7 +440,7 @@ public abstract class Character extends Rectangle{
 			_shield.loadItem(dt);
 		if(_footgear != null)
 			_footgear.loadItem(dt);
-		
+
 		new FloatTimer(dt.getGameScreen());
 	}
 
@@ -636,19 +642,19 @@ public abstract class Character extends Rectangle{
 		_footgear = f;
 		return old;
 	}
-	
+
 	public void removeWeapon() {
 		_equipped = null;
 	}
-	
+
 	public void removeFootgear() {
 		_footgear = null;
 	}
-	
+
 	public void removeCuirass() {
 		_cuirass = null;
 	}
-	
+
 	public void removeShield() {
 		_shield = null;
 	}
@@ -670,29 +676,29 @@ public abstract class Character extends Rectangle{
 		for(int i=0; i<NUM_STATS; i++)
 			_currentStats[i] = 10 * _BASE_STATS[i] + _level*_BASE_STATS[i] + _unitPoints[i]/12;
 	}
-	
+
 	/**
 	 * @return the attack strength of this enemy in combat
 	 */
 	public int getFullAttackStrength() {
 		return _currentStats[STRENGTH] + (_equipped == null ? 0:_equipped.getPower());
 	}
-	
+
 	/**
 	 * @return the combat defense of this character (includes this equipment)
 	 */
 	public int getFullDefense() {
 		return _currentStats[DEFENSE] + (_shield == null ? 0:_shield.getDefense()) +
-			(_cuirass == null ? 0:_cuirass.getDefense());
+		(_cuirass == null ? 0:_cuirass.getDefense());
 	}
-	
+
 	/**
 	 * @return the attack accuracy factoring in weapon accuracy, not factoring in opponent's
 	 */
 	public double getFullAttackAccuracy() {
 		return 2.5*_currentStats[SKILL] + (_equipped == null ? 90:_equipped.getAccuracy());
 	}
-	
+
 	/**
 	 * @param other another character
 	 * @return the probability (out of 100) that this character will connect when attacking the other
@@ -700,7 +706,7 @@ public abstract class Character extends Rectangle{
 	public double getHitChance(Character other) {
 		return getFullAttackAccuracy() - other._currentStats[SKILL];
 	}
-	
+
 	/**
 	 * @param other another character
 	 * @return the probability (out of 100) of a critical hit occurring if this character attacks the other
@@ -708,7 +714,7 @@ public abstract class Character extends Rectangle{
 	public double getCriticalChance(Character other) {
 		return _currentStats[LUCK] - other._currentStats[LUCK];
 	}
-	
+
 
 	/**
 	 *  attacks an opponent character
@@ -719,7 +725,7 @@ public abstract class Character extends Rectangle{
 	public void attack(Character opponent, Random r){
 		int offense, defense, damage;
 		boolean critical;
-		
+
 		if (r.nextInt(100) > getHitChance(opponent)) {
 			System.out.println("Attack missed!");
 		}		
@@ -745,25 +751,25 @@ public abstract class Character extends Rectangle{
 				return;
 			}
 		}
-		
+
 		if (r.nextInt(100) > opponent.getFullAttackAccuracy() - _currentStats[SKILL]) {
 			System.out.println("Attack missed!");
 		}
 		else {
 			offense = opponent._currentStats[STRENGTH] + (opponent._equipped == null ? 0:opponent._equipped.getPower());
 			defense = _currentStats[DEFENSE] + (_cuirass == null ? 0:_cuirass.getDefense())
-				+ (_shield == null ? 0:_shield.getDefense());
+			+ (_shield == null ? 0:_shield.getDefense());
 			critical = (r.nextInt(100) <= (opponent._currentStats[LUCK] - _currentStats[LUCK]));
-			
+
 			damage = Math.max(offense - defense + r.nextInt(Math.max((offense - defense)/4, 1)), 0);
-			
+
 			if (critical) {
 				damage *= CRITICAL_MULTIPLIER;
 				System.out.println("Critical hit!");
 			}
-			
+
 			updateHP(-damage);
-			
+
 			System.out.println(opponent._name + " attacks " + _name + "!  " + _name +
 					" takes " + damage + " damage!");
 
@@ -898,7 +904,7 @@ public abstract class Character extends Rectangle{
 	public BufferedImage getRightImage() {
 		return _right;
 	}
-	
+
 	public BufferedImage getLeftImage() {
 		return _left;
 	}
@@ -941,7 +947,7 @@ public abstract class Character extends Rectangle{
 		}
 		return c;
 	}
-	
+
 	public void initImages(DoodleTactics dt){
 		_profile = dt.importImage(_profileFile);
 		_left = dt.importImage(_leftFile);
@@ -974,9 +980,9 @@ public abstract class Character extends Rectangle{
 		brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		double oldX = this.getX();
 		double oldY = this.getY();
-		//int overflowX = (this.getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
-	//	int overflowY = (this.getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
-		//this.setLocation(this.getX() - overflowX,this.getY()/* - overflowY*/);
+		int overflowX = (this.getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
+		int overflowY = (this.getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
+		this.setLocation(this.getX() - overflowX,this.getY() - overflowY);
 		super.paint(brush,img);
 		this.setLocation(oldX, oldY);
 		brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
@@ -1001,43 +1007,43 @@ public abstract class Character extends Rectangle{
 	public HashMap<Integer, Item> getInventory() {
 		return _inventory;
 	}
-	
+
 	public int getStrength() {
 		return _BASE_STATS[STRENGTH];
 	}
-	
+
 	public int getDefense() {
 		return _BASE_STATS[DEFENSE];
 	}
-	
+
 	public int getSpecial() {
 		return _BASE_STATS[SPECIAL];
 	}
-	
+
 	public int getResistance() {
 		return _BASE_STATS[RESISTANCE];
 	}
-	
+
 	public int getSpeed() {
 		return _BASE_STATS[SPEED];
 	}
-	
+
 	public int getSkill() {
 		return _BASE_STATS[SKILL];
 	}
-	
+
 	public int getLuck() {
 		return _BASE_STATS[LUCK];
 	}
-	
+
 	public int getMAX_HP() {
 		return _BASE_STATS[MAX_HP];
 	}
-	
+
 	public void setName(String name) {
 		_name = name;
 	}
-	
+
 	public void setImages(BufferedImage prof, BufferedImage left, BufferedImage right, BufferedImage up, BufferedImage down) {
 		_profile = prof;
 		_left = left;
@@ -1045,21 +1051,21 @@ public abstract class Character extends Rectangle{
 		_up = up;
 		_down = down;
 		switch(_currDirection) {
-			case 1:
-				_currentImage = _down;
-				break;
-			case 2: 
-				_currentImage = _up;
-				break;
-			case 3:
-				_currentImage = _left;
-				break;
-			case 4:
-				_currentImage = _right;
-				break;
+		case 1:
+			_currentImage = _down;
+			break;
+		case 2: 
+			_currentImage = _up;
+			break;
+		case 3:
+			_currentImage = _left;
+			break;
+		case 4:
+			_currentImage = _right;
+			break;
 		}
 	}
-	
+
 	public void setStats(int strength, int def, int special, int resistance, int speed, int acc, int luck, int max_hp) {
 		_BASE_STATS[0] = strength;
 		_BASE_STATS[1] = def;
@@ -1112,8 +1118,8 @@ public abstract class Character extends Rectangle{
 		super.setLocation(x, y);
 		this.setPaintPriority((int) y + _down.getHeight());
 	}
-	
-	
+
+
 	@Override
 	public double getY(){
 		return super.getY();
@@ -1122,7 +1128,7 @@ public abstract class Character extends Rectangle{
 	public void setAffiliation(CombatController combatControl) {
 		_affiliation = combatControl;
 	}
-	
+
 	public void setDefeated() {
 		_affiliation.removeUnit(this);
 	}
