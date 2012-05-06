@@ -77,7 +77,7 @@ public abstract class Character extends Rectangle{
 	private  CombatController _affiliation; //player/AI etc
 
 	private transient FloatTimer _floatTimer; // internal timer used to animate floating
-	private transient JPanel _container;
+	private transient GameScreen _container;
 	private boolean _isAnimating;
 
 	private int _currDirection = 1; //1 = front, 2 = back, 3 = left, 4 = right 
@@ -95,7 +95,7 @@ public abstract class Character extends Rectangle{
 		ARCHER, MAGE, THIEF, WARRIOR, GENERAL;
 	}
 
-	public Character(DoodleTactics dt, JPanel container, String profile, String left, String right,
+	public Character(DoodleTactics dt, GameScreen container, String profile, String left, String right,
 			String up, String down, String name,double x, double y) {
 
 		super(container);
@@ -222,9 +222,11 @@ public abstract class Character extends Rectangle{
 
 	/**
 	 * moves the character to the given tile provided that it is valid to move to that tile
+	 * @param screen the game screen in which movement is occurring
 	 * @param t the desired tile to move the character to
+	 * @param follow whether or not the camera should follow the movement
 	 */
-	public void moveToTile(Tile src, Tile dest) {
+	public void moveToTile(Tile src, Tile dest, boolean follow) {
 
 		System.out.println("---MOVE TO TILE---");
 
@@ -237,7 +239,7 @@ public abstract class Character extends Rectangle{
 		System.out.println("xDiff: " + xDiff);
 		System.out.println("yDiff: " + yDiff);
 
-		_moveTimer = new MoveTimer(_container, xDiff, yDiff);
+		_moveTimer = new MoveTimer(_container, xDiff, yDiff, follow);
 
 		/* determine which orientation to set the character to */
 		if(xDiff > 0) {
@@ -258,13 +260,17 @@ public abstract class Character extends Rectangle{
 
 	private class MoveTimer extends Timer {
 
+		private GameScreen _screen;
 		private int _deltaX;
 		private int _deltaY;
+		private boolean _follow;
 
-		public MoveTimer(JPanel container, int deltaX, int deltaY) {
+		public MoveTimer(GameScreen container, int deltaX, int deltaY, boolean follow) {
 			super(50, null);
+			_screen = container;
 			_deltaX = deltaX;
 			_deltaY = deltaY;
+			_follow = follow;
 			this.addActionListener(new MoveListener(this, container));
 		}
 
@@ -283,8 +289,12 @@ public abstract class Character extends Rectangle{
 			}
 
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-
-				Character.this.setLocation((Character.this.getX() + (_deltaX*Tile.TILE_SIZE / _numSteps)), Character.this.getY() + (_deltaY*Tile.TILE_SIZE / _numSteps));
+				double dx = _deltaX*Tile.TILE_SIZE / _numSteps;
+				double dy = _deltaY*Tile.TILE_SIZE / _numSteps;
+				Character.this.updateLocation(dx, dy);
+				_screen.pan(-dx, -dy);
+			//	Character.this.setLocation((Character.this.getX() + (_deltaX*Tile.TILE_SIZE / _numSteps)),
+			//			Character.this.getY() + (_deltaY*Tile.TILE_SIZE / _numSteps));
 
 				switch(_cnt) {
 				case 0:
@@ -327,10 +337,12 @@ public abstract class Character extends Rectangle{
 	private class PathTimer extends Timer {
 
 		private List<Tile> _path;
+		private boolean _follow;
 
-		public PathTimer(List<Tile> path) {
+		public PathTimer(List<Tile> path, boolean follow) {
 			super(400, null);
 			_path = path;
+			_follow = follow;
 			this.addActionListener(new PathListener());
 		}
 
@@ -340,7 +352,7 @@ public abstract class Character extends Rectangle{
 
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 
-				Character.this.moveToTile(_path.get(_cnt), _path.get(_cnt + 1));
+				Character.this.moveToTile(_path.get(_cnt), _path.get(_cnt + 1), _follow);
 
 				_cnt += 1;
 
@@ -369,7 +381,7 @@ public abstract class Character extends Rectangle{
 	//	}
 	//	System.out.println("===================================");
 		if(tiles != null && tiles.size() > 1) {
-			_pathTimer = new PathTimer(tiles);
+			_pathTimer = new PathTimer(tiles, true);
 			_pathTimer.start();
 		}
 		else {

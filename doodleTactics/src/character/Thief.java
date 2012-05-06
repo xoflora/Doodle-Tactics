@@ -1,13 +1,12 @@
 package character;
 
-import javax.swing.JPanel;
-
 import main.DoodleTactics;
+import main.GameScreen;
 
 public class Thief extends Character{
 	 
 
-	public Thief(DoodleTactics dt, JPanel container, String profile, String left, String right, String up, String down, String name, double x, double y){
+	public Thief(DoodleTactics dt, GameScreen container, String profile, String left, String right, String up, String down, String name, double x, double y){
 		super(dt,container, profile, left, right, up, down, name,x, y);
 		
 		//set base stats

@@ -30,6 +30,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import main.DoodleTactics;
+import main.GameScreen;
 import character.*;
 import character.Character;
 import character.Character.CharacterDirection;
@@ -145,7 +146,7 @@ public class Map implements Serializable {
 	 * 	NOTE: ALL Tiles must be defined before characters
 	 * @author czchapma
 	 */
-	public static Map map(DoodleTactics dt, JPanel container, String path)
+	public static Map map(DoodleTactics dt, GameScreen container, String path)
 	throws InvalidMapException {
 		int count =4;
 		LinkedList<Terrain> terrainList = new LinkedList<Terrain>();
