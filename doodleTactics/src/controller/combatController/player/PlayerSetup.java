@@ -116,7 +116,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 			}
 						
 			if(_menu2 != null) {
-				Thread t = new Thread(new CurtainTimer(_menu2,null,20,_delay));
+				Thread t = new Thread(new CurtainTimer(_menu2,null,0,_delay));
 				t.start();
 				
 				try {
