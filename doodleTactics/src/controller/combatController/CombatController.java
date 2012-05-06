@@ -110,7 +110,6 @@ public abstract class CombatController extends GameScreenController {
 		}
 	}
 	
-	
 	/**
 	 * @param c a character
 	 * @return whether the given character is affiliated with this combat controller

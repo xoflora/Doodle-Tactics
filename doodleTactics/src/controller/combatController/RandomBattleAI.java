@@ -8,8 +8,6 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.List;
 
-import controller.combatController.CombatController.SlideTimer;
-
 import main.DoodleTactics;
 import map.Tile;
 import character.Character;
