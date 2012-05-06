@@ -84,8 +84,8 @@ public abstract class GameScreenController extends Controller {
 	 * responds to the mouse being dragged to move the camera
 	 */
 	public void mouseDragged(MouseEvent e) {
-		int updatex = (e.getX() - _draggedx)/Tile.TILE_SIZE;
-		int updatey = (e.getY() - _draggedy)/Tile.TILE_SIZE;
+	//	int updatex = (e.getX() - _draggedx)/Tile.TILE_SIZE;
+	//	int updatey = (e.getY() - _draggedy)/Tile.TILE_SIZE;
 
 		//	if (updatex != 0 || updatey != 0) {
 		_gameScreen.pan(e.getX() - _draggedx, e.getY() - _draggedy);
@@ -151,10 +151,12 @@ public abstract class GameScreenController extends Controller {
 		MenuItem m = _gameScreen.checkContains(e.getPoint());
 		if (m != null)
 			m.activate(e.getButton());
-		
-	/*	Tile t = _gameScreen.getTile(e.getX(), e.getY());
+		else {
+		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		if (t != null)
-			System.out.println("Tile " + t + ", Occupant " + t.getOccupant());	*/
+			System.out.println("Tile " + t + ", Occupant " + t.getOccupant() + ", Permissions " + t.canMove(0)
+					+ t.canMove(1) + t.canMove(2) + t.canMove(3));
+		}
 	}
 	
 /*	public void removeUnitStats() {

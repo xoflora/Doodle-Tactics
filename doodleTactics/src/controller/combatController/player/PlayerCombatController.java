@@ -143,7 +143,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		if (_optionWindow != null)
 			_optionWindow.removeFromDrawingQueue();
 		_optionWindow = null;
-		_state = State.START;
+		setState(State.START);
 	}
 	
 	private void clearMovementRange() {
@@ -192,7 +192,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			Tile t = _gameScreen.getTile(e.getX(), e.getY());
 			if (t != null) {
 				Character c = t.getOccupant();
-				if (_state == State.START) {
+				if (getState() == State.START) {
 					if (t.isOccupied()) {
 						if (c.getAffiliation() == this && !hasMoved(c)) {
 							_selectedTile = t;
@@ -210,7 +210,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 							for (Tile toPaint : _characterAttackRange) {
 								toPaint.setInPlayerAttackRange(true);
 							}
-							_state = State.CHARACTER_SELECTED;
+							setState(State.CHARACTER_SELECTED);
 						}
 						else if (isEnemy(c)) {
 							_enemyAttackRange = Util.union(_enemyAttackRange,
@@ -222,7 +222,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 					}
 				}
 				//selected tile and character are not null; selected character is the occupant of the tile
-				else if (_state == State.CHARACTER_SELECTED) {
+				else if (getState() == State.CHARACTER_SELECTED) {
 					if (_path.contains(t)) {
 						_destTile = t;
 						
@@ -240,7 +240,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						clearPath();
 					}
 				}
-				else if (_state == State.CHARACTER_OPTION_MENU) {
+				else if (getState() == State.CHARACTER_OPTION_MENU) {
 				//	_pool.removeCharacter(_selectedCharacter);
 				//	clear();
 				//	_state = State.START;
@@ -255,11 +255,11 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			}
 		}
 		else if (e.getButton() == MouseEvent.BUTTON3) {
-			if (_state == State.START)
+			if (getState() == State.START)
 				clear();
-			else if (_state == State.CHARACTER_SELECTED)
+			else if (getState() == State.CHARACTER_SELECTED)
 				clear();
-			else if (_state == State.CHARACTER_MOVING || _state == State.CHARACTER_OPTION_MENU) {
+			else if (getState() == State.CHARACTER_MOVING || getState() == State.CHARACTER_OPTION_MENU) {
 				_selectedCharacter.stopMotion();
 				_destTile.setOccupant(null);
 				_selectedTile.setOccupant(_selectedCharacter);
@@ -294,14 +294,14 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 					_optionWindow = null;
 				}
 				
-				_state = State.CHARACTER_SELECTED;
+				setState(State.CHARACTER_SELECTED);
 			}
-			else if (_state == State.SELECTING_ITEM) {
+			else if (getState() == State.SELECTING_ITEM) {
 				_itemWindow.removeFromDrawingQueue();
 				_itemWindow = null;
 				
 				_optionWindow.addToDrawingQueue();
-				_state = State.CHARACTER_OPTION_MENU;
+				setState(State.CHARACTER_OPTION_MENU);
 			}
 		}
 	}
@@ -312,7 +312,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		Tile t = _gameScreen.getTile(e.getX(), e.getY());
 		if (t != null) {
 			
-			if (_state == State.CHARACTER_SELECTED) {	//selected character and tile are not null
+			if (getState() == State.CHARACTER_SELECTED) {	//selected character and tile are not null
 				if (_selectedMovementRange.contains(t)) {
 					if (_path.isEmpty()) {
 						if (!_path.contains(_selectedTile)) {
@@ -477,14 +477,17 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	/**
 	 * used at the end of the player's turn; clears the unit pool and releases control
 	 */
-	public void finalize() {
-		if (!_finalized) {
+	public boolean finish() {
+		if (!_finalized && getState() == State.START) {
 			_finalized = true;
 			_pool.setInUse(false);
 			_pool = null;
 			_gameScreen.popControl();
 			_finalized = false;
+			return true;
 		}
+		else
+			return false;
 	}
 
 	/**
@@ -492,7 +495,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * @param action the action to send
 	 */
 	public void pushAction(ActionType action) {
-		assert(_state == State.CHARACTER_OPTION_MENU);
+		assert(getState() == State.CHARACTER_OPTION_MENU);
 		
 		if (action == ActionType.WAIT) {
 			_pool.removeCharacter(_selectedCharacter);
@@ -504,7 +507,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				_gameScreen.popControl();
 			}
 			else
-				_state = State.START;
+				setState(State.START);
 		}
 		else if (action == ActionType.ITEM) {
 			_itemWindow = new ItemWindow(_gameScreen, _dt, _selectedCharacter, this);
@@ -513,7 +516,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			_optionWindow.removeFromDrawingQueue();
 			_itemWindow.addToDrawingQueue();
 			
-			_state = State.SELECTING_ITEM;
+			setState(State.SELECTING_ITEM);
 		}
 		else if (action == ActionType.SPECIAL) {
 			
