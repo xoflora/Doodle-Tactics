@@ -131,29 +131,10 @@ public class CombatWindow extends MenuItem {
 					if (moveOffset == -40) {
 						moveUpTimer.this.getAttackTimer().start();
 					}
-//					try {
-//						_attackerX= 700;
-//						_attackTimer.start();
-//						Thread.sleep(1000);
-////						_attackerChar.attack(_victimChar, new Random());
-//						count++;
-//					} catch (InterruptedException e1) {
-//						System.out.println("THREAD ISSUES");
-//					}
+					else {
+						_c.done();
+					}
 				}
-//				CombatWindow.this.setLocation(0, CombatWindow.this.getY()+40);
-//				_attackerImg.setLocation(700, _battlersY+40);
-//				_victimImg.setLocation(400, _battlersY+40);
-//				_battlersY = _battlersY+40;
-//				count++;
-//				if (count == 16) {
-//		//			CombatWindow.this.setLocation(0, CombatWindow.this.getY()+5);
-//					count = 0;
-//					_isAnimating = false;
-//					_timer.stop();
-//					_c.done();
-//				}
-//				_gs.repaint();
 			}
 		}
 	}
@@ -209,6 +190,7 @@ public class CombatWindow extends MenuItem {
 					}
 					else {
 						count = 0;
+						_attackerChar.attack(_victimChar, new Random());
 						_timer.stop();
 						_window.getMoveUpTimer().getListener().setMoveOffset(40);
 						_window.getMoveUpTimer().start();
@@ -245,6 +227,7 @@ public class CombatWindow extends MenuItem {
 					else {
 						count = 0;
 						_timer.stop();
+						_attackerChar.attack(_victimChar, new Random());
 						_window.getMoveUpTimer().getListener().setMoveOffset(40);
 						_window.getMoveUpTimer().start();
 					}

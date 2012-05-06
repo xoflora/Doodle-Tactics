@@ -14,7 +14,12 @@ public abstract class Equipment extends Item{
 		super(dt,imagePath, name);
 		_isEquip = true;
 	}
+	
+//	public abstract void setStats();
 
+	
+	public abstract void exert();
+	
 	/**
 	 *  Removes this Item from a Character's inventory 
 	 * @param c - the Character
