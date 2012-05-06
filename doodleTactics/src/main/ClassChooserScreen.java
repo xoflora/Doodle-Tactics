@@ -17,6 +17,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.PlainDocument;
 
 import character.MainCharacter;
+import character.Character.CharacterType;
 
 import map.Tile;
 
@@ -180,25 +181,29 @@ public class ClassChooserScreen extends Screen {
 				switch (_chosenClass) {
 				case 1:
 					mainChar.setStats(8, 6, 5, 5, 6, 7, 3, 15);
+					mainChar.setCharacterType(CharacterType.WARRIOR);
+					mainChar.initStats();
 					mainChar.setImages(_dt.importImage("src/graphics/characters/warrior_portrait.png"), _dt.importImage("src/graphics/characters/warrior_left_color.png"), _dt.importImage("src/graphics/characters/warrior_right_color.png"), _dt.importImage("src/graphics/characters/warrior_back_color.png"), _dt.importImage("src/graphics/characters/warrior_front_color.png"));
 					mainChar.setSize(_dt.importImage("src/graphics/characters/warrior_front_color.png").getWidth(), _dt.importImage("src/graphics/characters/warrior_front_color.png").getHeight());
-//					if(mainChar.getDownImage().getWidth() - Tile.TILE_SIZE <= 25.0)
-//					overflow = (mainChar.getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
-//					mainChar.setLocation(mainChar.getX() - overflow,mainChar.getY() - mainChar.getDownImage().getHeight() + Tile.TILE_SIZE);
-//					_dt.getGameScreen().set
 					break;
 				case 2:
 					mainChar.setStats(6, 6, 5, 6, 10, 7, 9, 13);
+					mainChar.setCharacterType(CharacterType.THIEF);
+					mainChar.initStats();
 					mainChar.setImages(_dt.importImage("src/graphics/characters/thief_portrait.png"), _dt.importImage("src/graphics/characters/thief_left.png"), _dt.importImage("src/graphics/characters/thief_right.png"), _dt.importImage("src/graphics/characters/thief_back.png"), _dt.importImage("src/graphics/characters/thief_front.png"));
 					mainChar.setSize(_dt.importImage("src/graphics/characters/thief_front.png").getWidth(), _dt.importImage("src/graphics/characters/thief_front.png").getHeight());
 					break;
 				case 3:
 					mainChar.setStats(4, 5, 9, 8, 7, 5, 5, 12);
+					mainChar.setCharacterType(CharacterType.MAGE);
+					mainChar.initStats();
 					mainChar.setImages(_dt.importImage("src/graphics/characters/mage_portrait.png"), _dt.importImage("src/graphics/characters/mage_left.png"), _dt.importImage("src/graphics/characters/mage_right.png"), _dt.importImage("src/graphics/characters/mage_back.png"), _dt.importImage("src/graphics/characters/mage_front.png"));
 					mainChar.setSize(_dt.importImage("src/graphics/characters/mage_front.png").getWidth(), _dt.importImage("src/graphics/characters/mage_front.png").getHeight());
 					break;
 				case 4:
 					mainChar.setStats(7, 5, 5, 6, 9, 9, 3, 14);
+					mainChar.setCharacterType(CharacterType.ARCHER);
+					mainChar.initStats();
 					mainChar.setImages(_dt.importImage("src/graphics/characters/archer_portrait.png"), _dt.importImage("src/graphics/characters/archer_left.png"), _dt.importImage("src/graphics/characters/archer_right.png"), _dt.importImage("src/graphics/characters/archer_back.png"), _dt.importImage("src/graphics/characters/archer_front.png"));
 					mainChar.setSize(_dt.importImage("src/graphics/characters/archer_front.png").getWidth(), _dt.importImage("src/graphics/characters/archer_front.png").getHeight());
 					break;

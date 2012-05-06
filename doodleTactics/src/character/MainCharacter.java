@@ -59,7 +59,7 @@ public class MainCharacter extends Character {
 	}
 
 	@Override
-	public CharacterType getChararacterType() {
+	public CharacterType getCharacterType() {
 		// TODO Auto-generated method stub
 		return _currType;
 	}

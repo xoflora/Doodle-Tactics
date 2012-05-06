@@ -27,7 +27,7 @@ public class Warrior extends Character{
 	}
 
 	@Override
-	public CharacterType getChararacterType() {
+	public CharacterType getCharacterType() {
 		// TODO Auto-generated method stub
 		return CharacterType.WARRIOR;
 	}

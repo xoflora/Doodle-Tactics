@@ -15,16 +15,16 @@ public class Axe extends Weapon {
 	@Override
 	public boolean canBeEquipped(Character character) {
 		// TODO Auto-generated method stub
-		if (character.getChararacterType() == CharacterType.WARRIOR) {
+		if (character.getCharacterType() == CharacterType.WARRIOR || character.getCharacterType() == CharacterType.GENERAL) {
 			return true;
 		}
 		else return false;
 	}
 
 
-//	public WeaponType getWeaponType() {
-//		return WeaponType.AXE;
-//	}
+	public WeaponType getWeaponType() {
+		return WeaponType.AXE;
+	}
 
 
 }

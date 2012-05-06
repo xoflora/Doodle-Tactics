@@ -27,7 +27,7 @@ public class Archer extends Character{
 	}
 
 	@Override
-	public CharacterType getChararacterType() {
+	public CharacterType getCharacterType() {
 		return CharacterType.ARCHER;
 	}
 }
