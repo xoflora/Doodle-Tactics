@@ -661,28 +661,46 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		_numOptions = _dt.getParty().size()+2;
 
+		boolean isEquipped = false;
+		
 		if (_labelToItem.get(label).isEquip()) {
-			for (int i=0; i<character.getInventory().size(); i++) {
-				if (character.getInventory().get(i).equals(item)) {
-					equipButton _equip = new equipButton(this, _listItem, _listItemHovered, _dt);
-					_equip.addLabel("Unequip from " + character.getName());
-					_equip.setSize(labelWidth, labelHeight);
-					_equip.setVisible(true);
-					_equip.setLocation(_itemOptBoxX, _itemOptBoxY);
-					_buttonToChar.put(_equip, character);
-					_buttonList.add(_equip);
-					break;
+			if (character.getCuirass() != null) {
+				if (character.getCuirass().equals(item)) {
+					isEquipped = true;
 				}
-				if (i==character.getInventory().size()) {
-					equipButton _equip = new equipButton(this, _listItem, _listItemHovered, _dt);
-					unequipButton _unequip = new unequipButton(this, _listItem, _listItemHovered, _dt);
-					_unequip.addLabel("Equip to " + character.getName());
-					_unequip.setSize(labelWidth, labelHeight);
-					_unequip.setVisible(true);
-					_unequip.setLocation(_itemOptBoxX, _itemOptBoxY);
-					_buttonToChar.put(_unequip, character);
-					_buttonList.add(_unequip);
+			}
+			if (character.getWeapon() != null) {
+				if (character.getWeapon().equals(item)) {
+					isEquipped = true;
 				}
+			}
+			if (character.getShield() != null) {
+				if (character.getShield().equals(item)) {
+					isEquipped = true;
+				}
+			}
+			if (character.getFootgear() != null) {
+				if (character.getFootgear().equals(item)) {
+					isEquipped = true;
+				}
+			}
+			if (isEquipped) {
+				unequipButton _unequip = new unequipButton(this, _listItem, _listItemHovered, _dt);
+				_unequip.addLabel("Unequip from " + character.getName());
+				_unequip.setSize(labelWidth, labelHeight);
+				_unequip.setVisible(true);
+				_unequip.setLocation(_itemOptBoxX, _itemOptBoxY);
+				_buttonToChar.put(_unequip, character);
+				_buttonList.add(_unequip);
+			}
+			else {
+				equipButton _equip = new equipButton(this, _listItem, _listItemHovered, _dt);
+				_equip.addLabel("Equip to " + character.getName());
+				_equip.setSize(labelWidth, labelHeight);
+				_equip.setVisible(true);
+				_equip.setLocation(_itemOptBoxX, _itemOptBoxY);
+				_buttonToChar.put(_equip, character);
+				_buttonList.add(_equip);
 			}
 		}
 		else {
@@ -694,29 +712,32 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_buttonToChar.put(_use, character);
 			_buttonList.add(_use);
 		}
-		if (_dt.getParty().size() > 0) {
-			for (int i=0; i<_dt.getParty().size(); i++) {
-				if (!_dt.getParty().get(i).equals(_labelToCharacter.get(label))) {
-					if (_dt.getParty().get(i).getInventory().size() != _dt.getParty().get(i).getCapacity()) {
-						giveToCharButton _giveToChar = new giveToCharButton(this, _listItem, _listItemHovered, _dt);
-						_giveToChar.addLabel("Give to " + _dt.getParty().get(i).getName());
-						_giveToChar.setSize(labelWidth, labelHeight);
-						_giveToChar.setVisible(true);
-						_giveToChar.setLocation(_itemOptBoxX, _itemOptBoxY+(numOptionsInserted*labelHeight));
-						numOptionsInserted+=1;
-						_buttonToChar.put(_giveToChar, _dt.getParty().get(i));
-						_buttonList.add(_giveToChar);
+		if (!isEquipped) {
+			if (_dt.getParty().size() > 0) {
+				for (int i=0; i<_dt.getParty().size(); i++) {
+					System.out.println("Party member: " + _dt.getParty().get(i) + "; label to char: " + _labelToCharacter.get(label));
+					if (_dt.getParty().get(i) != (_labelToCharacter.get(label))) {
+						if (_dt.getParty().get(i).getInventory().size() != _dt.getParty().get(i).getCapacity()) {
+							giveToCharButton _giveToChar = new giveToCharButton(this, _listItem, _listItemHovered, _dt);
+							_giveToChar.addLabel("Give to " + _dt.getParty().get(i).getName());
+							_giveToChar.setSize(labelWidth, labelHeight);
+							_giveToChar.setVisible(true);
+							_giveToChar.setLocation(_itemOptBoxX, _itemOptBoxY+(numOptionsInserted*labelHeight));
+							numOptionsInserted+=1;
+							_buttonToChar.put(_giveToChar, _dt.getParty().get(i));
+							_buttonList.add(_giveToChar);
+						}
 					}
 				}
 			}
+			dropButton _drop = new dropButton(this, _listItem, _listItemHovered, _dt);
+			_drop.addLabel("Drop Item");
+			_drop.setSize(labelWidth, labelHeight);
+			_drop.setVisible(true);
+			_drop.setLocation(_itemOptBoxX, _itemOptBoxY+(numOptionsInserted*labelHeight));
+			_buttonToChar.put(_drop, character);
+			_buttonList.add(_drop);
 		}
-		dropButton _drop = new dropButton(this, _listItem, _listItemHovered, _dt);
-		_drop.addLabel("Drop Item");
-		_drop.setSize(labelWidth, labelHeight);
-		_drop.setVisible(true);
-		_drop.setLocation(_itemOptBoxX, _itemOptBoxY+(numOptionsInserted*labelHeight));
-		_buttonToChar.put(_drop, character);
-		_buttonList.add(_drop);
 
 		boolean canPutRight;
 		boolean canPutDown;
@@ -773,6 +794,9 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private class CharInfo extends JPanel {
 		//represents a box that will display all the characters current stats, items, inventory, etc.
 		public CharInfo(Screen screen, Character chrter) {
+			
+			System.out.println("THE CHARACTER: " + chrter);
+			
 			this.setLayout(new GridBagLayout());
 			GridBagConstraints constraint = new GridBagConstraints();
 			java.awt.Dimension panelSize = new java.awt.Dimension(730,200);
@@ -911,7 +935,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				//				item.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
 				listener = new itemListener(itemPic);
 				itemPic.addMouseMotionListener(listener);
-				itemPic.setSize(75,75);
+				itemPic.setSize(65,65);
 				itemPic.setVisible(true);
 				constraint.fill = GridBagConstraints.BOTH;
 				constraint.insets = insetItems;
@@ -928,7 +952,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			for (int i = 0; i<(5-chrter.getInventory().size()); i++) {
 				JLabel item = new JLabel(new ImageIcon(_dt.importImage("src/graphics/items/empty_slot.png")));
 				//				item.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
-				item.setSize(75, 75);
+				item.setSize(65, 65);
 				item.setVisible(true);
 				constraint.fill = GridBagConstraints.BOTH;
 				constraint.insets = insetItems;
@@ -961,12 +985,15 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				//			weapon.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
 				listener1 = new itemListener(weapon);
 				weapon.addMouseMotionListener(listener1);
+				weapon.addMouseListener(listener1);
 				_labelToCharacter.put(weapon, chrter);
 				_labelToItem.put(weapon, chrter.getWeapon());
 			}
 			else {
 				weapon = new JLabel(new ImageIcon(_dt.importImage("src/graphics/items/empty_slot.png")));
 			}
+			weapon.setSize(65,65);
+			weapon.setVisible(true);
 			constraint.fill = GridBagConstraints.BOTH;
 			constraint.insets = insetItems;
 			constraint.gridwidth = 1;
@@ -981,12 +1008,15 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				//				cuirass.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
 				listener1 = new itemListener(cuirass);
 				cuirass.addMouseMotionListener(listener1);
+				cuirass.addMouseListener(listener1);
 				_labelToCharacter.put(cuirass, chrter);
 				_labelToItem.put(cuirass, chrter.getCuirass());
 			}
 			else {
 				cuirass = new JLabel(new ImageIcon(_dt.importImage("src/graphics/items/empty_slot.png")));
 			}
+			cuirass.setSize(65,65);
+			cuirass.setVisible(true);
 			constraint.fill = GridBagConstraints.BOTH;
 			constraint.insets = insetItems;
 			constraint.gridx = 1;
@@ -999,12 +1029,15 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				//				shield.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
 				listener1 = new itemListener(shield);
 				shield.addMouseMotionListener(listener1);
+				shield.addMouseListener(listener1);
 				_labelToCharacter.put(shield, chrter);
 				_labelToItem.put(shield, chrter.getShield());
 			}
 			else {
 				shield = new JLabel(new ImageIcon(_dt.importImage("src/graphics/items/empty_slot.png")));
 			}
+			shield.setSize(65,65);
+			shield.setVisible(true);
 			constraint.fill = GridBagConstraints.BOTH;
 			constraint.gridwidth = 1;
 			constraint.insets = insetItems;
@@ -1018,12 +1051,15 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				//				footgear.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
 				listener1 = new itemListener(footgear);
 				footgear.addMouseMotionListener(listener1);
+				footgear.addMouseListener(listener1);
 				_labelToCharacter.put(footgear, chrter);
 				_labelToItem.put(footgear, chrter.getFootgear());
 			}
 			else {
 				footgear = new JLabel(new ImageIcon(_dt.importImage("src/graphics/items/empty_slot.png")));
 			}
+			footgear.setSize(65,65);
+			footgear.setVisible(true);
 			constraint.fill = GridBagConstraints.BOTH;
 			constraint.insets = insetItems;
 			constraint.gridwidth = 1;
@@ -1236,6 +1272,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		public void activate(optionButton button) {
 			try {
 				if (_selectedChar.getWeapon().equals(_selectedItem)) {
+					System.out.println("WAHH");
 					_selectedChar.addToInventory(_selectedChar.getWeapon());
 					_selectedChar.removeWeapon();
 				}
@@ -1249,6 +1286,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				else if (_selectedChar.getFootgear().equals(_selectedItem)){
 					_selectedChar.removeFootgear();
 				}
+				GameMenuScreen.this.setDefaultTabToUnits();
+				System.out.println("set to false");
+				_showingItemOptions = false;
+				GameMenuScreen.this.repaint();
 			} catch (ItemException e) {
 				System.out.println("Something bad happened in the Game Menu Screen");
 			}

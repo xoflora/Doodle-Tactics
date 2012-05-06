@@ -14,6 +14,10 @@ public abstract class Weapon extends Equipment{
 	private double _accuracy;
 	private int _attackPower;
 	
+//	public enum WeaponType {
+//		AXE, BOW, DAGGER, STAFF;
+//	}
+	
 	public Weapon(DoodleTactics dt, String imagePath, String name) {
 		super(dt,imagePath, name);
 	}
@@ -40,4 +44,6 @@ public abstract class Weapon extends Equipment{
 	public double getAccuracy() {
 		return _accuracy;
 	}
+	
+	public abstract boolean canBeEquipped(Character character);
 }
