@@ -132,14 +132,14 @@ public class OverworldController extends GameScreenController {
 	public void take() {
 		super.take();
 		// TODO : center the map around the main character
-		_randomMoveTimer.start();
+		//_randomMoveTimer.start();
 	}
 
 	@Override
 	public void release() {
 		super.release();
 		// TODO Auto-generated method stub
-		_randomMoveTimer.stop();
+		//_randomMoveTimer.stop();
 	}
 
 	@Override
