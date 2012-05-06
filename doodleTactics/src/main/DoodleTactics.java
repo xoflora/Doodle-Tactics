@@ -67,6 +67,14 @@ public class DoodleTactics extends JFrame {
 		_images = new HashMap<String,BufferedImage>();
 		_savedGames = new HashMap<String,String>();
 		_party = new ArrayList<Character>();
+		
+		_moveLeftKey = KeyEvent.VK_A;
+		_moveRightKey = KeyEvent.VK_D;
+		_moveUpKey = KeyEvent.VK_W;
+		_moveDownKey = KeyEvent.VK_S;
+		_menuKey = KeyEvent.VK_CONTROL;
+		_interactKey = KeyEvent.VK_SPACE;
+
 		_gameMenu = new GameMenuScreen(this);
 		_game = new GameScreen(this);
 		_mainMenu = new MainMenuScreen(this);
@@ -76,12 +84,8 @@ public class DoodleTactics extends JFrame {
 		this.setResizable(false);
 		this.setVisible(true);
 		
-		_moveLeftKey = KeyEvent.VK_A;
-		_moveRightKey = KeyEvent.VK_D;
-		_moveUpKey = KeyEvent.VK_W;
-		_moveDownKey = KeyEvent.VK_S;
-		_menuKey = KeyEvent.VK_CONTROL;
-		_interactKey = KeyEvent.VK_SPACE;
+	//	_game.readFilepathsFile();
+		
 		
 		//	_game.setMap("src/tests/data/testMapDemo");
 		

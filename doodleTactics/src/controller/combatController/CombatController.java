@@ -1,10 +1,14 @@
 package controller.combatController;
 
+import graphics.MenuItem;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
+
+import util.Util;
 
 import controller.GameScreenController;
 
@@ -22,6 +26,7 @@ public abstract class CombatController extends GameScreenController {
 	protected enum State {
 		START,
 		CHARACTER_SELECTED,
+		CHARACTER_MOVING,
 		CHARACTER_OPTION_MENU,
 		SELECTING_ITEM,
 		ITEM_MENU;
@@ -48,8 +53,10 @@ public abstract class CombatController extends GameScreenController {
 	private ListIterator<Character> _unitCycle;
 	protected HashMap<Character, Boolean> _hasMoved;
 	protected HashMap<Character, Tile> _locations;
+	protected CombatOrchestrator _orch;
 	
 	protected List<CombatController> _enemyAffiliations;
+	protected State _state;
 	
 	private Random r;
 	
@@ -70,7 +77,32 @@ public abstract class CombatController extends GameScreenController {
 		
 		for (Character c : _units)
 			c.affiliate(this);
+		
+		_orch = null;
+		_state = State.START;
 	}
+	
+	protected class SlideTimer implements Runnable{
+		private MenuItem _menu;
+		private int _stop;
+		public SlideTimer(MenuItem menu, int stop){
+			_menu = menu;
+			_stop = stop;
+		}
+		@Override
+		public void run() {
+			while(_menu.getX() > _stop){
+				try {
+					Thread.sleep(20);
+				} catch (InterruptedException e) {
+					//Do Nothing
+				}
+				_menu.setLocation(_menu.getX()  -20,_menu.getY());
+				_dt.getGameScreen().repaint();
+			}
+		}
+	}
+	
 	
 	/**
 	 * @param c a character
@@ -97,11 +129,25 @@ public abstract class CombatController extends GameScreenController {
 	}
 	
 	/**
+	 * @return the mapping from characters to tiles of this controller
+	 */
+	public HashMap<Character, Tile> getTileMappings() {
+		return _locations;
+	}
+	
+	/**
 	 * sets the enemy affiliations of this combat controller
 	 * @param aff
 	 */
 	public void setEnemyAffiliations(List<CombatController> aff) {
 		_enemyAffiliations = aff;
+	}
+	
+	/**
+	 * @return all combat factions that are enemies of this one
+	 */
+	public List<CombatController> getEnemyAffiliations() {
+		return _enemyAffiliations;
 	}
 	
 	/**
@@ -125,6 +171,21 @@ public abstract class CombatController extends GameScreenController {
 		//c.setLocation(dest.getX(), dest.getY());
 		_hasMoved.put(c, true);
 		_locations.put(c, path.get(path.size() - 1));
+		_state = State.CHARACTER_MOVING;
+	}
+	
+	/**
+	 * signifies that the character has finished moving along its path
+	 */
+	public void moveComplete() {
+		_state = State.CHARACTER_OPTION_MENU;
+	}
+	
+	/**
+	 * action corresponding to having a character wait
+	 */
+	public void characterWait() {
+		_state = State.START;
 	}
 	
 	@Override
@@ -135,6 +196,10 @@ public abstract class CombatController extends GameScreenController {
 	public void take() {
 		super.take();
 		_hasMoved.clear();
+		_unitCycle = _units.listIterator();
+		
+		if (_orch == null)
+			_dt.error("Combat error: orchestrator unassigned.");
 	}
 	
 	@Override
@@ -166,6 +231,17 @@ public abstract class CombatController extends GameScreenController {
 			if (affiliation.isAffiliated(c))
 				return true;
 		return false;
+	}
+	
+	public List<Character> enemyUnits() {
+		if (_orch == null)
+			return new ArrayList<Character>();
+		
+		List<Character> enemies = new ArrayList<Character>();
+		for (CombatController aff : _enemyAffiliations)
+			enemies.addAll(aff.getUnits());
+		
+		return enemies;
 	}
 	
 	/**
@@ -210,9 +286,18 @@ public abstract class CombatController extends GameScreenController {
 	 * @param dest defense
 	 */
 	public void attack(Character src, Character dest) {
+		System.out.println("DOING THE ANIMATION");
+		_dt.getGameScreen().getPopUpCombat().prepareWindow(src, dest);
+		_dt.getGameScreen().getPopUpCombat().animate();
 		src.attack(dest, r);
 		System.out.println(src.getName() + " has " + src.getHP() + " HP remaining.");
 		System.out.println(dest.getName() + " has " + dest.getHP() + " HP remaining.");
+		
+		if (isDefeated())
+			defeat();
+		else if (dest.getAffiliation().isDefeated()) {
+			dest.getAffiliation().defeat();
+		}
 	}
 	
 	/**
@@ -222,9 +307,35 @@ public abstract class CombatController extends GameScreenController {
 		System.out.println("removeing" + c + " from tile " + _locations.get(c));
 		_units.remove(c);
 		_gameScreen.removeCharacter(c);
+		System.out.println(_locations == null);
+		System.out.println(c == null);
+		System.out.println(_locations.get(c) == null);
 		_locations.get(c).setOccupant(null);
 		_locations.remove(c);
 	///	if (t.occupant() == c)
 	//		t.setOccupant(null);
+	}
+	
+	/**
+	 * sets the orchestrator of this combat controller
+	 * @param o
+	 */
+	public void setOrchestrator(CombatOrchestrator o) {
+		_orch = o;
+	}
+	
+	/**
+	 * @return whether or not this combat controller has any units remaining
+	 */
+	public boolean isDefeated() {
+		return _units.isEmpty();
+	}
+	
+	/**
+	 * defeat action of this combat controller
+	 * calls whatever events or other functions are appropriate
+	 */
+	public void defeat() {
+		System.out.println("defeated");
 	}
 }

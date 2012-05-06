@@ -29,8 +29,8 @@ public abstract class Character extends Rectangle{
 	 * @author czchapma
 	 */
 
-	final static int LEVELCAP = 99;
-	final static int NUM_STATS = 8;
+	public final static int LEVELCAP = 99;
+	public final static int NUM_STATS = 8;
 	protected String _name;
 	private static int numCharacters = 0;
 	protected final int _id;
@@ -38,14 +38,16 @@ public abstract class Character extends Rectangle{
 	//stats
 	//indices where stat is located in subsequent arrays
 	
-	protected final static int STRENGTH = 0;
-	protected final static int DEFENSE = 1;
-	protected final static int SPECIAL = 2;
-	protected final static int RESISTANCE = 3;
-	protected final static int SPEED = 4;
-	protected final static int ACCURACY = 5;
-	protected final static int LUCK =  6;
-	protected final static int MAX_HP =  7;
+	public final static int STRENGTH = 0;
+	public final static int DEFENSE = 1;
+	public final static int SPECIAL = 2;
+	public final static int RESISTANCE = 3;
+	public final static int SPEED = 4;
+	public final static int SKILL = 5;
+	public final static int LUCK =  6;
+	public final static int MAX_HP =  7;
+	
+	public final static int CRITICAL_MULTIPLIER = 2;
 
 	//stat arrays (indexed by type of stat, see above)
 	protected final int[] _BASE_STATS; //initial
@@ -79,6 +81,8 @@ public abstract class Character extends Rectangle{
 	private transient FloatTimer _floatTimer; // internal timer used to animate floating
 	private transient JPanel _container;
 	private boolean _isAnimating;
+	
+	private int _currDirection = 1; //1 = front, 2 = back, 3 = left, 4 = right 
 	
 	private transient PathTimer _pathTimer;
 	private transient MoveTimer _moveTimer;
@@ -121,7 +125,7 @@ public abstract class Character extends Rectangle{
 		this.setLocation(x, y);
 //		this.setLocation(x - overflow,y - _down.getHeight() + Tile.TILE_SIZE);
 		_floatTimer = new FloatTimer(container);
-		//this.startHovering();
+	//	this.startHovering();
 		
 		_pathTimer = null;
 		_moveTimer = null;
@@ -142,6 +146,10 @@ public abstract class Character extends Rectangle{
 		public void reset() {
 			Character.this.setLocation(Character.this.getX(), Character.this.getY() - _listener.getOffset());
 		}
+		
+		public float getListenerOffset(){
+			return _listener.getOffset();
+		}
 
 		private class FloatListener implements java.awt.event.ActionListener {
 
@@ -158,7 +166,7 @@ public abstract class Character extends Rectangle{
 			}
 
 			public float getOffset() {
-				_cnt = 0;
+				//_cnt = 0;
 				return _offset;
 			}
 
@@ -335,7 +343,8 @@ public abstract class Character extends Rectangle{
 					/* otherwise, continue incrementing */
 					if (_cnt == _path.size() - 1) {
 						PathTimer.this.stop();
-						System.out.println("=========END FOLLOW PATH=========");
+					//	System.out.println("=========END FOLLOW PATH=========");
+						_affiliation.moveComplete();
 					}
 			}
 		}
@@ -661,6 +670,45 @@ public abstract class Character extends Rectangle{
 		for(int i=0; i<NUM_STATS; i++)
 			_currentStats[i] = 10 * _BASE_STATS[i] + _level*_BASE_STATS[i] + _unitPoints[i]/12;
 	}
+	
+	/**
+	 * @return the attack strength of this enemy in combat
+	 */
+	public int getFullAttackStrength() {
+		return _currentStats[STRENGTH] + (_equipped == null ? 0:_equipped.getPower());
+	}
+	
+	/**
+	 * @return the combat defense of this character (includes this equipment)
+	 */
+	public int getFullDefense() {
+		return _currentStats[DEFENSE] + (_shield == null ? 0:_shield.getDefense()) +
+			(_cuirass == null ? 0:_cuirass.getDefense());
+	}
+	
+	/**
+	 * @return the attack accuracy factoring in weapon accuracy, not factoring in opponent's
+	 */
+	public double getFullAttackAccuracy() {
+		return 2.5*_currentStats[SKILL] + (_equipped == null ? 90:_equipped.getAccuracy());
+	}
+	
+	/**
+	 * @param other another character
+	 * @return the probability (out of 100) that this character will connect when attacking the other
+	 */
+	public double getHitChance(Character other) {
+		return getFullAttackAccuracy() - other._currentStats[SKILL];
+	}
+	
+	/**
+	 * @param other another character
+	 * @return the probability (out of 100) of a critical hit occurring if this character attacks the other
+	 */
+	public double getCriticalChance(Character other) {
+		return _currentStats[LUCK] - other._currentStats[LUCK];
+	}
+	
 
 	/**
 	 *  attacks an opponent character
@@ -672,20 +720,17 @@ public abstract class Character extends Rectangle{
 		int offense, defense, damage;
 		boolean critical;
 		
-		if (r.nextInt(100) > (_equipped == null ? 90:_equipped.getAccuracy())
-				+ 2.5*_currentStats[ACCURACY] - opponent._currentStats[ACCURACY]) {
+		if (r.nextInt(100) > getHitChance(opponent)) {
 			System.out.println("Attack missed!");
 		}		
 		else {
-			offense = _currentStats[STRENGTH] + (_equipped == null ? 0:_equipped.getPower());
-			defense = opponent._currentStats[DEFENSE] + (opponent._cuirass == null ? 0:opponent._cuirass.getDefense())
-			+ (opponent._shield == null ? 0:opponent._shield.getDefense());
 
-			damage = Math.max(offense - defense + r.nextInt(Math.max((offense - defense)/4, 1)), 0);
+			damage = Math.max(getFullAttackStrength() - opponent.getFullDefense() +
+					r.nextInt(Math.max((getFullAttackStrength() - opponent.getFullDefense())/4, 1)), 0);
 
 			critical = (r.nextInt(100) <= (_currentStats[LUCK] - opponent._currentStats[LUCK]));
 			if (critical) {
-				damage *= 2;
+				damage *= CRITICAL_MULTIPLIER;
 				System.out.print("Critical hit! ");
 			}
 
@@ -701,8 +746,7 @@ public abstract class Character extends Rectangle{
 			}
 		}
 		
-		if (r.nextInt(100) > (opponent._equipped == null ? 90:_equipped.getAccuracy())
-				+ 2.5*opponent._currentStats[ACCURACY] - _currentStats[ACCURACY]) {
+		if (r.nextInt(100) > opponent.getFullAttackAccuracy() - _currentStats[SKILL]) {
 			System.out.println("Attack missed!");
 		}
 		else {
@@ -714,7 +758,7 @@ public abstract class Character extends Rectangle{
 			damage = Math.max(offense - defense + r.nextInt(Math.max((offense - defense)/4, 1)), 0);
 			
 			if (critical) {
-				damage *= 2;
+				damage *= CRITICAL_MULTIPLIER;
 				System.out.println("Critical hit!");
 			}
 			
@@ -800,6 +844,7 @@ public abstract class Character extends Rectangle{
 	 * @author jeshapir
 	 */
 	public void setLeft(){
+		_currDirection = 3;
 		_currentImage = _left;
 	}
 
@@ -809,6 +854,7 @@ public abstract class Character extends Rectangle{
 	 * @author jeshapir
 	 */
 	public void setRight(){
+		_currDirection = 4;
 		_currentImage = _right;
 	}
 
@@ -818,6 +864,7 @@ public abstract class Character extends Rectangle{
 	 * @author jeshapir
 	 */
 	public void setUp(){
+		_currDirection = 2;
 		_currentImage = _up;
 	}
 
@@ -827,6 +874,7 @@ public abstract class Character extends Rectangle{
 	 * @author jeshapir
 	 */
 	public void setDown(){
+		_currDirection = 1;
 		_currentImage = _down;
 	}
 
@@ -849,6 +897,10 @@ public abstract class Character extends Rectangle{
 
 	public BufferedImage getRightImage() {
 		return _right;
+	}
+	
+	public BufferedImage getLeftImage() {
+		return _left;
 	}
 
 	/**
@@ -922,9 +974,9 @@ public abstract class Character extends Rectangle{
 		brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		double oldX = this.getX();
 		double oldY = this.getY();
-		int overflowX = (this.getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
-		int overflowY = (this.getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
-		this.setLocation(this.getX() - overflowX,this.getY() - this.getDownImage().getHeight() + Tile.TILE_SIZE);
+		//int overflowX = (this.getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
+	//	int overflowY = (this.getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
+		//this.setLocation(this.getX() - overflowX,this.getY()/* - overflowY*/);
 		super.paint(brush,img);
 		this.setLocation(oldX, oldY);
 		brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
@@ -951,35 +1003,35 @@ public abstract class Character extends Rectangle{
 	}
 	
 	public int getStrength() {
-		return _BASE_STATS[0];
+		return _BASE_STATS[STRENGTH];
 	}
 	
 	public int getDefense() {
-		return _BASE_STATS[1];
+		return _BASE_STATS[DEFENSE];
 	}
 	
 	public int getSpecial() {
-		return _BASE_STATS[2];
+		return _BASE_STATS[SPECIAL];
 	}
 	
 	public int getResistance() {
-		return _BASE_STATS[3];
+		return _BASE_STATS[RESISTANCE];
 	}
 	
 	public int getSpeed() {
-		return _BASE_STATS[4];
+		return _BASE_STATS[SPEED];
 	}
 	
-	public int getAccuracy() {
-		return _BASE_STATS[5];
+	public int getSkill() {
+		return _BASE_STATS[SKILL];
 	}
 	
 	public int getLuck() {
-		return _BASE_STATS[6];
+		return _BASE_STATS[LUCK];
 	}
 	
 	public int getMAX_HP() {
-		return _BASE_STATS[7];
+		return _BASE_STATS[MAX_HP];
 	}
 	
 	public void setName(String name) {
@@ -992,6 +1044,20 @@ public abstract class Character extends Rectangle{
 		_right = right;
 		_up = up;
 		_down = down;
+		switch(_currDirection) {
+			case 1:
+				_currentImage = _down;
+				break;
+			case 2: 
+				_currentImage = _up;
+				break;
+			case 3:
+				_currentImage = _left;
+				break;
+			case 4:
+				_currentImage = _right;
+				break;
+		}
 	}
 	
 	public void setStats(int strength, int def, int special, int resistance, int speed, int acc, int luck, int max_hp) {
@@ -1014,7 +1080,7 @@ public abstract class Character extends Rectangle{
 		System.out.println("-----\nStats:");
 		System.out.println("Strength: " + _currentStats[STRENGTH]);
 		System.out.println("Defense: " + _currentStats[DEFENSE]);
-		System.out.println("Skill: " + _currentStats[ACCURACY]);
+		System.out.println("Skill: " + _currentStats[SKILL]);
 		System.out.println("Speed: " + _currentStats[SPEED]);
 		System.out.println("Special: " + _currentStats[SPECIAL]);
 		System.out.println("Luck: " + _currentStats[LUCK]);
@@ -1045,6 +1111,12 @@ public abstract class Character extends Rectangle{
 	public void setLocation(double x, double y){
 		super.setLocation(x, y);
 		this.setPaintPriority((int) y + _down.getHeight());
+	}
+	
+	
+	@Override
+	public double getY(){
+		return super.getY();
 	}
 
 	public void setAffiliation(CombatController combatControl) {

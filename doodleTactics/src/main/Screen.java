@@ -4,6 +4,9 @@ import java.util.EmptyStackException;
 import java.util.Stack;
 
 import javax.swing.JPanel;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 import controller.Controller;
 /**
@@ -78,6 +81,19 @@ public abstract class Screen<T extends Controller> extends JPanel {
 			return _control.peek();
 		} catch(EmptyStackException e) {
 			return null;
+		}
+	}
+	
+	protected class MaxLengthDoc extends PlainDocument {
+		
+		public void insertString(int offset, String text, AttributeSet attributes) {
+			if (text != null && !text.equals(" ") && this.getLength() + text.length() <= 10) {
+				try {
+					super.insertString(offset, text, attributes);
+				} catch (BadLocationException e) {
+					_dt.error("Error when typing name into the text box");
+				}
+			}
 		}
 	}
 	

@@ -123,7 +123,7 @@ public class Dialogue extends Event {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_SPACE){
+		if(e.getKeyCode() == _dt.getInteractKey()){
 			System.out.println("SPACE!");
 			_currIndex++;
 			_gameScreen.repaint();

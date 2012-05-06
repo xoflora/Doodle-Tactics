@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import controller.combatController.RandomBattleAI;
+import controller.combatController.AIController.RandomBattleAI;
 import character.Character;
 import character.Character.CharacterDirection;
 
@@ -145,7 +145,7 @@ public class OverworldController extends GameScreenController {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getKeyCode() == KeyEvent.VK_CONTROL){
+		if(e.getKeyCode() == _dt.getMenuKey()){
 			//do stuff
 			_gameScreen.switchToGameMenu();
 			_dt.getGameMenuScreen().setDefaultTabToUnits();
@@ -157,7 +157,7 @@ public class OverworldController extends GameScreenController {
 			_gameScreen.enterCombat(new HashMap<Character, Tile>());
 		}
 
-		else if(e.getKeyCode() == KeyEvent.VK_SPACE){
+		else if(e.getKeyCode() == _dt.getInteractKey()){
 			System.out.println("Space");
 			Character main = _gameScreen.getMainChar();
 			Tile oldTile = _gameScreen.getTile((int)main.getX(),

@@ -124,6 +124,9 @@ public class Map implements Serializable {
 		_prevYWindowOffset = new Stack<Integer>();
 		_prevXWindowOffset.push(DEFAULT_X_WINDOW_OFFSET);
 		_prevYWindowOffset.push(DEFAULT_Y_WINDOW_OFFSET);
+		
+		System.out.println("Tile 14, 14: X-" +_map[0][0].getX() + " Y- " + _map[14][14].getY());
+
 	}
 
 	/**
@@ -358,11 +361,15 @@ public class Map implements Serializable {
 		System.out.println("Main Char X: " + _mainChar.getX() + " Y:" + _mainChar.getY()); 
 	//	System.out.println("Other CHAR X: " + _activeCharacters.get(1).getX() +
 	//			" Y: " + _activeCharacters.get(1).getY());
-
 		
-		for(int i=0; i<_map.length; i++)
-			for(int j=0; j<_map[0].length; j++)
-				_map[i][j].load(dt);
+		
+		for(int i=0; i<_map.length; i++){
+			for(int j=0; j<_map[0].length; j++){
+						_map[i][j].load(dt);
+			}
+		}
+		
+
 		
 		for(Terrain t: _terrain)
 			t.load(_dt);
@@ -407,7 +414,7 @@ public class Map implements Serializable {
 		try {
 			return _map[x][y];
 		} catch (ArrayIndexOutOfBoundsException e) {
-			System.out.println("ARRAY OUT OF BOUNDS NOO");
+		//	System.out.println("ARRAY OUT OF BOUNDS NOO");
 			return null;
 		}
 	}
@@ -515,7 +522,7 @@ public class Map implements Serializable {
 
 		try {
 			check = getNorth(search);
-			if (check.canMove(SOUTH) || !usePermissions) {
+			if (check != null && (check.canMove(SOUTH) || !usePermissions)) {
 				dist = distances.get(check);
 				compare = distances.get(search) + (useCost ? check.cost() : 1);
 
@@ -535,7 +542,7 @@ public class Map implements Serializable {
 
 		try {
 			check = getEast(search);
-			if (check.canMove(WEST) || !usePermissions) {
+			if (check != null && (check.canMove(WEST) || !usePermissions)) {
 				dist = distances.get(check);
 				compare = distances.get(search) + (useCost ? check.cost() : 1);
 
@@ -555,7 +562,7 @@ public class Map implements Serializable {
 
 		try {
 			check = getSouth(search);
-			if (check.canMove(NORTH) || !usePermissions) {
+			if (check != null && (check.canMove(NORTH) || !usePermissions)) {
 				dist = distances.get(check);
 				compare = distances.get(search) + (useCost ? check.cost() : 1);
 
@@ -575,7 +582,7 @@ public class Map implements Serializable {
 
 		try {
 			check = getWest(search);
-			if (check.canMove(EAST) || !usePermissions) {
+			if (check != null && (check.canMove(EAST) || !usePermissions)) {
 				dist = distances.get(check);
 				compare = distances.get(search) + (useCost ? check.cost() : 1);
 
@@ -984,7 +991,8 @@ public class Map implements Serializable {
 	 * @return true if the tile generates a random battle and false otherwise
 	 */
 	public boolean generatesRandomBattle(Tile t){
-		return _tileToEnemies.containsKey(t);
+	//	System.out.println("checking tile " + t);
+		return _tileToEnemies.get(t) != null && !_tileToEnemies.get(t).isEmpty();
 	}
 	
 	/**
@@ -999,6 +1007,20 @@ public class Map implements Serializable {
 			controllerMap.put(c, _enemyTiles.get(c));
 		
 		_dt.getGameScreen().enterCombat(controllerMap);
+	}
+	
+	/**
+	 * indicates that a random battle has been cleared by removing it from this map
+	 * @param c
+	 */
+	public void removeRandomBattle(Character c) {
+		System.out.println("lulz");
+		for (Tile t : _enemyToTiles.remove(c)) {
+		//	System.out.print(t + "\t");
+		/*	System.out.println(*/_tileToEnemies.get(t).remove(c)/*)*/;
+		}
+		System.out.println(_enemyToTiles.get(c));
+		_enemyTiles.remove(c);
 	}
 	
 	/**

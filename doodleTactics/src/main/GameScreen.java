@@ -24,7 +24,8 @@ import controller.GameScreenController;
 import controller.OverworldController;
 import controller.combatController.CombatController;
 import controller.combatController.CombatOrchestrator;
-import controller.combatController.RandomBattleAI;
+import controller.combatController.CombatWindow;
+import controller.combatController.AIController.RandomBattleAI;
 
 import character.Archer;
 import character.Character;
@@ -70,6 +71,8 @@ public class GameScreen extends Screen<GameScreenController> {
 	
 	private int _xWindowOffset;
 	private int _yWindowOffset;
+	
+	private CombatWindow _popUpCombat;
 
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
@@ -89,6 +92,8 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 		_xWindowOffset = 0;
 		_yWindowOffset = 0;
+		
+		_popUpCombat = new CombatWindow(this, dt);
 
 		this.repaint();
 	}
@@ -168,8 +173,8 @@ public class GameScreen extends Screen<GameScreenController> {
 			//Store XRef and YRef
 			Map prevMap = _currMap;
 			if(prevMap != null){
-				prevMap.setPrevXRef(_xRef);
-				prevMap.setPrevYRef(_yRef);
+				//prevMap.setPrevXRef(_xRef);
+				//prevMap.setPrevYRef(_yRef);
 				//Remove references to previous randomBattle
 				
 				
@@ -182,8 +187,8 @@ public class GameScreen extends Screen<GameScreenController> {
 
 
 			_currMap = map;
-			_xRef = _currMap.getPrevXRef();
-			_yRef = _currMap.getPrevYRef();
+			//_xRef = _currMap.getPrevXRef();
+			//_yRef = _currMap.getPrevYRef();
 			
 			_xWindowOffset = _currMap.getPrevXWindowOffset();
 			_yWindowOffset = _currMap.getPrevYWindowOffset();
@@ -532,6 +537,10 @@ public class GameScreen extends Screen<GameScreenController> {
 			_menuQueue.add(m);
 		}
 	}
+	
+	public CombatWindow getPopUpCombat() {
+		return _popUpCombat;
+	}
 
 	/**
 	 * removes a menu item
@@ -633,6 +642,8 @@ public class GameScreen extends Screen<GameScreenController> {
 		//		m.setSize(65, 50);
 		//		m.paint((Graphics2D) g,m.getImage());
 		//		_currentCharacter = m;
+		
+
 
 	}
 
@@ -731,11 +742,14 @@ public class GameScreen extends Screen<GameScreenController> {
 
 
 	public void saveGame(String filename){
+		String filepath =  "src/tests/data/" + filename;
 		System.out.println("Saving game!");
 		FileOutputStream fos;
 		ObjectOutputStream out;
 
 		//Store XRef and YRef
+		System.out.println("Prev X Win Offset: " + _xWindowOffset);
+		System.out.println("Prev Y Win Offset: " + _yWindowOffset);
 		_currMap.setPrevXWindowOffset(_xWindowOffset);
 		_currMap.setPrevYWindowOffset(_yWindowOffset);
 		System.out.println("MAIN CHAR X: " + _currMap.getMainCharacter().getX() +
@@ -744,15 +758,16 @@ public class GameScreen extends Screen<GameScreenController> {
 	//			" Y: " + _currMap.getCharactersToDisplay().get(1).getY());
 		
 		
-		_dt.addSavedGame(filename, filename);
+		_dt.addSavedGame(filename, filepath);
 		writeFilepathsFile();
 		try {
-			fos = new FileOutputStream(filename);
+			fos = new FileOutputStream(filepath);
 			out = new ObjectOutputStream(fos);
 			out.writeObject(_mapCache);
 			out.writeObject(_currMap);
 			out.writeObject(_dt.getCharacterMap());
 			out.writeObject(_dt.getParty());
+			out.writeObject(_dt.getGameMenuScreen().getKeyCodes());
 			out.writeInt(_xWindowOffset);
 			out.writeInt(_yWindowOffset);
 			out.close();
@@ -791,6 +806,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		System.out.println("Loading game!");
 		FileInputStream fis;
 		ObjectInputStream in;
+
 		try {
 			fis = new FileInputStream(filepath);
 			in = new ObjectInputStream(fis);
@@ -798,9 +814,13 @@ public class GameScreen extends Screen<GameScreenController> {
 			_currMap = (Map) in.readObject();
 			_dt.setCharacterMap((HashMap<String,Character>) in.readObject());
 			_dt.setParty((List<Character>) in.readObject());
+			_dt.getGameMenuScreen().load((int[]) in.readObject());
 			_xWindowOffset  =in.readInt();
 			_yWindowOffset = in.readInt();
-			
+			//Load XRef and YRef
+			System.out.println("X Win Offset: " + _xWindowOffset);
+			System.out.println("Y Win Offset: " + _yWindowOffset);
+
 			//Reload all party characters
 			for(Character c : _dt.getParty())
 				c.load(_dt);
@@ -811,9 +831,6 @@ public class GameScreen extends Screen<GameScreenController> {
 				Map m = _mapCache.get(path);
 				m.load(_dt);
 			}
-			
-			
-		//	setMap(path, _currMap.getMainCharacter().getX(), _currMap.getMainCharacter().getY());
 			
 			_terrainToPaint = _currMap.getTerrain();
 		} catch (IOException e) {
