@@ -174,7 +174,7 @@ public class CombatOrchestrator extends GameScreenController {
 	 * ends the combat with the player defeated
 	 */
 	private void defeat() {
-		
+		System.out.println("PLAYER LOSES");
 	}
 
 	/**

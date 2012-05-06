@@ -391,10 +391,11 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		if (_pool != null)
 			
 			// perform doodle combat curtain animation
-			new Thread(new CurtainTimer(_doodleCombat,_curtain,-10,5)).start();
-
 			_dt.getGameScreen().addMenuItem(_curtain);
 			_dt.getGameScreen().addMenuItem(_doodleCombat);
+			
+			new Thread(new CurtainTimer(_doodleCombat,_curtain,-10,5)).start();
+
 			_curtain.setVisible(true);
 			_doodleCombat.setVisible(true);
 	}
