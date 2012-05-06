@@ -1,19 +1,13 @@
 package character;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import javax.swing.JPanel;
-
-import event.InvalidEventException;
-
 import main.DoodleTactics;
+import main.GameScreen;
 
 public class Archer extends Character{
 
 
 
-	public Archer(DoodleTactics dt, JPanel container, String profile, String left, String right, String up, String down, String name,double x, double y){
+	public Archer(DoodleTactics dt, GameScreen container, String profile, String left, String right, String up, String down, String name,double x, double y){
 		super(dt,container, profile, left, right, up, down, name,x,y);
 		_BASE_STATS[STRENGTH] = 7;
 		_BASE_STATS[DEFENSE] = 5;
@@ -27,7 +21,7 @@ public class Archer extends Character{
 	}
 
 	@Override
-	public CharacterType getChararacterType() {
+	public CharacterType getCharacterType() {
 		return CharacterType.ARCHER;
 	}
 }

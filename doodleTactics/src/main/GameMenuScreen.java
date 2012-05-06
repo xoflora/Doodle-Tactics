@@ -1,7 +1,11 @@
 package main;
 
+import items.Cuirass;
+import items.Footgear;
 import items.Item;
 import items.ItemException;
+import items.Shield;
+import items.Weapon;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -685,22 +689,38 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				}
 			}
 			if (isEquipped) {
-				unequipButton _unequip = new unequipButton(this, _listItem, _listItemHovered, _dt);
-				_unequip.addLabel("Unequip from " + character.getName());
-				_unequip.setSize(labelWidth, labelHeight);
-				_unequip.setVisible(true);
-				_unequip.setLocation(_itemOptBoxX, _itemOptBoxY);
-				_buttonToChar.put(_unequip, character);
-				_buttonList.add(_unequip);
+				if (character.getInventory().size() != character.getCapacity()) {
+					unequipButton _unequip = new unequipButton(this, _listItem, _listItemHovered, _dt);
+					_unequip.addLabel("Unequip from " + character.getName());
+					_unequip.setSize(labelWidth, labelHeight);
+					_unequip.setVisible(true);
+					_unequip.setLocation(_itemOptBoxX, _itemOptBoxY);
+					_buttonToChar.put(_unequip, character);
+					_buttonList.add(_unequip);
+				}
 			}
 			else {
-				equipButton _equip = new equipButton(this, _listItem, _listItemHovered, _dt);
-				_equip.addLabel("Equip to " + character.getName());
-				_equip.setSize(labelWidth, labelHeight);
-				_equip.setVisible(true);
-				_equip.setLocation(_itemOptBoxX, _itemOptBoxY);
-				_buttonToChar.put(_equip, character);
-				_buttonList.add(_equip);
+				if (_selectedItem.isWeapon()) {
+					Weapon _selectedWeapon = (Weapon) _selectedItem;
+					if (_selectedWeapon.canBeEquipped(character)) {
+						equipButton _equip = new equipButton(this, _listItem, _listItemHovered, _dt);
+						_equip.addLabel("Equip to " + character.getName());
+						_equip.setSize(labelWidth, labelHeight);
+						_equip.setVisible(true);
+						_equip.setLocation(_itemOptBoxX, _itemOptBoxY);
+						_buttonToChar.put(_equip, character);
+						_buttonList.add(_equip);
+					}
+				}
+				else {
+					equipButton _equip = new equipButton(this, _listItem, _listItemHovered, _dt);
+					_equip.addLabel("Equip to " + character.getName());
+					_equip.setSize(labelWidth, labelHeight);
+					_equip.setVisible(true);
+					_equip.setLocation(_itemOptBoxX, _itemOptBoxY);
+					_buttonToChar.put(_equip, character);
+					_buttonList.add(_equip);
+				}
 			}
 		}
 		else {
@@ -794,8 +814,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private class CharInfo extends JPanel {
 		//represents a box that will display all the characters current stats, items, inventory, etc.
 		public CharInfo(Screen screen, Character chrter) {
-			
-			System.out.println("THE CHARACTER: " + chrter);
 			
 			this.setLayout(new GridBagLayout());
 			GridBagConstraints constraint = new GridBagConstraints();
@@ -1291,7 +1309,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				_showingItemOptions = false;
 				GameMenuScreen.this.repaint();
 			} catch (ItemException e) {
-				System.out.println("Something bad happened in the Game Menu Screen");
+				_dt.error("The item you tried to access does not exist.");
 			}
 		}
 
@@ -1307,7 +1325,72 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 
 		public void activate(optionButton button) {
-
+			try {
+				if (_selectedItem.isWeapon()) {
+					Weapon _selectedWeapon = (Weapon) _selectedItem;
+					Weapon oldWeapon = _selectedChar.changeWeapon(_selectedWeapon);
+					_selectedChar.removeFromInventory(_selectedItem);
+					if (oldWeapon != null) {
+						_selectedChar.addToInventory(oldWeapon);
+					}
+				}
+				else if (_selectedItem.isCuirass()) {
+					Cuirass _selectedCuirass = (Cuirass) _selectedItem;
+					Cuirass oldCuirass = _selectedChar.changeCuirass(_selectedCuirass);
+					_selectedChar.removeFromInventory(_selectedCuirass);
+					if (oldCuirass != null) {
+						_selectedChar.addToInventory(oldCuirass);
+					}
+				}
+				else if (_selectedItem.isShield()) {
+					Shield _selectedShield = (Shield) _selectedItem;
+					Shield oldShield = _selectedChar.changeShield(_selectedShield);
+					_selectedChar.removeFromInventory(_selectedShield);
+					if (oldShield != null) {
+						_selectedChar.addToInventory(oldShield);
+					}
+				}
+				else if (_selectedItem.isFootgear()) {
+					Footgear _selectedFootgear = (Footgear) _selectedItem;
+					Footgear oldFootgear = _selectedChar.changeFootgear(_selectedFootgear);
+					_selectedChar.removeFromInventory(_selectedFootgear);
+					if (oldFootgear != null) {
+						_selectedChar.addToInventory(oldFootgear);
+					}
+				}
+				else {
+					_dt.error("Error: Tried to equip a non-equipment item.");
+				}
+				GameMenuScreen.this.setDefaultTabToUnits();
+				System.out.println("set to false");
+				_showingItemOptions = false;
+				GameMenuScreen.this.repaint();
+			} catch (ItemException e) {
+				_dt.error("The item you tried to access does not exist.");
+			}
+//			try {
+//				if (_selectedChar.getWeapon().equals(_selectedItem)) {
+//					System.out.println("WAHH");
+//					_selectedChar.addToInventory(_selectedChar.getWeapon());
+//					_selectedChar.removeWeapon();
+//				}
+//				else if (_selectedChar.getCuirass().equals(_selectedItem)) {
+//					_selectedChar.addToInventory(_selectedChar.getWeapon());
+//					_selectedChar.removeCuirass();
+//				}
+//				else if (_selectedChar.getShield().equals(_selectedItem)) {
+//					_selectedChar.removeShield();
+//				}
+//				else if (_selectedChar.getFootgear().equals(_selectedItem)){
+//					_selectedChar.removeFootgear();
+//				}
+//				GameMenuScreen.this.setDefaultTabToUnits();
+//				System.out.println("set to false");
+//				_showingItemOptions = false;
+//				GameMenuScreen.this.repaint();
+//				} catch (ItemException e) {
+//					_dt.error("The item you are trying to access does not exist.");
+//			}
 		}
 	}
 

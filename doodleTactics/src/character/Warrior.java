@@ -1,8 +1,7 @@
 package character;
 
-import javax.swing.JPanel;
-
 import main.DoodleTactics;
+import main.GameScreen;
 
 public class Warrior extends Character{
 
@@ -11,7 +10,7 @@ public class Warrior extends Character{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Warrior(DoodleTactics dt, JPanel container,  String profile, String left, String right, String up, String down, String name, double x, double y){
+	public Warrior(DoodleTactics dt, GameScreen container,  String profile, String left, String right, String up, String down, String name, double x, double y){
 		super(dt,container, profile, left, right, up, down, name,x,y);
 		
 		//set base stats
@@ -27,7 +26,7 @@ public class Warrior extends Character{
 	}
 
 	@Override
-	public CharacterType getChararacterType() {
+	public CharacterType getCharacterType() {
 		// TODO Auto-generated method stub
 		return CharacterType.WARRIOR;
 	}

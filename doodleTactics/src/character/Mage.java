@@ -1,12 +1,11 @@
 package character;
 
-import javax.swing.JPanel;
-
 import main.DoodleTactics;
+import main.GameScreen;
 
 public class Mage extends Character{
 	
-	public Mage(DoodleTactics dt, JPanel container, String profile, String left, String right, String up, String down, String name,double x, double y){
+	public Mage(DoodleTactics dt, GameScreen container, String profile, String left, String right, String up, String down, String name,double x, double y){
 		super(dt,container, profile, left, right, up, down, name,x,y);
 		
 		//set base stats
@@ -22,7 +21,7 @@ public class Mage extends Character{
 
 	}
 
-	public CharacterType getChararacterType() {
+	public CharacterType getCharacterType() {
 		return CharacterType.MAGE;
 	}
 }

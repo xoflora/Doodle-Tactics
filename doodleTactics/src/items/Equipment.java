@@ -9,8 +9,10 @@ import character.Character;
 public abstract class Equipment extends Item{
 	
 	
+	
 	public Equipment(DoodleTactics dt, String imagePath, String name) {
 		super(dt,imagePath, name);
+		_isEquip = true;
 	}
 
 	/**

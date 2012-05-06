@@ -434,15 +434,16 @@ public class GameScreen extends Screen<GameScreenController> {
 		_yWindowOffset -= y;
 		
 	//	_currentCharacter.updateLocation(x, y);
+		//update character locations
+		for(Character c : getController().getCharactersToDisplay())
+			c.updateLocation(x, y);
 		
 		//update map locations
 		for(int i = 0; i < MAP_WIDTH; i++)
 			for(int j = 0; j < MAP_HEIGHT; j++)
 				_currMap.getTile(i, j).updateLocation(x, y);
 		
-		//update character locations
-		for(Character c : getController().getCharactersToDisplay())
-			c.updateLocation(x, y);
+
 		
 		//update terrain location
 		for (Terrain t : _terrainToPaint)

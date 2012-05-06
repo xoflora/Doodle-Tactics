@@ -246,6 +246,15 @@ public class DoodleTactics extends JFrame {
 		_allChars.put(name, c);
 	}
 	
+	/**
+	 * Get Character from Map
+	 * @param - A character's name
+	 * @return - The Character
+	 */
+	public Character getCharacter(String name){
+		return _allChars.get(name);
+	}
+	
 	public GameScreen getGameScreen() {
 		return _game;
 	}

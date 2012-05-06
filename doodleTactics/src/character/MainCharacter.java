@@ -1,14 +1,8 @@
 package character;
 
-import java.awt.image.BufferedImage;
-
-import javax.swing.JPanel;
-
-import character.Character.CharacterType;
-
 import main.DoodleTactics;
 import main.GameOverScreen;
-import map.Tile;
+import main.GameScreen;
 
 public class MainCharacter extends Character {
 	
@@ -23,7 +17,7 @@ public class MainCharacter extends Character {
 	
 	private CharacterType _currType = CharacterType.GENERAL;
 	
-	public MainCharacter(DoodleTactics dt, JPanel container, String profile, String left, String right, String up, String down, String name, int x, int y){
+	public MainCharacter(DoodleTactics dt, GameScreen container, String profile, String left, String right, String up, String down, String name, int x, int y){
 		super(dt,container, profile, left, right, up, down, name, x , y);
 		_tileX = x;
 		_tileY = y;
@@ -59,7 +53,7 @@ public class MainCharacter extends Character {
 	}
 
 	@Override
-	public CharacterType getChararacterType() {
+	public CharacterType getCharacterType() {
 		// TODO Auto-generated method stub
 		return _currType;
 	}

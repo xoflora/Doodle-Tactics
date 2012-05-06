@@ -241,15 +241,14 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 					}
 				}
 				else if (getState() == State.CHARACTER_OPTION_MENU) {
-				//	_pool.removeCharacter(_selectedCharacter);
-				//	clear();
-				//	_state = State.START;
 					if (_characterAttackRange.contains(t) && isEnemy(t.getOccupant())) {
-						attack(_selectedCharacter, t.getOccupant());
+						clearPath();
+						clearMovementRange();
+						clearPlayerAttackRange();
 						_pool.removeCharacter(_selectedCharacter);
-						
-						clear();
-						characterWait();
+						_hasMoved.put(_selectedCharacter, true);
+						attack(_selectedCharacter, t.getOccupant());
+						System.out.println(getState());
 					}
 				}
 			}
@@ -403,8 +402,11 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void release() {
 		super.release();
 		
-		new Thread(new SlideTimer(_playerPhase,-1050)).start();
-		clear();
+		System.out.println(getState());
+		if (getState() != State.ATTACKING) {
+			new Thread(new SlideTimer(_playerPhase,-1050)).start();
+			clear();
+		}
 	}
 
 	@Override
@@ -413,13 +415,24 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 */
 	public void take() {
 		super.take();
-	//	_gameScreen.panToCoordinate(_gameScreen.getMainChar().getX(),
-	//			_gameScreen.getMainChar().getY());
 		
-		_playerPhase.setLocation(1050,_playerPhase.getY());
-		new Thread(new SlideTimer(_playerPhase,250)).start();
-
-		initialize();
+		if (getState() != State.ATTACKING) {
+			_gameScreen.panToCoordinate(_gameScreen.getMainChar().getX(),
+					_gameScreen.getMainChar().getY());
+			_playerPhase.setLocation(1050,_playerPhase.getY());
+			new Thread(new SlideTimer(_playerPhase,250)).start();
+			
+			initialize();
+		}
+		else {
+			clear();
+			
+			if (_pool.isEmpty()) {
+				_pool.setInUse(false);
+				_pool = null;
+				_gameScreen.popControl();
+			}
+		}
 	}
 
 	@Override
@@ -505,7 +518,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		if (action == ActionType.WAIT) {
 			_pool.removeCharacter(_selectedCharacter);
 			clear();
-			System.out.println(_pool.getNumUnits());
+
 			if (_pool.isEmpty()) {
 				_pool.setInUse(false);
 				_pool = null;
