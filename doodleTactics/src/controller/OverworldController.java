@@ -39,7 +39,7 @@ public class OverworldController extends GameScreenController {
 	private class RandomMoveTimer extends Timer {
 
 		public RandomMoveTimer() {
-			super(30000, null);
+			super(1000, null);
 			this.addActionListener(new RandomMoveListener());
 		}
 
@@ -52,7 +52,7 @@ public class OverworldController extends GameScreenController {
 					for(Character c : _gameScreen.getMap().getCharactersToDisplay()) {
 
 						// provided this character is not the main character
-						if(! c.equals(_gameScreen.getMainChar()) && c.getName().equals("Thighs")) {
+						if(! c.equals(_gameScreen.getMainChar())) {
 
 							System.out.println("character at " + c.getX() + ", " + c.getY());
 
@@ -132,14 +132,14 @@ public class OverworldController extends GameScreenController {
 	public void take() {
 		super.take();
 		// TODO : center the map around the main character
-		//_randomMoveTimer.start();
+		_randomMoveTimer.start();
 	}
 
 	@Override
 	public void release() {
 		super.release();
 		// TODO Auto-generated method stub
-		//_randomMoveTimer.stop();
+		_randomMoveTimer.stop();
 	}
 
 	@Override
