@@ -6,6 +6,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+
+import controller.combatController.CombatController;
+import controller.combatController.CombatOrchestrator;
+import controller.combatController.AIController.AICombatController;
 
 import main.DoodleTactics;
 import map.Tile;
@@ -17,8 +22,14 @@ import character.Warrior;
 
 public class CombatEvent extends Event{
 
-	public CombatEvent(DoodleTactics dt, boolean hasOccured) {
+	private CombatOrchestrator _co;
+	private WinCondition _winConditions;
+	private int _roundsToWin;
+	public CombatEvent(DoodleTactics dt, boolean hasOccured,WinCondition type, int numRounds, CombatOrchestrator co) {
 		super(dt, hasOccured);
+		_co = co;
+		_winConditions = type;
+		_roundsToWin = numRounds;
 	}
 
 
@@ -41,17 +52,19 @@ public class CombatEvent extends Event{
 	 * File:
 	 * <Win Condition, Root or Survive> 
 	 */
-	public CombatEvent parseEvent(String filepath) throws InvalidEventException{
-		WinCondition wc;
-		LinkedList<Character> _combatants;
+	public static CombatEvent parseEvent(DoodleTactics dt,String filepath) throws InvalidEventException{
+		WinCondition wc = null;
 		int numUnits;
+		HashMap<String,FactionType> groupNameToType = new HashMap<String,FactionType>();
+		HashMap<String,HashMap<Character,Tile>> nameToCharacters = new HashMap<String,HashMap<Character,Tile>>();
+		int numRounds = -1;
+
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filepath));
 			numUnits = Integer.parseInt(br.readLine());
 			String line = br.readLine();
 
 			//Check Win Conditions
-			int numRounds = -1;
 			if(line.startsWith("root")){
 				wc = WinCondition.ROOT;
 			} else if(line.startsWith("survive")){
@@ -60,8 +73,6 @@ public class CombatEvent extends Event{
 			}
 
 			//Get faction types
-			HashMap<String,FactionType> groupNameToType = new HashMap<String,FactionType>();
-			HashMap<String,HashMap<Character,Tile>> nameToCharacters = new HashMap<String,HashMap<Character,Tile>>();
 			String[] split = br.readLine().split(",");
 			while(split.length == 2){
 				groupNameToType.put(split[1], getFactionType(split[0]));
@@ -78,43 +89,60 @@ public class CombatEvent extends Event{
 				//faction,name,tileX,tileY
 				if(split.length == 4){
 					String group = split[0];
-					Character toAdd = _dt.getCharacter(split[1]);
-					Tile t = _dt.getGameScreen().getMap().getTile(Integer.parseInt(split[2]), Integer.parseInt(split[3]));
+					Character toAdd = dt.getCharacter(split[1]);
+					Tile t = dt.getGameScreen().getMap().getTile(Integer.parseInt(split[2]), Integer.parseInt(split[3]));
 					nameToCharacters.get(group).put(toAdd, t);
-				} else if(split.length == 7){
+				} else if(split.length == 8){
 					String group = split[0];
 					String type = split[0];
 					int x = Integer.parseInt(split[7]);
 					int y = Integer.parseInt(split[8]);
 					Character c;
 					if(type.equalsIgnoreCase("mage"))
-						c = new Mage(_dt,_dt.getGameScreen(),split[2],split[3],split[4],split[5],split[6],"Mage",x,y);
+						c = new Mage(dt,dt.getGameScreen(),split[2],split[3],split[4],split[5],split[6],"Mage",x,y);
 					else if(type.equalsIgnoreCase("warrior"))
-						c = new Warrior(_dt,_dt.getGameScreen(),split[2],split[3],split[4],split[5],split[6],"Warrior",x,y);
+						c = new Warrior(dt,dt.getGameScreen(),split[2],split[3],split[4],split[5],split[6],"Warrior",x,y);
 					else if(type.equalsIgnoreCase("archer"))
-						c = new Archer(_dt,_dt.getGameScreen(),split[2],split[3],split[4],split[5],split[6],"Archer",x,y);
+						c = new Archer(dt,dt.getGameScreen(),split[2],split[3],split[4],split[5],split[6],"Archer",x,y);
 					else if(type.equalsIgnoreCase("thief"))
-						c = new Thief(_dt,_dt.getGameScreen(),split[2],split[3],split[4],split[5],split[6],"Mage",x,y);
+						c = new Thief(dt,dt.getGameScreen(),split[2],split[3],split[4],split[5],split[6],"Mage",x,y);
 					else
 						throw new InvalidEventException("CombatEvent- expected Character class, received: " + type);
-					Tile t = _dt.getGameScreen().getMap().getTile(x, y);
+					Tile t = dt.getGameScreen().getMap().getTile(x, y);
 					nameToCharacters.get(group).put(c, t);
-				} else
+				} else{
 					throw new InvalidEventException("CombatEvent- incorrect number of items on line");
+				}
 				line = br.readLine();
 			}
 		} catch (FileNotFoundException e) {
 			throw new InvalidEventException(filepath + "could not be opened");
 		} catch (IOException e) {
 			throw new InvalidEventException("Something went wrong while reading " + filepath);
-
 		}
-
-		return null;
+		
+		
+		
+		//Create CombatControllers
+		List<CombatController> enemies = new LinkedList<CombatController>();
+		List<CombatController> partners = new LinkedList<CombatController>();
+		List<CombatController> neutrals = new LinkedList<CombatController>();
+		
+		
+		for(String s: nameToCharacters.keySet()){
+			AICombatController toAdd = new AICombatController(dt, nameToCharacters.get(s));
+			if(groupNameToType.get(s) == FactionType.Enemy)
+				enemies.add(toAdd);
+			else if(groupNameToType.get(s) == FactionType.Neutral)
+				neutrals.add(toAdd);
+			else
+				partners.add(toAdd);
+		}
+		return new CombatEvent(dt,false, wc,numRounds, new CombatOrchestrator(dt,enemies,partners,neutrals,numUnits));
 	}
 
 
-	public FactionType getFactionType(String s){
+	public static FactionType getFactionType(String s){
 		if(s.equalsIgnoreCase("enemy"))
 			return FactionType.Enemy;
 		else if(s.equalsIgnoreCase("partner"))
@@ -123,6 +151,12 @@ public class CombatEvent extends Event{
 			return FactionType.Neutral;
 		else
 			return null;
+	}
+	
+	@Override
+	public void take(){
+		System.out.println("COMBAT EVENT!");
+		_gameScreen.pushControl(_co);
 	}
 
 

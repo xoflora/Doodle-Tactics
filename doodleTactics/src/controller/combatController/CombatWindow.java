@@ -1,9 +1,11 @@
 package controller.combatController;
 
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -19,22 +21,24 @@ import graphics.Rectangle;
 
 public class CombatWindow extends MenuItem {
 
-	charImage _attackerImg, _victimImg;
-	Character _attackerChar, _victimChar;
+	protected charImage _attackerImg, _victimImg;
+	private Character _attackerChar, _victimChar;
 
-	CombatWindowController _c;
+	private CombatWindowController _c;
 
-	moveUpTimer _moveUpTimer;
-	GameScreen _gs;
-	boolean _isAnimating;
-	int _attackerX, _battlersY, _victimX, _victimY;
+	private moveUpTimer _moveUpTimer;
+	private attackTimer _attackTimer;
+	private GameScreen _gs;
+	private boolean _isAnimating;
+	private int _attackerX, _battlersY = 0, _victimX, _victimY;
 	
 	public CombatWindow(JPanel container, BufferedImage defaultPic, BufferedImage hoverPic, DoodleTactics dt, int priority) {
 		super(container, defaultPic, hoverPic, dt, priority);
 		this.setLocation(0, 17*Tile.TILE_SIZE);
 		_gs = (GameScreen) container;
 		_gs.addMenuItem(this);
-		_moveUpTimer = new moveUpTimer();
+		_attackTimer = new attackTimer(this);
+		_moveUpTimer = new moveUpTimer(_attackTimer);
 		
 		_attackerImg = null;
 		_victimImg = null;
@@ -60,108 +64,196 @@ public class CombatWindow extends MenuItem {
 		this.setLocation(0, 17*Tile.TILE_SIZE);
 		_battlersY = (17*Tile.TILE_SIZE)+215;
 		this.setVisible(true);
+		_attackerX = 700;
+		_moveUpTimer.getListener().setMoveOffset(-40);
 		_moveUpTimer.start();
 	}
 	
 	public void paint(Graphics2D brush, BufferedImage img) {
 		super.paint(brush, img);
 		if (_isAnimating) {
-			brush.drawImage(_attackerImg.getImage(), 700, _battlersY, _gs);
-			brush.drawImage(_victimImg.getImage(), 400, _battlersY, _gs);
+			brush.drawImage(_attackerImg.getImage(), (int)_attackerImg.getX(), (int)_attackerImg.getY(), _gs);
+			brush.drawImage(_victimImg.getImage(), (int)_victimImg.getX(), (int)_victimImg.getY(), _gs);
 		}
+	}
+	
+	public moveUpTimer getMoveUpTimer() {
+		return _moveUpTimer;
 	}
 	
 	private class moveUpTimer extends Timer {
 		
-		public moveUpTimer() {
-			super(1, null);
-			this.addActionListener(new moveUpListener(this));
+		moveUpListener _listener;
+		attackTimer _attackTimer;
+		
+		public moveUpTimer(attackTimer attackTimer) {
+			super(20, null);
+			_attackTimer = attackTimer;
+			_listener = new moveUpListener(this);
+			this.addActionListener(_listener);
+		}
+		
+		public moveUpListener getListener() {
+			return _listener;
+		}
+		
+		public attackTimer getAttackTimer() {
+			return _attackTimer;
 		}
 		
 		private class moveUpListener implements ActionListener {
 
-			int count = 0;
-			Timer _timer;
+			private int count = 0, moveOffset = 0;
+			private Timer _timer;
 			
 			public moveUpListener(Timer timer) {
 				_timer = timer;
 			}
 			
+			public void setMoveOffset(int offset) {
+				moveOffset = offset;
+			}
+			
 			public void actionPerformed(ActionEvent e) {
-				if (count < 8) {
-					CombatWindow.this.setLocation(0, CombatWindow.this.getY()-40);
-					_battlersY = _battlersY-40;
-					count++;
-					if (count == 8) {
-//						CombatWindow.this.setLocation(0, CombatWindow.this.getY()-5);
-					}
+				CombatWindow.this.setLocation(0, CombatWindow.this.getY()+moveOffset);
+				_attackerImg.setLocation(_attackerX, _battlersY+moveOffset);
+				_victimImg.setLocation(400, _battlersY+moveOffset);
+				_battlersY = _battlersY+moveOffset;
+				count++;
+				_gs.repaint();
+				if (count == 8) {
+					count = 0;
+					_timer.stop();
+//					_c.done();
+					System.out.println("Stopped the timer");
 					_gs.repaint();
-				}
-				else {
-//					_attackerChar.getCharacterType() == CharacterType.WARRIOR || _attackerChar.getCharacterType() == CharacterType.
-//
-//								Character.this.setLocation((Character.this.getX() + (_deltaX*Tile.TILE_SIZE / _numSteps)), Character.this.getY() + (_deltaY*Tile.TILE_SIZE / _numSteps));
-//
-//								switch(_cnt) {
-//								case 0:
-//									Character.this.setRotation(-10);
-//									break;
-//								case 1:
-//									Character.this.setRotation(-5);
-//									break;
-//								case 2:
-//									Character.this.setRotation(0);
-//									break;
-//								case 3:
-//									Character.this.setRotation(5);
-//									break;
-//								case 4:
-//									Character.this.setRotation(10);
-//									break;
-//								case 5:
-//									Character.this.setRotation(0);
-//									break;
-//								}
-//
-//								_container.repaint();
-//
-//								_cnt+=1;
-//
-//								/* if we've incremented numSteps times, then we should stop */
-//								/* otherwise, continue incrementing */
-//								if (_cnt == _numSteps) {
-//									_timer.stop();
-//									Character.this._isAnimating = false;
-//									System.out.println("---END MOVE TO TILE---");
-//								}
-//
-//								_container.repaint();
-//							}
-//						}
+					_attackerX = 700;
+					if (moveOffset == -40) {
+						moveUpTimer.this.getAttackTimer().start();
+					}
+//					try {
+//						_attackerX= 700;
+//						_attackTimer.start();
+//						Thread.sleep(1000);
+////						_attackerChar.attack(_victimChar, new Random());
+//						count++;
+//					} catch (InterruptedException e1) {
+//						System.out.println("THREAD ISSUES");
 //					}
-					if (count == 8) {
-						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e1) {
-							System.out.println("THREAD ISSUES");
-						}
-					}
-					CombatWindow.this.setLocation(0, CombatWindow.this.getY()+40);
-					_battlersY = _battlersY+40;
-					count++;
-					if (count == 16) {
-//						CombatWindow.this.setLocation(0, CombatWindow.this.getY()+5);
-						count = 0;
-						_isAnimating = false;
-						_timer.stop();
-						_c.done();
-					}
-					_gs.repaint();
 				}
+//				CombatWindow.this.setLocation(0, CombatWindow.this.getY()+40);
+//				_attackerImg.setLocation(700, _battlersY+40);
+//				_victimImg.setLocation(400, _battlersY+40);
+//				_battlersY = _battlersY+40;
+//				count++;
+//				if (count == 16) {
+//		//			CombatWindow.this.setLocation(0, CombatWindow.this.getY()+5);
+//					count = 0;
+//					_isAnimating = false;
+//					_timer.stop();
+//					_c.done();
+//				}
+//				_gs.repaint();
 			}
 		}
 	}
 	
+	private class attackTimer extends Timer {
+		
+		CombatWindow _window;
+		
+		public attackTimer(CombatWindow window) {
+			super(100, null);
+			_window = window;
+			this.addActionListener(new attackListener(this));
+		}
+		
+		private class attackListener implements ActionListener {
+			
+			private Timer _timer;
+			private int count = 0;
+			
+			public attackListener(Timer timer) {
+				_timer = timer;
+			}
+
+			public void actionPerformed(ActionEvent e) {
+				if (_attackerChar.getCharacterType() == CharacterType.WARRIOR || _attackerChar.getCharacterType() == CharacterType.THIEF) {
+//					System.out.println("ANIMATING THE ATTACK");
+					if (count < 6) {
+						_attackerImg.setLocation(_attackerX-40, _battlersY);
+						_victimImg.setLocation(400, _battlersY);
+						_attackerX = _attackerX-40;
+						switch(count) {
+							case 0:
+								_attackerImg.setRotation(-10);
+								break;
+							case 1:
+								_attackerImg.setRotation(-5);
+								break;
+							case 2:
+								_attackerImg.setRotation(0);
+								break;
+							case 3:
+								_attackerImg.setRotation(5);
+								break;
+							case 4:
+								_attackerImg.setRotation(10);
+								break;
+							case 6:
+								_attackerImg.setRotation(0);
+								break;
+						}
+						count++;
+						_gs.repaint();
+					}
+					else {
+						count = 0;
+						_timer.stop();
+						_window.getMoveUpTimer().getListener().setMoveOffset(40);
+						_window.getMoveUpTimer().start();
+					}
+				}
+				else {
+					if (count < 6) {
+						_attackerImg.setLocation(_attackerX-20, _battlersY);
+						_victimImg.setLocation(400, _battlersY);
+						_attackerX = _attackerX-20;
+						switch(count) {
+							case 0:
+								_attackerImg.setRotation(-10);
+								break;
+							case 1:
+								_attackerImg.setRotation(-5);
+								break;
+							case 2:
+								_attackerImg.setRotation(0);
+								break;
+							case 3:
+								_attackerImg.setRotation(5);
+								break;
+							case 4:
+								_attackerImg.setRotation(10);
+								break;
+							case 6:
+								_attackerImg.setRotation(0);
+								break;
+						}
+						count++;
+						_gs.repaint();
+					}
+					else {
+						count = 0;
+						_timer.stop();
+						_window.getMoveUpTimer().getListener().setMoveOffset(40);
+						_window.getMoveUpTimer().start();
+					}
+				}
+			}
+		}
+	}
+		
+
 	private class charImage extends Rectangle {
 
 		private BufferedImage _image;
@@ -179,5 +271,4 @@ public class CombatWindow extends MenuItem {
 			_image = img;
 		}
 	}
-	
 }
