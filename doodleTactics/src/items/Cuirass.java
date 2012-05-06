@@ -10,6 +10,7 @@ public class Cuirass extends Equipment{
 	
 	public Cuirass(DoodleTactics dt, String imagePath, String name) {
 		super(dt,imagePath, name);
+		_isCuirass = true;
 	}
 
 

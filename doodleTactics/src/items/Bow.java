@@ -19,10 +19,14 @@ public class Bow extends Weapon{
 
 	@Override
 	public boolean canBeEquipped(Character character) {
-		if (character.getChararacterType() == CharacterType.ARCHER) {
+		if (character.getCharacterType() == CharacterType.ARCHER || character.getCharacterType() == CharacterType.GENERAL) {
 			return true;
 		}
 		else return false;
+	}
+
+	public WeaponType getWeaponType() {
+		return WeaponType.BOW;
 	}
 
 

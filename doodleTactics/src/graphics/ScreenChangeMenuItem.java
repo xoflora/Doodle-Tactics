@@ -46,7 +46,6 @@ public class ScreenChangeMenuItem extends MenuItem {
 		pot5.setDescription("A normal healing potion.");
 		Axe axe = new Axe(_dt, "src/graphics/items/key.png", "Shiny Axe");
 		axe.setDescription("An axe");
-		axe.setAsEquip(true);
 		try {
 			_dt.getParty().get(1).addToInventory(potion);
 			_dt.getParty().get(1).updateHP(-10);

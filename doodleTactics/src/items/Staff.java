@@ -15,16 +15,13 @@ public class Staff extends Weapon implements Serializable{
 	}
 
 	public boolean canBeEquipped(Character character) {
-		if (character.getChararacterType() == CharacterType.MAGE) {
+		if (character.getCharacterType() == CharacterType.MAGE || character.getCharacterType() == CharacterType.GENERAL) {
 			return true;
 		}
 		else return false;
 	}
 
-//	@Override
-//	public WeaponType getWeaponType() {
-//		// TODO Auto-generated method stub
-//		return WeaponType.STAFF;
-//	}
-
+	public WeaponType getWeaponType() {
+		return WeaponType.STAFF;
+	}
 }

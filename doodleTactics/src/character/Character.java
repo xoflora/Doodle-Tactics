@@ -551,7 +551,7 @@ public abstract class Character extends Rectangle{
 	/**
 	 * Initializes Current Stats to Base Stats
 	 */
-	protected void initStats(){
+	public void initStats(){
 		for(int i=0; i<NUM_STATS; i++){
 			_currentStats[i] = _BASE_STATS[i];
 		}
@@ -1141,7 +1141,7 @@ public abstract class Character extends Rectangle{
 	
 //	public abstract boolean canEquip(Weapon weapon);
 	
-	public abstract CharacterType getChararacterType();
+	public abstract CharacterType getCharacterType();
 
 	/*	public static void testPreSerialize(){
 		try{

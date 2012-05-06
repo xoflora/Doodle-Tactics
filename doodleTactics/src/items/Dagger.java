@@ -16,14 +16,14 @@ public class Dagger extends Weapon {
 
 	@Override
 	public boolean canBeEquipped(Character character) {
-		if (character.getChararacterType() == CharacterType.THIEF) {
+		if (character.getCharacterType() == CharacterType.THIEF || character.getCharacterType() == CharacterType.GENERAL) {
 			return true;
 		}
 		else return false;
 	}
 
-//	public WeaponType getWeaponType() {
-//		return WeaponType.DAGGER;
-//	}
+	public WeaponType getWeaponType() {
+		return WeaponType.DAGGER;
+	}
 	
 }
