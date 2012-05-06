@@ -606,14 +606,12 @@ public class GameScreen extends Screen<GameScreenController> {
 			//	System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
 
 			// paint all characters and terrains
-			System.out.println("Begin painting chars/terrain");
 			while(!_characterTerrainQueue.isEmpty()) {
 				Rectangle toPaint = _characterTerrainQueue.poll();
 				//		System.out.println("Painted: " + toPaint.getPaintPriority());
 				toPaint.setVisible(true);
 				toPaint.paint(g, toPaint.getImage());				
 			}
-			System.out.println("END painting chars/terrain");
 
 			//print all the menu items
 			List<MenuItem> items = new LinkedList<MenuItem>();

@@ -124,17 +124,27 @@ public class Dialogue extends Event {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == _dt.getInteractKey()){
-			System.out.println("SPACE!");
 			_currIndex++;
 			_gameScreen.repaint();
 
-			if(_currIndex >= _characters.size())
+			if(_currIndex >= _characters.size()){
 				_gameScreen.popControl();
-		}
+				return;
+			}
+						
+			if(_phrases.get(_currIndex).startsWith("http://")){
+				try {
+					Runtime.getRuntime().exec("google-chrome " + _phrases.get(_currIndex));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
 
+		}
 	}
 
 	public void paintNext(Graphics2D brush) {
+		System.out.println("CALLING PAINT NEXT");
 		BufferedImage profileImg = _characters.get(_currIndex).getProfileImage();
 		_profile = new MenuItem(_gameScreen, profileImg,profileImg,_dt,5);
 		_profile.setVisible(true);
@@ -148,13 +158,6 @@ public class Dialogue extends Event {
 		brush.setFont(new Font("M",Font.BOLD,25));
 		brush.setColor(new Color(0,0,1));
 		brush.drawString(_phrases.get(_currIndex), 450,665);
-		if(_phrases.get(_currIndex).startsWith("http://")){
-			try {
-				Runtime.getRuntime().exec("google-chrome " + _phrases.get(_currIndex));
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
 
 	}
 

@@ -10,6 +10,7 @@ public class Shield extends Equipment{
 	
 	public Shield(DoodleTactics dt, String imagePath, String name) {
 		super(dt,imagePath, name);
+		_isShield = true;
 	}
 
 

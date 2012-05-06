@@ -14,12 +14,13 @@ public abstract class Weapon extends Equipment{
 	private double _accuracy;
 	private int _attackPower;
 	
-//	public enum WeaponType {
-//		AXE, BOW, DAGGER, STAFF;
-//	}
+	public enum WeaponType {
+		AXE, BOW, DAGGER, STAFF;
+	}
 	
 	public Weapon(DoodleTactics dt, String imagePath, String name) {
 		super(dt,imagePath, name);
+		_isWeapon = true;
 	}
 	
 	BufferedImage _displayImage;
@@ -46,4 +47,6 @@ public abstract class Weapon extends Equipment{
 	}
 	
 	public abstract boolean canBeEquipped(Character character);
+	
+	public abstract WeaponType getWeaponType();
 }

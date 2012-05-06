@@ -41,29 +41,29 @@ public class RandomBattleAI extends CombatController implements Runnable {
 		
 		PriorityQueue<Action> actions;
 		
-	//	boolean done = false;
-		
 		_current = nextUnit();
 		System.out.println("start state" + getState() + " " + _current);
 		
 		while (_current != null) {
 			synchronized(_current) {
-				if (getState() == State.START) {
+				if (_current != null && getState() == State.START) {
 					setState(State.CHARACTER_SELECTED);
 					actions = new PriorityQueue<Action>();
 
 					for (Tile t : _gameScreen.getMap().getMovementRange(_locations.get(_current),
 							_current.getMovementRange())) {
-						Action[] possible = {/*new AttackAction(this, toMove, t), new ItemAction(this, toMove, t),*/
+						Action[] possible = {new AttackAction(this, _current, t), /*new ItemAction(this, _current, t),*/
 								new WaitAction(this, _current, t)};
 
-						actions.add(Collections.max(Arrays.asList(possible)));
+					//	actions.add(Collections.max(Arrays.asList(possible)));
+						actions.addAll(Arrays.asList(possible));
 					}
 
 					_hasMoved.put(_current, true);
 					_act = actions.poll();
 					if (_act != null) {
-					//	System.out.println("CRUNCH");
+						System.out.println(_act.getValue());
+						_gameScreen.panToCoordinate(_current.getX(), _current.getY());
 						System.out.println(_act.getValue());
 						setState(State.CHARACTER_MOVING);
 						move(_current, _locations.get(_current),
@@ -74,7 +74,7 @@ public class RandomBattleAI extends CombatController implements Runnable {
 						_current = nextUnit();
 					}
 				}
-				System.out.println(getState());
+			//	System.out.println(getState());
 			}
 		}
 		
@@ -99,12 +99,11 @@ public class RandomBattleAI extends CombatController implements Runnable {
 	@Override
 	
 	public void characterWait() {
-		super.characterWait();
-		
 		if (_current != null)
 			synchronized(_current) {
 				_current = nextUnit();
 			}
+		super.characterWait();
 		
 		System.out.println("Waiting: " + getState() + " " + _current);
 	}
@@ -112,34 +111,40 @@ public class RandomBattleAI extends CombatController implements Runnable {
 	@Override
 	public void release() {
 		super.release();
-		//Temporary, while AI Phase does nothing
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {}
 
-		new Thread(new SlideTimer(_aiPhase,-1050)).start();
+		if (getState() != State.ATTACKING) {
+			//Temporary, while AI Phase does nothing
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {}
+
+			new Thread(new SlideTimer(_aiPhase,-1050)).start();
+		}
 	}
 
 	@Override
 	public void take() {
 		super.take();
-		//Temporary, while AI Phase does nothing
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {}
-
-		System.out.println("Enemy phase");
-		_aiPhase.setLocation(1050,_aiPhase.getY());
-		new Thread(new SlideTimer(_aiPhase,250)).start();
 		
-		_act = null;
-		new Thread(this).start();
+		if (getState() != State.ATTACKING) {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {}
+			
+			System.out.println("Enemy phase");
+			_aiPhase.setLocation(1050,_aiPhase.getY());
+			new Thread(new SlideTimer(_aiPhase,250)).start();
+			
+			_act = null;
+			new Thread(this).start();
+		}
+		else
+			characterWait();
 	}
 	
 	@Override
 	public void removeUnit(Character c) {
 		super.removeUnit(c);
-	//	System.out.println("CRUCNH");
 		_gameScreen.getMap().removeRandomBattle(c);
 	}
 

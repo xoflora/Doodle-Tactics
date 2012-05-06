@@ -11,6 +11,7 @@ public class Footgear extends Equipment {
 	
 	public Footgear(DoodleTactics dt, String imagePath, String name) {
 		super(dt,imagePath, name);
+		_isFootgear = true;
 	}
 
 	int _speedEffect;

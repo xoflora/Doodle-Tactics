@@ -14,7 +14,7 @@ public abstract class Item implements Serializable{
 	static int  numItems = 0;
 	public final int _id;
 	private String _description;
-	private boolean _isEquip = false;
+	protected boolean _isEquip = false, _isWeapon = false, _isCuirass = false, _isFootgear = false, _isShield = false;
 	private String _name;
 		
 	public Item(DoodleTactics dt, String imagePath, String name){
@@ -45,12 +45,32 @@ public abstract class Item implements Serializable{
 		_description = desc;
 	}
 	
-	public void setAsEquip(boolean bool) {
-		_isEquip = bool;
-	}
+//	public void setAsEquip(boolean bool) {
+//		_isEquip = bool;
+//	}
 	
 	public boolean isEquip() {
 		return _isEquip;
+	}
+	
+	public boolean isWeapon() {
+		return _isWeapon;
+	}
+	
+	public boolean isCuirass() {
+		return _isCuirass;
+	}
+	
+	public boolean isShield() {
+		return _isShield;
+	}
+	
+	public boolean isFootgear() {
+		return _isFootgear;
+	}
+	
+	public void setAsWeapon(boolean bool) {
+		_isWeapon = bool;
 	}
 	
 	public void loadItem(DoodleTactics dt){

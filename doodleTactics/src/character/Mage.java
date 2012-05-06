@@ -22,7 +22,7 @@ public class Mage extends Character{
 
 	}
 
-	public CharacterType getChararacterType() {
+	public CharacterType getCharacterType() {
 		return CharacterType.MAGE;
 	}
 }
