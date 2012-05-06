@@ -152,10 +152,13 @@ public abstract class GameScreenController extends Controller {
 		if (m != null)
 			m.activate(e.getButton());
 		else {
-		Tile t = _gameScreen.getTile(e.getX(), e.getY());
-		if (t != null)
-			System.out.println("Tile " + t + ", Occupant " + t.getOccupant() + ", Permissions " + t.canMove(0)
-					+ t.canMove(1) + t.canMove(2) + t.canMove(3));
+			Tile t = _gameScreen.getTile(e.getX(), e.getY());
+			if (t != null && e.getButton() == MouseEvent.BUTTON3) {
+				System.out.println("Tile " + t + ", Occupant " + t.getOccupant() + ", Permissions " + t.canMove(0)
+						+ t.canMove(1) + t.canMove(2) + t.canMove(3));
+				if (t.isOccupied())
+				System.out.println(t.getOccupant().getMinAttackRange() + " " + t.getOccupant().getMaxAttackRange());
+			}
 		}
 	}
 	

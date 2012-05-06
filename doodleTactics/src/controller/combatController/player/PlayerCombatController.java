@@ -359,11 +359,14 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void mousePressed(MouseEvent e) {
 		super.mousePressed(e);
 		MenuItem m = _gameScreen.checkContains(e.getPoint());
-		if (m == _optionWindow || m == _itemWindow) {
+		if (m != null && (m == _optionWindow || m == _itemWindow)) {
+			System.out.println("HLO");
 			_menuDraggedx = e.getX();
 			_menuDraggedy = e.getY();
 			_draggingMenu = true;
 		}
+		else
+			_draggingMenu = false;
 	}
 	
 	@Override
@@ -371,6 +374,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * 
 	 */
 	public void mouseDragged(MouseEvent e) {
+		System.out.println(_draggingMenu);
 		if (!_draggingMenu)
 			super.mouseDragged(e);
 		else {
@@ -397,7 +401,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * ends the player's turn
 	 */
 	public void release() {
-		// TODO Auto-generated method stub
 		super.release();
 		
 		new Thread(new SlideTimer(_playerPhase,-1050)).start();
@@ -410,7 +413,9 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 */
 	public void take() {
 		super.take();
-		System.out.println("Player phase!");
+	//	_gameScreen.panToCoordinate(_gameScreen.getMainChar().getX(),
+	//			_gameScreen.getMainChar().getY());
+		
 		_playerPhase.setLocation(1050,_playerPhase.getY());
 		new Thread(new SlideTimer(_playerPhase,250)).start();
 
