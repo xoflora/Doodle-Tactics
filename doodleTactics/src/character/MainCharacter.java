@@ -1,5 +1,7 @@
 package character;
 
+import java.awt.image.BufferedImage;
+
 import javax.swing.JPanel;
 
 import character.Character.CharacterType;
@@ -61,5 +63,5 @@ public class MainCharacter extends Character {
 		// TODO Auto-generated method stub
 		return _currType;
 	}
-	
+
 }

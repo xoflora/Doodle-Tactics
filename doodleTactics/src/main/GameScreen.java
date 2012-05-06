@@ -606,12 +606,14 @@ public class GameScreen extends Screen<GameScreenController> {
 			//	System.out.println("There are " + _characterTerrainQueue.size() + " things to paint");
 
 			// paint all characters and terrains
+			System.out.println("Begin painting chars/terrain");
 			while(!_characterTerrainQueue.isEmpty()) {
 				Rectangle toPaint = _characterTerrainQueue.poll();
 				//		System.out.println("Painted: " + toPaint.getPaintPriority());
 				toPaint.setVisible(true);
 				toPaint.paint(g, toPaint.getImage());				
 			}
+			System.out.println("END painting chars/terrain");
 
 			//print all the menu items
 			List<MenuItem> items = new LinkedList<MenuItem>();
@@ -643,8 +645,6 @@ public class GameScreen extends Screen<GameScreenController> {
 		//		m.paint((Graphics2D) g,m.getImage());
 		//		_currentCharacter = m;
 		
-
-
 	}
 
 	public void switchToGameMenu() {
@@ -758,6 +758,11 @@ public class GameScreen extends Screen<GameScreenController> {
 	//			" Y: " + _currMap.getCharactersToDisplay().get(1).getY());
 		
 		
+		int overflowX = (_currMap.getMainCharacter().getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
+		int overflowY = (_currMap.getMainCharacter().getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
+		_currMap.getMainCharacter().setLocation(_currMap.getMainCharacter().getX() - overflowX,_currMap.getMainCharacter().getY() - overflowY);
+
+		
 		_dt.addSavedGame(filename, filepath);
 		writeFilepathsFile();
 		try {
@@ -767,6 +772,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			out.writeObject(_currMap);
 			out.writeObject(_dt.getCharacterMap());
 			out.writeObject(_dt.getParty());
+			out.writeObject(_currentCharacter);
 			out.writeObject(_dt.getGameMenuScreen().getKeyCodes());
 			out.writeInt(_xWindowOffset);
 			out.writeInt(_yWindowOffset);
@@ -814,12 +820,11 @@ public class GameScreen extends Screen<GameScreenController> {
 			_currMap = (Map) in.readObject();
 			_dt.setCharacterMap((HashMap<String,Character>) in.readObject());
 			_dt.setParty((List<Character>) in.readObject());
+			_currentCharacter = (MainCharacter) in.readObject();
+
 			_dt.getGameMenuScreen().load((int[]) in.readObject());
 			_xWindowOffset  =in.readInt();
 			_yWindowOffset = in.readInt();
-			//Load XRef and YRef
-			System.out.println("X Win Offset: " + _xWindowOffset);
-			System.out.println("Y Win Offset: " + _yWindowOffset);
 
 			//Reload all party characters
 			for(Character c : _dt.getParty())
@@ -833,6 +838,9 @@ public class GameScreen extends Screen<GameScreenController> {
 			}
 			
 			_terrainToPaint = _currMap.getTerrain();
+			
+			System.out.println("Finished Loading!");
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
