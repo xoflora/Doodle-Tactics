@@ -22,6 +22,9 @@ public class CombatWindow extends MenuItem {
 
 	charImage _attackerImg, _victimImg;
 	Character _attackerChar, _victimChar;
+
+	CombatWindowController _c;
+
 	moveUpTimer _moveUpTimer;
 	GameScreen _gs;
 	boolean _isAnimating;
@@ -33,14 +36,25 @@ public class CombatWindow extends MenuItem {
 		_gs = (GameScreen) container;
 		_gs.addMenuItem(this);
 		_moveUpTimer = new moveUpTimer();
+		
+		_attackerImg = null;
+		_victimImg = null;
+		_attackerChar = null;
+		_victimChar = null;
+		_c = null;
 	}
 	
-	public void prepareWindow(Character src, Character dest) {
+
+	public void prepareWindow(Character src, Character dest, CombatWindowController c) {
+		_attackerChar = src;
 		_attackerImg = new charImage(_gs, 101);
 		_attackerImg.setImage(src.getLeftImage());
+		_victimChar = dest;
 		_victimImg = new charImage(_gs, 102);
 		_victimImg.setImage(dest.getRightImage());
+		_c = c;
 	}
+
 
 	public void animate() {
 		_isAnimating = true;
@@ -141,6 +155,7 @@ public class CombatWindow extends MenuItem {
 						count = 0;
 						_isAnimating = false;
 						_timer.stop();
+						_c.done();
 					}
 					_gs.repaint();
 				}

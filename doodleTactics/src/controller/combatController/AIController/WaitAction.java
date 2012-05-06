@@ -1,7 +1,6 @@
 package controller.combatController.AIController;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import map.Tile;
 import controller.combatController.CombatController;
@@ -29,26 +28,7 @@ public class WaitAction extends Action {
 	 * evaluates what happens if the character moves to the given tile
 	 */
 	public double evaluateMove() {
-	//	List<Character> aggressors = new ArrayList<Character>();
-		double eval = 0;
-		
-		for (CombatController aff : _src.getEnemyAffiliations())
-			for (Character c : aff.getUnits()) {
-			//	System.out.println(c);
-			//	System.out.println(aff.getTileMappings().get(c) == null);
-				if (_src.getScreen().getMap().getAttackRange(aff.getTileMappings().get(c),
-						c.getMovementRange(), c.getMinAttackRange(),
-						c.getMaxAttackRange()).contains(_destTile)) {
-					if (c.getHitChance(_c) > 30 && c.getFullAttackStrength() > _c.getFullDefense())
-						if (c.getCriticalChance(_c) > 30)
-							eval -= Character.CRITICAL_MULTIPLIER*
-								(c.getFullAttackStrength() - _c.getFullDefense());
-						else
-							eval -= c.getFullAttackStrength() - _c.getFullDefense();
-				}
-			}
-		
-		return eval;
+		return defensiveEval(new ArrayList<Character>());
 	}
 
 }

@@ -12,6 +12,4 @@ public abstract class AICombatController extends CombatController {
 	public AICombatController(DoodleTactics dt, HashMap<Character, Tile> units) {
 		super(dt, units);
 	}
-
-	
 }

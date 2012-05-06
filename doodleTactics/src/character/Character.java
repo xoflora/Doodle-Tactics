@@ -82,6 +82,8 @@ public abstract class Character extends Rectangle{
 
 	private int _currDirection = 1; //1 = front, 2 = back, 3 = left, 4 = right 
 
+	private int _hoverOffset;
+	
 	private transient PathTimer _pathTimer;
 	private transient MoveTimer _moveTimer;
 
@@ -128,7 +130,8 @@ public abstract class Character extends Rectangle{
 		this.setLocation(x, y);
 		//		this.setLocation(x - overflow,y - _down.getHeight() + Tile.TILE_SIZE);
 		_floatTimer = new FloatTimer(container);
-		//	this.startHovering();
+		_hoverOffset = 0;
+		this.startHovering();
 
 		_pathTimer = null;
 		_moveTimer = null;
@@ -179,36 +182,36 @@ public abstract class Character extends Rectangle{
 				switch(_cnt) {
 
 				case 0:
-					Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1.5);
-					_offset += 1.5;
+					//Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1.5);
+					_hoverOffset += 1.5;
 					break;
 				case 1:
-					Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1);
-					_offset += 1;
+					//Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1);
+					_hoverOffset += 1;
 					break;
 				case 2:
-					Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1);
-					_offset += 1;
+					//Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1);
+					_hoverOffset += 1;
 					break;
 				case 3:
-					Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1);
-					_offset += 1;
+					//Character.this.setLocation(Character.this.getX(), Character.this.getY() + 1);
+					_hoverOffset += 1;
 					break;
 				case 4:
-					Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1);
-					_offset -= 1;
+					//Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1);
+					_hoverOffset -= 1;
 					break;
 				case 5:
-					Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1);
-					_offset -= 1;
+					//Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1);
+					_hoverOffset -= 1;
 					break;
 				case 6:
-					Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1);
-					_offset -= 1;
+					//Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1);
+					_hoverOffset -= 1;
 					break;
 				case 7:
-					Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1.5);
-					_offset -= 1.5;
+					//Character.this.setLocation(Character.this.getX(), Character.this.getY() - 1.5);
+					_hoverOffset -= 1.5;
 					break;
 				}
 
@@ -988,7 +991,7 @@ public abstract class Character extends Rectangle{
 		double oldY = this.getY();
 		int overflowX = (this.getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
 		int overflowY = (this.getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
-		this.setLocation(this.getX() - overflowX,this.getY() - overflowY);
+		this.setLocation(this.getX() - overflowX,this.getY() - overflowY + _hoverOffset);
 		super.paint(brush,img);
 		this.setLocation(oldX, oldY);
 		brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
