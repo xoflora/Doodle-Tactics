@@ -141,6 +141,8 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 				_menu1.setLocation(_menu1.getX(),_menu1.getY() - _delay);
 				_dt.getGameScreen().repaint();
 			}
+			
+			_dt.getGameScreen().removeMenuItem(_menu1);
 		}
 	}
 	
