@@ -79,7 +79,7 @@ public class OverworldController extends GameScreenController {
 											System.out.println("MOVE NORTH");
 											System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
 											src.removeOccupant();
-											c.moveToTile(src, dest);
+											c.moveToTile(src, dest, false);
 											dest.setOccupant(c);
 										}
 										break;
@@ -89,7 +89,7 @@ public class OverworldController extends GameScreenController {
 											System.out.println("MOVE SOUTH");
 											System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
 											src.removeOccupant();
-											c.moveToTile(src, dest);
+											c.moveToTile(src, dest, false);
 											dest.setOccupant(c);
 										}
 										break;
@@ -99,7 +99,7 @@ public class OverworldController extends GameScreenController {
 											System.out.println("MOVE EAST");
 											System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
 											src.removeOccupant();
-											c.moveToTile(src, dest);
+											c.moveToTile(src, dest, false);
 											dest.setOccupant(c);
 										}
 										break;
@@ -109,7 +109,7 @@ public class OverworldController extends GameScreenController {
 											System.out.println("MOVE WEST");
 											System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
 											src.removeOccupant();
-											c.moveToTile(src, dest);
+											c.moveToTile(src, dest, false);
 											dest.setOccupant(c);
 										}
 										break;

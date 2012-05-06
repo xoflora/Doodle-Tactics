@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -79,6 +80,9 @@ public class RandomBattleAI extends CombatController implements Runnable {
 		}
 		
 		System.out.println("End state " + getState());
+		
+		long time = new Date().getTime();
+		while (new Date().getTime() - time < 500);
 		
 		_gameScreen.popControl();
 	}
