@@ -25,4 +25,9 @@ public class Archer extends Character{
 		_BASE_STATS[MAX_HP] = 14;
 		initStats();
 	}
+
+	@Override
+	public CharacterType getChararacterType() {
+		return CharacterType.ARCHER;
+	}
 }

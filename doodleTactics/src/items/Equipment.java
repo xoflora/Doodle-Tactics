@@ -8,6 +8,7 @@ import character.Character;
 
 public abstract class Equipment extends Item{
 	
+	
 	public Equipment(DoodleTactics dt, String imagePath, String name) {
 		super(dt,imagePath, name);
 	}
@@ -20,5 +21,4 @@ public abstract class Equipment extends Item{
 	public void revert(Character c) throws ItemException{
 			c.removeFromInventory(this);
 	}
-
 }

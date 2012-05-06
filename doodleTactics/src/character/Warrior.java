@@ -25,6 +25,12 @@ public class Warrior extends Character{
 		_BASE_STATS[MAX_HP] = 15;
 		initStats();
 	}
+
+	@Override
+	public CharacterType getChararacterType() {
+		// TODO Auto-generated method stub
+		return CharacterType.WARRIOR;
+	}
 	
 	
 }

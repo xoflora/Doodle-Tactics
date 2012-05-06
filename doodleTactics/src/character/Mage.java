@@ -21,4 +21,8 @@ public class Mage extends Character{
 		initStats();
 
 	}
+
+	public CharacterType getChararacterType() {
+		return CharacterType.MAGE;
+	}
 }
