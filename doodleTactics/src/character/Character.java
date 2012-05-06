@@ -1,7 +1,5 @@
 package character;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -89,6 +87,10 @@ public abstract class Character extends Rectangle{
 
 	public static enum CharacterDirection{
 		LEFT,RIGHT,UP,DOWN
+	}
+	
+	public enum CharacterType {
+		ARCHER, MAGE, THIEF, WARRIOR, GENERAL;
 	}
 
 	public Character(DoodleTactics dt, JPanel container, String profile, String left, String right,
@@ -1136,6 +1138,10 @@ public abstract class Character extends Rectangle{
 	public void setDefeated() {
 		_affiliation.removeUnit(this);
 	}
+	
+//	public abstract boolean canEquip(Weapon weapon);
+	
+	public abstract CharacterType getChararacterType();
 
 	/*	public static void testPreSerialize(){
 		try{

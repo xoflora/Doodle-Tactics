@@ -21,4 +21,10 @@ public class Thief extends Character{
 		_BASE_STATS[MAX_HP] = 13;
 		initStats();
 	}
+
+	@Override
+	public CharacterType getChararacterType() {
+		// TODO Auto-generated method stub
+		return CharacterType.THIEF;
+	}
 }
