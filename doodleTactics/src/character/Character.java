@@ -289,8 +289,12 @@ public abstract class Character extends Rectangle{
 			}
 
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-
-				Character.this.setLocation((Character.this.getX() + (_deltaX*Tile.TILE_SIZE / _numSteps)), Character.this.getY() + (_deltaY*Tile.TILE_SIZE / _numSteps));
+				double dx = _deltaX*Tile.TILE_SIZE / _numSteps;
+				double dy = _deltaY*Tile.TILE_SIZE / _numSteps;
+				Character.this.updateLocation(dx, dy);
+				_screen.pan(-dx, -dy);
+			//	Character.this.setLocation((Character.this.getX() + (_deltaX*Tile.TILE_SIZE / _numSteps)),
+			//			Character.this.getY() + (_deltaY*Tile.TILE_SIZE / _numSteps));
 
 				switch(_cnt) {
 				case 0:

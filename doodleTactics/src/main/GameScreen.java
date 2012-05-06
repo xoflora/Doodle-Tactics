@@ -412,10 +412,11 @@ public class GameScreen extends Screen<GameScreenController> {
 		src.setOccupant(null);
 		dest.setOccupant(_currentCharacter);
 		
+		
 		new MapMoveTimer(src, dest).start();
 	}
 
-	public void pan(double x, double y) {
+	synchronized public void pan(double x, double y) {
 		
 	//	System.out.println(x + " " + y);
 
