@@ -18,7 +18,7 @@ public abstract class Equipment extends Item{
 //	public abstract void setStats();
 
 	
-	public abstract void exert();
+//	public abstract void exert();
 	
 	/**
 	 *  Removes this Item from a Character's inventory 
