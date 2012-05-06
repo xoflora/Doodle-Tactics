@@ -986,11 +986,7 @@ public abstract class Character extends Rectangle{
 		double oldY = this.getY();
 		int overflowX = (this.getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
 		int overflowY = (this.getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
-<<<<<<< HEAD
 		this.setLocation(this.getX() - overflowX,this.getY() - overflowY);
-=======
-		this.setLocation(this.getX() - overflowX,this.getY()/* - overflowY*/);
->>>>>>> 4fbe5a49cee824eaf5c0165ca101eebcde79fe7f
 		super.paint(brush,img);
 		this.setLocation(oldX, oldY);
 		brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
