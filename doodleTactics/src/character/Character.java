@@ -82,6 +82,8 @@ public abstract class Character extends Rectangle{
 
 	private int _currDirection = 1; //1 = front, 2 = back, 3 = left, 4 = right 
 
+	private int _hoverOffset;
+	
 	private transient PathTimer _pathTimer;
 	private transient MoveTimer _moveTimer;
 
@@ -128,7 +130,7 @@ public abstract class Character extends Rectangle{
 		this.setLocation(x, y);
 		//		this.setLocation(x - overflow,y - _down.getHeight() + Tile.TILE_SIZE);
 		_floatTimer = new FloatTimer(container);
-		//	this.startHovering();
+		this.startHovering();
 
 		_pathTimer = null;
 		_moveTimer = null;
