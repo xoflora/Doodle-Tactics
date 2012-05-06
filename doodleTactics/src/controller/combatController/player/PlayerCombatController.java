@@ -226,6 +226,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 					if (_path.contains(t)) {
 						_destTile = t;
 						
+						_gameScreen.panToCoordinate(_selectedTile.getX(), _selectedTile.getY());
 						move(_selectedCharacter, _selectedTile, _path);
 						
 						_cacheMovementRange = _selectedMovementRange;
@@ -294,6 +295,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				}
 				
 				setState(State.CHARACTER_SELECTED);
+				_gameScreen.panToCoordinate(_selectedTile.getX(), _selectedTile.getY());
 			}
 			else if (getState() == State.SELECTING_ITEM) {
 				_itemWindow.removeFromDrawingQueue();
