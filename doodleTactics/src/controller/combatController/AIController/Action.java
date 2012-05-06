@@ -1,5 +1,7 @@
 package controller.combatController.AIController;
 
+import java.util.List;
+
 import character.Character;
 import controller.combatController.CombatController;
 import map.Tile;
@@ -58,4 +60,27 @@ public abstract class Action implements Comparable<Action> {
 	 * pushes an action to the combat controller
 	 */
 	public abstract void act();
+	
+	
+	/**
+	 * @return a defensive evaluation of the destination tile
+	 */
+	public double defensiveEval(List<Character> filter) {
+		double eval = 0;
+		for (CombatController aff : _src.getEnemyAffiliations())
+			for (Character c : aff.getUnits()) {
+				if (_src.isEnemy(c) && !filter.contains(c) &&
+						_src.getScreen().getMap().getAttackRange(aff.getTileMappings().get(c),
+						c.getMovementRange(), c.getMinAttackRange(),
+						c.getMaxAttackRange()).contains(_destTile)) {
+					if (c.getHitChance(_c) > 30 && c.getFullAttackStrength() > _c.getFullDefense())
+						if (c.getCriticalChance(_c) > 30)
+							eval -= Character.CRITICAL_MULTIPLIER*
+								(c.getFullAttackStrength() - _c.getFullDefense());
+						else
+							eval -= c.getFullAttackStrength() - _c.getFullDefense();
+				}
+			}
+		return eval;
+	}
 }

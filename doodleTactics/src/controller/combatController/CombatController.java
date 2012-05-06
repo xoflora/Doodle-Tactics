@@ -30,7 +30,8 @@ public abstract class CombatController extends GameScreenController {
 		CHARACTER_MOVING,
 		CHARACTER_OPTION_MENU,
 		SELECTING_ITEM,
-		ITEM_MENU;
+		ITEM_MENU,
+		ATTACKING;
 		
 		public String toString() {
 			switch (this) {
@@ -46,6 +47,8 @@ public abstract class CombatController extends GameScreenController {
 				return "SELECTING_ITEM";
 			case ITEM_MENU:
 				return "ITEM_MENU";
+			case ATTACKING:
+				return "ATTACKING";
 			default:
 				return "";
 			}
@@ -199,8 +202,11 @@ public abstract class CombatController extends GameScreenController {
 	 */
 	public void take() {
 		super.take();
-		_hasMoved.clear();
-		_unitCycle = _units.listIterator();
+		
+		if (_state != State.ATTACKING) {
+			_hasMoved.clear();
+			_unitCycle = _units.listIterator();
+		}
 		
 		if (_orch == null)
 			_dt.error("Combat error: orchestrator unassigned.");
@@ -290,10 +296,13 @@ public abstract class CombatController extends GameScreenController {
 	 * @param dest defense
 	 */
 	public void attack(Character src, Character dest) {
-		System.out.println("DOING THE ANIMATION");
-		_dt.getGameScreen().getPopUpCombat().prepareWindow(src, dest);
-		_dt.getGameScreen().getPopUpCombat().animate();
-		src.attack(dest, r);
+		_state = State.ATTACKING;
+		
+		System.out.println("DOING THE ANIMATION " + _state);
+		
+		_gameScreen.pushControl(new CombatWindowController(_dt, src, dest));
+		
+	/*	src.attack(dest, r);
 		System.out.println(src.getName() + " has " + src.getHP() + " HP remaining.");
 		System.out.println(dest.getName() + " has " + dest.getHP() + " HP remaining.");
 		
@@ -301,7 +310,7 @@ public abstract class CombatController extends GameScreenController {
 			defeat();
 		else if (dest.getAffiliation().isDefeated()) {
 			dest.getAffiliation().defeat();
-		}
+		}	*/
 	}
 	
 	/**
@@ -348,24 +357,5 @@ public abstract class CombatController extends GameScreenController {
 	}
 	public void setState(State st) {
 		_state = st;
-	}
-	
-	
-	
-	
-	public void mousePressed(MouseEvent e) {
-		super.mousePressed(e);
-	}
-	public void mouseDragged(MouseEvent e) {
-		super.mouseDragged(e);
-	}
-	public void mouseReleased(MouseEvent e) {
-		super.mouseReleased(e);
-	}
-	public void mouseMoved(MouseEvent e) {
-		super.mouseMoved(e);
-	}
-	public void mouseClicked(MouseEvent e) {
-		super.mouseClicked(e);
 	}
 }

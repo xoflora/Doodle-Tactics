@@ -19,6 +19,7 @@ import graphics.MenuItem;
 public class CombatWindow extends MenuItem {
 
 	Character _attacker, _victim;
+	CombatWindowController _c;
 	moveUpTimer _moveUpTimer;
 	GameScreen _gs;
 	boolean _isAnimating;
@@ -30,11 +31,17 @@ public class CombatWindow extends MenuItem {
 		_gs = (GameScreen) container;
 		_gs.addMenuItem(this);
 		_moveUpTimer = new moveUpTimer();
+		
+		_attacker = null;
+		_victim = null;
+		_c = null;
 	}
 	
-	public void prepareWindow(Character src, Character dest) {
+	public void prepareWindow(Character src, Character dest, CombatWindowController c) {
 		_attacker = src;
 		_victim = dest;
+		
+		_c = c;
 	}
 
 	public void animate() {
@@ -96,6 +103,7 @@ public class CombatWindow extends MenuItem {
 						count = 0;
 						_isAnimating = false;
 						_timer.stop();
+						_c.done();
 					}
 					_gs.repaint();
 				}

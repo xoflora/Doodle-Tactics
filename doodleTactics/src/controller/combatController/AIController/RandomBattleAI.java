@@ -41,14 +41,12 @@ public class RandomBattleAI extends CombatController implements Runnable {
 		
 		PriorityQueue<Action> actions;
 		
-	//	boolean done = false;
-		
 		_current = nextUnit();
 		System.out.println("start state" + getState() + " " + _current);
 		
 		while (_current != null) {
 			synchronized(_current) {
-				if (getState() == State.START) {
+				if (_current != null && getState() == State.START) {
 					setState(State.CHARACTER_SELECTED);
 					actions = new PriorityQueue<Action>();
 
@@ -63,7 +61,7 @@ public class RandomBattleAI extends CombatController implements Runnable {
 					_hasMoved.put(_current, true);
 					_act = actions.poll();
 					if (_act != null) {
-					//	System.out.println("CRUNCH");
+						_gameScreen.panToCoordinate(_current.getX(), _current.getY());
 						System.out.println(_act.getValue());
 						setState(State.CHARACTER_MOVING);
 						move(_current, _locations.get(_current),
@@ -99,12 +97,11 @@ public class RandomBattleAI extends CombatController implements Runnable {
 	@Override
 	
 	public void characterWait() {
-		super.characterWait();
-		
 		if (_current != null)
 			synchronized(_current) {
 				_current = nextUnit();
 			}
+		super.characterWait();
 		
 		System.out.println("Waiting: " + getState() + " " + _current);
 	}
@@ -139,7 +136,6 @@ public class RandomBattleAI extends CombatController implements Runnable {
 	@Override
 	public void removeUnit(Character c) {
 		super.removeUnit(c);
-	//	System.out.println("CRUCNH");
 		_gameScreen.getMap().removeRandomBattle(c);
 	}
 
