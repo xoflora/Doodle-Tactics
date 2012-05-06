@@ -1,10 +1,10 @@
 4
 Survive,5
-Enemy:e1
-Enemy:e2
-Partner:a1
-Partner:a2
-Neutral:n1
-Neutral:n2
+Enemy,e1
+Enemy,e2
+Partner,a1
+Partner,a2
+Neutral,n1
+Neutral,n2
 Enemy,Thighs
 Partner,Mage,src/graphics/characters/mage_portrait.png,src/graphics/characters/mage_left.png,src/graphics/characters/mage_right.png,src/graphics/characters/mage_back.png,src/graphics/characters/mage_front.png,14,14

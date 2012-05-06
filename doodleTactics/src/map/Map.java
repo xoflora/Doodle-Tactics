@@ -1,5 +1,6 @@
 package map;
 
+import event.CombatEvent;
 import event.Dialogue;
 import event.InvalidEventException;
 import event.Warp;
@@ -58,6 +59,7 @@ public class Map implements Serializable {
 	public static final int NO_EVENT = 0;
 	public static final int DIALOGUE = 1;
 	public static final int WARP = 2;
+	public static final int COMBAT = 3;
 	// ...
 
 	private static final int DEFAULT_XREF = 5;
@@ -275,7 +277,8 @@ public class Map implements Serializable {
 				// Tile case
 				// 7 if no event specified, 8 otherwise
 				else if (((splitLine.length == 7) && Integer.parseInt(splitLine[6]) == NO_EVENT) ||
-						(splitLine.length == 8 && Integer.parseInt(splitLine[6]) == DIALOGUE)
+						(splitLine.length == 8 && Integer.parseInt(splitLine[6]) == DIALOGUE) ||
+						(splitLine.length == 8 && Integer.parseInt(splitLine[6]) == COMBAT)
 								|| (splitLine.length == 10 && Integer.parseInt(splitLine[6]) == WARP)) {
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
@@ -291,6 +294,9 @@ public class Map implements Serializable {
 					} else if(Integer.parseInt(splitLine[6]) == WARP){
 						tiles[x][y].setEvent(new Warp(dt,tiles[x][y],splitLine[7],
 								Integer.parseInt(splitLine[8]), Integer.parseInt(splitLine[9])));
+						tiles[x][y].setEnterEvent();
+					} else if((Integer.parseInt(splitLine[6])) == COMBAT){
+						tiles[x][y].setEvent(CombatEvent.parseEvent(dt, splitLine[7]));
 						tiles[x][y].setEnterEvent();
 					}
 					//add others in the future perhaps
@@ -341,6 +347,7 @@ public class Map implements Serializable {
 				msg = "(line " + count + ") " + msg;
 			throw new InvalidMapException(msg);
 		}catch (InvalidEventException e) {
+			System.out.println(e.getMessage());
 			throw new InvalidMapException("(line " + count + ") Invalid Event Specified");
 		}
 
