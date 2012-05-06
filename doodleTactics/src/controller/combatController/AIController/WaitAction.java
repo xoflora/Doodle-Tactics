@@ -19,7 +19,6 @@ public class WaitAction extends Action {
 
 	@Override
 	public void act() {
-		System.out.println("HELLO");
 		_src.characterWait();
 	}
 

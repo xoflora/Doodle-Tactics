@@ -68,7 +68,7 @@ public abstract class Action implements Comparable<Action> {
 	public double defensiveEval(List<Character> filter) {
 		double eval = 0;
 		for (CombatController aff : _src.getEnemyAffiliations())
-			for (Character c : aff.getUnits()) {
+			for (Character c : aff.getUnits()) {				
 				if (_src.isEnemy(c) && !filter.contains(c) &&
 						_src.getScreen().getMap().getAttackRange(aff.getTileMappings().get(c),
 						c.getMovementRange(), c.getMinAttackRange(),

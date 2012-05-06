@@ -23,11 +23,12 @@ public class CombatWindowController extends GameScreenController {
 
 	@Override
 	public void release() {
-		
+		super.release();
 	}
 
 	@Override
 	public void take() {
+		super.take();
 		_gameScreen.getPopUpCombat().prepareWindow(_src, _dest, this);
 		_gameScreen.getPopUpCombat().animate();
 	}
@@ -36,7 +37,6 @@ public class CombatWindowController extends GameScreenController {
 	 * 
 	 */
 	public void done() {
-		// TODO Auto-generated method stub
 		_gameScreen.popControl();
 	}
 }

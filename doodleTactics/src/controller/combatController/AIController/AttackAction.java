@@ -14,6 +14,13 @@ import character.Character;
  */
 public class AttackAction extends Action {
 	
+	private static final double MINOR_DAMAGE_MULTIPLIER = 3;
+	private static final double DAMAGING_MULTIPLIER = 6;
+	private static final double CRIPPLING_MULTIPLIER = 12;
+	private static final double DEFEAT_MULTIPLIER = 24;
+	
+	private static final double DEFEAT_VALUE = 1000;
+	
 	private Character _toAttack;
 
 	public AttackAction(CombatController src, Character c, Tile t) {
@@ -22,8 +29,12 @@ public class AttackAction extends Action {
 
 	@Override
 	public void act() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("EWOI");
+		if (_toAttack != null)
+			_src.attack(_c, _toAttack);
+		else {
+			_src.characterWait();
+		}
 	}
 
 	@Override
@@ -31,18 +42,42 @@ public class AttackAction extends Action {
 	 * 
 	 */
 	public double evaluateMove() {
-		double eval = 0;
 		List<Character> filter = new ArrayList<Character>();
 		
 		int power = _c.getFullAttackStrength();
 		
+		double bestAttack = 0;
 		for (Tile t : _src.getScreen().getMap().getAttackRange(_destTile, 0,
 				_c.getMinAttackRange(), _c.getMaxAttackRange()))
 			if (_src.isEnemy(t.getOccupant())) {
+				Character other = t.getOccupant();
+				int damage = power - other.getFullDefense();
 				
+				if (other.getHP() == 0) {
+					bestAttack = DEFEAT_VALUE;
+					_toAttack = other;
+				}
+				else if (damage/other.getHP() > bestAttack) {
+					bestAttack = damage/other.getHP();
+					_toAttack = other;
+				}
 			}
 		
-		return eval;
+		double eval;
+		if (bestAttack >= 1) {
+			filter.add(_toAttack);
+			eval = DEFEAT_MULTIPLIER;
+		}
+		else if (bestAttack >= .75) {
+			filter.add(_toAttack);
+			eval = CRIPPLING_MULTIPLIER;
+		}
+		else if (bestAttack >= .4)
+			eval = DAMAGING_MULTIPLIER;
+		else {
+			eval = MINOR_DAMAGE_MULTIPLIER;
+		}
+		
+		return eval*bestAttack + defensiveEval(filter);
 	}
-
 }
