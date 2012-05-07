@@ -350,6 +350,26 @@ public abstract class CombatController extends GameScreenController {
 	public void attack(Tile src, Tile dest, int range) {
 		_state = State.ATTACKING;
 		
+		int xDiff = src.x()-dest.x();
+		int yDiff = src.y()-dest.y();
+								
+		if (Math.abs(xDiff) > Math.abs(yDiff)) {
+			if (xDiff > 0) {
+				src.getOccupant().setLeft();
+			}
+			else {
+				src.getOccupant().setRight();
+			}
+		}
+		else {
+			if (yDiff > 0) {
+				src.getOccupant().setUp();
+			}
+			else {
+				src.getOccupant().setDown();
+			}
+		}
+		
 		System.out.println("DOING THE ANIMATION " + _state);
 		
 		_gameScreen.pushControl(new CombatWindowController(_dt, src, dest, range));

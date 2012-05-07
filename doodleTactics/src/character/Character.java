@@ -1162,15 +1162,15 @@ public abstract class Character extends Rectangle{
 		}
 	}
 
-	public void setBaseStats(int strength, int def, int special, int resistance, int speed, int acc, int luck, int max_hp) {
-		_BASE_STATS[0] = strength;
-		_BASE_STATS[1] = def;
-		_BASE_STATS[2] = special;
-		_BASE_STATS[3] =resistance;
-		_BASE_STATS[4] = speed;
-		_BASE_STATS[5] = acc;
-		_BASE_STATS[6] = luck;
-		_BASE_STATS[7] = max_hp;
+	public void setBaseStats(double d, double e, double f, double g, double h, double i, double j, double k) {
+		_BASE_STATS[0] = d;
+		_BASE_STATS[1] = e;
+		_BASE_STATS[2] = f;
+		_BASE_STATS[3] =g;
+		_BASE_STATS[4] = h;
+		_BASE_STATS[5] = i;
+		_BASE_STATS[6] = j;
+		_BASE_STATS[7] = k;
 	}
 	
 	public int[] getCurrStats() {

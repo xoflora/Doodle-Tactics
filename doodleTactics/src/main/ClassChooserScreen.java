@@ -180,28 +180,28 @@ public class ClassChooserScreen extends Screen {
 				MainCharacter mainChar = _dt.getGameScreen().getMainChar();
 				switch (_chosenClass) {
 				case 1:
-					mainChar.setBaseStats(8, 6, 5, 5, 6, 7, 3, 15);
+					mainChar.setBaseStats(.8, .6, .5, .5, .6, .7, .3, 1.5);
 					mainChar.setCharacterType(CharacterType.WARRIOR);
 					mainChar.initStats();
 					mainChar.setImages(_dt.importImage("src/graphics/characters/warrior_portrait.png"), _dt.importImage("src/graphics/characters/warrior_left_color.png"), _dt.importImage("src/graphics/characters/warrior_right_color.png"), _dt.importImage("src/graphics/characters/warrior_back_color.png"), _dt.importImage("src/graphics/characters/warrior_front_color.png"));
 					mainChar.setSize(_dt.importImage("src/graphics/characters/warrior_front_color.png").getWidth(), _dt.importImage("src/graphics/characters/warrior_front_color.png").getHeight());
 					break;
 				case 2:
-					mainChar.setBaseStats(6, 6, 5, 6, 10, 7, 9, 13);
+					mainChar.setBaseStats(.6, .6, .5, .6, 1.0, .7, .9, 1.3);
 					mainChar.setCharacterType(CharacterType.THIEF);
 					mainChar.initStats();
 					mainChar.setImages(_dt.importImage("src/graphics/characters/thief_portrait.png"), _dt.importImage("src/graphics/characters/thief_left.png"), _dt.importImage("src/graphics/characters/thief_right.png"), _dt.importImage("src/graphics/characters/thief_back.png"), _dt.importImage("src/graphics/characters/thief_front.png"));
 					mainChar.setSize(_dt.importImage("src/graphics/characters/thief_front.png").getWidth(), _dt.importImage("src/graphics/characters/thief_front.png").getHeight());
 					break;
 				case 3:
-					mainChar.setBaseStats(4, 5, 9, 8, 7, 5, 5, 12);
+					mainChar.setBaseStats(.4, .5, .9, .8, .7, .5, .5, 1.2);
 					mainChar.setCharacterType(CharacterType.MAGE);
 					mainChar.initStats();
 					mainChar.setImages(_dt.importImage("src/graphics/characters/mage_portrait.png"), _dt.importImage("src/graphics/characters/mage_left.png"), _dt.importImage("src/graphics/characters/mage_right.png"), _dt.importImage("src/graphics/characters/mage_back.png"), _dt.importImage("src/graphics/characters/mage_front.png"));
 					mainChar.setSize(_dt.importImage("src/graphics/characters/mage_front.png").getWidth(), _dt.importImage("src/graphics/characters/mage_front.png").getHeight());
 					break;
 				case 4:
-					mainChar.setBaseStats(7, 5, 5, 6, 9, 9, 3, 14);
+					mainChar.setBaseStats(.7, .5, .5, .6, .9, .9, .3, 1.4);
 					mainChar.setCharacterType(CharacterType.ARCHER);
 					mainChar.initStats();
 					mainChar.setImages(_dt.importImage("src/graphics/characters/archer_portrait.png"), _dt.importImage("src/graphics/characters/archer_left.png"), _dt.importImage("src/graphics/characters/archer_right.png"), _dt.importImage("src/graphics/characters/archer_back.png"), _dt.importImage("src/graphics/characters/archer_front.png"));
