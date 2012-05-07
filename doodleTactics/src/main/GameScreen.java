@@ -436,8 +436,10 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 	//	_currentCharacter.updateLocation(x, y);
 		//update character locations
-		for(Character c : getController().getCharactersToDisplay())
-			c.updateLocation(x, y);
+		synchronized (getController()) {
+			for(Character c : getController().getCharactersToDisplay())
+				c.updateLocation(x, y);
+		}
 		
 		//update map locations
 		for(int i = 0; i < MAP_WIDTH; i++)
@@ -558,7 +560,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		return b;
 	}
 
-	public void paintComponent(java.awt.Graphics graphics) {
+	synchronized public void paintComponent(java.awt.Graphics graphics) {
 		Graphics2D g = (Graphics2D) graphics;
 
 		/*	System.out.println("-------PAINT--------");

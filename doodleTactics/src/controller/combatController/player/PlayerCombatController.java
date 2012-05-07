@@ -413,16 +413,12 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 */
 	public void mousePressed(MouseEvent e) {
 		super.mousePressed(e);
-		MenuItem m = _gameScreen.checkContains(e.getPoint());
-
 		if (!_menus.isEmpty() && _menus.peek().contains(e.getPoint())) {
 			System.out.println("HLO");
 			_menuDraggedx = e.getX();
 			_menuDraggedy = e.getY();
 			_draggingMenu = true;
 		}
-	//	else
-	//		_draggingMenu = false;
 	}
 	
 	@Override
