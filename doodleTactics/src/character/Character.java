@@ -442,6 +442,7 @@ public abstract class Character extends Rectangle{
 		_up = dt.importImage(_upFile);
 		_down = dt.importImage(_downFile);
 		_currentImage = _down;
+		_container = dt.getGameScreen();
 
 		int overflow = 0;
 		if(_down.getWidth() - Tile.TILE_SIZE <= 25.0)

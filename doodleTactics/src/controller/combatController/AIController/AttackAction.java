@@ -41,7 +41,7 @@ public class AttackAction extends Action {
 
 	@Override
 	/**
-	 * 
+	 * evaluates moving to this tile and attacking an enemy character
 	 */
 	public double evaluateMove() {
 		List<Character> filter = new ArrayList<Character>();

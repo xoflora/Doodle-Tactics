@@ -58,4 +58,9 @@ public class MainCharacter extends Character {
 		return _currType;
 	}
 
+	@Override
+	public void load(DoodleTactics dt) {
+		super.load(dt);
+		_dt = dt;
+	}
 }
