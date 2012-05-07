@@ -86,6 +86,8 @@ public abstract class Character extends Rectangle{
 	
 	private transient PathTimer _pathTimer;
 	private transient MoveTimer _moveTimer;
+	
+	private DoodleTactics _dt;
 
 	public static enum CharacterDirection{
 		LEFT,RIGHT,UP,DOWN
@@ -100,6 +102,7 @@ public abstract class Character extends Rectangle{
 
 		super(container);
 		
+		_dt = dt;
 		_container = container;
 		_BASE_STATS = new int[NUM_STATS];
 		_currentStats = new int[NUM_STATS];
@@ -698,6 +701,36 @@ public abstract class Character extends Rectangle{
 		for(int i=0; i<NUM_STATS; i++)
 			_currentStats[i] = 10 * _BASE_STATS[i] + _level*_BASE_STATS[i] + _unitPoints[i]/12;
 	}
+	
+	public void checkLevelUp() {
+		if (_exp >= 100*(Math.pow(1.2, _level))) {
+			_exp = (int) (_exp-(100*(Math.pow(1.2, _level))));
+			try {
+				this.levelUp();
+				System.out.println("Level up!");
+			} catch (InvalidLevelException e) {
+				// TODO Auto-generated catch block
+				_dt.error("You have reached the level cap. Good job for WINNING THE GAME.");
+			}
+		}
+	}
+	
+	public void addExpForAttack(Character enemy) {
+		int yield = (int) Math.min(2*(_level-enemy.getLevel())+((100*Math.pow(1.2, _level))/10), 1);
+		_exp+=yield;
+		this.checkLevelUp();
+	}
+	
+	public void addExpForDefeating(Character enemy) {
+		int yield = (int) Math.min(2*(_level-enemy.getLevel())+((100*Math.pow(1.2, _level))/5), 1);
+		_exp+=yield;
+		this.checkLevelUp();
+	}
+	
+	public int getExpNeededToLevel() {
+		int neededExp = (int) (100*(Math.pow(1.2, _level)));
+		return neededExp;
+	}
 
 	/**
 	 * @return the attack strength of this enemy in combat
@@ -748,7 +781,7 @@ public abstract class Character extends Rectangle{
 		int offense, defense, damage;
 		boolean critical;
 
-		if (r.nextInt(100) < getHitChance(opponent.getOccupant())-opponent.getEvasion()) {
+		if (r.nextInt(100) > getHitChance(opponent.getOccupant())-opponent.getEvasion()) {
 			System.out.println("Attack missed!");
 		}
 		else {
@@ -774,7 +807,7 @@ public abstract class Character extends Rectangle{
 			}
 		}
 		if (opponent.getOccupant().getMaxAttackRange() > range && opponent.getOccupant().getMinAttackRange() < range) {
-			if (r.nextInt(100) < opponent.getOccupant().getFullAttackAccuracy() - _currentStats[SKILL] - attacker.getEvasion()) {
+			if (r.nextInt(100) > opponent.getOccupant().getFullAttackAccuracy() - _currentStats[SKILL] - attacker.getEvasion()) {
 				System.out.println("Attack missed!");
 			}
 			else {

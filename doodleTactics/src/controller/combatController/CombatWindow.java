@@ -194,6 +194,8 @@ public class CombatWindow extends MenuItem {
 					else {
 						count = 0;
 						_attackerChar.attack(_attackerTile, _victimTile, new Random(), count);
+						_attackerChar.addExpForAttack(_victimChar);
+						_victimChar.addExpForAttack(_attackerChar);
 						_timer.stop();
 						_window.getMoveUpTimer().getListener().setMoveOffset(40);
 						_window.getMoveUpTimer().start();
@@ -231,6 +233,8 @@ public class CombatWindow extends MenuItem {
 						count = 0;
 						_timer.stop();
 						_attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
+						_attackerChar.addExpForAttack(_victimChar);
+						_victimChar.addExpForAttack(_attackerChar);
 						_window.getMoveUpTimer().getListener().setMoveOffset(40);
 						_window.getMoveUpTimer().start();
 					}
