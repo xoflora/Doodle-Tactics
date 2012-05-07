@@ -69,10 +69,6 @@ public abstract class Item implements Serializable{
 		return _isFootgear;
 	}
 	
-	public void setAsWeapon(boolean bool) {
-		_isWeapon = bool;
-	}
-	
 	public void loadItem(DoodleTactics dt){
 		_image = dt.importImage(_imagePath);
 	}

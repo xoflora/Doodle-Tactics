@@ -54,8 +54,6 @@ public class OverworldController extends GameScreenController {
 						// provided this character is not the main character
 						if(! c.equals(_gameScreen.getMainChar())) {
 
-							System.out.println("character at " + c.getX() + ", " + c.getY());
-
 							//generate a random direction to move in
 							Random r = new Random();
 							int direction = r.nextInt(4);
@@ -294,6 +292,9 @@ public class OverworldController extends GameScreenController {
 			}
 			else if(e.getKeyChar() == 'g'){
 				_gameScreen.switchToClassChooserMenu();
+			} else if(e.getKeyChar() == 'l') {
+				SpecialAttackController specialAttack = new SpecialAttackController(_dt,500,500);
+				_gameScreen.pushControl(specialAttack);
 			}
 		}
 		_gameScreen.repaint();

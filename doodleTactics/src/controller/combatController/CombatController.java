@@ -30,7 +30,7 @@ public abstract class CombatController extends GameScreenController {
 		CHARACTER_MOVING,
 		CHARACTER_OPTION_MENU,
 		SELECTING_ITEM,
-		ITEM_MENU,
+		ITEM_SELECTED,
 		ATTACKING;
 		
 		public String toString() {
@@ -45,8 +45,8 @@ public abstract class CombatController extends GameScreenController {
 				return "CHARACTER_OPTION_MENU";
 			case SELECTING_ITEM:
 				return "SELECTING_ITEM";
-			case ITEM_MENU:
-				return "ITEM_MENU";
+			case ITEM_SELECTED:
+				return "ITEM_SELECTED";
 			case ATTACKING:
 				return "ATTACKING";
 			default:
@@ -109,7 +109,6 @@ public abstract class CombatController extends GameScreenController {
 			}
 		}
 	}
-	
 	
 	/**
 	 * @param c a character
@@ -295,12 +294,12 @@ public abstract class CombatController extends GameScreenController {
 	 * @param src offense
 	 * @param dest defense
 	 */
-	public void attack(Character src, Character dest) {
+	public void attack(Character src, Character dest, int range) {
 		_state = State.ATTACKING;
 		
 		System.out.println("DOING THE ANIMATION " + _state);
 		
-		_gameScreen.pushControl(new CombatWindowController(_dt, src, dest));
+		_gameScreen.pushControl(new CombatWindowController(_dt, src, dest, range));
 		
 	/*	src.attack(dest, r);
 		System.out.println(src.getName() + " has " + src.getHP() + " HP remaining.");

@@ -144,7 +144,6 @@ public class Dialogue extends Event {
 	}
 
 	public void paintNext(Graphics2D brush) {
-		System.out.println("CALLING PAINT NEXT");
 		BufferedImage profileImg = _characters.get(_currIndex).getProfileImage();
 		_profile = new MenuItem(_gameScreen, profileImg,profileImg,_dt,5);
 		_profile.setVisible(true);

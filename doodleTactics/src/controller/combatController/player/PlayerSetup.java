@@ -1,6 +1,9 @@
 package controller.combatController.player;
 
+import graphics.MenuItem;
+
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +50,8 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	
 	private CombatOrchestrator _orch;
 	private List<Tile> _enemyAttackRange;
+	private MenuItem _curtain;
+	private MenuItem _doodleCombat;
 
 	public PlayerSetup(DoodleTactics dt, List<Tile> validTiles, CombatOrchestrator orch) {
 		super(dt);
@@ -70,8 +75,74 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 			_orch = orch;
 			_enemyAttackRange = new ArrayList<Tile>();
 			
+			BufferedImage combat = _dt.importImage("src/graphics/menu/combatMenu/doodle_combat.png");
+			BufferedImage curtain = _dt.importImage("src/graphics/menu/combatMenu/curtain.png");
+			_doodleCombat = new MenuItem(_dt.getGameScreen(),combat,combat,_dt,3);
+			_curtain = new MenuItem(_dt.getGameScreen(),curtain,curtain,_dt,2);
+			_curtain.setLocation(-25,-900);
+			_doodleCombat.setLocation(115, -306);
+			
 		} catch(IOException e) {
 			_dt.error("Error initializing unit setup.");
+		}
+	}
+	
+	protected class CurtainTimer implements Runnable{
+		private MenuItem _menu1;
+		private MenuItem _menu2;
+		private int _stop;
+		private int _delay;
+		
+		public CurtainTimer(MenuItem menu1, MenuItem menu2, int stop, int delay){
+			_menu1 = menu1;
+			_menu2 = menu2;
+			_stop = stop;
+			_delay = delay;
+		}
+		@Override
+		public void run() {
+			
+			double start = _menu1.getY();
+			
+			while(_menu1.getY() < _stop){
+				try {
+					Thread.sleep(_delay);
+				} catch (InterruptedException e) {
+					//Do Nothing
+				}
+				
+				_menu1.setLocation(_menu1.getX(),_menu1.getY() + _delay);
+				_dt.getGameScreen().repaint();
+			}
+						
+			if(_menu2 != null) {
+				Thread t = new Thread(new CurtainTimer(_menu2,null,0,_delay));
+				t.start();
+				
+				try {
+					Thread.sleep((long) ((Math.abs(_curtain.getY() - 10))*2));
+				} catch (InterruptedException e) {
+					
+				}
+			}
+			
+			if(_menu2 == null) {
+				_pool.setInUse(true);
+			}
+				
+			while(_menu1.getY() > start) {
+				
+				try {
+					Thread.sleep(_delay);
+				} catch (InterruptedException ex) {
+					//Do Nothing
+				}
+				
+				_menu1.setLocation(_menu1.getX(),_menu1.getY() - _delay);
+				_dt.getGameScreen().repaint();
+			}
+			
+			_dt.getGameScreen().removeMenuItem(_menu1);
 		}
 	}
 	
@@ -318,7 +389,15 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 	@Override
 	public void initialize() {
 		if (_pool != null)
-			_pool.setInUse(true);
+			
+			// perform doodle combat curtain animation
+			_dt.getGameScreen().addMenuItem(_curtain);
+			_dt.getGameScreen().addMenuItem(_doodleCombat);
+			
+			new Thread(new CurtainTimer(_doodleCombat,_curtain,-10,5)).start();
+
+			_curtain.setVisible(true);
+			_doodleCombat.setVisible(true);
 	}
 
 	@Override
