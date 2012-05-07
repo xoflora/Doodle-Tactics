@@ -15,7 +15,6 @@ public class LoadGameMenuItem extends MenuItem{
 	public LoadGameMenuItem(JPanel container, BufferedImage defltPath,
 			BufferedImage hoveredPath, DoodleTactics dt) {
 		super(container, defltPath, hoveredPath, dt);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

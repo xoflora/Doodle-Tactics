@@ -49,7 +49,7 @@ public class ScreenChangeMenuItem extends MenuItem {
 		pot5.setDescription("A normal healing potion.");
 		Axe axe = new Axe(_dt, "src/graphics/items/axe_icon.png", "Shiny Axe");
 		axe.setDescription("An axe");
-		axe.setStats(1, 1, 5, 1);
+		axe.setStats(1, 1, 5, 70);
 		Footgear boots = new Footgear(_dt, "src/graphics/items/boots_icon.png", "Cool boots");
 		boots.setDescription("Lots of traction.");
 		boots.setSpeed(2);
@@ -58,6 +58,7 @@ public class ScreenChangeMenuItem extends MenuItem {
 		bow.setStats(2, 4, 2, 4);
 		Cuirass cuirass = new Cuirass(_dt, "src/graphics/items/cuirass_icon.png", "Doodle Cuirass");
 		cuirass.setDefense(2);
+		cuirass.setResistance(2);
 		cuirass.setDescription("Shields you from the cold.");
 		try {
 			_dt.getParty().get(1).addToInventory(potion);

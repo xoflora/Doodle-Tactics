@@ -39,7 +39,6 @@ public class GameMenuController extends Controller {
 
 	@Override
 	public void take() {
-		// TODO
 	}
 
 	@Override
@@ -83,7 +82,7 @@ public class GameMenuController extends Controller {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(_mode == State.LISTEN){
-			if (e.getKeyCode() == _dt.getMenuKey()) {
+			if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
 				//do stuff
 				_gameMenu.setDefault();
 				_gameMenu.removeAll();
@@ -124,11 +123,11 @@ public class GameMenuController extends Controller {
 	public void mouseMoved(MouseEvent e) {
 		if(_gameMenu.getSaveMenuItem().contains(e.getPoint()) && _gameMenu.getSaveMenuItem().containsText()){
 			_gameMenu.getSaveMenuItem().setHovered();
+
 		} else{
 			_gameMenu.getSaveMenuItem().setDefault();
 		}
+
 		_gameMenu.repaint();
-
 	}
-
 }

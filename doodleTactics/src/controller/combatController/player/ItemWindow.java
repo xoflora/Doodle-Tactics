@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,9 +48,8 @@ public class ItemWindow extends MenuItem implements CombatMenu {
 		private int[] _rowLengths;
 		private int[] _rowPositions;
 
-		public ItemOption(JPanel container, BufferedImage defltPath,
-				BufferedImage hoveredPath, DoodleTactics dt, Item item) {
-			super(container, defltPath, hoveredPath, dt, OPTION_PRIORITY);
+		public ItemOption(JPanel container, DoodleTactics dt, Item item) {
+			super(container, item.getImage(), item.getImage(), dt, OPTION_PRIORITY);
 			_showDescription = false;
 			_item = item;
 			_word = item.getDescription().toCharArray();
@@ -77,7 +77,9 @@ public class ItemWindow extends MenuItem implements CombatMenu {
 		
 		@Override
 		public void activate(int type) {
-			
+			if (type != MouseEvent.BUTTON1)
+				return;
+			_source.openItemMenu(_item);
 		}
 		
 		@Override
@@ -192,7 +194,7 @@ public class ItemWindow extends MenuItem implements CombatMenu {
 		HashMap<Integer, Item> inventory = c.getInventory();
 		for (Integer i : inventory.keySet()) {
 			Item item = inventory.get(i);
-			_items.add(new ItemOption(container, item.getImage(), item.getImage(), _dt, item));
+			_items.add(new ItemOption(container, _dt, item));
 		}
 		
 		_arrow = new MenuItem(_gameScreen, dt.importImage(ARROW_IMAGE),
@@ -248,12 +250,16 @@ public class ItemWindow extends MenuItem implements CombatMenu {
 	
 	@Override
 	public void setLocation(double x, double y) {
-		super.setLocation(getX() + x, getY() + y);
-		_arrow.setLocation(_arrow.getX() + x, _arrow.getY() + y);
-		_descriptionBox.setLocation(_descriptionBox.getX() + x, _descriptionBox.getY() + y);
+		_arrow.setLocation(_arrow.getX() - getX() + x, y);
+		_descriptionBox.setLocation(_descriptionBox.getX() - getX() + x, y + getHeight());
+		super.setLocation(x, y);
 		
-		for (MenuItem m : _items)
-			m.setLocation(m.getX() + x, m.getY() + y);
+		double menuX = x + HORZ_BUFFER;
+		for (MenuItem m : _items) {
+			m.setLocation(menuX, y + VERT_BUFFER);
+			menuX += m.getWidth() + HORZ_BUFFER;
+		}
+		setSize(menuX - x - HORZ_BUFFER, VERT_SIZE);
 	}
 	
 	@Override

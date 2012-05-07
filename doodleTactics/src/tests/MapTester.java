@@ -37,7 +37,7 @@ public class MapTester {
 			
 			for (int i = 0; i < tiles.length; i++)
 				for (int j = 0; j < tiles[i].length; j++)
-					tiles[i][j] = Tile.tile(meh, panel, "src/graphics/tiles/tile.png", 'F', i, j, 1);
+					tiles[i][j] = Tile.tile(meh, panel, "src/graphics/tiles/tile.png", 'F', i, j, 1, 0, 0, 0);
 			_test = new Map(null, tiles, "TestMap", null, null, null, null, null, null);
 
 			_test.getTile(7, 7).setCost(5);

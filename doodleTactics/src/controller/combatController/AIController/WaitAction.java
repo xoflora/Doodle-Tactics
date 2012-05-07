@@ -29,5 +29,4 @@ public class WaitAction extends Action {
 	public double evaluateMove() {
 		return defensiveEval(new ArrayList<Character>());
 	}
-
 }

@@ -80,6 +80,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 	private int SCROLLBOX_X, SCROLLBOX_Y;
 
+	private String _saveMessage;
 	public GameMenuScreen(DoodleTactics dt) {
 		super(dt);
 		this.setBackground(java.awt.Color.DARK_GRAY);
@@ -213,13 +214,41 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_typeText.setSize(400, 50);
 		_typeText.setBorder(null);
 		_typeText.setCaretColor(java.awt.Color.CYAN);
-		_typeText.getCaret().setBlinkRate(400);
+		_typeText.getCaret().setBlinkRate(0);
 		_typeText.setLocation(420,420);
 		_typeText.setFocusable(true);
-//		_typeText.grabFocus();
+		//		_typeText.grabFocus();
 		_typeText.setDocument(new MaxLengthDoc());
+		_typeText.addKeyListener(new KeyListener(){
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_CONTROL){
+					_dt.getGameMenuScreen().setDefault();
+					_dt.getGameMenuScreen().removeAll();
+					switchToGameScreen();
+					_typeText.setFocusable(false);
+				}
 
 
+			}
+
+
+			@Override
+			public void keyReleased(KeyEvent e) {}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(_dt.getSavedFilePaths().containsKey(_typeText.getText() + e.getKeyChar()))
+					_saveMessage = "Warning: filename already stored, overwrite?";
+				else
+					_saveMessage = "";
+				GameMenuScreen.this.repaint();
+
+			}
+		});
+
+		_saveMessage = "";
 		_saveMenuItem = new SaveMenuItem(saveImg,hoveredSaveImg,_dt);
 	}
 
@@ -234,8 +263,17 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		public void paint(Graphics2D brush){
 			brush.drawImage(_saveBg, null,187,119);
 			brush.drawImage(_current,null,440,550);
+			brush.setRenderingHint(
+					RenderingHints.KEY_TEXT_ANTIALIASING,
+					RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+			brush.setFont(new Font("M",Font.BOLD,25));
+			brush.setColor(new Color(0,0,1));
+			if(_saveMessage.length() < 30)
+				brush.drawString(_saveMessage,500,530);
+			else
+				brush.drawString(_saveMessage,250,530);
 		}
-		
+
 		public boolean containsText(){
 			return !_typeText.getText().equals("");
 		}
@@ -245,6 +283,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		public void insertString(int offset, String text, AttributeSet attributes) {
 			if (text != null && !text.equals(" ") && this.getLength() + text.length() <= 15) {
+				System.out.println(_typeText.getText() + text);
+				GameMenuScreen.this.repaint();
 				try {
 					super.insertString(offset, text, attributes);
 				} catch (BadLocationException e) {
@@ -321,6 +361,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		//Save!
 		if(_currClicked == 5){
 			_typeText.grabFocus();
+			_typeText.setFocusable(true);
 			_saveMenuItem.setVisible(true);
 			_saveMenuItem.paint((Graphics2D) g);
 		}
@@ -329,7 +370,9 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		if(_currClicked == 4){
 			//Options
 			this.grabFocus();
+			_typeText.setFocusable(false);
 			int y = 1;
+			_typeText.setText("");
 			((Graphics2D) g).setRenderingHint(
 					RenderingHints.KEY_TEXT_ANTIALIASING,
 					RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
@@ -357,8 +400,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			((Graphics2D) g).setColor(new Color(64,224,208));
 			((Graphics2D) g).drawString("Autosaving",200,500);
 			g.drawLine(190, 515, 385, 515);
-
-
 
 		}
 
@@ -458,14 +499,14 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_typeText.setVisible(true);
 			this.add(_typeText);
 
-			//_dt.getGameScreen().saveGame("src/tests/data/testSave");	
 			clicked = _save;
 			_currClicked = 5;
 		}
 
 		if(_saveMenuItem.contains(point) && _saveMenuItem.containsText()){
 			String filepath = _typeText.getText();
-			_dt.getGameScreen().saveGame(filepath);	
+			_dt.getGameScreen().saveGame(filepath);
+			_saveMessage = "Game saved!";
 		}
 
 		this.repaint();
@@ -595,25 +636,25 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		//		c.gridy = 0;
 		profile.setVisible(true);
 		_itemInfoBox.add(profile, BorderLayout.NORTH);
-//		if (item.isEquip()) {
-//
-//		}
-//		else {
-			JTextArea description = new JTextArea(5, 5);
-			description.setOpaque(false);
-			description.setFont(new Font("Arial", Font.BOLD, 14));
-			description.setForeground(java.awt.Color.BLACK);
-			description.setText(item.getDescription());
-			description.setSize(130, 250);
-			description.setVisible(true);
-			description.setLineWrap(true);
-			description.setWrapStyleWord(true);
-			description.revalidate();
-			//			c.fill = GridBagConstraints.BOTH;
-			//			c.gridx = 0;
-			//			c.gridy = 1;
-			_itemInfoBox.add(description, BorderLayout.CENTER);
-//		}
+		//		if (item.isEquip()) {
+		//
+		//		}
+		//		else {
+		JTextArea description = new JTextArea(5, 5);
+		description.setOpaque(false);
+		description.setFont(new Font("Arial", Font.BOLD, 14));
+		description.setForeground(java.awt.Color.BLACK);
+		description.setText(item.getDescription());
+		description.setSize(130, 250);
+		description.setVisible(true);
+		description.setLineWrap(true);
+		description.setWrapStyleWord(true);
+		description.revalidate();
+		//			c.fill = GridBagConstraints.BOTH;
+		//			c.gridx = 0;
+		//			c.gridy = 1;
+		_itemInfoBox.add(description, BorderLayout.CENTER);
+		//		}
 		_itemInfoBox.setVisible(true);
 		this.add(_itemInfoBox);
 	}
@@ -675,7 +716,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_numOptions = _dt.getParty().size()+2;
 
 		boolean isEquipped = false;
-		
+
 		if (_labelToItem.get(label).isEquip()) {
 			if (character.getCuirass() != null) {
 				if (character.getCuirass().equals(item)) {
@@ -786,10 +827,17 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 
 		if (!canPutRight) {
-			_itemOptBoxX = _itemOptBoxX-labelWidth;
+			_itemOptBoxX = _itemOptBoxX-labelWidth-SCROLLBOX_X;
+		}
+		if (canPutRight) {
+			_itemOptBoxX = _itemOptBoxX-SCROLLBOX_X;
 		}
 		if (!canPutDown) {
-			_itemOptBoxY = _itemOptBoxY-labelHeight*_buttonList.size()+_scrollBar.getVerticalScrollBar().getValue();
+			System.out.println("can't put down");
+			_itemOptBoxY = (_itemOptBoxY-labelHeight*_buttonList.size()-SCROLLBOX_Y)+_scrollBar.getVerticalScrollBar().getValue();
+		}
+		if (canPutDown) {
+			_itemOptBoxY = _itemOptBoxY-SCROLLBOX_Y+_scrollBar.getVerticalScrollBar().getValue();
 		}
 
 		for (int i=0; i<_buttonList.size(); i++) {
@@ -801,13 +849,13 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		//		_buttons.setLocation((int)label.getLocationOnScreen().getX(), (int)label.getLocationOnScreen().getY());
 		_buttons.setButtonList(_buttonList);
 		//		System.out.println("Size: " + _buttonList.size());
-		int x = _itemOptBoxX-SCROLLBOX_X;
-		int y = _itemOptBoxY-SCROLLBOX_Y;
-		System.out.println("option box location x: " + x + "; y: " + y);
-		_buttons.setBounds(_itemOptBoxX-SCROLLBOX_X,_itemOptBoxY-SCROLLBOX_Y,labelWidth, labelHeight*_buttonList.size());
+
+		//		System.out.println("option box location x: " + _itemOptBoxX + "; y: " + _itemOptBoxY);
+		_buttons.setBounds(_itemOptBoxX,_itemOptBoxY,labelWidth, labelHeight*_buttonList.size());
+		_buttons.grabFocus();
 		_layers.add(_buttons, new Integer(1), 0);
 		this.repaint();
-		_unitsBox.grabFocus();
+		//		_unitsBox.grabFocus();
 	}
 
 	public void switchToGameScreen() {
@@ -823,7 +871,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private class CharInfo extends JPanel {
 		//represents a box that will display all the characters current stats, items, inventory, etc.
 		public CharInfo(Screen screen, Character chrter) {
-			
+
 			this.setLayout(new GridBagLayout());
 			GridBagConstraints constraint = new GridBagConstraints();
 			java.awt.Dimension panelSize = new java.awt.Dimension(730,200);
@@ -841,7 +889,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			//			profile.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
 			profile.setVisible(true);
 
-			Insets inset = new Insets(5, 5, 5, 5);
+			Insets inset = new Insets(2, 2, 2, 2);
 
 			JLabel name = new JLabel(chrter.getName());
 			name.setForeground(java.awt.Color.BLACK);
@@ -853,7 +901,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			level.setSize(200, 50);
 			level.setVisible(true);
 
-			JLabel exp = new JLabel("EXP : " + chrter.getExp());
+			JLabel exp = new JLabel("EXP : " + chrter.getExp() + "/" + chrter.getExpNeededToLevel());
 			exp.setForeground(java.awt.Color.BLACK);
 			level.setSize(200, 50);
 			level.setVisible(true);
@@ -890,7 +938,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			int extraDef = 0;
 			int extraAcc = 0;
 			int extraSpeed = 0;
-			
+
 			if (chrter.getWeapon() != null) {
 				extraAttack+=chrter.getWeapon().getPower();
 				extraAcc+=chrter.getWeapon().getAccuracy();
@@ -904,39 +952,39 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			if (chrter.getFootgear() != null) {
 				extraSpeed+=chrter.getFootgear().getSpeed();
 			}
-			
-			JLabel strength = new JLabel("STRENGTH : " + chrter.getBaseStats()[0] + "+" + extraAttack);
-//			strength.setFont(new Font("Verdana", Font.BOLD, 12));
+
+			JLabel strength = new JLabel("STRENGTH : " + chrter.getCurrStats()[0] + "+" + extraAttack);
+			//			strength.setFont(new Font("Verdana", Font.BOLD, 12));
 			strength.setForeground(java.awt.Color.BLACK);
 			strength.setSize(150, 50);
 			strength.setVisible(true);
 
-			JLabel defense = new JLabel("DEFENSE : " + chrter.getBaseStats()[1] + "+" + extraDef);
+			JLabel defense = new JLabel("DEFENSE : " + chrter.getCurrStats()[1] + "+" + extraDef);
 			defense.setForeground(java.awt.Color.BLACK);
 			defense.setSize(150, 50);
 			defense.setVisible(true);
 
-			JLabel special = new JLabel("SPECIAL : " + chrter.getBaseStats()[2]);
+			JLabel special = new JLabel("SPECIAL : " + chrter.getCurrStats()[2]);
 			special.setForeground(java.awt.Color.BLACK);
 			special.setSize(150, 50);
 			special.setVisible(true);
 
-			JLabel resistance = new JLabel("RESISTANCE : " + chrter.getBaseStats()[3]);
+			JLabel resistance = new JLabel("RESISTANCE : " + chrter.getCurrStats()[3]);
 			resistance.setForeground(java.awt.Color.BLACK);
 			resistance.setSize(150, 50);
 			resistance.setVisible(true);
 
-			JLabel speed = new JLabel("SPEED : " + chrter.getBaseStats()[4] + "+" + extraSpeed);
+			JLabel speed = new JLabel("SPEED : " + chrter.getCurrStats()[4] + "+" + extraSpeed);
 			speed.setForeground(java.awt.Color.BLACK);
 			speed.setSize(150, 50);
 			speed.setVisible(true);
 
-			JLabel skill = new JLabel("ACCURACY : " + chrter.getBaseStats()[5] + "+" + extraAcc);
+			JLabel skill = new JLabel("ACCURACY : " + chrter.getCurrStats()[5] + "+" + extraAcc);
 			skill.setForeground(java.awt.Color.BLACK);
 			skill.setSize(150, 50);
 			skill.setVisible(true);
 
-			JLabel luck = new JLabel("LUCK : " + chrter.getBaseStats()[6]);
+			JLabel luck = new JLabel("LUCK : " + chrter.getCurrStats()[6]);
 			luck.setForeground(java.awt.Color.BLACK);
 			luck.setSize(150, 50);
 			luck.setVisible(true);
@@ -974,7 +1022,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				e.printStackTrace();
 			}
 
-			Insets insetItems = new Insets(2, 2, 2, 2);
+			Insets insetItems = new Insets(1, 1, 1, 1);
 
 			JLabel inventory = new JLabel(new ImageIcon(inventoryPic));
 			constraint.fill = GridBagConstraints.BOTH;
@@ -1150,7 +1198,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			System.out.println("clicked in itemListener");
 			if (_currClicked == 1) {
 				//				showingMenu = true;
 				GameMenuScreen.this.checkItemClicked(e.getPoint(), _itemPic);
@@ -1200,7 +1247,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private class unitsBoxListener implements MouseMotionListener, MouseListener {
 
 		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
 
 		}
 
@@ -1329,7 +1375,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			try {
 				if (_selectedChar.getWeapon() != null) {
 					if (_selectedChar.getWeapon().equals(_selectedItem)) {
-						System.out.println("WAHH");
 						_selectedChar.addToInventory(_selectedChar.getWeapon());
 						_selectedChar.removeWeapon();
 					}
@@ -1377,9 +1422,9 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				if (!_selectedChar.equip((Equipment)_selectedItem)) {
 					_dt.error("That item cannot be equipped.");
 				}
-				
+
 				GameMenuScreen.this.setDefaultTabToUnits();
-			//	System.out.println("set to false");
+				//	System.out.println("set to false");
 				_showingItemOptions = false;
 				GameMenuScreen.this.repaint();
 			} catch (ClassCastException e) {
@@ -1498,6 +1543,14 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 	public SaveMenuItem getSaveMenuItem(){
 		return _saveMenuItem;
+	}
+
+	public JTextField getSaveText(){
+		return _typeText;
+	}
+
+	public void setSaveMsg(String msg){
+		_saveMessage = msg;
 	}
 
 	/*public char getKey(int key){

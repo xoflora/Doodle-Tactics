@@ -23,6 +23,9 @@ public class CombatWindow extends MenuItem {
 
 	protected charImage _attackerImg, _victimImg;
 	private Character _attackerChar, _victimChar;
+	
+	private Tile _attackerTile;
+	private Tile _victimTile;
 
 	private CombatWindowController _c;
 
@@ -30,7 +33,7 @@ public class CombatWindow extends MenuItem {
 	private attackTimer _attackTimer;
 	private GameScreen _gs;
 	private boolean _isAnimating;
-	private int _attackerX, _battlersY = 0, _victimX, _victimY;
+	private int _attackerX, _battlersY = 0, _victimX, _victimY, _range;
 	
 	public CombatWindow(JPanel container, BufferedImage defaultPic, BufferedImage hoverPic, DoodleTactics dt, int priority) {
 		super(container, defaultPic, hoverPic, dt, priority);
@@ -46,20 +49,20 @@ public class CombatWindow extends MenuItem {
 		_victimChar = null;
 		_c = null;
 	}
-	
 
-	public void prepareWindow(Character src, Character dest, CombatWindowController c, int range) {
-		_attackerChar = src;
+	public void animate(Tile src, Tile dest, CombatWindowController c, int range) {
+		_attackerTile = src;
+		_victimTile = dest;
+		_attackerChar = src.getOccupant();
 		_attackerImg = new charImage(_gs, 101);
-		_attackerImg.setImage(src.getLeftImage());
-		_victimChar = dest;
+		_attackerImg.setImage(src.getOccupant().getLeftImage());
+		_victimChar = dest.getOccupant();
 		_victimImg = new charImage(_gs, 102);
-		_victimImg.setImage(dest.getRightImage());
+		_victimImg.setImage(dest.getOccupant().getRightImage());
 		_c = c;
-	}
-
-
-	public void animate() {
+		
+		_range = range;
+		
 		_isAnimating = true;
 		this.setLocation(0, 17*Tile.TILE_SIZE);
 		_battlersY = (17*Tile.TILE_SIZE)+215;
@@ -190,7 +193,10 @@ public class CombatWindow extends MenuItem {
 					}
 					else {
 						count = 0;
-						_attackerChar.attack(_victimChar, new Random());
+						
+						_attackerChar.attack(_attackerTile, _victimTile, new Random(), count);
+						_attackerChar.addExpForAttack(_victimChar);
+						_victimChar.addExpForAttack(_attackerChar);
 						_timer.stop();
 						_window.getMoveUpTimer().getListener().setMoveOffset(40);
 						_window.getMoveUpTimer().start();
@@ -227,7 +233,9 @@ public class CombatWindow extends MenuItem {
 					else {
 						count = 0;
 						_timer.stop();
-						_attackerChar.attack(_victimChar, new Random());
+						_attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
+						_attackerChar.addExpForAttack(_victimChar);
+						_victimChar.addExpForAttack(_attackerChar);
 						_window.getMoveUpTimer().getListener().setMoveOffset(40);
 						_window.getMoveUpTimer().start();
 					}

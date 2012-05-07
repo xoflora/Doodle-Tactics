@@ -64,6 +64,9 @@ public class Tile extends graphics.Rectangle {
 	
 	private boolean[] _canMove;
 	private int _cost;
+	private int _defense;
+	private int _resistance;
+	private int _skill;
 	private int _x;
 	private int _y;
 	
@@ -95,7 +98,7 @@ public class Tile extends graphics.Rectangle {
 	 * @param height
 	 * @param cost
 	 */
-	public Tile(DoodleTactics dt, JPanel container, String imgPath, int x, int y, int cost) 
+	public Tile(DoodleTactics dt, JPanel container, String imgPath, int x, int y, int cost, int defense, int resistance, int skill) 
 			throws InvalidTileException {
 		super(container);
 		this.setSize(TILE_SIZE,TILE_SIZE);
@@ -104,6 +107,9 @@ public class Tile extends graphics.Rectangle {
 		_imgPath = imgPath;	
 		_canMove = new boolean[4];
 		_cost = cost;
+		_defense = defense;
+		_resistance = resistance;
+		_skill = skill;
 		_x = x;
 		_y = y;
 		
@@ -251,8 +257,8 @@ public class Tile extends graphics.Rectangle {
 	 * @return a new tile given by the string
 	 */
 	public static Tile tile(DoodleTactics dt, JPanel container,String imgPath, char permissions,
-			int x, int y, int cost) throws InvalidTileException {
-		Tile t = new Tile(dt,container, imgPath, x, y,cost);
+			int x, int y, int cost, int defense, int resistance, int skill) throws InvalidTileException {
+		Tile t = new Tile(dt,container, imgPath, x, y,cost, defense, resistance, skill);
 		t.setTilePermissions(permissions);
 		return t;
 	}
@@ -284,7 +290,6 @@ public class Tile extends graphics.Rectangle {
 	public boolean isOccupied() {
 		return !(_character == null);
 	}
-	
 
 	public void setEnterEvent(){
 		_enterEvent = true;
@@ -328,12 +333,36 @@ public class Tile extends graphics.Rectangle {
 		return _cost;
 	}
 	
+	public int getDefense() {
+		return _defense;
+	}
+	
+	public int getResistance() {
+		return _resistance;
+	}
+	
+	public int getEvasion() {
+		return _skill;
+	}
+	
 	/**
 	 * updates the cost of a tile
 	 * @param cost the new cost
 	 */
 	public void setCost(int cost) {
 		_cost = cost;
+	}
+	
+	public void setDefense(int def) {
+		_defense = def;
+	}
+	
+	public void setResistance(int resistance) {
+		_resistance = resistance;
+	}
+	
+	public void getSkill(int skill) {
+		_skill = skill;
 	}
 	
 	public int x() {
@@ -504,6 +533,11 @@ public class Tile extends graphics.Rectangle {
 	 */
 	public void setOccupant(Character c) {
 		_character = c;
+		if (_character != null) {
+			_character.addDefense(this.getDefense());
+			_character.addResistance(this.getResistance());
+			_character.addSkill(this.getEvasion());
+		}
 	}
 	
 	/**
@@ -511,6 +545,11 @@ public class Tile extends graphics.Rectangle {
 	 * (called when the character moves out of the tile) 
 	 */
 	public void removeOccupant(){
+		if (_character != null) {
+			_character.addDefense(-this.getDefense());
+			_character.addResistance(-this.getResistance());
+			_character.addSkill(-this.getEvasion());
+		}
 		_character = null;
 	}
 	

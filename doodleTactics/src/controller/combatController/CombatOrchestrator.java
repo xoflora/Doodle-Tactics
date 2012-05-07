@@ -16,7 +16,7 @@ import main.DoodleTactics;
 import map.Tile;
 import character.Character;
 
-public class CombatOrchestrator extends GameScreenController {
+public abstract class CombatOrchestrator extends GameScreenController {
 	
 	private enum State {
 		SETUP,
@@ -48,7 +48,7 @@ public class CombatOrchestrator extends GameScreenController {
 		
 		_enemies = enemies;
 		_partners = partners;
-		_others = others;		
+		_others = others;
 		
 		_p = null;
 	}
@@ -152,6 +152,8 @@ public class CombatOrchestrator extends GameScreenController {
 	 */
 	public void take() {
 		super.take();
+		
+		//Animate DoodleCombat bar
 		
 		if (_state == State.BATTLING) {			
 			

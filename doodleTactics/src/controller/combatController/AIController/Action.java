@@ -73,12 +73,14 @@ public abstract class Action implements Comparable<Action> {
 						_src.getScreen().getMap().getAttackRange(aff.getTileMappings().get(c),
 						c.getMovementRange(), c.getMinAttackRange(),
 						c.getMaxAttackRange()).contains(_destTile)) {
-					if (c.getHitChance(_c) > 30 && c.getFullAttackStrength() > _c.getFullDefense())
+					int defense = _c.getFullDefense() + _destTile.getDefense();
+					if (c.getHitChance(_c) > 30 && c.getFullAttackStrength() > defense)
 						if (c.getCriticalChance(_c) > 30)
 							eval -= Character.CRITICAL_MULTIPLIER*
-								(c.getFullAttackStrength() - _c.getFullDefense());
+								(c.getFullAttackStrength() - defense);
 						else
-							eval -= c.getFullAttackStrength() - _c.getFullDefense();
+							eval -= c.getFullAttackStrength() - defense;
+					eval += defense;
 				}
 			}
 		return eval;

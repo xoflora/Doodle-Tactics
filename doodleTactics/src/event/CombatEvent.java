@@ -10,6 +10,7 @@ import java.util.List;
 
 import controller.combatController.CombatController;
 import controller.combatController.CombatOrchestrator;
+import controller.combatController.EventCombatOrchestrator;
 import controller.combatController.AIController.AICombatController;
 
 import main.DoodleTactics;
@@ -138,7 +139,7 @@ public class CombatEvent extends Event{
 			else
 				partners.add(toAdd);
 		}
-		return new CombatEvent(dt,false, wc,numRounds, new CombatOrchestrator(dt,enemies,partners,neutrals,numUnits));
+		return new CombatEvent(dt,false, wc,numRounds, new EventCombatOrchestrator(dt,enemies,partners,neutrals,numUnits));
 	}
 
 

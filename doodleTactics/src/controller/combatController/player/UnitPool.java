@@ -111,10 +111,10 @@ public class UnitPool extends MenuItem {
 				brush.setFont(new Font("Arial", Font.BOLD, 14));
 				brush.setColor(new Color(0,0,1));
 				brush.drawString(_c.getName(), TEXT_X, y + BUFFER);
-				brush.drawString("HP: " + _c.getHP() + "/" + _c.getBaseStats()[7] +
+				brush.drawString("HP: " + _c.getHP() + "/" + _c.getCurrStats()[Character.MAX_HP] +
 						", Lvl " + _c.getLevel(), TEXT_X, y + BUFFER*2);
-				brush.drawString("Atk: " + _c.getBaseStats()[0] + ", Def: "
-						+ _c.getBaseStats()[1], TEXT_X, y + BUFFER*3);
+				brush.drawString("Atk: " + _c.getFullAttackStrength() + ", Def: "
+						+ _c.getFullDefense(), TEXT_X, y + BUFFER*3);
 				brush.drawString("Range: " + _c.getMovementRange(), TEXT_X, y + BUFFER*4);
 			}
 		}
@@ -153,8 +153,7 @@ public class UnitPool extends MenuItem {
 	private boolean _inUse;
 	private int _numUnits;
 
-	public UnitPool(DoodleTactics dt, GameScreen screen, PoolDependent source, List<Character> units) 
-			throws IOException {
+	public UnitPool(DoodleTactics dt, GameScreen screen, PoolDependent source, List<Character> units) {
 		super(screen, dt.importImage(IMAGE_PATH), dt.importImage(IMAGE_PATH), dt, SIDEBAR_PRIORITY);
 
 		_dt = dt;

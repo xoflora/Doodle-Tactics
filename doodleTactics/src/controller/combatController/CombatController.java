@@ -65,6 +65,9 @@ public abstract class CombatController extends GameScreenController {
 	
 	private State _state;
 	
+	protected boolean _cycledLeft;
+	protected boolean _cycledRight;
+	
 	private Random r;
 	
 	public CombatController(DoodleTactics dt, HashMap<Character, Tile> units) {
@@ -87,6 +90,9 @@ public abstract class CombatController extends GameScreenController {
 		
 		_orch = null;
 		_state = State.START;
+		
+		_cycledLeft = false;
+		_cycledRight = false;
 	}
 	
 	protected class SlideTimer implements Runnable{
@@ -205,6 +211,8 @@ public abstract class CombatController extends GameScreenController {
 		if (_state != State.ATTACKING) {
 			_hasMoved.clear();
 			_unitCycle = _units.listIterator();
+			_cycledLeft = false;
+			_cycledRight = false;
 		}
 		
 		if (_orch == null)
@@ -275,14 +283,59 @@ public abstract class CombatController extends GameScreenController {
 		boolean hasNext;
 		Character c;
 		while ((hasNext = _unitCycle.hasNext()) || wrap) {
-			c = _unitCycle.next();
-			if (!hasMoved(c))
-				return c;
-			if (!wrap && c == wrapPoint)
-				return null;
-			if (!hasNext && wrap) {
+			if (!hasNext) {
 				wrap = false;
 				_unitCycle = _units.listIterator();
+			}
+			else {
+				c = _unitCycle.next();
+				if (!hasMoved(c)) {
+					_cycledRight = true;
+					return c;
+				}
+				if (!wrap && c == wrapPoint)
+					return null;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * @return the previous unit in the controller that has not yet moved
+	 * (equivalent to nextUnit() but cycles in the opposite direction)
+	 */
+	public Character previousUnit() {
+		boolean wrap;
+		Character wrapPoint;
+		
+		if (_unitCycle.hasPrevious()) {
+			wrap = true;
+			wrapPoint = _unitCycle.previous();
+			if (!hasMoved(wrapPoint))
+				return wrapPoint;
+		}
+		else {
+			wrap = false;
+			wrapPoint = null;
+			_unitCycle = _units.listIterator(_units.size());
+		}
+		
+		boolean hasPrevoius;
+		Character c;
+		while ((hasPrevoius = _unitCycle.hasPrevious()) || wrap) {
+			if (!hasPrevoius) {
+				wrap = false;
+				_unitCycle = _units.listIterator(_units.size());
+			}
+			else {
+				c = _unitCycle.previous();
+				if (!hasMoved(c)) {
+					_cycledLeft = true;
+					return c;
+				}
+				if (!wrap && c == wrapPoint)
+					return null;
 			}
 		}
 		
@@ -294,8 +347,28 @@ public abstract class CombatController extends GameScreenController {
 	 * @param src offense
 	 * @param dest defense
 	 */
-	public void attack(Character src, Character dest, int range) {
+	public void attack(Tile src, Tile dest, int range) {
 		_state = State.ATTACKING;
+		
+		int xDiff = src.x()-dest.x();
+		int yDiff = src.y()-dest.y();
+								
+		if (Math.abs(xDiff) > Math.abs(yDiff)) {
+			if (xDiff > 0) {
+				src.getOccupant().setLeft();
+			}
+			else {
+				src.getOccupant().setRight();
+			}
+		}
+		else {
+			if (yDiff > 0) {
+				src.getOccupant().setUp();
+			}
+			else {
+				src.getOccupant().setDown();
+			}
+		}
 		
 		System.out.println("DOING THE ANIMATION " + _state);
 		

@@ -48,7 +48,7 @@ public abstract class Character extends Rectangle{
 	public final static int CRITICAL_MULTIPLIER = 2;
 
 	//stat arrays (indexed by type of stat, see above)
-	protected final int[] _BASE_STATS; //initial
+	protected final double[] _BASE_STATS; //initial
 	protected int[] _currentStats; //updated with levelUp()
 	protected int[] _unitPoints; //gained by character
 	protected final int[] YIELD; //given out by character
@@ -86,6 +86,8 @@ public abstract class Character extends Rectangle{
 	
 	private transient PathTimer _pathTimer;
 	private transient MoveTimer _moveTimer;
+	
+	private DoodleTactics _dt;
 
 	public static enum CharacterDirection{
 		LEFT,RIGHT,UP,DOWN
@@ -100,8 +102,9 @@ public abstract class Character extends Rectangle{
 
 		super(container);
 		
+		_dt = dt;
 		_container = container;
-		_BASE_STATS = new int[NUM_STATS];
+		_BASE_STATS = new double[NUM_STATS];
 		_currentStats = new int[NUM_STATS];
 		_unitPoints = new int[NUM_STATS]; 
 		YIELD = new int[NUM_STATS];
@@ -481,7 +484,7 @@ public abstract class Character extends Rectangle{
 		return _level;
 	}
 
-	public int[] getBaseStats(){
+	public double[] getBaseStats(){
 		return _BASE_STATS;
 	}
 
@@ -569,9 +572,12 @@ public abstract class Character extends Rectangle{
 	 */
 	public void initStats(){
 		for(int i=0; i<NUM_STATS; i++){
-			_currentStats[i] = _BASE_STATS[i];
+			_currentStats[i] = (int) (_BASE_STATS[i]*10);
+			if (i== NUM_STATS-1) {
+//				System.out.println(this.getName() + " max HP: " + _currentStats[MAX_HP]);
+			}
 		}
-		_currentHP = _BASE_STATS[MAX_HP];
+		_currentHP = (int) (_BASE_STATS[MAX_HP]*10);
 	}
 
 	/**
@@ -696,7 +702,37 @@ public abstract class Character extends Rectangle{
 
 		//update stats
 		for(int i=0; i<NUM_STATS; i++)
-			_currentStats[i] = 10 * _BASE_STATS[i] + _level*_BASE_STATS[i] + _unitPoints[i]/12;
+			_currentStats[i] = (int) (10 * _BASE_STATS[i] + _level*_BASE_STATS[i] + _unitPoints[i]/12);
+	}
+	
+	public void checkLevelUp() {
+		if (_exp >= 100*(Math.pow(1.2, (_level-1)))) {
+			_exp = (int) (_exp-(100*(Math.pow(1.2, (_level-1)))));
+			try {
+				this.levelUp();
+				System.out.println("Level up!");
+			} catch (InvalidLevelException e) {
+				// TODO Auto-generated catch block
+				_dt.error("You have reached the level cap. Good job for WINNING THE GAME.");
+			}
+		}
+	}
+	
+	public void addExpForAttack(Character enemy) {
+		int yield = (int) Math.max(2*((_level-1)-enemy.getLevel())+((100*Math.pow(1.2, _level-1))/10), 1);
+		_exp+=yield;
+		this.checkLevelUp();
+	}
+	
+	public void addExpForDefeating(Character enemy) {
+		int yield = (int) Math.max(2*((_level-1)-enemy.getLevel())+((100*Math.pow(1.2, (_level-1)))/5), 1);
+		_exp+=yield;
+		this.checkLevelUp();
+	}
+	
+	public int getExpNeededToLevel() {
+		int neededExp = (int) (100*(Math.pow(1.2, (_level-1))));
+		return neededExp;
 	}
 
 	/**
@@ -736,6 +772,10 @@ public abstract class Character extends Rectangle{
 	public double getCriticalChance(Character other) {
 		return _currentStats[LUCK] - other._currentStats[LUCK];
 	}
+	
+	public double getFullResistance() {
+		return _currentStats[RESISTANCE] + (_cuirass == null ? 0:_cuirass.getResistance());
+	}
 
 
 	/**
@@ -744,61 +784,63 @@ public abstract class Character extends Rectangle{
 	 *  @param r a random number generator
 	 *  @author rroelke
 	 */
-	public void attack(Character opponent, Random r){
+	public void attack(Tile attacker, Tile opponent, Random r, int range){
 		int offense, defense, damage;
 		boolean critical;
 
-		if (r.nextInt(100) > getHitChance(opponent)) {
+		if (r.nextInt(100) > getHitChance(opponent.getOccupant())-opponent.getEvasion()) {
 			System.out.println("Attack missed!");
-		}		
+		}
 		else {
 
-			damage = Math.max(getFullAttackStrength() - opponent.getFullDefense() +
-					r.nextInt(Math.max((getFullAttackStrength() - opponent.getFullDefense())/4, 1)), 0);
+			damage = Math.max(getFullAttackStrength() - opponent.getOccupant().getFullDefense() - opponent.getDefense() +
+					r.nextInt(Math.max((getFullAttackStrength() - opponent.getOccupant().getFullDefense() - opponent.getDefense())/4, 1)), 0);
 
-			critical = (r.nextInt(100) <= (_currentStats[LUCK] - opponent._currentStats[LUCK]));
+			critical = (r.nextInt(100) <= (_currentStats[LUCK] - opponent.getOccupant()._currentStats[LUCK]));
 			if (critical) {
 				damage *= CRITICAL_MULTIPLIER;
 				System.out.print("Critical hit! ");
 			}
 
-			opponent.updateHP(-damage);
+			opponent.getOccupant().updateHP(-damage);
 
-			System.out.println(_name + " attacks " + opponent._name + "!  " + opponent._name +
+			System.out.println(_name + " attacks " + opponent.getOccupant()._name + "!  " + opponent.getOccupant()._name +
 					" takes " + damage + " damage!");
 
-			if (opponent._currentHP <= 0) {
-				System.out.println(opponent.getName() + " defeated.");
-				opponent.setDefeated();
+			if (opponent.getOccupant()._currentHP <= 0) {
+				this.addExpForDefeating(opponent.getOccupant());
+				System.out.println(opponent.getOccupant().getName() + " defeated.");
+				opponent.getOccupant().setDefeated();
 				return;
 			}
 		}
-
-		if (r.nextInt(100) > opponent.getFullAttackAccuracy() - _currentStats[SKILL]) {
-			System.out.println("Attack missed!");
-		}
-		else {
-			offense = opponent._currentStats[STRENGTH] + (opponent._equipped == null ? 0:opponent._equipped.getPower());
-			defense = _currentStats[DEFENSE] + (_cuirass == null ? 0:_cuirass.getDefense())
-			+ (_shield == null ? 0:_shield.getDefense());
-			critical = (r.nextInt(100) <= (opponent._currentStats[LUCK] - _currentStats[LUCK]));
-
-			damage = Math.max(offense - defense + r.nextInt(Math.max((offense - defense)/4, 1)), 0);
-
-			if (critical) {
-				damage *= CRITICAL_MULTIPLIER;
-				System.out.println("Critical hit!");
+		if (opponent.getOccupant().getMaxAttackRange() > range && opponent.getOccupant().getMinAttackRange() < range) {
+			if (r.nextInt(100) > opponent.getOccupant().getFullAttackAccuracy() - _currentStats[SKILL] - attacker.getEvasion()) {
+				System.out.println("Attack missed!");
 			}
-
-			updateHP(-damage);
-
-			System.out.println(opponent._name + " attacks " + _name + "!  " + _name +
-					" takes " + damage + " damage!");
-
-			if (_currentHP <= 0) {
-				System.out.println(getName() + " defeated.");
-				setDefeated();
-				return;
+			else {
+				offense = opponent.getOccupant()._currentStats[STRENGTH] + (opponent.getOccupant()._equipped == null ? 0:opponent.getOccupant()._equipped.getPower());
+				defense = _currentStats[DEFENSE] + (_cuirass == null ? 0:_cuirass.getDefense())
+				+ (_shield == null ? 0:_shield.getDefense())+attacker.getDefense();
+				critical = (r.nextInt(100) <= (opponent.getOccupant()._currentStats[LUCK] - _currentStats[LUCK]));
+	
+				damage = Math.max(offense - defense + r.nextInt(Math.max((offense - defense)/4, 1)), 0);
+	
+				if (critical) {
+					damage *= CRITICAL_MULTIPLIER;
+					System.out.println("Critical hit!");
+				}
+	
+				updateHP(-damage);
+	
+				System.out.println(opponent.getOccupant()._name + " attacks " + _name + "!  " + _name +
+						" takes " + damage + " damage!");
+	
+				if (_currentHP <= 0) {
+					System.out.println(getName() + " defeated.");
+					setDefeated();
+					return;
+				}
 			}
 		}
 	}
@@ -1031,35 +1073,67 @@ public abstract class Character extends Rectangle{
 	}
 
 	public int getStrength() {
-		return _BASE_STATS[STRENGTH];
+		return _currentStats[STRENGTH];
 	}
 
 	public int getDefense() {
-		return _BASE_STATS[DEFENSE];
+		return _currentStats[DEFENSE];
 	}
 
 	public int getSpecial() {
-		return _BASE_STATS[SPECIAL];
+		return _currentStats[SPECIAL];
 	}
 
 	public int getResistance() {
-		return _BASE_STATS[RESISTANCE];
+		return _currentStats[RESISTANCE];
 	}
 
 	public int getSpeed() {
-		return _BASE_STATS[SPEED];
+		return _currentStats[SPEED];
 	}
 
 	public int getSkill() {
-		return _BASE_STATS[SKILL];
+		return _currentStats[SKILL];
 	}
 
 	public int getLuck() {
-		return _BASE_STATS[LUCK];
+		return _currentStats[LUCK];
 	}
 
 	public int getMAX_HP() {
-		return _BASE_STATS[MAX_HP];
+		return _currentStats[MAX_HP];
+	}
+	
+	public void addDefense(int defense) {
+		_currentStats[DEFENSE] += defense;
+	}
+	
+	public void addStrength(int str) {
+		_currentStats[STRENGTH] += str;
+	}
+	
+	public void addSpecial(int special) {
+		_currentStats[SPECIAL] += special;
+	}
+	
+	public void addResistance(int resistance) {
+		_currentStats[RESISTANCE] += resistance;
+	}
+	
+	public void addSpeed(int speed) {
+		_currentStats[SPEED] += speed;
+	}
+	
+	public void addSkill(int skill) {
+		_currentStats[SKILL] += skill;
+	}
+	
+	public void addLuck(int luck) {
+		_currentStats[LUCK] += luck;
+	}
+	
+	public void addMax_HP(int hp) {
+		_currentStats[MAX_HP] += hp;
 	}
 
 	public void setName(String name) {
@@ -1088,15 +1162,19 @@ public abstract class Character extends Rectangle{
 		}
 	}
 
-	public void setStats(int strength, int def, int special, int resistance, int speed, int acc, int luck, int max_hp) {
-		_BASE_STATS[0] = strength;
-		_BASE_STATS[1] = def;
-		_BASE_STATS[2] = special;
-		_BASE_STATS[3] =resistance;
-		_BASE_STATS[4] = speed;
-		_BASE_STATS[5] = acc;
-		_BASE_STATS[6] = luck;
-		_BASE_STATS[7] = max_hp;
+	public void setBaseStats(double d, double e, double f, double g, double h, double i, double j, double k) {
+		_BASE_STATS[0] = d;
+		_BASE_STATS[1] = e;
+		_BASE_STATS[2] = f;
+		_BASE_STATS[3] =g;
+		_BASE_STATS[4] = h;
+		_BASE_STATS[5] = i;
+		_BASE_STATS[6] = j;
+		_BASE_STATS[7] = k;
+	}
+	
+	public int[] getCurrStats() {
+		return _currentStats;
 	}
 
 	public void printStats(){

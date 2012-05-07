@@ -180,7 +180,8 @@ public class Map implements Serializable {
 			String overflowPath = splitLine[2];
 
 			// parse the dimensions of the map
-			splitLine = reader.readLine().split(",");
+			String lineRead = reader.readLine();
+			splitLine = lineRead.split(",");
 			if (splitLine.length != 2)
 				throw new InvalidMapException("(line 3) Incorrect amount of data");
 			int numX = Integer.parseInt(splitLine[0]);
@@ -192,7 +193,7 @@ public class Map implements Serializable {
 				for (int y = 0; y < numY; y++) {
 					if (tiles[x][y] == null)
 						tiles[x][y] = Tile.tile(dt,container, defaultPath, 'F', x,
-								y, 1);
+								y, 1, 0, 0, 0);
 				}
 			}
 
@@ -276,27 +277,28 @@ public class Map implements Serializable {
 
 				// Tile case
 				// 7 if no event specified, 8 otherwise
-				else if (((splitLine.length == 7) && Integer.parseInt(splitLine[6]) == NO_EVENT) ||
-						(splitLine.length == 8 && Integer.parseInt(splitLine[6]) == DIALOGUE) ||
-						(splitLine.length == 8 && Integer.parseInt(splitLine[6]) == COMBAT)
-								|| (splitLine.length == 10 && Integer.parseInt(splitLine[6]) == WARP)) {
+				else if (((splitLine.length == 10) && Integer.parseInt(splitLine[6]) == NO_EVENT) ||
+						(splitLine.length == 11 && Integer.parseInt(splitLine[6]) == DIALOGUE) ||
+						(splitLine.length == 11 && Integer.parseInt(splitLine[6]) == COMBAT)
+								|| (splitLine.length == 13 && Integer.parseInt(splitLine[6]) == WARP)) {
+					System.out.println(line);
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
 
 					tiles[x][y] = Tile.tile(dt,container, splitLine[3],
 							splitLine[2].charAt(0), x, y, Integer
-							.parseInt(splitLine[4]));
+							.parseInt(splitLine[4]), Integer.parseInt(splitLine[7]), Integer.parseInt(splitLine[8]), Integer.parseInt(splitLine[9]));
 
 					//Handle Events
 					if(Integer.parseInt(splitLine[6]) == DIALOGUE){
-						tiles[x][y].setEvent(new Dialogue(dt,splitLine[7]));
+						tiles[x][y].setEvent(new Dialogue(dt,splitLine[10]));
 						tiles[x][y].setInteractible();
 					} else if(Integer.parseInt(splitLine[6]) == WARP){
-						tiles[x][y].setEvent(new Warp(dt,tiles[x][y],splitLine[7],
-								Integer.parseInt(splitLine[8]), Integer.parseInt(splitLine[9])));
+						tiles[x][y].setEvent(new Warp(dt,tiles[x][y],splitLine[10],
+								Integer.parseInt(splitLine[11]), Integer.parseInt(splitLine[12])));
 						tiles[x][y].setEnterEvent();
 					} else if((Integer.parseInt(splitLine[6])) == COMBAT){
-						tiles[x][y].setEvent(CombatEvent.parseEvent(dt, splitLine[7]));
+						tiles[x][y].setEvent(CombatEvent.parseEvent(dt, splitLine[10]));
 						tiles[x][y].setEnterEvent();
 					}
 					//add others in the future perhaps
@@ -309,8 +311,9 @@ public class Map implements Serializable {
 				} else
 					throw new InvalidMapException("(line " + count
 							+ ") Incorrect amount of data");
-
+				
 				line = reader.readLine();
+				System.out.println("count: " + count + "line: " + line);
 			}
 
 

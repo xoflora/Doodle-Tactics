@@ -25,6 +25,7 @@ import controller.OverworldController;
 import controller.combatController.CombatController;
 import controller.combatController.CombatOrchestrator;
 import controller.combatController.CombatWindow;
+import controller.combatController.RandomBattleOrchestrator;
 import controller.combatController.AIController.RandomBattleAI;
 
 import character.Archer;
@@ -99,7 +100,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	}
 
 	/**
-	 * Parses the Main Character from the given file
+	 * Parses the character party from the given file
 	 */
 	public void parseParty(String filePath){
 		try {
@@ -436,8 +437,10 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 	//	_currentCharacter.updateLocation(x, y);
 		//update character locations
-		for(Character c : getController().getCharactersToDisplay())
-			c.updateLocation(x, y);
+		synchronized (getController()) {
+			for(Character c : getController().getCharactersToDisplay())
+				c.updateLocation(x, y);
+		}
 		
 		//update map locations
 		for(int i = 0; i < MAP_WIDTH; i++)
@@ -558,7 +561,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		return b;
 	}
 
-	public void paintComponent(java.awt.Graphics graphics) {
+	synchronized public void paintComponent(java.awt.Graphics graphics) {
 		Graphics2D g = (Graphics2D) graphics;
 
 		/*	System.out.println("-------PAINT--------");
@@ -673,7 +676,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		RandomBattleAI enemy = new RandomBattleAI(_dt, enemies);
 		List<CombatController> e = new ArrayList<CombatController>();
 		e.add(enemy);
-		enterCombat(new CombatOrchestrator(_dt, e, null, null, RandomBattleAI.RANDOM_BATTLE_NUM_UNITS));
+		enterCombat(new RandomBattleOrchestrator(_dt, e, null, null, RandomBattleAI.RANDOM_BATTLE_NUM_UNITS));
 	}
 
 	/**
@@ -742,7 +745,7 @@ public class GameScreen extends Screen<GameScreenController> {
 
 
 	public void saveGame(String filename){
-		String filepath =  "src/tests/data/" + filename;
+		String filepath =  "src/tests/saves/" + filename;
 		System.out.println("Saving game!");
 		FileOutputStream fos;
 		ObjectOutputStream out;
@@ -760,7 +763,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 		int overflowX = (_currMap.getMainCharacter().getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
 		int overflowY = (_currMap.getMainCharacter().getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
-		_currMap.getMainCharacter().setLocation(_currMap.getMainCharacter().getX() - overflowX,_currMap.getMainCharacter().getY() - overflowY);
+		//_currMap.getMainCharacter().setLocation(_currMap.getMainCharacter().getX() - overflowX,_currMap.getMainCharacter().getY() - overflowY);
 
 		
 		_dt.addSavedGame(filename, filepath);
@@ -786,7 +789,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		FileOutputStream fos;
 		ObjectOutputStream out;
 		try {
-			fos = new FileOutputStream("src/tests/data/savedGames");
+			fos = new FileOutputStream("src/tests/saves/savedGames");
 			out = new ObjectOutputStream(fos);
 			out.writeObject(_dt.getSavedFilePaths());
 		}  catch(IOException e){
@@ -798,10 +801,12 @@ public class GameScreen extends Screen<GameScreenController> {
 		FileInputStream fis;
 		ObjectInputStream in;
 		try {
-			fis = new FileInputStream("src/tests/data/savedGames");
+			fis = new FileInputStream("src/tests/saves/savedGames");
 			in = new ObjectInputStream(fis);
 			_dt.setSavedFilePaths((HashMap<String,String>) in.readObject());
-		} catch(IOException e){
+		} catch(FileNotFoundException e){
+			//Do Nothing...no games to load
+		}catch(IOException e){
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
