@@ -303,7 +303,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						clearPlayerAttackRange();
 						_pool.removeCharacter(_selectedCharacter);
 						_hasMoved.put(_selectedCharacter, true);
-						attack(_selectedCharacter, t.getOccupant(), _selectedTile.gridDistanceToTile(t));
+						attack(_selectedTile, t, _selectedTile.gridDistanceToTile(t));
 						System.out.println(getState());
 					}
 				}

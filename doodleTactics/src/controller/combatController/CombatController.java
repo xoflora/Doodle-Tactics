@@ -294,7 +294,7 @@ public abstract class CombatController extends GameScreenController {
 	 * @param src offense
 	 * @param dest defense
 	 */
-	public void attack(Character src, Character dest, int range) {
+	public void attack(Tile src, Tile dest, int range) {
 		_state = State.ATTACKING;
 		
 		System.out.println("DOING THE ANIMATION " + _state);
