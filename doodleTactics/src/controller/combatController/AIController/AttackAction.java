@@ -31,9 +31,9 @@ public class AttackAction extends Action {
 
 	@Override
 	public void act() {
-		System.out.println("EWOI");
-		if (_toAttack != null)
+		if (_toAttack != null) {
 			_src.attack(_destTile, _toAttack, _distance);
+		}
 		else {
 			_src.characterWait();
 		}

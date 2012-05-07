@@ -194,7 +194,7 @@ public class CombatWindow extends MenuItem {
 					else {
 						count = 0;
 						
-						_attackerChar.attack(_attackerTile, _victimTile, new Random(), count);
+						_attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
 						_attackerChar.addExpForAttack(_victimChar);
 						_victimChar.addExpForAttack(_attackerChar);
 						_timer.stop();
