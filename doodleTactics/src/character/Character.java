@@ -1312,4 +1312,52 @@ public abstract class Character extends Rectangle{
 		testPreSerialize();
 		testPostSerialize();
 	}	*/
+	
+	/**
+	 * equips a piece of equipment to this character
+	 * @return whether or not the equip was successful
+	 */
+	public boolean equip(Equipment e) {
+		try {
+			if (e.isWeapon()) {
+				Weapon _selectedWeapon = (Weapon) e;
+				Weapon oldWeapon = changeWeapon(_selectedWeapon);
+				removeFromInventory(e);
+				if (oldWeapon != null) {
+					addToInventory(oldWeapon);
+				}
+				return true;
+			}
+			else if (e.isCuirass()) {
+				Cuirass _selectedCuirass = (Cuirass) e;
+				Cuirass oldCuirass = changeCuirass(_selectedCuirass);
+				removeFromInventory(_selectedCuirass);
+				if (oldCuirass != null) {
+					addToInventory(oldCuirass);
+				}
+				return true;
+			}
+			else if (e.isShield()) {
+				Shield _selectedShield = (Shield) e;
+				Shield oldShield = changeShield(_selectedShield);
+				removeFromInventory(_selectedShield);
+				if (oldShield != null) {
+					addToInventory(oldShield);
+				}
+				return true;
+			}
+			else if (e.isFootgear()) {
+				Footgear _selectedFootgear = (Footgear) e;
+				Footgear oldFootgear = changeFootgear(_selectedFootgear);
+				removeFromInventory(_selectedFootgear);
+				if (oldFootgear != null) {
+					addToInventory(oldFootgear);
+				}
+				return true;
+			}
+			return false;
+		} catch(ItemException f) {
+			return false;
+		}
+	}
 }

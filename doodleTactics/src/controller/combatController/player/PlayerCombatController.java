@@ -2,6 +2,8 @@ package controller.combatController.player;
 
 import graphics.MenuItem;
 
+import items.Item;
+
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -541,5 +543,13 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		else if (action == ActionType.SPECIAL) {
 			
 		}
+	}
+	
+	/**
+	 * opens an item menu corresponding to a given item
+	 * @param i the item whose menu should be opened
+	 */
+	public void openItemMenu(Item i) {
+		
 	}
 }

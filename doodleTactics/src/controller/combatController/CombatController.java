@@ -30,7 +30,7 @@ public abstract class CombatController extends GameScreenController {
 		CHARACTER_MOVING,
 		CHARACTER_OPTION_MENU,
 		SELECTING_ITEM,
-		ITEM_MENU,
+		ITEM_SELECTED,
 		ATTACKING;
 		
 		public String toString() {
@@ -45,8 +45,8 @@ public abstract class CombatController extends GameScreenController {
 				return "CHARACTER_OPTION_MENU";
 			case SELECTING_ITEM:
 				return "SELECTING_ITEM";
-			case ITEM_MENU:
-				return "ITEM_MENU";
+			case ITEM_SELECTED:
+				return "ITEM_SELECTED";
 			case ATTACKING:
 				return "ATTACKING";
 			default:
