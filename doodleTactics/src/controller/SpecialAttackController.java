@@ -38,16 +38,22 @@ public class SpecialAttackController extends GameScreenController {
 
 		private AnimationListener _listener;
 		private LinkedList<MenuItem> _effects;
-		private final int _width = effect.getWidth();
-		private final int _height = effect.getHeight();
-		private final int _rotationStep = 5;
-		private final int _spawnStep = 5;
+		private int _width;
+		private int _height;
+		private int _rotationStep;
+		private int _spawnStep;
+		private boolean _reverse;
 
 		public AnimationTimer() {
-			super(75, null);
+			super(40, null);
 			_listener = new AnimationListener();
 			this.addActionListener(_listener);
 			_effects = new LinkedList<MenuItem>();
+			_rotationStep = 5;
+			_spawnStep = 5;
+			_width = effect.getWidth();
+			_height = effect.getHeight();
+			_reverse = false;
 		}
 		
 		public void addGraphic() {
@@ -94,11 +100,19 @@ public class SpecialAttackController extends GameScreenController {
 				_cnt++;
 				
 				if(_cnt == _numSteps) {
-					for(MenuItem m : _effects) { 
-						_gameScreen.removeMenuItem(m);
+					if(_reverse) {
+						for(MenuItem m : _effects) { 
+							_gameScreen.removeMenuItem(m);
+						}
+						AnimationTimer.this.stop();
+						_gameScreen.popControl();
+					} else {
+						_cnt = 0;
+						_rotationStep = -_rotationStep;
+						_width = -_width;
+						_height = -_height;
+						_reverse = true;
 					}
-					AnimationTimer.this.stop();
-					_gameScreen.popControl();
 				}
 			}
 		}
