@@ -3,6 +3,7 @@ package controller.combatController.AIController;
 import java.util.ArrayList;
 
 import map.Tile;
+import controller.combatController.ActionType;
 import controller.combatController.CombatController;
 import character.Character;
 
@@ -15,6 +16,7 @@ public class WaitAction extends Action {
 
 	public WaitAction(CombatController src, Character c, Tile t) {
 		super(src, c, t);
+		_type = ActionType.WAIT;
 	}
 
 	@Override

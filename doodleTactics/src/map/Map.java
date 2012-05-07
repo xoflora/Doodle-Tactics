@@ -212,7 +212,6 @@ public class Map implements Serializable {
 						throw new InvalidMapException("(line " + count + ") Main Character must be parsed before images");
 					int xTile = Integer.parseInt(splitLine[2]);
 					int yTile = Integer.parseInt(splitLine[3]);
-					System.out.println(main.getTileX() + ": " + main.getTileY());
 					double xLoc = Tile.TILE_SIZE * xTile; //(xTile  - main.getTileX());
 					double yLoc = Tile.TILE_SIZE * yTile; //(yTile - main.getTileY());
 					tiles[xTile][yTile].setTilePermissions((splitLine[4]).charAt(0));
@@ -283,7 +282,6 @@ public class Map implements Serializable {
 						(splitLine.length == 11 && Integer.parseInt(splitLine[6]) == DIALOGUE) ||
 						(splitLine.length == 11 && Integer.parseInt(splitLine[6]) == COMBAT)
 								|| (splitLine.length == 13 && Integer.parseInt(splitLine[6]) == WARP)) {
-					System.out.println(line);
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
 
@@ -315,7 +313,6 @@ public class Map implements Serializable {
 							+ ") Incorrect amount of data");
 				
 				line = reader.readLine();
-				System.out.println("count: " + count + "line: " + line);
 			}
 
 
@@ -949,10 +946,6 @@ public class Map implements Serializable {
 		_prevYWindowOffset.push(y);
 	}
 	
-	public Set<Character> getRandomBattleEnemies() {
-		return _enemyToTiles.keySet();
-	}
-	
 	/**
 	 * updates random battle data structures to maintain data for a random battle character
 	 * @param c the random battle character to add
@@ -963,7 +956,7 @@ public class Map implements Serializable {
 		if (old != null)
 			for (Tile t : old)
 				if (_tileToEnemies.get(t) != null)
-					_tileToEnemies.get(old).remove(c);
+					_tileToEnemies.get(t).remove(c);
 		
 		_enemyTiles.put(c, newTile);
 		
@@ -1039,6 +1032,29 @@ public class Map implements Serializable {
 	}
 	
 	/**
+	 * @return all random enemies residing in this map
+	 */
+	public Set<Character> getRandomBattleEnemies() {
+		return _enemyToTiles.keySet();
+	}
+	
+	/**
+	 * @param c
+	 * @return the tile in which a randomly-generated enemy resides
+	 */
+	public Tile getRandomEnemyTile(Character c) {
+		return _enemyTiles.get(c);
+	}
+	
+	/**
+	 * @param t a tile
+	 * @return a list of all characters who start a random battle from the given tile
+	 */
+	public List<Character> getRandomEnemies(Tile t) {
+		return _tileToEnemies.get(t);
+	}
+	
+	/**
 	 * generates a random battle inside the map; characters within movement range of the player can be added
 	 * @param A tile that generates a Random Battle
 	 */
@@ -1085,6 +1101,8 @@ public class Map implements Serializable {
 	 * @param newLocations the new tile locations of the characters to update
 	 */
 	public void updateRandomBattleTiles(HashMap<Character, Tile> newLocations) {
-		
+		for (Character c : newLocations.keySet())
+			if (_enemyTiles.keySet().contains(c))
+				updateRandomBattle(c, newLocations.get(c));
 	}
 }

@@ -154,6 +154,7 @@ DemoMap,src/graphics/tiles/light_blue.png,src/graphics/tiles/grass.png
 14,14,0,src/graphics/tiles/light_blue.png,1,0,1,0,0,0,src/tests/data/DialogueDemo
 2,12,F,src/graphics/tiles/light_blue.png,1,0,3,0,0,0,src/tests/data/combatDemo
 16,9,F,src/graphics/tiles/light_blue.png,1,1,0,0,0,0
+17,4,F,src/graphics/tiles/light_blue.png,1,1,0,0,0,0
 img,src/graphics/terrain/pen_pillar.png,0,0,A
 img,src/graphics/terrain/pen_pillar.png,1,0,A
 img,src/graphics/terrain/pen_pillar.png,2,0,A
