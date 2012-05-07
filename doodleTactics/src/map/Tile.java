@@ -514,6 +514,14 @@ public class Tile extends graphics.Rectangle {
 		_character = null;
 	}
 	
+	/**
+	 * @param other a comparison tile
+	 * @return the distance in the grid (number of moves required) to reach the other tile
+	 */
+	public int gridDistanceToTile(Tile other) {
+		return Math.abs(x() - other.x()) + Math.abs(y() - other.y());
+	}
+	
 	
 	private AlphaComposite makeComposite(float alpha) {
 		return AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
