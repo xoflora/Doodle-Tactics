@@ -12,14 +12,10 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.text.PlainDocument;
 
 import character.MainCharacter;
 import character.Character.CharacterType;
-
-import map.Tile;
 
 import controller.ClassChooserScreenController;
 import controller.Controller;
