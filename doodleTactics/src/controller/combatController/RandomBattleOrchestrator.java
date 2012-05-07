@@ -12,4 +12,36 @@ public class RandomBattleOrchestrator extends CombatOrchestrator {
 		super(dt, enemies, partners, others, numUnits);
 	}
 
+	@Override
+	public boolean isLoss() {
+		return _gameScreen.getMainChar().getHP() <= 0;
+	}
+
+	@Override
+	/**
+	 * @return whether or not the current combat state is a win condition;
+	 * 		the combat state is a win condition when no enemy units remain on the map
+	 */
+	public boolean isWin() {
+		for (CombatController e : _enemies)
+			if (!e.getUnits().isEmpty())
+				return false;
+		
+		return true;
+	}
+
+	@Override
+	public boolean isRun() {
+		return false;
+	}
+
+	@Override
+	public void performTileEvents() {
+		
+	}
+
+	@Override
+	public void performTurnUpdate() {
+
+	}
 }

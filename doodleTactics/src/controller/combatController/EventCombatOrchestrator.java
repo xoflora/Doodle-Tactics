@@ -12,4 +12,35 @@ public class EventCombatOrchestrator extends CombatOrchestrator {
 		super(dt, enemies, partners, others, numUnits);
 	}
 
+	@Override
+	public boolean isLoss() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isRun() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isWin() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void performTileEvents() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void performTurnUpdate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }

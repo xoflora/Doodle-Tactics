@@ -301,31 +301,14 @@ public class OverworldController extends GameScreenController {
 		_gameScreen.repaint();
 	}
 
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		super.mouseClicked(e);
-		// TODO Auto-generated method stub
-		//	Tile t = _gameScreen.getTile(e.getX(), e.getY());
-		//	if (_validTiles.contains(t)) {
-		//	_selectedTile = t;
-
-		//		System.out.println(t.getOccupant());
-		//	}
-
-		Tile t = _gameScreen.getTile(e.getX(), e.getY());
-		if (t != null)
-			System.out.println(t.getOccupant());
-	}
-
-	//	@Override
-	//	public void mousePressed(MouseEvent e) { }
-
-	//	@Override
-	//	public void mouseDragged(MouseEvent e) { }
-
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		super.mouseMoved(e);
 	}
+	
+	@Override
+	public void mousePressed(MouseEvent e) { }
+	
+	@Override
+	public void mouseDragged(MouseEvent e) { }
 }

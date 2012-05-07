@@ -25,9 +25,10 @@ public abstract class CombatOrchestrator extends GameScreenController {
 	private ListIterator<CombatController> _factionCycle;
 	private State _state;
 	
-	private List<CombatController> _enemies;
-	private List<CombatController> _partners;
-	private List<CombatController> _others;
+	protected List<CombatController> _enemies;
+	protected List<CombatController> _partners;
+	protected List<CombatController> _others;
+	protected List<CombatController> _defeated;
 	
 	private int _numUnits;
 	private static final int NUM_EXTRA_SETUP_SPACES = 0;
@@ -46,6 +47,7 @@ public abstract class CombatOrchestrator extends GameScreenController {
 		_enemies = enemies;
 		_partners = partners;
 		_others = others;
+		_defeated = new ArrayList<CombatController>();
 		
 		_p = null;
 	}
@@ -62,9 +64,36 @@ public abstract class CombatOrchestrator extends GameScreenController {
 	public void release() {
 		// TODO determine whether the combat is a win or a loss and act accordingly
 		//	if combat is a loss, swap screens for the "game over" screen
-		System.out.println("Orchestrator releasing for some reason");
 		super.release();
 	}
+	
+	/**
+	 * performs any tile events that are associated with a combat controller
+	 */
+	public abstract void performTileEvents();
+	
+	/**
+	 * performs an update that happens every x turns
+	 */
+	public abstract void performTurnUpdate();
+	
+	/**
+	 * @return whether or not the current combat state represents a win for the player
+	 */
+	public abstract boolean isWin();
+	
+	/**
+	 * @return whether or not the current combat state represents a loss for the player
+	 */
+	public abstract boolean isLoss();
+	
+	/**
+	 * @return whether or not the current combat state reprsents an escape condition
+	 */
+	public abstract boolean isRun();
+	
+	
+	
 	
 	/**
 	 * removes a defeated faction from this combat controller
@@ -77,15 +106,7 @@ public abstract class CombatOrchestrator extends GameScreenController {
 			return;
 		else if (_others != null && _others.remove(f))
 			return;
-		System.out.println("WTF");
-	}
-	
-	public boolean isWin() {
-		return _enemies.isEmpty();
-	}
-	
-	public boolean isLoss() {
-		return !_partners.contains(_p);
+		_dt.error("Combat faction is neither partner, enemy, nor neutral.");
 	}
 
 	@Override
@@ -96,11 +117,32 @@ public abstract class CombatOrchestrator extends GameScreenController {
 	public void take() {
 		super.take();
 		
-		//Animate DoodleCombat bar
-		
-		if (_state == State.BATTLING) {			
+		if (_state == State.BATTLING) {
 			
-			if (_factionCycle.hasNext()) {
+			if (isWin()) {
+				victory();
+			}
+			else if (isLoss()) {
+				
+			}
+			else if (isRun()) {
+				
+			}
+			else {
+				if (_factionCycle.hasNext()) {
+					CombatController f = _factionCycle.next();
+				//	System.out.println("MEHHH");
+					_gameScreen.pushControl(f);
+				}
+				else {	// factions should not be empty; if the player controller is removed the loss condition would
+						// have already occurred
+					System.out.println("SHOULDN'T AHPPEN YET");
+					_factionCycle = _factions.listIterator();
+					take();
+				}
+			}
+			
+		/*	if (_factionCycle.hasNext()) {
 				CombatController f = _factionCycle.next();
 				if (f.getUnits().isEmpty()) {
 					_factionCycle.remove();
@@ -118,17 +160,13 @@ public abstract class CombatOrchestrator extends GameScreenController {
 			else if (!_factions.isEmpty()) {	//INCORRECT CONDITION - swap for not win/loss condition
 				_factionCycle = _factions.listIterator();
 				take();
-			}
-	//		else	//combat has ended - win/loss condition
-	//			_gameScreen.popControl();
+			}	*/
 		}
 		else if (_state == State.SETUP_COMPLETE) {
-			
-		//	if (_p == null)
-		//		_p = new PlayerCombatController(_dt, _dt.getParty());
-			
+			System.out.println("SETUP COMPLETE");
 			if (_partners == null)
 				_partners = new ArrayList<CombatController>();
+			System.out.println(_p == null);
 			_partners.add(_p);
 			
 			for (CombatController p : _partners)
@@ -155,6 +193,7 @@ public abstract class CombatOrchestrator extends GameScreenController {
 			take();
 		}
 		else if (_state == State.SETUP){
+			System.out.println("SETTING UP");
 			_gameScreen.pushControl(new PlayerSetup(_dt,
 					_gameScreen.getValidSetupTiles(_numUnits + NUM_EXTRA_SETUP_SPACES), this));
 			_state = State.SETUP_COMPLETE;
@@ -167,7 +206,6 @@ public abstract class CombatOrchestrator extends GameScreenController {
 	private void victory() {
 		System.out.println("Player is victorious!");
 		while (!_p.getUnits().isEmpty())
-		//	if (_p.getUnits().get(0) != _gameScreen.getMainChar())
 				_p.removeUnit(_p.getUnits().get(0));
 		_gameScreen.popControl();
 	}
@@ -196,6 +234,7 @@ public abstract class CombatOrchestrator extends GameScreenController {
 	 * @param units the unit list of the player combat controller
 	 */
 	public void setPlayerUnits(HashMap<Character, Tile> units) {
+		System.out.println("EWOIUREWORIU");
 		units.put(_gameScreen.getMainChar(), _gameScreen.
 				getTile((int)_gameScreen.getMainChar().getX(), (int)_gameScreen.getMainChar().getY()));
 		_p = new PlayerCombatController(_dt, units);
