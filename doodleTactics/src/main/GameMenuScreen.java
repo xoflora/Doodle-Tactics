@@ -215,7 +215,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_typeText.getCaret().setBlinkRate(400);
 		_typeText.setLocation(420,420);
 		_typeText.setFocusable(true);
-		_typeText.grabFocus();
+//		_typeText.grabFocus();
 		_typeText.setDocument(new MaxLengthDoc());
 
 
@@ -299,6 +299,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 	public void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);
+		this.grabFocus();
 		if (_currClicked == 1) {
 			_itemInfoBox.setLocation(15, 570);
 			_itemInfoBox.setSize(144, 230);
@@ -318,6 +319,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		//Save!
 		if(_currClicked == 5){
+			_typeText.grabFocus();
 			_saveMenuItem.setVisible(true);
 			_saveMenuItem.paint((Graphics2D) g);
 		}
@@ -380,12 +382,12 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		/* check if the point is in any of the buttons */
 		MenuItem clicked = null;
-		_staticMap.setVisible(false);
-		_downArrow.setVisible(false);
 
 		System.out.println("curr clicked: " + _currClicked);
 
 		if(_units.contains(point)) {
+			_staticMap.setVisible(false);
+			_downArrow.setVisible(false);
 			this.removeAll();
 			this.setDefault();
 			_units.setHovered();
@@ -421,6 +423,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 
 		if(_map.contains(point)) {
+			_staticMap.setVisible(false);
+			_downArrow.setVisible(false);
 			this.removeAll();
 			this.setDefault();
 			_map.setHovered();
@@ -435,6 +439,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 
 		if(_options.contains(point)) {
+			_staticMap.setVisible(false);
+			_downArrow.setVisible(false);
 			this.removeAll();
 			this.setDefault();
 			_options.setHovered();
@@ -443,6 +449,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 
 		if(_save.contains(point)) {
+			_staticMap.setVisible(false);
+			_downArrow.setVisible(false);
 			this.removeAll();
 			this.setDefault();
 			_save.setHovered();
@@ -835,14 +843,17 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			Insets inset = new Insets(5, 5, 5, 5);
 
 			JLabel name = new JLabel(chrter.getName());
+			name.setForeground(java.awt.Color.BLACK);
 			name.setSize(200, 50);
 			name.setVisible(true);
 
 			JLabel level = new JLabel("Level : " + chrter.getLevel());
+			level.setForeground(java.awt.Color.BLACK);
 			level.setSize(200, 50);
 			level.setVisible(true);
 
 			JLabel exp = new JLabel("EXP : " + chrter.getExp());
+			exp.setForeground(java.awt.Color.BLACK);
 			level.setSize(200, 50);
 			level.setVisible(true);
 
@@ -870,35 +881,62 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			JLabel HP = new JLabel("HP : " + chrter.getHP() + "/" + chrter.getBaseStats()[7]);
 			//			HP.setFont(new Font("Arial", Font.BOLD, 12));
 			//			HP.setForeground(java.awt.Color.WHITE);
+			HP.setForeground(java.awt.Color.BLACK);
 			HP.setSize(150, 50);
 			HP.setVisible(true);
 
-			JLabel strength = new JLabel("STRENGTH : " + chrter.getBaseStats()[0]);
-			strength.setFont(new Font("Arial", Font.BOLD, 12));
+			int extraAttack = 0;
+			int extraDef = 0;
+			int extraAcc = 0;
+			int extraSpeed = 0;
+			
+			if (chrter.getWeapon() != null) {
+				extraAttack+=chrter.getWeapon().getPower();
+				extraAcc+=chrter.getWeapon().getAccuracy();
+			}
+			if (chrter.getCuirass() != null) {
+				extraDef+=chrter.getCuirass().getDefense();
+			}
+			if (chrter.getShield() != null) {
+				extraDef+=chrter.getShield().getDefense();
+			}
+			if (chrter.getFootgear() != null) {
+				extraSpeed+=chrter.getFootgear().getSpeed();
+			}
+			
+			JLabel strength = new JLabel("STRENGTH : " + chrter.getBaseStats()[0] + "+" + extraAttack);
+//			strength.setFont(new Font("Verdana", Font.BOLD, 12));
+			strength.setForeground(java.awt.Color.BLACK);
 			strength.setSize(150, 50);
 			strength.setVisible(true);
 
-			JLabel defense = new JLabel("DEFENSE : " + chrter.getBaseStats()[1]);
+			JLabel defense = new JLabel("DEFENSE : " + chrter.getBaseStats()[1] + "+" + extraDef);
+			defense.setForeground(java.awt.Color.BLACK);
 			defense.setSize(150, 50);
 			defense.setVisible(true);
 
 			JLabel special = new JLabel("SPECIAL : " + chrter.getBaseStats()[2]);
+			special.setForeground(java.awt.Color.BLACK);
 			special.setSize(150, 50);
 			special.setVisible(true);
 
 			JLabel resistance = new JLabel("RESISTANCE : " + chrter.getBaseStats()[3]);
+			resistance.setForeground(java.awt.Color.BLACK);
 			resistance.setSize(150, 50);
 			resistance.setVisible(true);
 
-			JLabel speed = new JLabel("SPEED : " + chrter.getBaseStats()[4]);
+			JLabel speed = new JLabel("SPEED : " + chrter.getBaseStats()[4] + "+" + extraSpeed);
+			speed.setForeground(java.awt.Color.BLACK);
 			speed.setSize(150, 50);
 			speed.setVisible(true);
-			_scrollBar.setVisible(true);
-			JLabel skill = new JLabel("SKILL : " + chrter.getBaseStats()[5]);
+
+			JLabel skill = new JLabel("ACCURACY : " + chrter.getBaseStats()[5] + "+" + extraAcc);
+			skill.setForeground(java.awt.Color.BLACK);
 			skill.setSize(150, 50);
 			skill.setVisible(true);
 
 			JLabel luck = new JLabel("LUCK : " + chrter.getBaseStats()[6]);
+			luck.setForeground(java.awt.Color.BLACK);
 			luck.setSize(150, 50);
 			luck.setVisible(true);
 
@@ -935,7 +973,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				e.printStackTrace();
 			}
 
-			Insets insetItems = new Insets(5, 5, 5, 5);
+			Insets insetItems = new Insets(2, 2, 2, 2);
 
 			JLabel inventory = new JLabel(new ImageIcon(inventoryPic));
 			constraint.fill = GridBagConstraints.BOTH;
@@ -945,7 +983,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			constraint.gridy = 0;
 			constraint.weightx = 1.0;
 			row1.add(inventory, constraint);
-			System.out.println(chrter.getName() + " inventory size: " + chrter.getInventory().size());
 			int count = 0;
 			itemListener listener;
 			for (Item item: chrter.getInventory().values()) {
@@ -1289,20 +1326,30 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		@Override
 		public void activate(optionButton button) {
 			try {
-				if (_selectedChar.getWeapon().equals(_selectedItem)) {
-					System.out.println("WAHH");
-					_selectedChar.addToInventory(_selectedChar.getWeapon());
-					_selectedChar.removeWeapon();
+				if (_selectedChar.getWeapon() != null) {
+					if (_selectedChar.getWeapon().equals(_selectedItem)) {
+						System.out.println("WAHH");
+						_selectedChar.addToInventory(_selectedChar.getWeapon());
+						_selectedChar.removeWeapon();
+					}
 				}
-				else if (_selectedChar.getCuirass().equals(_selectedItem)) {
-					_selectedChar.addToInventory(_selectedChar.getWeapon());
-					_selectedChar.removeCuirass();
+				if (_selectedChar.getCuirass() != null) {
+					if (_selectedChar.getCuirass().equals(_selectedItem)) {
+						_selectedChar.addToInventory(_selectedChar.getCuirass());
+						_selectedChar.removeCuirass();
+					}
 				}
-				else if (_selectedChar.getShield().equals(_selectedItem)) {
-					_selectedChar.removeShield();
+				if (_selectedChar.getShield() != null) {
+					if (_selectedChar.getShield().equals(_selectedItem)) {
+						_selectedChar.addToInventory(_selectedChar.getShield());
+						_selectedChar.removeShield();
+					}
 				}
-				else if (_selectedChar.getFootgear().equals(_selectedItem)){
-					_selectedChar.removeFootgear();
+				if (_selectedChar.getFootgear() != null) {
+					if (_selectedChar.getFootgear().equals(_selectedItem)){
+						_selectedChar.addToInventory(_selectedChar.getFootgear());
+						_selectedChar.removeFootgear();
+					}
 				}
 				GameMenuScreen.this.setDefaultTabToUnits();
 				System.out.println("set to false");
@@ -1368,29 +1415,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			} catch (ItemException e) {
 				_dt.error("The item you tried to access does not exist.");
 			}
-//			try {
-//				if (_selectedChar.getWeapon().equals(_selectedItem)) {
-//					System.out.println("WAHH");
-//					_selectedChar.addToInventory(_selectedChar.getWeapon());
-//					_selectedChar.removeWeapon();
-//				}
-//				else if (_selectedChar.getCuirass().equals(_selectedItem)) {
-//					_selectedChar.addToInventory(_selectedChar.getWeapon());
-//					_selectedChar.removeCuirass();
-//				}
-//				else if (_selectedChar.getShield().equals(_selectedItem)) {
-//					_selectedChar.removeShield();
-//				}
-//				else if (_selectedChar.getFootgear().equals(_selectedItem)){
-//					_selectedChar.removeFootgear();
-//				}
-//				GameMenuScreen.this.setDefaultTabToUnits();
-//				System.out.println("set to false");
-//				_showingItemOptions = false;
-//				GameMenuScreen.this.repaint();
-//				} catch (ItemException e) {
-//					_dt.error("The item you are trying to access does not exist.");
-//			}
 		}
 	}
 

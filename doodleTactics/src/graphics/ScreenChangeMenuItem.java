@@ -1,6 +1,9 @@
 package graphics;
 
 import items.Axe;
+import items.Bow;
+import items.Cuirass;
+import items.Footgear;
 import items.HealthPotion;
 import items.ItemException;
 
@@ -44,8 +47,18 @@ public class ScreenChangeMenuItem extends MenuItem {
 		pot4.setDescription("Fun stuff.");
 		HealthPotion pot5 = new HealthPotion(_dt, "src/graphics/items/purple_potion.png", "Effervescent Potion", 1000);
 		pot5.setDescription("A normal healing potion.");
-		Axe axe = new Axe(_dt, "src/graphics/items/key.png", "Shiny Axe");
+		Axe axe = new Axe(_dt, "src/graphics/items/axe_icon.png", "Shiny Axe");
 		axe.setDescription("An axe");
+		axe.setStats(1, 1, 5, 1);
+		Footgear boots = new Footgear(_dt, "src/graphics/items/boots_icon.png", "Cool boots");
+		boots.setDescription("Lots of traction.");
+		boots.setSpeed(2);
+		Bow bow = new Bow(_dt, "src/graphics/items/bow_icon.png", "Doodle Bow");
+		bow.setDescription("derp");
+		bow.setStats(2, 4, 2, 4);
+		Cuirass cuirass = new Cuirass(_dt, "src/graphics/items/cuirass_icon.png", "Doodle Cuirass");
+		cuirass.setDefense(2);
+		cuirass.setDescription("Shields you from the cold.");
 		try {
 			_dt.getParty().get(1).addToInventory(potion);
 			_dt.getParty().get(1).updateHP(-10);
@@ -54,6 +67,9 @@ public class ScreenChangeMenuItem extends MenuItem {
 			_dt.getParty().get(1).addToInventory(pot4);
 			_dt.getParty().get(1).addToInventory(pot5);
 			_dt.getParty().get(2).changeWeapon(axe);
+			_dt.getParty().get(3).addToInventory(boots);
+			_dt.getParty().get(4).addToInventory(bow);
+			_dt.getParty().get(2).changeCuirass(cuirass);
 
 		} catch (ItemException e) {
 			// TODO Auto-generated catch block
