@@ -449,14 +449,24 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void keyPressed(KeyEvent e) {
 		if (getState() == State.START) {
 			if (e.getKeyCode() == _dt.getLeftKey()) {
-				Character c = nextUnit();
+				if (_cycledRight)
+					previousUnit();
+				Character c = previousUnit();
 				System.out.println(c);
 				_gameScreen.panToCoordinate(c.getX(), c.getY());
+				
+				_cycledLeft = true;
+				_cycledRight = false;
 			}
 			else if (e.getKeyCode() == _dt.getRightKey()) {
+				if (_cycledLeft)
+					nextUnit();
 				Character c = nextUnit();
 				System.out.println(c);
 				_gameScreen.panToCoordinate(c.getX(), c.getY());
+				
+				_cycledLeft = false;
+				_cycledRight = true;
 			}
 		}
 	}
