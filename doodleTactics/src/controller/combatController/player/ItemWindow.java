@@ -19,7 +19,7 @@ import main.GameScreen;
 import map.Tile;
 import graphics.MenuItem;
 
-public class ItemWindow extends MenuItem {
+public class ItemWindow extends MenuItem implements CombatMenu {
 	
 	private static final int MENU_PRIORITY = 3;
 	private static final int ARROW_PRIORITY = 5;

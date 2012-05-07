@@ -13,9 +13,10 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import main.DoodleTactics;
+import main.GameScreen;
 import graphics.MenuItem;
 
-public class ItemActionWindow extends MenuItem {
+public class ItemActionWindow extends MenuItem implements CombatMenu {
 	
 	private static final String WINDOW_IMAGE = "";
 	private static final String EQUIP_IMAGE = "src/graphics/menu/combatMenu/equip.png";
@@ -31,9 +32,10 @@ public class ItemActionWindow extends MenuItem {
 	private List<MenuItem> _options;
 
 	@SuppressWarnings("serial")
-	public ItemActionWindow(Item item, final Character c, JPanel container, BufferedImage defltPath,
-			BufferedImage hoveredPath, DoodleTactics dt) {
+	public ItemActionWindow(Item item, final Character c, GameScreen container, BufferedImage defltPath,
+			BufferedImage hoveredPath, final DoodleTactics dt) {
 		super(container, defltPath, hoveredPath, dt);
+	//	_gameScreen = container;
 		
 		_options = new ArrayList<MenuItem>();
 		if (_item.isEquip()) {
@@ -44,7 +46,8 @@ public class ItemActionWindow extends MenuItem {
 					dt.importImage(USE_HOVERED), dt) {
 				@Override
 				public void activate(int type) {
-					
+					if (!c.equip(_equip))
+						dt.error("That item cannot be equipped.");
 				}
 			});
 		}
@@ -74,4 +77,12 @@ public class ItemActionWindow extends MenuItem {
 		});
 	}
 
+	
+	public void addToDrawingQueue() {
+		
+	}
+	
+	public void removeFromDrawingQueue() {
+		
+	}
 }

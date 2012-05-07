@@ -299,7 +299,7 @@ public abstract class CombatController extends GameScreenController {
 		
 		System.out.println("DOING THE ANIMATION " + _state);
 		
-		_gameScreen.pushControl(new CombatWindowController(_dt, src, dest));
+		_gameScreen.pushControl(new CombatWindowController(_dt, src, dest, range));
 		
 	/*	src.attack(dest, r);
 		System.out.println(src.getName() + " has " + src.getHP() + " HP remaining.");

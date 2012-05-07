@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 import controller.combatController.ActionType;
 import controller.combatController.CombatController;
@@ -50,6 +51,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	private boolean _draggingMenu;
 	
 	private UnitPool _pool;
+	private Stack<CombatMenu> _menus;
 	private CombatOptionWindow _optionWindow;
 	private ItemWindow _itemWindow;
 	private MenuItem _playerPhase;
