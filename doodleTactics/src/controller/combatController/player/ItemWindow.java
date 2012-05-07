@@ -84,6 +84,8 @@ public class ItemWindow extends MenuItem implements CombatMenu {
 		
 		@Override
 		public void paint(Graphics2D brush, BufferedImage img) {
+			brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+
 			super.paint(brush, img);
 			
 			if (_showDescription && getVisible()) {
@@ -176,6 +178,7 @@ public class ItemWindow extends MenuItem implements CombatMenu {
 					y += FONT_SIZE + 1;
 				}
 			}
+			brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 		}
 	}
 	
@@ -201,7 +204,6 @@ public class ItemWindow extends MenuItem implements CombatMenu {
 				dt.importImage(ARROW_IMAGE), _dt, ARROW_PRIORITY);
 		_descriptionBox = new MenuItem(_gameScreen, dt.importImage(DESCRIPTION_BOX),
 				dt.importImage(DESCRIPTION_BOX), _dt, DESCRIPTION_PRIORITY);
-		
 	}
 	
 	/**
