@@ -1,5 +1,8 @@
 package controller.combatController;
 
+import graphics.MenuItem;
+
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +53,60 @@ public abstract class CombatOrchestrator extends GameScreenController {
 		_defeated = new ArrayList<CombatController>();
 		
 		_p = null;
+	}
+	
+	protected class VictoryTimer implements Runnable {
+		private MenuItem _menu;
+		private int _stop;
+		private int _delay;
+		
+		public VictoryTimer(MenuItem menu, int stop, int delay) {
+			_menu = menu;
+			_stop = stop;
+			_delay = delay;
+		}
+		
+		@Override
+		public void run() {
+			
+			double start = _menu.getY();
+			
+			while(_menu.getY() < _stop){
+				try {
+					Thread.sleep(_delay);
+				} catch (InterruptedException e) {
+					//Do Nothing
+				}
+				
+				_menu.setLocation(_menu.getX(),_menu.getY() + (_delay/2));
+				_dt.getGameScreen().repaint();
+			}
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				//Do Nothing
+			}
+			
+			while(_menu.getY() > start) {
+				
+				try {
+					Thread.sleep(_delay);
+				} catch (InterruptedException ex) {
+					//Do Nothing
+				}
+				
+				_menu.setLocation(_menu.getX(),_menu.getY() - (_delay/2));
+				_dt.getGameScreen().repaint();
+			}
+			
+			while (!_p.getUnits().isEmpty())
+				//	if (_p.getUnits().get(0) != _gameScreen.getMainChar())
+				_p.removeUnit(_p.getUnits().get(0));
+			
+			_dt.getGameScreen().removeMenuItem(_menu);
+			_gameScreen.popControl();
+		}
 	}
 	
 	public List<CombatController> getEnemyAffiliations() {
@@ -205,16 +262,24 @@ public abstract class CombatOrchestrator extends GameScreenController {
 	 */
 	private void victory() {
 		System.out.println("Player is victorious!");
+		
 		while (!_p.getUnits().isEmpty())
 				_p.removeUnit(_p.getUnits().get(0));
 		_gameScreen.popControl();
+		
+		BufferedImage img = _dt.importImage("src/graphics/menu/combatMenu/victory.png");
+		MenuItem victory = new MenuItem(_gameScreen,img,img,_dt,0);
+		victory.setLocation(((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - victory.getImage().getWidth())/2, - victory.getHeight());
+		_gameScreen.addMenuItem(victory);
+		victory.setVisible(true);
+		new Thread(new VictoryTimer(victory,0,20)).start();
 	}
 	
 	/**
 	 * ends the combat with the player defeated
 	 */
 	private void defeat() {
-		System.out.println("PLAYER LOSES");
+
 	}
 
 	/**
