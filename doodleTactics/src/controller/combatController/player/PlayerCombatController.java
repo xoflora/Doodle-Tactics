@@ -52,8 +52,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	
 	private UnitPool _pool;
 	private Stack<CombatMenu> _menus;
-	private CombatOptionWindow _optionWindow;
-	private ItemWindow _itemWindow;
 	private MenuItem _playerPhase;
 	private boolean _finalized;
 	
@@ -78,12 +76,11 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_cacheAttackRange = null;
 		
 		_pool = null;
-		_optionWindow = null;
-		_itemWindow = null;
 		
 		_menuDraggedx = 0;
 		_menuDraggedy = 0;
 		_draggingMenu = false;
+		_menus = new Stack<CombatMenu>();
 		
 		BufferedImage img = _dt.importImage("src/graphics/menu/player_phase.png");
 		_playerPhase = new MenuItem(_dt.getGameScreen(),img,img,_dt,-10);
@@ -113,13 +110,81 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * sets the player attack range
 	 * @param source the source tile
 	 * @param c the character
+	 * @param useMove whether or not the attack range factor in movement range
 	 */
-	private void setPlayerAttackRange(Tile source, Character c) {
+	private void setPlayerAttackRange(Tile source, Character c, boolean useMove) {
 		clearPlayerAttackRange();
-		_characterAttackRange = _gameScreen.getMap().getAttackRange(source, 0,
-				c.getMinAttackRange(), c.getMaxAttackRange());
-		for (Tile t : _characterAttackRange)
-			t.setInPlayerAttackRange(true);
+		
+		if (useMove) {
+			List<Tile> mv = _gameScreen.getMap().getMovementRange(source, c.getMovementRange());
+			List<Tile> atk = _gameScreen.getMap().getAttackRange(source, c.getMovementRange(),
+								c.getMinAttackRange(), c.getMaxAttackRange());
+			
+			_selectedMovementRange = mv;
+			_characterAttackRange = Util.difference(atk, mv);
+			
+			for (Tile toPaint : _selectedMovementRange)
+				toPaint.setInMovementRange(true);
+		}
+		else
+			_characterAttackRange = _gameScreen.getMap().getAttackRange(source, 0,
+					c.getMinAttackRange(), c.getMaxAttackRange());
+		
+		for (Tile toPaint : _characterAttackRange)
+			toPaint.setInPlayerAttackRange(true);
+		
+	/*	List<Tile> mv = _gameScreen.getMap().getMovementRange(t, c.getMovementRange());
+		List<Tile> atk = _gameScreen.getMap().getAttackRange(t, c.getMovementRange(),
+							c.getMinAttackRange(), c.getMaxAttackRange());
+		
+		_selectedMovementRange = mv;
+		_characterAttackRange = Util.difference(atk, mv);
+		
+		for (Tile toPaint : _selectedMovementRange)
+			toPaint.setInMovementRange(true);
+		for (Tile toPaint : _characterAttackRange) {
+			toPaint.setInPlayerAttackRange(true);
+		}	*/
+	}
+	
+	/**
+	 * draws another layer of combat menu, hiding the previous layer (if it exists)
+	 * @param menu the new menu to draw
+	 * @param x the x-position of the menu
+	 * @param y the y-position of the menu
+	 */
+	private void addMenu(CombatMenu menu, double x, double y) {
+		if (!_menus.isEmpty() && _menus.peek() != null)
+			_menus.peek().removeFromDrawingQueue();
+		_menus.push(menu);
+		menu.setLocation(x, y);
+		menu.addToDrawingQueue();
+	}
+	
+	/**
+	 * removes the highest layer of combat menu, drawing the previous layer (if it exists)
+	 * @return
+	 */
+	CombatMenu removeMenu() {
+		CombatMenu toReturn = _menus.pop();
+		toReturn.removeFromDrawingQueue();
+
+		if (!_menus.isEmpty()) {
+			CombatMenu next = _menus.peek();
+			if (next != null)
+				next.addToDrawingQueue();
+		}
+		
+		return toReturn;
+	}
+	
+	/**
+	 * removes and un-draws all menu items
+	 */
+	private void removeAllMenus() {
+		while (!_menus.isEmpty()) {
+			_menus.pop().removeFromDrawingQueue();
+		}
 	}
 	
 	/**
@@ -144,9 +209,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_cacheCost = 0;
 		_cacheDestTile = null;
 		
-		if (_optionWindow != null)
-			_optionWindow.removeFromDrawingQueue();
-		_optionWindow = null;
+		removeAllMenus();
+		
 		setState(State.START);
 	}
 	
@@ -169,6 +233,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_pathCost = 0;
 	}
 	
+	
+	
 	@Override
 	public void move(Character c, Tile source, List<Tile> path) {
 		super.move(c, source, path);
@@ -177,15 +243,10 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	@Override
 	public void moveComplete() {
 		super.moveComplete();
-
-		try {
-			_optionWindow = new CombatOptionWindow(_dt, _gameScreen, false,
-					_selectedCharacter.getInventory().size() != 0, false, this);
-			_optionWindow.setLocation(_destTile.getX() + Tile.TILE_SIZE, _destTile.getY() - Tile.TILE_SIZE);
-			_optionWindow.addToDrawingQueue();
-		} catch(IOException e) {
-			_dt.error("");
-		}
+		addMenu(new CombatOptionWindow(_dt, _gameScreen, false,
+					_selectedCharacter.getInventory().size() != 0, false, this),
+				_destTile.getX() + Tile.TILE_SIZE,
+				_destTile.getY() - Tile.TILE_SIZE);
 	}
 
 	@Override
@@ -202,18 +263,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 							_selectedTile = t;
 							_selectedCharacter = c;
 							
-							List<Tile> mv = _gameScreen.getMap().getMovementRange(t, c.getMovementRange());
-							List<Tile> atk = _gameScreen.getMap().getAttackRange(t, c.getMovementRange(),
-												c.getMinAttackRange(), c.getMaxAttackRange());
+							setPlayerAttackRange(_selectedTile, _selectedCharacter, true);
 							
-							_selectedMovementRange = mv;
-							_characterAttackRange = Util.difference(atk, mv);
-							
-							for (Tile toPaint : _selectedMovementRange)
-								toPaint.setInMovementRange(true);
-							for (Tile toPaint : _characterAttackRange) {
-								toPaint.setInPlayerAttackRange(true);
-							}
 							setState(State.CHARACTER_SELECTED);
 						}
 						else if (isEnemy(c)) {
@@ -237,7 +288,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						clearMovementRange();
 						
 						_cacheAttackRange = _characterAttackRange;
-						setPlayerAttackRange(_destTile, _selectedCharacter);
+						setPlayerAttackRange(_destTile, _selectedCharacter, false);
 						
 						_cachePath = _path;
 						_cacheCost = _pathCost;
@@ -252,7 +303,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						clearPlayerAttackRange();
 						_pool.removeCharacter(_selectedCharacter);
 						_hasMoved.put(_selectedCharacter, true);
-						attack(_selectedCharacter, t.getOccupant(), _selectedTile.gridDistanceToTile(t));
+						attack(_selectedTile, t, _selectedTile.gridDistanceToTile(t));
 						System.out.println(getState());
 					}
 				}
@@ -293,20 +344,18 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				_hasMoved.put(_selectedCharacter, false);
 				_locations.put(_selectedCharacter, _selectedTile);
 				
-				if (_optionWindow != null) {
-					_optionWindow.removeFromDrawingQueue();
-					_optionWindow = null;
-				}
+				removeAllMenus();
 				
 				setState(State.CHARACTER_SELECTED);
 				_gameScreen.panToCoordinate(_selectedTile.getX(), _selectedTile.getY());
 			}
 			else if (getState() == State.SELECTING_ITEM) {
-				_itemWindow.removeFromDrawingQueue();
-				_itemWindow = null;
-				
-				_optionWindow.addToDrawingQueue();
+				removeMenu();
 				setState(State.CHARACTER_OPTION_MENU);
+			}
+			else if (getState() == State.ITEM_SELECTED) {
+				removeMenu();
+				setState(State.SELECTING_ITEM);
 			}
 		}
 	}
@@ -364,14 +413,15 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void mousePressed(MouseEvent e) {
 		super.mousePressed(e);
 		MenuItem m = _gameScreen.checkContains(e.getPoint());
-		if (m != null && (m == _optionWindow || m == _itemWindow)) {
+
+		if (!_menus.isEmpty() && _menus.peek().contains(e.getPoint())) {
 			System.out.println("HLO");
 			_menuDraggedx = e.getX();
 			_menuDraggedy = e.getY();
 			_draggingMenu = true;
 		}
-		else
-			_draggingMenu = false;
+	//	else
+	//		_draggingMenu = false;
 	}
 	
 	@Override
@@ -383,10 +433,12 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		if (!_draggingMenu)
 			super.mouseDragged(e);
 		else {
-			if (_optionWindow != null)
+			if (_menus.peek() != null)
+				_menus.peek().updateLocation(e.getX() - _menuDraggedx, e.getY() - _menuDraggedy);
+		/*	if (_optionWindow != null)
 				_optionWindow.setLocation(e.getX() - _menuDraggedx, e.getY() - _menuDraggedy);
 			if (_itemWindow != null)
-				_itemWindow.setLocation(e.getX() - _menuDraggedx, e.getY() - _menuDraggedy);
+				_itemWindow.setLocation(e.getX() - _menuDraggedx, e.getY() - _menuDraggedy);	*/
 			_menuDraggedx = e.getX();
 			_menuDraggedy = e.getY();
 		}
@@ -489,12 +541,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * 
 	 */
 	public void initialize() {
-		try {
-			_pool = new UnitPool(_dt, _gameScreen, this, _units);
-			_pool.setInUse(true);
-		} catch (IOException e) {
-			_dt.error("");
-		}
+		_pool = new UnitPool(_dt, _gameScreen, this, _units);
+		_pool.setInUse(true);
 	}
 	
 	@Override
@@ -513,6 +561,19 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		else
 			return false;
 	}
+	
+	@Override
+	public void characterWait() {
+		super.characterWait();
+		_pool.removeCharacter(_selectedCharacter);
+		clear();
+		
+		if (_pool.isEmpty()) {
+			_pool.setInUse(false);
+			_pool = null;
+			_gameScreen.popControl();
+		}
+	}
 
 	/**
 	 * sends an action to the controller
@@ -521,24 +582,16 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void pushAction(ActionType action) {
 		assert(getState() == State.CHARACTER_OPTION_MENU);
 		
-		if (action == ActionType.WAIT) {
-			_pool.removeCharacter(_selectedCharacter);
-			clear();
-
-			if (_pool.isEmpty()) {
-				_pool.setInUse(false);
-				_pool = null;
-				_gameScreen.popControl();
-			}
-			else
-				setState(State.START);
-		}
+		if (action == ActionType.WAIT)
+			characterWait();
 		else if (action == ActionType.ITEM) {
-			_itemWindow = new ItemWindow(_gameScreen, _dt, _selectedCharacter, this);
+		/*	_itemWindow = new ItemWindow(_gameScreen, _dt, _selectedCharacter, this);
 			_itemWindow.setLocation(_optionWindow.getX(), _optionWindow.getY());
 			
 			_optionWindow.removeFromDrawingQueue();
-			_itemWindow.addToDrawingQueue();
+			_itemWindow.addToDrawingQueue();	*/
+			addMenu(new ItemWindow(_gameScreen, _dt, _selectedCharacter, this),
+					_menus.peek().getX(), _menus.peek().getY());
 			
 			setState(State.SELECTING_ITEM);
 		}
@@ -547,11 +600,23 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		}
 	}
 	
+	public void returnToOptionMenu() {
+		removeAllMenus();
+		addMenu(new CombatOptionWindow(_dt, _gameScreen, false,
+				_selectedCharacter.getInventory().size() != 0, false, this),
+				_destTile.getX() + Tile.TILE_SIZE,
+				_destTile.getY() - Tile.TILE_SIZE);
+		setState(State.CHARACTER_OPTION_MENU);
+	}
+
 	/**
 	 * opens an item menu corresponding to a given item
 	 * @param i the item whose menu should be opened
 	 */
 	public void openItemMenu(Item i) {
-		
+		System.out.println(i);
+		addMenu(new ItemActionWindow(i, _selectedCharacter, _gameScreen, _dt, this),
+				_menus.peek().getX(), _menus.peek().getY());
+		setState(State.ITEM_SELECTED);
 	}
 }

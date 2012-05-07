@@ -5,17 +5,18 @@ import java.awt.event.MouseEvent;
 
 import main.DoodleTactics;
 import main.Screen;
+import map.Tile;
 import controller.Controller;
 import controller.GameScreenController;
 import character.Character;
 
 public class CombatWindowController extends GameScreenController {
 	
-	private Character _src;
-	private Character _dest;
+	private Tile _src;
+	private Tile _dest;
 	private int _range;
 
-	public CombatWindowController(DoodleTactics dt, Character src, Character dest, int range) {
+	public CombatWindowController(DoodleTactics dt, Tile src, Tile dest, int range) {
 		super(dt);
 		
 		_src = src;

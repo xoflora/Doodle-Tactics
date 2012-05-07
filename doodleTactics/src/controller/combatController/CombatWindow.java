@@ -48,13 +48,13 @@ public class CombatWindow extends MenuItem {
 	}
 
 
-	public void animate(Character src, Character dest, CombatWindowController c, int range) {
-		_attackerChar = src;
+	public void animate(Tile src, Tile dest, CombatWindowController c, int range) {
+		_attackerChar = src.getOccupant();
 		_attackerImg = new charImage(_gs, 101);
-		_attackerImg.setImage(src.getLeftImage());
-		_victimChar = dest;
+		_attackerImg.setImage(src.getOccupant().getLeftImage());
+		_victimChar = dest.getOccupant();
 		_victimImg = new charImage(_gs, 102);
-		_victimImg.setImage(dest.getRightImage());
+		_victimImg.setImage(dest.getOccupant().getRightImage());
 		_c = c;
 		
 		_range = range;

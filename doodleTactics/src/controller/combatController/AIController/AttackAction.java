@@ -21,7 +21,7 @@ public class AttackAction extends Action {
 	
 	private static final double DEFEAT_VALUE = 1000;
 	
-	private Character _toAttack;
+	private Tile _toAttack;
 	private int _distance;
 
 	public AttackAction(CombatController src, Character c, Tile t) {
@@ -33,7 +33,7 @@ public class AttackAction extends Action {
 	public void act() {
 		System.out.println("EWOI");
 		if (_toAttack != null)
-			_src.attack(_c, _toAttack, _distance);
+			_src.attack(_destTile, _toAttack, _distance);
 		else {
 			_src.characterWait();
 		}
@@ -57,22 +57,22 @@ public class AttackAction extends Action {
 				
 				if (other.getHP() == 0) {
 					bestAttack = DEFEAT_VALUE;
-					_toAttack = other;
+					_toAttack = t;
 				}
 				else if (damage/other.getHP() > bestAttack) {
 					bestAttack = damage/other.getHP();
-					_toAttack = other;
+					_toAttack = t;
 					_distance = _destTile.gridDistanceToTile(t);
 				}
 			}
 		
 		double eval;
 		if (bestAttack >= 1) {
-			filter.add(_toAttack);
+			filter.add(_toAttack.getOccupant());
 			eval = DEFEAT_MULTIPLIER;
 		}
 		else if (bestAttack >= .75) {
-			filter.add(_toAttack);
+			filter.add(_toAttack.getOccupant());
 			eval = CRIPPLING_MULTIPLIER;
 		}
 		else if (bestAttack >= .4)

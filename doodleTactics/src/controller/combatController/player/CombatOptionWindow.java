@@ -67,7 +67,7 @@ public class CombatOptionWindow extends MenuItem implements CombatMenu {
 	private List<CombatOption> _options;
 	
 	public CombatOptionWindow(DoodleTactics dt, GameScreen container, boolean special, boolean item, boolean talk,
-			PlayerCombatController source) throws IOException {
+			PlayerCombatController source) {
 		
 		super(container, dt.importImage(MENU_IMAGE_PATH),
 				dt.importImage(MENU_IMAGE_PATH), dt, MENU_PRIORITY);
@@ -100,7 +100,7 @@ public class CombatOptionWindow extends MenuItem implements CombatMenu {
 		double y = getY() + VERT_BUFFER;
 		for (MenuItem m : _options) {
 			_gameScreen.addMenuItem(m);
-			m.setLocation(getX() + HORZ_BUFFER, y);
+	//		m.setLocation(getX() + HORZ_BUFFER, y);
 			y += m.getImage().getHeight() + VERT_BUFFER;
 			m.setVisible(true);
 		}
@@ -122,8 +122,12 @@ public class CombatOptionWindow extends MenuItem implements CombatMenu {
 	
 	@Override
 	public void setLocation(double x, double y) {
-		super.setLocation(getX() + x, getY() + y);
-		for (MenuItem m : _options)
-			m.setLocation(m.getX() + x, m.getY() + y);
+		super.setLocation(x, y);
+		
+		double menuY = getY() + VERT_BUFFER;
+		for (MenuItem m : _options) {
+			m.setLocation(x + HORZ_BUFFER, menuY);
+			menuY += m.getImage().getHeight() + VERT_BUFFER;
+		}
 	}
 }
