@@ -251,7 +251,7 @@ public class Tile extends graphics.Rectangle {
 	 * @return a new tile given by the string
 	 */
 	public static Tile tile(DoodleTactics dt, JPanel container,String imgPath, char permissions,
-			int x, int y, int cost) throws InvalidTileException {
+			int x, int y, int cost, int defense, int resistance, int skill) throws InvalidTileException {
 		Tile t = new Tile(dt,container, imgPath, x, y,cost);
 		t.setTilePermissions(permissions);
 		return t;

@@ -808,12 +808,19 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 
 		if (!canPutRight) {
-			_itemOptBoxX = _itemOptBoxX-labelWidth;
+			_itemOptBoxX = _itemOptBoxX-labelWidth-SCROLLBOX_X;
+		}
+		if (canPutRight) {
+			_itemOptBoxX = _itemOptBoxX-SCROLLBOX_X;
 		}
 		if (!canPutDown) {
-			_itemOptBoxY = _itemOptBoxY-labelHeight*_buttonList.size()+_scrollBar.getVerticalScrollBar().getValue();
+			System.out.println("can't put down");
+			_itemOptBoxY = (_itemOptBoxY-labelHeight*_buttonList.size()-SCROLLBOX_Y)+_scrollBar.getVerticalScrollBar().getValue();
 		}
-
+		if (canPutDown) {
+			_itemOptBoxY = _itemOptBoxY-SCROLLBOX_Y+_scrollBar.getVerticalScrollBar().getValue();
+		}
+		
 		for (int i=0; i<_buttonList.size(); i++) {
 			_buttonList.get(i).setVisible(true);
 		}
@@ -823,13 +830,13 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		//		_buttons.setLocation((int)label.getLocationOnScreen().getX(), (int)label.getLocationOnScreen().getY());
 		_buttons.setButtonList(_buttonList);
 		//		System.out.println("Size: " + _buttonList.size());
-		int x = _itemOptBoxX-SCROLLBOX_X;
-		int y = _itemOptBoxY-SCROLLBOX_Y;
-		System.out.println("option box location x: " + x + "; y: " + y);
-		_buttons.setBounds(_itemOptBoxX-SCROLLBOX_X,_itemOptBoxY-SCROLLBOX_Y,labelWidth, labelHeight*_buttonList.size());
+		
+//		System.out.println("option box location x: " + _itemOptBoxX + "; y: " + _itemOptBoxY);
+		_buttons.setBounds(_itemOptBoxX,_itemOptBoxY,labelWidth, labelHeight*_buttonList.size());
+		_buttons.grabFocus();
 		_layers.add(_buttons, new Integer(1), 0);
 		this.repaint();
-		_unitsBox.grabFocus();
+//		_unitsBox.grabFocus();
 	}
 
 	public void switchToGameScreen() {
@@ -863,7 +870,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			//			profile.setBorder(BorderFactory.createLineBorder(java.awt.Color.black));
 			profile.setVisible(true);
 
-			Insets inset = new Insets(5, 5, 5, 5);
+			Insets inset = new Insets(2, 2, 2, 2);
 
 			JLabel name = new JLabel(chrter.getName());
 			name.setForeground(java.awt.Color.BLACK);
@@ -996,7 +1003,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				e.printStackTrace();
 			}
 
-			Insets insetItems = new Insets(2, 2, 2, 2);
+			Insets insetItems = new Insets(1, 1, 1, 1);
 
 			JLabel inventory = new JLabel(new ImageIcon(inventoryPic));
 			constraint.fill = GridBagConstraints.BOTH;
@@ -1172,7 +1179,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			System.out.println("clicked in itemListener");
 			if (_currClicked == 1) {
 				//				showingMenu = true;
 				GameMenuScreen.this.checkItemClicked(e.getPoint(), _itemPic);
@@ -1222,7 +1228,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private class unitsBoxListener implements MouseMotionListener, MouseListener {
 
 		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
 
 		}
 
@@ -1351,7 +1356,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			try {
 				if (_selectedChar.getWeapon() != null) {
 					if (_selectedChar.getWeapon().equals(_selectedItem)) {
-						System.out.println("WAHH");
 						_selectedChar.addToInventory(_selectedChar.getWeapon());
 						_selectedChar.removeWeapon();
 					}
