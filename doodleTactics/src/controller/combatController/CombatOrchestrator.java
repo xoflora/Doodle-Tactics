@@ -96,6 +96,8 @@ public class CombatOrchestrator extends GameScreenController {
 	public void take() {
 		super.take();
 		
+		//Animate DoodleCombat bar
+		
 		if (_state == State.BATTLING) {			
 			
 			if (_factionCycle.hasNext()) {

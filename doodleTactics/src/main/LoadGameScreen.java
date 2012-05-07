@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 import controller.LoadGameController;
 
 public class LoadGameScreen extends Screen<LoadGameController>{
-	
+
 	private BufferedImage _buttonSelectedImage;
 	private BufferedImage _buttonUnselectedImage;
 	private BufferedImage _bg;
@@ -30,7 +30,8 @@ public class LoadGameScreen extends Screen<LoadGameController>{
 	private LoadMenuItem[] _savedGames;
 	private LoadMenuItem _currSelected;
 	private MenuItem _loadButton;
-	
+	private MenuItem _backButton;
+
 	public LoadGameScreen(DoodleTactics dt) {
 		super(dt);
 		this.setVisible(true);
@@ -41,24 +42,30 @@ public class LoadGameScreen extends Screen<LoadGameController>{
 		_dt.getGameScreen().readFilepathsFile();
 		//Background
 		_bg = dt.importImage("src/graphics/menu/load_menu.png");
-		
+
 		//Load MenuItems
-		
-		
+
+
 		//RadioButtons
 		_buttonUnselectedImage = dt.importImage("src/graphics/menu/load_radio_button.png");
 		_buttonSelectedImage = dt.importImage("src/graphics/menu/load_radio_button_selected.png");
-		
+
 		//Load Buttons
 		BufferedImage loadButtonHoveredImage = _dt.importImage("src/graphics/menu/load_game_button_hovered.png");
 		BufferedImage loadButtonImage = _dt.importImage("src/graphics/menu/load_game_button.png");
 		_loadButton = new MenuItem(this,loadButtonImage,loadButtonHoveredImage,_dt);
-		_loadButton.setLocation(350,700);
+		_loadButton.setLocation(500,700);
 		_loadButton.setVisible(true);
-		
+
+		BufferedImage backButtonHoveredImage = _dt.importImage("src/graphics/menu/save_back_hovered.png");
+		BufferedImage backButtonImage = _dt.importImage("src/graphics/menu/save_back.png");
+		_backButton = new MenuItem(this,backButtonImage,backButtonHoveredImage,_dt);
+		_backButton.setLocation(200,700);
+		_backButton.setVisible(true);
+
 		//MenuPanel
 		_menuPanel = dt.importImage("src/graphics/menu/load_menu_item.png");
-		
+
 		//List of LoadMenuItems
 		_savedGames = new LoadMenuItem[DoodleTactics.NUM_SAVE_OPTIONS];
 		int count = 0;
@@ -67,27 +74,27 @@ public class LoadGameScreen extends Screen<LoadGameController>{
 			String filepath = titleToFilepath.get(title);
 			int y = (_bg.getHeight()/(DoodleTactics.NUM_SAVE_OPTIONS + 2))*(count + 1);
 			_savedGames[count] = new LoadMenuItem(this,_buttonUnselectedImage,_buttonSelectedImage,
-									title,filepath,y,_dt);
+					title,filepath,y,_dt);
 			_savedGames[count].setVisible(true);
-		//	_savedGames[count].setLocation(0,(_bg.getHeight()/DoodleTactics.NUM_SAVE_OPTIONS)*count);
+			//	_savedGames[count].setLocation(0,(_bg.getHeight()/DoodleTactics.NUM_SAVE_OPTIONS)*count);
 			count++;
 		}
-		
-	
+
+
 		//Fill empty files
 		while(count < DoodleTactics.NUM_SAVE_OPTIONS){
 			int y = (_bg.getHeight()/(DoodleTactics.NUM_SAVE_OPTIONS + 2))*(count + 1);
 			_savedGames[count] = new LoadMenuItem(this,_buttonUnselectedImage,_buttonSelectedImage,
 					"<Empty>",null,y,_dt);
 			_savedGames[count].setVisible(true);
-		//	_savedGames[count].setLocation(0,(_bg.getHeight()/DoodleTactics.NUM_SAVE_OPTIONS)*count);
+			//	_savedGames[count].setLocation(0,(_bg.getHeight()/DoodleTactics.NUM_SAVE_OPTIONS)*count);
 
 			count++;
 		}
-		
+
 		repaint();
 	}
-	
+
 	public class LoadMenuItem extends MenuItem{
 		private boolean _selectable;
 		private int _y;
@@ -103,7 +110,7 @@ public class LoadGameScreen extends Screen<LoadGameController>{
 			_filepath = filename;
 			this.setLocation(40,_y +40);
 		}	
-		
+
 		@Override
 		public void setHovered(){
 			if(_selectable)
@@ -111,11 +118,11 @@ public class LoadGameScreen extends Screen<LoadGameController>{
 			else
 				_currSelected = null;
 		}
-		
+
 		public String getFilePath(){
 			return _filepath;
 		}
-		
+
 		@Override
 		public void paint(Graphics2D g){
 			g.drawImage(getImage(),null,20,_y);
@@ -134,11 +141,11 @@ public class LoadGameScreen extends Screen<LoadGameController>{
 	protected LoadGameController defaultController() {
 		return new LoadGameController(_dt, this);
 	}
-	
+
 	public LoadMenuItem checkContainsRadioButtons(java.awt.Point point) {
-		
-	
-		
+
+
+
 		for(int i=0; i<_dt.NUM_SAVE_OPTIONS; i++){
 			if(_savedGames[i].contains(point)){
 				//Reset current to default
@@ -153,32 +160,41 @@ public class LoadGameScreen extends Screen<LoadGameController>{
 		}
 		return null;
 	}
-	
+
 	public MenuItem checkContainsButton(java.awt.Point point){
 		//Check if mousing over the load button
 		if(_loadButton.contains(point)){
 			_loadButton.setHovered();
+			_backButton.setDefault();
 			this.repaint();
 			return _loadButton;
-		} else{
+		} else if(_backButton.contains(point)){
+			_backButton.setHovered();
 			_loadButton.setDefault();
+			this.repaint();
+			return _backButton;
+		}
+		else{	
+			_loadButton.setDefault();
+			_backButton.setDefault();
 			this.repaint();
 			return null;
 		}
 	}
 
-	
+
 	@Override
 	public void paintComponent( Graphics brush ){
 		Graphics2D g = (Graphics2D) brush;
 		g.drawImage(_bg, null, 0, 0);
-		
+
 		for(int i=0; i<DoodleTactics.NUM_SAVE_OPTIONS; i++){
 			_savedGames[i].paint(g);
 		}
 		_loadButton.paint(g,_loadButton.getImage());
+		_backButton.paint(g,_backButton.getImage());
 	}
-	
+
 	public LoadMenuItem getCurrSelected(){
 		return _currSelected;
 	}
