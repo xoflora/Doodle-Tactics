@@ -64,7 +64,9 @@ public class RandomBattleAI extends CombatController implements Runnable {
 
 					_hasMoved.put(_current, true);
 					_act = actions.poll();
-					if (_act != null && !(_act.getTile() == _locations.get(_current)) && _act.getType() == ActionType.WAIT) {
+					System.out.println("ACTION: " + _locations.get(_current) + " to " + _act.getTile() + 
+							", action is " + _act.getType());
+					if (_act != null/* && !(_act.getTile() == _locations.get(_current)) && _act.getType() == ActionType.WAIT*/) {
 					//	System.out.println(_act.getValue());
 						try {
 							Thread.sleep(500);

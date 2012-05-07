@@ -15,32 +15,33 @@ import character.Character;
  */
 public class AttackAction extends Action {
 	
-	private static final double ATTACK_CONSTANT = 10;
-	private static final double MINOR_DAMAGE_MULTIPLIER = 3;
-	private static final double DAMAGING_MULTIPLIER = 6;
-	private static final double CRIPPLING_MULTIPLIER = 12;
-	private static final double DEFEAT_MULTIPLIER = 24;
+	private static final int ATTACK_POINTLESS = 0;
+	private static final int MINOR_DAMAGE = 1;
+	private static final int REASONABLE_DAMAGE = 2;
+	private static final int GOOD_DAMAGE = 3;
+	private static final int CRIPPLING_DAMAGE = 4;
+	private static final int LETHAL_BLOW = 5;
+	
+	private static final double[] TIERED_MULTIPLIERS = {-1, 3, 6, 12, 24, 100};
+	private static final double[] TIER_THRESHOLDS = {0, .1, .2, .4, .7, 1};
 	
 	private static final double DEFEAT_VALUE = 1000;
 	
 	private Tile _toAttack;
-	private int _distance;
 
 	public AttackAction(CombatController src, Character c, Tile t) {
 		super(src, c, t);
-		_distance = -1;
+		_type = ActionType.ATTACK;
 	}
 
 	@Override
 	public void act() {
 		if (_toAttack != null) {
-			_src.attack(_destTile, _toAttack, _distance);
+			_src.attack(_destTile, _toAttack);
 		}
 		else {
 			_src.characterWait();
 		}
-		
-		_type = ActionType.ATTACK;
 	}
 
 	@Override
@@ -66,25 +67,30 @@ public class AttackAction extends Action {
 				else if (damage/other.getHP() > bestAttack) {
 					bestAttack = damage/other.getHP();
 					_toAttack = t;
-					_distance = _destTile.gridDistanceToTile(t);
 				}
 			}
 		
-		double eval;
-		if (bestAttack >= 1) {
-			filter.add(_toAttack.getOccupant());
-			eval = DEFEAT_MULTIPLIER;
-		}
-		else if (bestAttack >= .75) {
-			filter.add(_toAttack.getOccupant());
-			eval = CRIPPLING_MULTIPLIER;
-		}
-		else if (bestAttack >= .4)
-			eval = DAMAGING_MULTIPLIER;
-		else {
-			eval = MINOR_DAMAGE_MULTIPLIER;
-		}
+		if (_toAttack == null)
+			return Double.NEGATIVE_INFINITY;
 		
-		return eval*bestAttack*ATTACK_CONSTANT + defensiveEval(filter);
+		double eval;
+		if (bestAttack >= TIER_THRESHOLDS[LETHAL_BLOW]) {
+			filter.add(_toAttack.getOccupant());
+			eval = TIERED_MULTIPLIERS[LETHAL_BLOW];
+		}
+		else if (bestAttack >= TIER_THRESHOLDS[CRIPPLING_DAMAGE]) {
+			filter.add(_toAttack.getOccupant());
+			eval = TIERED_MULTIPLIERS[CRIPPLING_DAMAGE];
+		}
+		else if (bestAttack >= TIER_THRESHOLDS[GOOD_DAMAGE])
+			eval = TIERED_MULTIPLIERS[GOOD_DAMAGE];
+		else if (bestAttack > TIER_THRESHOLDS[REASONABLE_DAMAGE])
+			eval = TIERED_MULTIPLIERS[REASONABLE_DAMAGE];
+		else if (bestAttack > TIER_THRESHOLDS[MINOR_DAMAGE])
+			eval = TIERED_MULTIPLIERS[MINOR_DAMAGE];
+		else
+			eval = TIERED_MULTIPLIERS[ATTACK_POINTLESS];
+		
+		return eval*bestAttack + defensiveEval(filter);
 	}
 }

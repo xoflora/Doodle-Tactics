@@ -2,7 +2,6 @@ package controller.combatController;
 
 import graphics.MenuItem;
 
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -347,7 +346,7 @@ public abstract class CombatController extends GameScreenController {
 	 * @param src offense
 	 * @param dest defense
 	 */
-	public void attack(Tile src, Tile dest, int range) {
+	public void attack(Tile src, Tile dest) {
 		_state = State.ATTACKING;
 		
 		int xDiff = src.x()-dest.x();
@@ -372,7 +371,7 @@ public abstract class CombatController extends GameScreenController {
 		
 		System.out.println("DOING THE ANIMATION " + _state);
 		
-		_gameScreen.pushControl(new CombatWindowController(_dt, src, dest, range));
+		_gameScreen.pushControl(new CombatWindowController(_dt, src, dest));
 		
 	/*	src.attack(dest, r);
 		System.out.println(src.getName() + " has " + src.getHP() + " HP remaining.");
