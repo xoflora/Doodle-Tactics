@@ -79,7 +79,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private buttonPanel _buttons;
 
 	private int SCROLLBOX_X, SCROLLBOX_Y;
-
+	
+	private String _saveMessage;
 	public GameMenuScreen(DoodleTactics dt) {
 		super(dt);
 		this.setBackground(java.awt.Color.DARK_GRAY);
@@ -223,10 +224,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_CONTROL){
-					_dt.getGameScreen().grabFocus();					
 					_dt.getGameMenuScreen().setDefault();
 					_dt.getGameMenuScreen().removeAll();
-					_dt.changeScreens(_dt.getGameScreen());
+					switchToGameScreen();
+					_typeText.setFocusable(false);
 				}
 			}
 
@@ -241,7 +242,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 					GameMenuScreen.this.grabFocus();
 			}
 		});
-
+		
+		_saveMessage = "";
 		_saveMenuItem = new SaveMenuItem(saveImg,hoveredSaveImg,_dt);
 	}
 
@@ -256,6 +258,14 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		public void paint(Graphics2D brush){
 			brush.drawImage(_saveBg, null,187,119);
 			brush.drawImage(_current,null,440,550);
+			brush.setRenderingHint(
+					RenderingHints.KEY_TEXT_ANTIALIASING,
+					RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+			brush.setFont(new Font("M",Font.BOLD,25));
+			brush.setColor(new Color(0,0,1));
+			//_saveMessage = "ABCDEFG";
+			brush.drawString(_saveMessage,500,700);
+
 		}
 
 		public boolean containsText(){
@@ -343,6 +353,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		//Save!
 		if(_currClicked == 5){
 			_typeText.grabFocus();
+			_typeText.setFocusable(true);
 			_saveMenuItem.setVisible(true);
 			_saveMenuItem.paint((Graphics2D) g);
 		}
@@ -351,6 +362,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		if(_currClicked == 4){
 			//Options
 			this.grabFocus();
+			_typeText.setFocusable(false);
 			int y = 1;
 			((Graphics2D) g).setRenderingHint(
 					RenderingHints.KEY_TEXT_ANTIALIASING,
@@ -480,7 +492,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_typeText.setVisible(true);
 			this.add(_typeText);
 
-			//_dt.getGameScreen().saveGame("src/tests/data/testSave");	
 			clicked = _save;
 			_currClicked = 5;
 		}
@@ -488,6 +499,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		if(_saveMenuItem.contains(point) && _saveMenuItem.containsText()){
 			String filepath = _typeText.getText();
 			_dt.getGameScreen().saveGame(filepath);
+			_saveMessage = "Game saved!";
 		}
 
 		this.repaint();
@@ -1524,6 +1536,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 	public SaveMenuItem getSaveMenuItem(){
 		return _saveMenuItem;
+	}
+	
+	public JTextField getSaveText(){
+		return _typeText;
 	}
 
 	/*public char getKey(int key){

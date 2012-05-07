@@ -88,6 +88,7 @@ public class GameMenuController extends Controller {
 				_gameMenu.setDefault();
 				_gameMenu.removeAll();
 				_gameMenu.switchToGameScreen();
+				_gameMenu.getSaveText().setFocusable(false);
 			} else if(e.getKeyCode() == KeyEvent.VK_DOWN){
 				_gameMenu.increaseCurrOption();
 				_gameMenu.repaint();

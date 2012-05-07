@@ -760,6 +760,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 		int overflowX = (_currMap.getMainCharacter().getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
 		int overflowY = (_currMap.getMainCharacter().getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
+		//_currMap.getMainCharacter().setLocation(_currMap.getMainCharacter().getX() - overflowX,_currMap.getMainCharacter().getY() - overflowY);
 
 		
 		_dt.addSavedGame(filename, filepath);
