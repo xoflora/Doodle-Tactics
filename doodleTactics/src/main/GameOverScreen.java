@@ -25,6 +25,7 @@ public class GameOverScreen extends Screen<GameOverScreenController> {
 		_dt = dt;
 		setBackground(Color.GRAY);
 
+		System.out.println("dt: " + dt);
 		BufferedImage titleImage = dt.importImage("src/graphics/menu/title.png");
 
 		_title = new MenuItem(this, titleImage, titleImage, dt);

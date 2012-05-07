@@ -19,7 +19,7 @@ import main.GameScreen;
 import map.Tile;
 import graphics.MenuItem;
 
-public class ItemWindow extends MenuItem {
+public class ItemWindow extends MenuItem implements CombatMenu {
 	
 	private static final int MENU_PRIORITY = 3;
 	private static final int ARROW_PRIORITY = 5;
@@ -76,10 +76,15 @@ public class ItemWindow extends MenuItem {
 		}
 		
 		@Override
+		public void activate(int type) {
+			
+		}
+		
+		@Override
 		public void paint(Graphics2D brush, BufferedImage img) {
 			super.paint(brush, img);
 			
-			if (_showDescription) {
+			if (_showDescription && getVisible()) {
 				brush.setRenderingHint(
 						RenderingHints.KEY_TEXT_ANTIALIASING,
 						RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
@@ -123,14 +128,12 @@ public class ItemWindow extends MenuItem {
 					int j = 0, row = 1;
 					while (pos < _word.length && row < MAX_TEXT_ROWS) {
 						_rowPositions[row] = _rowLengths[row - 1] + _rowPositions[row - 1];
-						
 						if (row == MAX_TEXT_ROWS - 1) {
 							_rowLengths[row] = _word.length - _rowPositions[row];
 							break;
 						}
 						
 						while (j < 2*(_descriptionBox.getWidth() - 2*CHAR_HBUFF)/FONT_SIZE && pos + j < _word.length) {
-							
 							if (_word[pos + j] == ' ')
 								_rowLengths[row] = pos + j - _rowPositions[row];
 							
@@ -171,11 +174,6 @@ public class ItemWindow extends MenuItem {
 					y += FONT_SIZE + 1;
 				}
 			}
-		}
-		
-		@Override
-		public void activate(int type) {
-			
 		}
 	}
 	
@@ -240,8 +238,10 @@ public class ItemWindow extends MenuItem {
 		_arrow.setVisible(false);
 		for (ItemOption i : _items) {
 			i.setVisible(false);
+			i._showDescription = false;
 			_gameScreen.removeMenuItem(i);
 		}
+		_gameScreen.removeMenuItem(_descriptionBox);
 		_gameScreen.removeMenuItem(_arrow);
 		_gameScreen.removeMenuItem(this);
 	}

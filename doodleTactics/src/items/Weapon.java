@@ -41,9 +41,20 @@ public abstract class Weapon extends Equipment{
 	public int getPower() {
 		return _attackPower;
 	}
-
+	
+	public void setStats(int minRange, int maxRange, int power, int accuracy) {
+		_minAttackRange = minRange;
+		_maxAttackRange = maxRange;
+		_attackPower = power;
+		_accuracy = accuracy;
+	}
+	
 	public double getAccuracy() {
 		return _accuracy;
+	}
+	
+	public void setAsWeapon(boolean bool) {
+		_isWeapon = bool;
 	}
 	
 	public abstract boolean canBeEquipped(Character character);

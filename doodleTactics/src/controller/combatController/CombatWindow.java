@@ -48,7 +48,7 @@ public class CombatWindow extends MenuItem {
 	}
 	
 
-	public void prepareWindow(Character src, Character dest, CombatWindowController c) {
+	public void prepareWindow(Character src, Character dest, CombatWindowController c, int range) {
 		_attackerChar = src;
 		_attackerImg = new charImage(_gs, 101);
 		_attackerImg.setImage(src.getLeftImage());

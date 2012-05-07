@@ -22,6 +22,10 @@ public class Cuirass extends Equipment{
 	public void exert(Character c) {
 		c.changeCuirass(this);
 	}
+	
+	public void setDefense(int def) {
+		_defense = def;
+	}
 
 
 	public int getDefense() {

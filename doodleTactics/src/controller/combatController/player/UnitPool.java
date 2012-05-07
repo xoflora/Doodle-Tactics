@@ -32,8 +32,8 @@ import character.Character;
  */
 public class UnitPool extends MenuItem {
 
-	private static final int SIDEBAR_WIDTH = Tile.TILE_SIZE;
-	private static final int SIDEBAR_HEIGHT = 160;
+//	private static final int SIDEBAR_WIDTH = Tile.TILE_SIZE;
+//	private static final int SIDEBAR_HEIGHT = 160;
 
 	private static final int CHARACTER_OFFSET_X = 40;
 	private static final int CHARACTER_OFFSET_Y = 120;

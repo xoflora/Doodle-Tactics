@@ -22,16 +22,18 @@ public class AttackAction extends Action {
 	private static final double DEFEAT_VALUE = 1000;
 	
 	private Character _toAttack;
+	private int _distance;
 
 	public AttackAction(CombatController src, Character c, Tile t) {
 		super(src, c, t);
+		_distance = -1;
 	}
 
 	@Override
 	public void act() {
 		System.out.println("EWOI");
 		if (_toAttack != null)
-			_src.attack(_c, _toAttack);
+			_src.attack(_c, _toAttack, _distance);
 		else {
 			_src.characterWait();
 		}
@@ -39,7 +41,7 @@ public class AttackAction extends Action {
 
 	@Override
 	/**
-	 * 
+	 * evaluates moving to this tile and attacking an enemy character
 	 */
 	public double evaluateMove() {
 		List<Character> filter = new ArrayList<Character>();
@@ -60,6 +62,7 @@ public class AttackAction extends Action {
 				else if (damage/other.getHP() > bestAttack) {
 					bestAttack = damage/other.getHP();
 					_toAttack = other;
+					_distance = _destTile.gridDistanceToTile(t);
 				}
 			}
 		

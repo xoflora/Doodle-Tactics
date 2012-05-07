@@ -2,12 +2,15 @@ package controller.combatController.player;
 
 import graphics.MenuItem;
 
+import items.Item;
+
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 import controller.combatController.ActionType;
 import controller.combatController.CombatController;
@@ -48,6 +51,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	private boolean _draggingMenu;
 	
 	private UnitPool _pool;
+	private Stack<CombatMenu> _menus;
 	private CombatOptionWindow _optionWindow;
 	private ItemWindow _itemWindow;
 	private MenuItem _playerPhase;
@@ -248,7 +252,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						clearPlayerAttackRange();
 						_pool.removeCharacter(_selectedCharacter);
 						_hasMoved.put(_selectedCharacter, true);
-						attack(_selectedCharacter, t.getOccupant());
+						attack(_selectedCharacter, t.getOccupant(), _selectedTile.gridDistanceToTile(t));
 						System.out.println(getState());
 					}
 				}
@@ -541,5 +545,13 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		else if (action == ActionType.SPECIAL) {
 			
 		}
+	}
+	
+	/**
+	 * opens an item menu corresponding to a given item
+	 * @param i the item whose menu should be opened
+	 */
+	public void openItemMenu(Item i) {
+		
 	}
 }

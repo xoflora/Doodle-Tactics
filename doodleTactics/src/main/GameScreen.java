@@ -823,7 +823,7 @@ public class GameScreen extends Screen<GameScreenController> {
 			_currentCharacter = (MainCharacter) in.readObject();
 
 			_dt.getGameMenuScreen().load((int[]) in.readObject());
-			_xWindowOffset  =in.readInt();
+			_xWindowOffset = in.readInt();
 			_yWindowOffset = in.readInt();
 
 			//Reload all party characters

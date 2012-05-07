@@ -23,7 +23,7 @@ import graphics.Rectangle;
  * @author rroelke
  *
  */
-public class CombatOptionWindow extends MenuItem {
+public class CombatOptionWindow extends MenuItem implements CombatMenu {
 	
 	private static final String MENU_IMAGE_PATH = "src/graphics/menu/combatMenu/combat_menu_background.png";
 //	private static final String ATTACK_IMAGE = "src/graphics/menu/attack.png";
