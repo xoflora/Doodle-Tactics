@@ -292,6 +292,9 @@ public class OverworldController extends GameScreenController {
 			}
 			else if(e.getKeyChar() == 'g'){
 				_gameScreen.switchToClassChooserMenu();
+			} else if(e.getKeyChar() == 'l') {
+				SpecialAttackController specialAttack = new SpecialAttackController(_dt,500,500);
+				_gameScreen.pushControl(specialAttack);
 			}
 		}
 		_gameScreen.repaint();
