@@ -45,7 +45,7 @@ public class CombatOrchestrator extends GameScreenController {
 		
 		_enemies = enemies;
 		_partners = partners;
-		_others = others;		
+		_others = others;
 		
 		_p = null;
 	}

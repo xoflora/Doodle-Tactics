@@ -320,7 +320,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		//Save!
 		if(_currClicked == 5){
-			_typeText.grabFocus();
+//			_typeText.grabFocus();
 			_saveMenuItem.setVisible(true);
 			_saveMenuItem.paint((Graphics2D) g);
 		}
@@ -885,7 +885,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			constraint.gridx = 1;
 			constraint.gridy = 0;
 			this.add(col2, constraint);
-
+			
 			JLabel HP = new JLabel("HP : " + chrter.getHP() + "/" + chrter.getBaseStats()[7]);
 			//			HP.setFont(new Font("Arial", Font.BOLD, 12));
 			//			HP.setForeground(java.awt.Color.WHITE);

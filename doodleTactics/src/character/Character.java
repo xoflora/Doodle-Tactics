@@ -1032,35 +1032,67 @@ public abstract class Character extends Rectangle{
 	}
 
 	public int getStrength() {
-		return _BASE_STATS[STRENGTH];
+		return _currentStats[STRENGTH];
 	}
 
 	public int getDefense() {
-		return _BASE_STATS[DEFENSE];
+		return _currentStats[DEFENSE];
 	}
 
 	public int getSpecial() {
-		return _BASE_STATS[SPECIAL];
+		return _currentStats[SPECIAL];
 	}
 
 	public int getResistance() {
-		return _BASE_STATS[RESISTANCE];
+		return _currentStats[RESISTANCE];
 	}
 
 	public int getSpeed() {
-		return _BASE_STATS[SPEED];
+		return _currentStats[SPEED];
 	}
 
 	public int getSkill() {
-		return _BASE_STATS[SKILL];
+		return _currentStats[SKILL];
 	}
 
 	public int getLuck() {
-		return _BASE_STATS[LUCK];
+		return _currentStats[LUCK];
 	}
 
 	public int getMAX_HP() {
-		return _BASE_STATS[MAX_HP];
+		return _currentStats[MAX_HP];
+	}
+	
+	public void addDefense(int defense) {
+		_currentStats[DEFENSE] += defense;
+	}
+	
+	public void addStrength(int str) {
+		_currentStats[STRENGTH] += str;
+	}
+	
+	public void addSpecial(int special) {
+		_currentStats[SPECIAL] += special;
+	}
+	
+	public void addResistance(int resistance) {
+		_currentStats[RESISTANCE] += resistance;
+	}
+	
+	public void addSpeed(int speed) {
+		_currentStats[SPEED] += speed;
+	}
+	
+	public void addSkill(int skill) {
+		_currentStats[SKILL] += skill;
+	}
+	
+	public void addLuck(int luck) {
+		_currentStats[LUCK] += luck;
+	}
+	
+	public void addMax_HP(int hp) {
+		_currentStats[MAX_HP] += hp;
 	}
 
 	public void setName(String name) {
@@ -1089,7 +1121,7 @@ public abstract class Character extends Rectangle{
 		}
 	}
 
-	public void setStats(int strength, int def, int special, int resistance, int speed, int acc, int luck, int max_hp) {
+	public void setBaseStats(int strength, int def, int special, int resistance, int speed, int acc, int luck, int max_hp) {
 		_BASE_STATS[0] = strength;
 		_BASE_STATS[1] = def;
 		_BASE_STATS[2] = special;
@@ -1098,6 +1130,10 @@ public abstract class Character extends Rectangle{
 		_BASE_STATS[5] = acc;
 		_BASE_STATS[6] = luck;
 		_BASE_STATS[7] = max_hp;
+	}
+	
+	public int[] getCurrStats() {
+		return _currentStats;
 	}
 
 	public void printStats(){
