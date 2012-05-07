@@ -13,6 +13,7 @@ import controller.GameScreenController;
 import controller.combatController.player.PlayerCombatController;
 import controller.combatController.player.PlayerSetup;
 import main.DoodleTactics;
+import main.GameOverScreen;
 import map.Tile;
 import character.Character;
 
@@ -106,6 +107,8 @@ public abstract class CombatOrchestrator extends GameScreenController {
 			
 			_dt.getGameScreen().removeMenuItem(_menu);
 			_gameScreen.popControl();
+			_gameScreen.panToCoordinate(_gameScreen.getMainChar().getX(),
+					_gameScreen.getMainChar().getY());
 		}
 	}
 	
@@ -180,7 +183,7 @@ public abstract class CombatOrchestrator extends GameScreenController {
 				victory();
 			}
 			else if (isLoss()) {
-				
+				defeat();
 			}
 			else if (isRun()) {
 				
@@ -263,9 +266,9 @@ public abstract class CombatOrchestrator extends GameScreenController {
 	private void victory() {
 		System.out.println("Player is victorious!");
 		
-		while (!_p.getUnits().isEmpty())
-				_p.removeUnit(_p.getUnits().get(0));
-		_gameScreen.popControl();
+	//	while (!_p.getUnits().isEmpty())
+	//			_p.removeUnit(_p.getUnits().get(0));
+	//	_gameScreen.popControl();
 		
 		BufferedImage img = _dt.importImage("src/graphics/menu/combatMenu/victory.png");
 		MenuItem victory = new MenuItem(_gameScreen,img,img,_dt,0);
@@ -279,7 +282,7 @@ public abstract class CombatOrchestrator extends GameScreenController {
 	 * ends the combat with the player defeated
 	 */
 	private void defeat() {
-
+		_dt.changeScreens(new GameOverScreen(_dt));
 	}
 
 	/**

@@ -31,6 +31,11 @@ public class RandomBattleOrchestrator extends CombatOrchestrator {
 	}
 
 	@Override
+	/**
+	 * @return whether or not the current combat state represents an escape condition;
+	 * 		the combat state is an escape condition if all characters are outside the attack
+	 * 		range of all enemies
+	 */
 	public boolean isRun() {
 		return false;
 	}
