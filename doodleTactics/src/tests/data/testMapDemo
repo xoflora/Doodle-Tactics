@@ -104,6 +104,7 @@ DemoMap,src/graphics/tiles/light_blue.png,src/graphics/tiles/grass.png
 8,18,0,src/graphics/tiles/top.png,1,0,0,0,0,0
 7,18,0,src/graphics/tiles/top.png,1,0,0,0,0,0
 6,18,0,src/graphics/tiles/top.png,1,0,0,0,0,0
+5,18,0,src/graphics/tiles/top.png,1,0,0,0,0,0
 4,18,0,src/graphics/tiles/top.png,1,0,0,0,0,0
 3,18,0,src/graphics/tiles/top.png,1,0,0,0,0,0
 2,18,0,src/graphics/tiles/top.png,1,0,0,0,0,0
