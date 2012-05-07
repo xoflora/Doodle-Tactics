@@ -31,8 +31,7 @@ public class CombatWindowController extends GameScreenController {
 	@Override
 	public void take() {
 		super.take();
-		_gameScreen.getPopUpCombat().prepareWindow(_src, _dest, this, _range);
-		_gameScreen.getPopUpCombat().animate();
+		_gameScreen.getPopUpCombat().animate(_src, _dest, this, _range);
 	}
 	
 	/**

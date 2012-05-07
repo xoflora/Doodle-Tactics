@@ -102,3 +102,4 @@ img,src/graphics/terrain/short_building.png,5,3,A
 img,src/graphics/terrain/tall_building.png,0,10,A
 14,14,F,src/graphics/tiles/door.jpg,1,0,2,src/tests/data/testMapDemo,5,13
 char,Thief,Thighs,src/graphics/characters/sampleProfile.gif,src/graphics/characters/thief_left.png,src/graphics/characters/thief_right.png,src/graphics/characters/thief_back.png,src/graphics/characters/thief_front.png,8,1
+char,Mage,Doodle Sage,src/graphics/characters/doodle_sage_portrait.png,src/graphics/characters/doodle_sage_left.png,src/graphics/characters/doodle_sage_right.png,src/graphics/characters/doodle_sage_back.png,src/graphics/characters/doodle_sage_front.png,10,10

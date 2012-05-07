@@ -744,7 +744,7 @@ public abstract class Character extends Rectangle{
 	 *  @param r a random number generator
 	 *  @author rroelke
 	 */
-	public void attack(Character opponent, Random r){
+	public void attack(Character opponent, Random r, int range){
 		int offense, defense, damage;
 		boolean critical;
 
@@ -773,32 +773,33 @@ public abstract class Character extends Rectangle{
 				return;
 			}
 		}
-
-		if (r.nextInt(100) > opponent.getFullAttackAccuracy() - _currentStats[SKILL]) {
-			System.out.println("Attack missed!");
-		}
-		else {
-			offense = opponent._currentStats[STRENGTH] + (opponent._equipped == null ? 0:opponent._equipped.getPower());
-			defense = _currentStats[DEFENSE] + (_cuirass == null ? 0:_cuirass.getDefense())
-			+ (_shield == null ? 0:_shield.getDefense());
-			critical = (r.nextInt(100) <= (opponent._currentStats[LUCK] - _currentStats[LUCK]));
-
-			damage = Math.max(offense - defense + r.nextInt(Math.max((offense - defense)/4, 1)), 0);
-
-			if (critical) {
-				damage *= CRITICAL_MULTIPLIER;
-				System.out.println("Critical hit!");
+		if (opponent.getMaxAttackRange() > range && opponent.getMinAttackRange() < range) {
+			if (r.nextInt(100) > opponent.getFullAttackAccuracy() - _currentStats[SKILL]) {
+				System.out.println("Attack missed!");
 			}
-
-			updateHP(-damage);
-
-			System.out.println(opponent._name + " attacks " + _name + "!  " + _name +
-					" takes " + damage + " damage!");
-
-			if (_currentHP <= 0) {
-				System.out.println(getName() + " defeated.");
-				setDefeated();
-				return;
+			else {
+				offense = opponent._currentStats[STRENGTH] + (opponent._equipped == null ? 0:opponent._equipped.getPower());
+				defense = _currentStats[DEFENSE] + (_cuirass == null ? 0:_cuirass.getDefense())
+				+ (_shield == null ? 0:_shield.getDefense());
+				critical = (r.nextInt(100) <= (opponent._currentStats[LUCK] - _currentStats[LUCK]));
+	
+				damage = Math.max(offense - defense + r.nextInt(Math.max((offense - defense)/4, 1)), 0);
+	
+				if (critical) {
+					damage *= CRITICAL_MULTIPLIER;
+					System.out.println("Critical hit!");
+				}
+	
+				updateHP(-damage);
+	
+				System.out.println(opponent._name + " attacks " + _name + "!  " + _name +
+						" takes " + damage + " damage!");
+	
+				if (_currentHP <= 0) {
+					System.out.println(getName() + " defeated.");
+					setDefeated();
+					return;
+				}
 			}
 		}
 	}

@@ -192,7 +192,7 @@ public class Map implements Serializable {
 				for (int y = 0; y < numY; y++) {
 					if (tiles[x][y] == null)
 						tiles[x][y] = Tile.tile(dt,container, defaultPath, 'F', x,
-								y, 1);
+								y, 1, 0, 0, 0);
 				}
 			}
 
@@ -285,7 +285,7 @@ public class Map implements Serializable {
 
 					tiles[x][y] = Tile.tile(dt,container, splitLine[3],
 							splitLine[2].charAt(0), x, y, Integer
-							.parseInt(splitLine[4]));
+							.parseInt(splitLine[4]), Integer.parseInt(splitLine[5]), Integer.parseInt(splitLine[6]), Integer.parseInt(splitLine[7]));
 
 					//Handle Events
 					if(Integer.parseInt(splitLine[6]) == DIALOGUE){
