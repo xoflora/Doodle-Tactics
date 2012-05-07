@@ -25,6 +25,7 @@ import controller.OverworldController;
 import controller.combatController.CombatController;
 import controller.combatController.CombatOrchestrator;
 import controller.combatController.CombatWindow;
+import controller.combatController.RandomBattleOrchestrator;
 import controller.combatController.AIController.RandomBattleAI;
 
 import character.Archer;
@@ -675,7 +676,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		RandomBattleAI enemy = new RandomBattleAI(_dt, enemies);
 		List<CombatController> e = new ArrayList<CombatController>();
 		e.add(enemy);
-		enterCombat(new CombatOrchestrator(_dt, e, null, null, RandomBattleAI.RANDOM_BATTLE_NUM_UNITS));
+		enterCombat(new RandomBattleOrchestrator(_dt, e, null, null, RandomBattleAI.RANDOM_BATTLE_NUM_UNITS));
 	}
 
 	/**
