@@ -275,14 +275,16 @@ public abstract class CombatController extends GameScreenController {
 		boolean hasNext;
 		Character c;
 		while ((hasNext = _unitCycle.hasNext()) || wrap) {
-			c = _unitCycle.next();
-			if (!hasMoved(c))
-				return c;
-			if (!wrap && c == wrapPoint)
-				return null;
-			if (!hasNext && wrap) {
+			if (!hasNext) {
 				wrap = false;
 				_unitCycle = _units.listIterator();
+			}
+			else {
+				c = _unitCycle.next();
+				if (!hasMoved(c))
+					return c;
+				if (!wrap && c == wrapPoint)
+					return null;
 			}
 		}
 		

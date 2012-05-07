@@ -4,6 +4,7 @@ import graphics.MenuItem;
 
 import items.Item;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -441,6 +442,22 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				_itemWindow.setLocation(e.getX() - _menuDraggedx, e.getY() - _menuDraggedy);	*/
 			_menuDraggedx = e.getX();
 			_menuDraggedy = e.getY();
+		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (getState() == State.START) {
+			if (e.getKeyCode() == _dt.getLeftKey()) {
+				Character c = nextUnit();
+				System.out.println(c);
+				_gameScreen.panToCoordinate(c.getX(), c.getY());
+			}
+			else if (e.getKeyCode() == _dt.getRightKey()) {
+				Character c = nextUnit();
+				System.out.println(c);
+				_gameScreen.panToCoordinate(c.getX(), c.getY());
+			}
 		}
 	}
 	
