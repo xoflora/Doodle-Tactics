@@ -79,7 +79,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private buttonPanel _buttons;
 
 	private int SCROLLBOX_X, SCROLLBOX_Y;
-	
+
 	private String _saveMessage;
 	public GameMenuScreen(DoodleTactics dt) {
 		super(dt);
@@ -229,20 +229,25 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 					switchToGameScreen();
 					_typeText.setFocusable(false);
 				}
+
+
 			}
 
+
 			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-			}
+			public void keyReleased(KeyEvent e) {}
 
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_CONTROL)
-					GameMenuScreen.this.grabFocus();
+				if(_dt.getSavedFilePaths().containsKey(_typeText.getText() + e.getKeyChar()))
+					_saveMessage = "Warning: filename already stored, overwrite?";
+				else
+					_saveMessage = "";
+				GameMenuScreen.this.repaint();
+
 			}
 		});
-		
+
 		_saveMessage = "";
 		_saveMenuItem = new SaveMenuItem(saveImg,hoveredSaveImg,_dt);
 	}
@@ -263,9 +268,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 					RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 			brush.setFont(new Font("M",Font.BOLD,25));
 			brush.setColor(new Color(0,0,1));
-			//_saveMessage = "ABCDEFG";
-			brush.drawString(_saveMessage,500,700);
-
+			if(_saveMessage.length() < 30)
+				brush.drawString(_saveMessage,500,530);
+			else
+				brush.drawString(_saveMessage,250,530);
 		}
 
 		public boolean containsText(){
@@ -277,6 +283,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		public void insertString(int offset, String text, AttributeSet attributes) {
 			if (text != null && !text.equals(" ") && this.getLength() + text.length() <= 15) {
+				System.out.println(_typeText.getText() + text);
+				GameMenuScreen.this.repaint();
 				try {
 					super.insertString(offset, text, attributes);
 				} catch (BadLocationException e) {
@@ -364,6 +372,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			this.grabFocus();
 			_typeText.setFocusable(false);
 			int y = 1;
+			_typeText.setText("");
 			((Graphics2D) g).setRenderingHint(
 					RenderingHints.KEY_TEXT_ANTIALIASING,
 					RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
@@ -391,8 +400,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			((Graphics2D) g).setColor(new Color(64,224,208));
 			((Graphics2D) g).drawString("Autosaving",200,500);
 			g.drawLine(190, 515, 385, 515);
-
-
 
 		}
 
@@ -832,7 +839,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		if (canPutDown) {
 			_itemOptBoxY = _itemOptBoxY-SCROLLBOX_Y+_scrollBar.getVerticalScrollBar().getValue();
 		}
-		
+
 		for (int i=0; i<_buttonList.size(); i++) {
 			_buttonList.get(i).setVisible(true);
 		}
@@ -842,13 +849,13 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		//		_buttons.setLocation((int)label.getLocationOnScreen().getX(), (int)label.getLocationOnScreen().getY());
 		_buttons.setButtonList(_buttonList);
 		//		System.out.println("Size: " + _buttonList.size());
-		
-//		System.out.println("option box location x: " + _itemOptBoxX + "; y: " + _itemOptBoxY);
+
+		//		System.out.println("option box location x: " + _itemOptBoxX + "; y: " + _itemOptBoxY);
 		_buttons.setBounds(_itemOptBoxX,_itemOptBoxY,labelWidth, labelHeight*_buttonList.size());
 		_buttons.grabFocus();
 		_layers.add(_buttons, new Integer(1), 0);
 		this.repaint();
-//		_unitsBox.grabFocus();
+		//		_unitsBox.grabFocus();
 	}
 
 	public void switchToGameScreen() {
@@ -919,7 +926,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			constraint.gridx = 1;
 			constraint.gridy = 0;
 			this.add(col2, constraint);
-			
+
 			JLabel HP = new JLabel("HP : " + chrter.getHP() + "/" + chrter.getBaseStats()[7]);
 			//			HP.setFont(new Font("Arial", Font.BOLD, 12));
 			//			HP.setForeground(java.awt.Color.WHITE);
@@ -1537,9 +1544,13 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	public SaveMenuItem getSaveMenuItem(){
 		return _saveMenuItem;
 	}
-	
+
 	public JTextField getSaveText(){
 		return _typeText;
+	}
+
+	public void setSaveMsg(String msg){
+		_saveMessage = msg;
 	}
 
 	/*public char getKey(int key){
