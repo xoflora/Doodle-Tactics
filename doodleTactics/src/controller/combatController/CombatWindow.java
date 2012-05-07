@@ -23,6 +23,9 @@ public class CombatWindow extends MenuItem {
 
 	protected charImage _attackerImg, _victimImg;
 	private Character _attackerChar, _victimChar;
+	
+	private Tile _attackerTile;
+	private Tile _victimTile;
 
 	private CombatWindowController _c;
 
@@ -47,8 +50,9 @@ public class CombatWindow extends MenuItem {
 		_c = null;
 	}
 
-
 	public void animate(Tile src, Tile dest, CombatWindowController c, int range) {
+		_attackerTile = src;
+		_victimTile = dest;
 		_attackerChar = src.getOccupant();
 		_attackerImg = new charImage(_gs, 101);
 		_attackerImg.setImage(src.getOccupant().getLeftImage());
@@ -189,7 +193,7 @@ public class CombatWindow extends MenuItem {
 					}
 					else {
 						count = 0;
-						_attackerChar.attack(_victimChar, new Random(), count);
+						_attackerChar.attack(_attackerTile, _victimTile, new Random(), count);
 						_timer.stop();
 						_window.getMoveUpTimer().getListener().setMoveOffset(40);
 						_window.getMoveUpTimer().start();
@@ -226,7 +230,7 @@ public class CombatWindow extends MenuItem {
 					else {
 						count = 0;
 						_timer.stop();
-						_attackerChar.attack(_victimChar, new Random(), _range);
+						_attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
 						_window.getMoveUpTimer().getListener().setMoveOffset(40);
 						_window.getMoveUpTimer().start();
 					}

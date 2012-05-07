@@ -341,7 +341,7 @@ public class Tile extends graphics.Rectangle {
 		return _resistance;
 	}
 	
-	public int getSkill() {
+	public int getEvasion() {
 		return _skill;
 	}
 	
@@ -536,7 +536,7 @@ public class Tile extends graphics.Rectangle {
 		if (_character != null) {
 			_character.addDefense(this.getDefense());
 			_character.addResistance(this.getResistance());
-			_character.addSkill(this.getSkill());
+			_character.addSkill(this.getEvasion());
 		}
 	}
 	
@@ -548,7 +548,7 @@ public class Tile extends graphics.Rectangle {
 		if (_character != null) {
 			_character.addDefense(-this.getDefense());
 			_character.addResistance(-this.getResistance());
-			_character.addSkill(-this.getSkill());
+			_character.addSkill(-this.getEvasion());
 		}
 		_character = null;
 	}

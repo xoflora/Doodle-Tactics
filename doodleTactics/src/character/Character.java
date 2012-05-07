@@ -744,44 +744,44 @@ public abstract class Character extends Rectangle{
 	 *  @param r a random number generator
 	 *  @author rroelke
 	 */
-	public void attack(Character opponent, Random r, int range){
+	public void attack(Tile attacker, Tile opponent, Random r, int range){
 		int offense, defense, damage;
 		boolean critical;
 
-		if (r.nextInt(100) > getHitChance(opponent)) {
+		if (r.nextInt(100) < getHitChance(opponent.getOccupant())-opponent.getEvasion()) {
 			System.out.println("Attack missed!");
-		}		
+		}
 		else {
 
-			damage = Math.max(getFullAttackStrength() - opponent.getFullDefense() +
-					r.nextInt(Math.max((getFullAttackStrength() - opponent.getFullDefense())/4, 1)), 0);
+			damage = Math.max(getFullAttackStrength() - opponent.getOccupant().getFullDefense() - opponent.getDefense() +
+					r.nextInt(Math.max((getFullAttackStrength() - opponent.getOccupant().getFullDefense() - opponent.getDefense())/4, 1)), 0);
 
-			critical = (r.nextInt(100) <= (_currentStats[LUCK] - opponent._currentStats[LUCK]));
+			critical = (r.nextInt(100) <= (_currentStats[LUCK] - opponent.getOccupant()._currentStats[LUCK]));
 			if (critical) {
 				damage *= CRITICAL_MULTIPLIER;
 				System.out.print("Critical hit! ");
 			}
 
-			opponent.updateHP(-damage);
+			opponent.getOccupant().updateHP(-damage);
 
-			System.out.println(_name + " attacks " + opponent._name + "!  " + opponent._name +
+			System.out.println(_name + " attacks " + opponent.getOccupant()._name + "!  " + opponent.getOccupant()._name +
 					" takes " + damage + " damage!");
 
-			if (opponent._currentHP <= 0) {
-				System.out.println(opponent.getName() + " defeated.");
-				opponent.setDefeated();
+			if (opponent.getOccupant()._currentHP <= 0) {
+				System.out.println(opponent.getOccupant().getName() + " defeated.");
+				opponent.getOccupant().setDefeated();
 				return;
 			}
 		}
-		if (opponent.getMaxAttackRange() > range && opponent.getMinAttackRange() < range) {
-			if (r.nextInt(100) > opponent.getFullAttackAccuracy() - _currentStats[SKILL]) {
+		if (opponent.getOccupant().getMaxAttackRange() > range && opponent.getOccupant().getMinAttackRange() < range) {
+			if (r.nextInt(100) < opponent.getOccupant().getFullAttackAccuracy() - _currentStats[SKILL] - attacker.getEvasion()) {
 				System.out.println("Attack missed!");
 			}
 			else {
-				offense = opponent._currentStats[STRENGTH] + (opponent._equipped == null ? 0:opponent._equipped.getPower());
+				offense = opponent.getOccupant()._currentStats[STRENGTH] + (opponent.getOccupant()._equipped == null ? 0:opponent.getOccupant()._equipped.getPower());
 				defense = _currentStats[DEFENSE] + (_cuirass == null ? 0:_cuirass.getDefense())
-				+ (_shield == null ? 0:_shield.getDefense());
-				critical = (r.nextInt(100) <= (opponent._currentStats[LUCK] - _currentStats[LUCK]));
+				+ (_shield == null ? 0:_shield.getDefense())+attacker.getDefense();
+				critical = (r.nextInt(100) <= (opponent.getOccupant()._currentStats[LUCK] - _currentStats[LUCK]));
 	
 				damage = Math.max(offense - defense + r.nextInt(Math.max((offense - defense)/4, 1)), 0);
 	
@@ -792,7 +792,7 @@ public abstract class Character extends Rectangle{
 	
 				updateHP(-damage);
 	
-				System.out.println(opponent._name + " attacks " + _name + "!  " + _name +
+				System.out.println(opponent.getOccupant()._name + " attacks " + _name + "!  " + _name +
 						" takes " + damage + " damage!");
 	
 				if (_currentHP <= 0) {

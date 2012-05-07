@@ -946,38 +946,38 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				extraSpeed+=chrter.getFootgear().getSpeed();
 			}
 
-			JLabel strength = new JLabel("STRENGTH : " + chrter.getBaseStats()[0] + "+" + extraAttack);
+			JLabel strength = new JLabel("STRENGTH : " + chrter.getCurrStats()[0] + "+" + extraAttack);
 			//			strength.setFont(new Font("Verdana", Font.BOLD, 12));
 			strength.setForeground(java.awt.Color.BLACK);
 			strength.setSize(150, 50);
 			strength.setVisible(true);
 
-			JLabel defense = new JLabel("DEFENSE : " + chrter.getBaseStats()[1] + "+" + extraDef);
+			JLabel defense = new JLabel("DEFENSE : " + chrter.getCurrStats()[1] + "+" + extraDef);
 			defense.setForeground(java.awt.Color.BLACK);
 			defense.setSize(150, 50);
 			defense.setVisible(true);
 
-			JLabel special = new JLabel("SPECIAL : " + chrter.getBaseStats()[2]);
+			JLabel special = new JLabel("SPECIAL : " + chrter.getCurrStats()[2]);
 			special.setForeground(java.awt.Color.BLACK);
 			special.setSize(150, 50);
 			special.setVisible(true);
 
-			JLabel resistance = new JLabel("RESISTANCE : " + chrter.getBaseStats()[3]);
+			JLabel resistance = new JLabel("RESISTANCE : " + chrter.getCurrStats()[3]);
 			resistance.setForeground(java.awt.Color.BLACK);
 			resistance.setSize(150, 50);
 			resistance.setVisible(true);
 
-			JLabel speed = new JLabel("SPEED : " + chrter.getBaseStats()[4] + "+" + extraSpeed);
+			JLabel speed = new JLabel("SPEED : " + chrter.getCurrStats()[4] + "+" + extraSpeed);
 			speed.setForeground(java.awt.Color.BLACK);
 			speed.setSize(150, 50);
 			speed.setVisible(true);
 
-			JLabel skill = new JLabel("ACCURACY : " + chrter.getBaseStats()[5] + "+" + extraAcc);
+			JLabel skill = new JLabel("ACCURACY : " + chrter.getCurrStats()[5] + "+" + extraAcc);
 			skill.setForeground(java.awt.Color.BLACK);
 			skill.setSize(150, 50);
 			skill.setVisible(true);
 
-			JLabel luck = new JLabel("LUCK : " + chrter.getBaseStats()[6]);
+			JLabel luck = new JLabel("LUCK : " + chrter.getCurrStats()[6]);
 			luck.setForeground(java.awt.Color.BLACK);
 			luck.setSize(150, 50);
 			luck.setVisible(true);
