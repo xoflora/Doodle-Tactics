@@ -153,8 +153,7 @@ public class UnitPool extends MenuItem {
 	private boolean _inUse;
 	private int _numUnits;
 
-	public UnitPool(DoodleTactics dt, GameScreen screen, PoolDependent source, List<Character> units) 
-			throws IOException {
+	public UnitPool(DoodleTactics dt, GameScreen screen, PoolDependent source, List<Character> units) {
 		super(screen, dt.importImage(IMAGE_PATH), dt.importImage(IMAGE_PATH), dt, SIDEBAR_PRIORITY);
 
 		_dt = dt;

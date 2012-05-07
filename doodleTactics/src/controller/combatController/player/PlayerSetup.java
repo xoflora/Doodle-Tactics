@@ -55,36 +55,31 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 
 	public PlayerSetup(DoodleTactics dt, List<Tile> validTiles, CombatOrchestrator orch) {
 		super(dt);
+		
+		_validTiles = validTiles;
+		_units = _dt.getParty();
+		_units.remove(_gameScreen.getMainChar());
 
-		try {
-			_validTiles = validTiles;
-			_units = _dt.getParty();
-			_units.remove(_gameScreen.getMainChar());
-			
-			_toPlace = Util.clone(_units);
-			_inPlace = new HashMap<Character, Tile>();
-			
-			_selectedCharacter = null;
-			
-			_pool = new UnitPool(_dt, _gameScreen, this, _toPlace);
-			
-			_state = State.SELECTING;
-			
-			_finalized = false;
-			
-			_orch = orch;
-			_enemyAttackRange = new ArrayList<Tile>();
-			
-			BufferedImage combat = _dt.importImage("src/graphics/menu/combatMenu/doodle_combat.png");
-			BufferedImage curtain = _dt.importImage("src/graphics/menu/combatMenu/curtain.png");
-			_doodleCombat = new MenuItem(_dt.getGameScreen(),combat,combat,_dt,3);
-			_curtain = new MenuItem(_dt.getGameScreen(),curtain,curtain,_dt,2);
-			_curtain.setLocation(-25,-900);
-			_doodleCombat.setLocation(115, -306);
-			
-		} catch(IOException e) {
-			_dt.error("Error initializing unit setup.");
-		}
+		_toPlace = Util.clone(_units);
+		_inPlace = new HashMap<Character, Tile>();
+
+		_selectedCharacter = null;
+
+		_pool = new UnitPool(_dt, _gameScreen, this, _toPlace);
+
+		_state = State.SELECTING;
+
+		_finalized = false;
+
+		_orch = orch;
+		_enemyAttackRange = new ArrayList<Tile>();
+
+		BufferedImage combat = _dt.importImage("src/graphics/menu/combatMenu/doodle_combat.png");
+		BufferedImage curtain = _dt.importImage("src/graphics/menu/combatMenu/curtain.png");
+		_doodleCombat = new MenuItem(_dt.getGameScreen(),combat,combat,_dt,3);
+		_curtain = new MenuItem(_dt.getGameScreen(),curtain,curtain,_dt,2);
+		_curtain.setLocation(-25,-900);
+		_doodleCombat.setLocation(115, -306);
 	}
 	
 	protected class CurtainTimer implements Runnable{
