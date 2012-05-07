@@ -19,12 +19,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Set;
 import java.util.Stack;
 
 import javax.imageio.ImageIO;
@@ -946,6 +948,34 @@ public class Map implements Serializable {
 	public void setPrevYWindowOffset(int y) {
 		_prevYWindowOffset.push(y);
 	}
+	
+	public Set<Character> getRandomBattleEnemies() {
+		return _enemyToTiles.keySet();
+	}
+	
+	/**
+	 * updates random battle data structures to maintain data for a random battle character
+	 * @param c the random battle character to add
+	 */
+	private void updateRandomBattle(Character c, Tile newTile) {
+		List<Tile> newRange = getMovementRange(newTile, c.getMovementRange());
+		List<Tile> old = _enemyToTiles.put(c, newRange);
+		if (old != null)
+			for (Tile t : old)
+				if (_tileToEnemies.get(t) != null)
+					_tileToEnemies.get(old).remove(c);
+		
+		_enemyTiles.put(c, newTile);
+		
+		for (Tile t : newRange) {
+			List<Character> list = _tileToEnemies.get(t);
+			if (list == null)
+				_tileToEnemies.put(t, new ArrayList<Character>());
+			_tileToEnemies.get(t).add(c);
+		}
+		
+		_enemyToTiles.put(c, newRange);
+	}
 
 	/**
 	 * Assign Random Enemies to Tiles
@@ -971,7 +1001,9 @@ public class Map implements Serializable {
 				enemy.setVisible(true);
 				_activeCharacters.add(enemy);
 				t.setOccupant(enemy);
-				_enemyTiles.put(enemy, t);
+				
+				updateRandomBattle(enemy, t);
+		/*		_enemyTiles.put(enemy, t);
 				
 				if(_tileToEnemies.containsKey(t))
 					_tileToEnemies.get(t).add(enemy);
@@ -981,18 +1013,18 @@ public class Map implements Serializable {
 					_tileToEnemies.put(t,toAdd);
 				}
 				
-				System.out.println("ENEMY ADDED, mvmt range: " + enemy.getMovementRange() + " tiles");
+		//		System.out.println("ENEMY ADDED, mvmt range: " + enemy.getMovementRange() + " tiles");
 				List<Tile> mvmtRange = getMovementRange(t,enemy.getMovementRange());
 				for(Tile inRange : mvmtRange){
 					if(_tileToEnemies.containsKey(inRange))
 						_tileToEnemies.get(inRange).add(enemy);
-					else{
+					else {
 						LinkedList<Character> toAdd = new LinkedList<Character>();
 						toAdd.add(enemy);
 						_tileToEnemies.put(inRange,toAdd);
 					}
 				}
-				_enemyToTiles.put(enemy,mvmtRange);
+				_enemyToTiles.put(enemy,mvmtRange);		*/
 			}
 		}
 	}
@@ -1030,7 +1062,7 @@ public class Map implements Serializable {
 		//	System.out.print(t + "\t");
 		/*	System.out.println(*/_tileToEnemies.get(t).remove(c)/*)*/;
 		}
-		System.out.println(_enemyToTiles.get(c));
+	//	System.out.println(_enemyToTiles.get(c));
 		_enemyTiles.remove(c);
 	}
 	
@@ -1046,5 +1078,13 @@ public class Map implements Serializable {
 		_enemyTiles.clear();
 		_enemyToTiles.clear();
 		_tileToEnemies.clear();
+	}
+	
+	/**
+	 * updates the random battle tiles
+	 * @param newLocations the new tile locations of the characters to update
+	 */
+	public void updateRandomBattleTiles(HashMap<Character, Tile> newLocations) {
+		
 	}
 }
