@@ -4,3 +4,4 @@ bin
 .metadata
 doodleTactics/src/tests/data/testSave
 doodleTactics/src/tests/data/savedGames
+doodleTactics/src/tests/saves
