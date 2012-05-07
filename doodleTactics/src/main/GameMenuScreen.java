@@ -342,7 +342,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		//Save!
 		if(_currClicked == 5){
-//			_typeText.grabFocus();
+			_typeText.grabFocus();
 			_saveMenuItem.setVisible(true);
 			_saveMenuItem.paint((Graphics2D) g);
 		}
