@@ -49,10 +49,12 @@ public abstract class Action implements Comparable<Action> {
 	 * 		a negative number if the other action is better
 	 */
 	public int compareTo(Action other) {
+		System.out.println("Comparing " + this + " to " + other);
 		if (_value > other._value)
 			return -1;
-		else if (_value < other._value)
+		else if (_value < other._value) {
 			return 1;
+		}
 		else
 			return _type.compareTo(other._type);
 	}
@@ -81,7 +83,6 @@ public abstract class Action implements Comparable<Action> {
 								(c.getFullAttackStrength() - defense);
 						else
 							eval -= c.getFullAttackStrength() - defense;
-					eval += defense;
 				}
 			}
 		return eval;

@@ -22,8 +22,8 @@ public class AttackAction extends Action {
 	private static final int CRIPPLING_DAMAGE = 4;
 	private static final int LETHAL_BLOW = 5;
 	
-	private static final double[] TIERED_MULTIPLIERS = {-1, 3, 6, 12, 24, 100};
-	private static final double[] TIER_THRESHOLDS = {0, .1, .2, .4, .7, 1};
+	private static final double[] TIERED_MULTIPLIERS =	{-1,	6,	12,	24,	50,	100};
+	private static final double[] TIER_THRESHOLDS =		{0,		.1,	.2,	.4,	.7,	1};
 	
 	private static final double DEFEAT_VALUE = 1000;
 	
@@ -58,22 +58,24 @@ public class AttackAction extends Action {
 				_c.getMinAttackRange(), _c.getMaxAttackRange()))
 			if (_src.isEnemy(t.getOccupant())) {
 				Character other = t.getOccupant();
-				int damage = power - other.getFullDefense();
+				double damage = power - other.getFullDefense();
 				
 				System.out.println("DAMAGE " + damage);
+				System.out.println("RATIO " + (double)damage/(double)other.getHP());
 				
 				if (other.getHP() == 0) {
 					bestAttack = DEFEAT_VALUE;
 					_toAttack = t;
 				}
-				else if ((double)damage/(double)other.getHP() > bestAttack) {
-					bestAttack = damage/other.getHP();
+				else if (damage/(double)other.getHP() > bestAttack) {
+					bestAttack = damage/(double)other.getHP();
 					_toAttack = t;
+					System.out.println("BEST ATTACK: " + bestAttack + " " + _toAttack);
 				}
 			}
 		
 		if (_toAttack == null)
-			return Double.NEGATIVE_INFINITY;
+			return Double.MIN_VALUE;
 		
 		double eval;
 		if (bestAttack >= TIER_THRESHOLDS[LETHAL_BLOW]) {
@@ -86,13 +88,15 @@ public class AttackAction extends Action {
 		}
 		else if (bestAttack >= TIER_THRESHOLDS[GOOD_DAMAGE])
 			eval = TIERED_MULTIPLIERS[GOOD_DAMAGE];
-		else if (bestAttack > TIER_THRESHOLDS[REASONABLE_DAMAGE])
+		else if (bestAttack >= TIER_THRESHOLDS[REASONABLE_DAMAGE]) {
+			System.out.println("FUCK YOU");
 			eval = TIERED_MULTIPLIERS[REASONABLE_DAMAGE];
-		else if (bestAttack > TIER_THRESHOLDS[MINOR_DAMAGE])
+		}
+		else if (bestAttack >= TIER_THRESHOLDS[MINOR_DAMAGE])
 			eval = TIERED_MULTIPLIERS[MINOR_DAMAGE];
 		else
 			eval = TIERED_MULTIPLIERS[ATTACK_POINTLESS];
 		
-		return eval*bestAttack + defensiveEval(filter);
+		return eval + defensiveEval(filter);
 	}
 }
