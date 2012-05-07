@@ -22,14 +22,14 @@ public class MainCharacter extends Character {
 		_tileX = x;
 		_tileY = y;
 		_dt = dt;
-		_BASE_STATS[STRENGTH] = 2;
-		_BASE_STATS[DEFENSE] = 2;
-		_BASE_STATS[SPECIAL] = 2;
-		_BASE_STATS[RESISTANCE] = 2;
-		_BASE_STATS[SPEED] = 2;
-		_BASE_STATS[SKILL] = 2;
-		_BASE_STATS[LUCK] = 2;
-		_BASE_STATS[MAX_HP] = 5;
+		_BASE_STATS[STRENGTH] = .2;
+		_BASE_STATS[DEFENSE] = .2;
+		_BASE_STATS[SPECIAL] = .2;
+		_BASE_STATS[RESISTANCE] = .2;
+		_BASE_STATS[SPEED] = .2;
+		_BASE_STATS[SKILL] = .2;
+		_BASE_STATS[LUCK] = .2;
+		_BASE_STATS[MAX_HP] = .5;
 		initStats();
 	}
 	

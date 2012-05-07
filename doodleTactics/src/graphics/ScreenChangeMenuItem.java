@@ -58,6 +58,7 @@ public class ScreenChangeMenuItem extends MenuItem {
 		bow.setStats(2, 4, 2, 4);
 		Cuirass cuirass = new Cuirass(_dt, "src/graphics/items/cuirass_icon.png", "Doodle Cuirass");
 		cuirass.setDefense(2);
+		cuirass.setResistance(2);
 		cuirass.setDescription("Shields you from the cold.");
 		try {
 			_dt.getParty().get(1).addToInventory(potion);

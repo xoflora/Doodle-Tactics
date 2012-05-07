@@ -15,6 +15,7 @@ public class Cuirass extends Equipment{
 
 
 	int _defense;
+	int _resistance;
 	BufferedImage _menuImage;
 	
 	
@@ -26,9 +27,16 @@ public class Cuirass extends Equipment{
 	public void setDefense(int def) {
 		_defense = def;
 	}
-
-
+	
+	public void setResistance(int resistance) {
+		_resistance = resistance;
+	}
+	
 	public int getDefense() {
 		return _defense;
+	}
+	
+	public int getResistance() {
+		return _resistance;
 	}
 }
