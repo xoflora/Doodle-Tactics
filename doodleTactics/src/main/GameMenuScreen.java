@@ -1,6 +1,7 @@
 package main;
 
 import items.Cuirass;
+import items.Equipment;
 import items.Footgear;
 import items.Item;
 import items.ItemException;
@@ -1373,46 +1374,15 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		public void activate(optionButton button) {
 			try {
-				if (_selectedItem.isWeapon()) {
-					Weapon _selectedWeapon = (Weapon) _selectedItem;
-					Weapon oldWeapon = _selectedChar.changeWeapon(_selectedWeapon);
-					_selectedChar.removeFromInventory(_selectedItem);
-					if (oldWeapon != null) {
-						_selectedChar.addToInventory(oldWeapon);
-					}
+				if (!_selectedChar.equip((Equipment)_selectedItem)) {
+					_dt.error("That item cannot be equipped.");
 				}
-				else if (_selectedItem.isCuirass()) {
-					Cuirass _selectedCuirass = (Cuirass) _selectedItem;
-					Cuirass oldCuirass = _selectedChar.changeCuirass(_selectedCuirass);
-					_selectedChar.removeFromInventory(_selectedCuirass);
-					if (oldCuirass != null) {
-						_selectedChar.addToInventory(oldCuirass);
-					}
-				}
-				else if (_selectedItem.isShield()) {
-					Shield _selectedShield = (Shield) _selectedItem;
-					Shield oldShield = _selectedChar.changeShield(_selectedShield);
-					_selectedChar.removeFromInventory(_selectedShield);
-					if (oldShield != null) {
-						_selectedChar.addToInventory(oldShield);
-					}
-				}
-				else if (_selectedItem.isFootgear()) {
-					Footgear _selectedFootgear = (Footgear) _selectedItem;
-					Footgear oldFootgear = _selectedChar.changeFootgear(_selectedFootgear);
-					_selectedChar.removeFromInventory(_selectedFootgear);
-					if (oldFootgear != null) {
-						_selectedChar.addToInventory(oldFootgear);
-					}
-				}
-				else {
-					_dt.error("Error: Tried to equip a non-equipment item.");
-				}
+				
 				GameMenuScreen.this.setDefaultTabToUnits();
-				System.out.println("set to false");
+			//	System.out.println("set to false");
 				_showingItemOptions = false;
 				GameMenuScreen.this.repaint();
-			} catch (ItemException e) {
+			} catch (ClassCastException e) {
 				_dt.error("The item you tried to access does not exist.");
 			}
 		}
