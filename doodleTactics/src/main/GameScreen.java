@@ -742,7 +742,7 @@ public class GameScreen extends Screen<GameScreenController> {
 
 
 	public void saveGame(String filename){
-		String filepath =  "src/tests/data/" + filename;
+		String filepath =  "src/tests/saves/" + filename;
 		System.out.println("Saving game!");
 		FileOutputStream fos;
 		ObjectOutputStream out;
@@ -786,7 +786,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		FileOutputStream fos;
 		ObjectOutputStream out;
 		try {
-			fos = new FileOutputStream("src/tests/data/savedGames");
+			fos = new FileOutputStream("src/tests/saves/savedGames");
 			out = new ObjectOutputStream(fos);
 			out.writeObject(_dt.getSavedFilePaths());
 		}  catch(IOException e){
@@ -798,10 +798,12 @@ public class GameScreen extends Screen<GameScreenController> {
 		FileInputStream fis;
 		ObjectInputStream in;
 		try {
-			fis = new FileInputStream("src/tests/data/savedGames");
+			fis = new FileInputStream("src/tests/saves/savedGames");
 			in = new ObjectInputStream(fis);
 			_dt.setSavedFilePaths((HashMap<String,String>) in.readObject());
-		} catch(IOException e){
+		} catch(FileNotFoundException e){
+			//Do Nothing...no games to load
+		}catch(IOException e){
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

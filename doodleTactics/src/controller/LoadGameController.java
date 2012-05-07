@@ -35,15 +35,14 @@ public class LoadGameController extends Controller{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		LoadMenuItem clicked = _loadScreen.checkContainsRadioButtons(e.getPoint());
-		if(clicked != null)
+		if(clicked != null){
 			clicked.setHovered();
-		_loadScreen.repaint();
-		
-		MenuItem button = _loadScreen.checkContainsButton(e.getPoint());
-		if(button != null && _loadScreen.getCurrSelected() != null){
-			_dt.getGameScreen().loadGame(_loadScreen.getCurrSelected().getFilePath());
-			_dt.changeScreens(_dt.getGameScreen());
+			_loadScreen.repaint();
 		}
+		MenuItem button = _loadScreen.checkContainsButton(e.getPoint());
+		if(button != null)
+			button.activate(e.getButton());
+		
 	}
 
 	@Override
@@ -74,6 +73,6 @@ public class LoadGameController extends Controller{
 	public void mouseMoved(MouseEvent e) {
 		_loadScreen.checkContainsButton(e.getPoint());
 		_loadScreen.repaint();
-		
+
 	}
 }

@@ -20,6 +20,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import controller.LoadGameController;
+import controller.MainMenuController;
 
 public class LoadGameScreen extends Screen<LoadGameController>{
 
@@ -53,13 +54,27 @@ public class LoadGameScreen extends Screen<LoadGameController>{
 		//Load Buttons
 		BufferedImage loadButtonHoveredImage = _dt.importImage("src/graphics/menu/load_game_button_hovered.png");
 		BufferedImage loadButtonImage = _dt.importImage("src/graphics/menu/load_game_button.png");
-		_loadButton = new MenuItem(this,loadButtonImage,loadButtonHoveredImage,_dt);
+		_loadButton = new MenuItem(this,loadButtonImage,loadButtonHoveredImage,_dt){;
+		@Override
+		public void activate(int type){
+			if(_currSelected != null){
+				_dt.getGameScreen().loadGame(_currSelected.getFilePath());
+				_dt.changeScreens(_dt.getGameScreen());
+			}
+		}
+		};
 		_loadButton.setLocation(500,700);
 		_loadButton.setVisible(true);
 
 		BufferedImage backButtonHoveredImage = _dt.importImage("src/graphics/menu/save_back_hovered.png");
 		BufferedImage backButtonImage = _dt.importImage("src/graphics/menu/save_back.png");
-		_backButton = new MenuItem(this,backButtonImage,backButtonHoveredImage,_dt);
+		_backButton = new MenuItem(this,backButtonImage,backButtonHoveredImage,_dt){
+			@Override
+			public void activate(int type){
+				_dt.setScreen(_dt.getMainMenuScreen());
+
+			}
+		};
 		_backButton.setLocation(200,700);
 		_backButton.setVisible(true);
 
@@ -164,7 +179,8 @@ public class LoadGameScreen extends Screen<LoadGameController>{
 	public MenuItem checkContainsButton(java.awt.Point point){
 		//Check if mousing over the load button
 		if(_loadButton.contains(point)){
-			_loadButton.setHovered();
+			if(_currSelected != null)
+				_loadButton.setHovered();
 			_backButton.setDefault();
 			this.repaint();
 			return _loadButton;
@@ -199,4 +215,3 @@ public class LoadGameScreen extends Screen<LoadGameController>{
 		return _currSelected;
 	}
 }
-
