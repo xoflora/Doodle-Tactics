@@ -1,10 +1,11 @@
 package controller.combatController;
 
 public enum ActionType {
+	
+	SPECIAL,
 	ATTACK,
 	ITEM,
 	TALK,
-	SPECIAL,
 	WAIT;
 	
 	public String toString() {
