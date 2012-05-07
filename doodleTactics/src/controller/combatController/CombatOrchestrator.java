@@ -218,7 +218,6 @@ public abstract class CombatOrchestrator extends GameScreenController {
 				}
 				else {	// factions should not be empty; if the player controller is removed the loss condition would
 						// have already occurred
-					System.out.println("SHOULDN'T AHPPEN YET");
 					_factionCycle = _factions.listIterator();
 					take();
 				}

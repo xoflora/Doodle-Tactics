@@ -1,6 +1,7 @@
 package controller.combatController.AIController;
 
 import map.Tile;
+import controller.combatController.ActionType;
 import controller.combatController.CombatController;
 import character.Character;
 
@@ -13,6 +14,7 @@ public class ItemAction extends Action {
 
 	public ItemAction(CombatController src, Character c, Tile t) {
 		super(src, c, t);
+		_type = ActionType.ITEM;
 	}
 
 	@Override

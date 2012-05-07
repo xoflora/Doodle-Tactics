@@ -3,6 +3,7 @@ package controller.combatController.AIController;
 import java.util.List;
 
 import character.Character;
+import controller.combatController.ActionType;
 import controller.combatController.CombatController;
 import map.Tile;
 
@@ -15,6 +16,7 @@ public abstract class Action implements Comparable<Action> {
 	protected CombatController _src;
 	protected Character _c;
 	protected Tile _destTile;
+	protected ActionType _type;
 	private double _value;
 	
 	public Action(CombatController src, Character c, Tile t) {
@@ -47,7 +49,7 @@ public abstract class Action implements Comparable<Action> {
 	 * 		a negative number if the other action is better
 	 */
 	public int compareTo(Action other) {
-		System.out.println("comparing " + _value + " to " + other._value);
+	//	System.out.println("comparing " + _value + " to " + other._value);
 		if (_value < other._value)
 			return 1;
 		else if (_value == other._value)
@@ -84,5 +86,9 @@ public abstract class Action implements Comparable<Action> {
 				}
 			}
 		return eval;
+	}
+
+	public ActionType getType() {
+		return _type;
 	}
 }

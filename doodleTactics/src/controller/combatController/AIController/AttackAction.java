@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import map.Tile;
+import controller.combatController.ActionType;
 import controller.combatController.CombatController;
 import character.Character;
 
@@ -14,6 +15,7 @@ import character.Character;
  */
 public class AttackAction extends Action {
 	
+	private static final double ATTACK_CONSTANT = 10;
 	private static final double MINOR_DAMAGE_MULTIPLIER = 3;
 	private static final double DAMAGING_MULTIPLIER = 6;
 	private static final double CRIPPLING_MULTIPLIER = 12;
@@ -37,6 +39,8 @@ public class AttackAction extends Action {
 		else {
 			_src.characterWait();
 		}
+		
+		_type = ActionType.ATTACK;
 	}
 
 	@Override
@@ -81,6 +85,6 @@ public class AttackAction extends Action {
 			eval = MINOR_DAMAGE_MULTIPLIER;
 		}
 		
-		return eval*bestAttack + defensiveEval(filter);
+		return eval*bestAttack*ATTACK_CONSTANT + defensiveEval(filter);
 	}
 }
