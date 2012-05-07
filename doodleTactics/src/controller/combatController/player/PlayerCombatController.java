@@ -413,16 +413,12 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 */
 	public void mousePressed(MouseEvent e) {
 		super.mousePressed(e);
-		MenuItem m = _gameScreen.checkContains(e.getPoint());
-
 		if (!_menus.isEmpty() && _menus.peek().contains(e.getPoint())) {
 			System.out.println("HLO");
 			_menuDraggedx = e.getX();
 			_menuDraggedy = e.getY();
 			_draggingMenu = true;
 		}
-	//	else
-	//		_draggingMenu = false;
 	}
 	
 	@Override
@@ -449,14 +445,24 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void keyPressed(KeyEvent e) {
 		if (getState() == State.START) {
 			if (e.getKeyCode() == _dt.getLeftKey()) {
-				Character c = nextUnit();
+				if (_cycledRight)
+					previousUnit();
+				Character c = previousUnit();
 				System.out.println(c);
 				_gameScreen.panToCoordinate(c.getX(), c.getY());
+				
+				_cycledLeft = true;
+				_cycledRight = false;
 			}
 			else if (e.getKeyCode() == _dt.getRightKey()) {
+				if (_cycledLeft)
+					nextUnit();
 				Character c = nextUnit();
 				System.out.println(c);
 				_gameScreen.panToCoordinate(c.getX(), c.getY());
+				
+				_cycledLeft = false;
+				_cycledRight = true;
 			}
 		}
 	}

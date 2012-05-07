@@ -13,7 +13,7 @@ import main.DoodleTactics;
 import map.Tile;
 import character.Character;
 
-public class CombatOrchestrator extends GameScreenController {
+public abstract class CombatOrchestrator extends GameScreenController {
 	
 	private enum State {
 		SETUP,

@@ -25,6 +25,7 @@ import controller.OverworldController;
 import controller.combatController.CombatController;
 import controller.combatController.CombatOrchestrator;
 import controller.combatController.CombatWindow;
+import controller.combatController.RandomBattleOrchestrator;
 import controller.combatController.AIController.RandomBattleAI;
 
 import character.Archer;
@@ -99,7 +100,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	}
 
 	/**
-	 * Parses the Main Character from the given file
+	 * Parses the character party from the given file
 	 */
 	public void parseParty(String filePath){
 		try {
@@ -436,8 +437,10 @@ public class GameScreen extends Screen<GameScreenController> {
 		
 	//	_currentCharacter.updateLocation(x, y);
 		//update character locations
-		for(Character c : getController().getCharactersToDisplay())
-			c.updateLocation(x, y);
+		synchronized (getController()) {
+			for(Character c : getController().getCharactersToDisplay())
+				c.updateLocation(x, y);
+		}
 		
 		//update map locations
 		for(int i = 0; i < MAP_WIDTH; i++)
@@ -558,7 +561,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		return b;
 	}
 
-	public void paintComponent(java.awt.Graphics graphics) {
+	synchronized public void paintComponent(java.awt.Graphics graphics) {
 		Graphics2D g = (Graphics2D) graphics;
 
 		/*	System.out.println("-------PAINT--------");
@@ -673,7 +676,7 @@ public class GameScreen extends Screen<GameScreenController> {
 		RandomBattleAI enemy = new RandomBattleAI(_dt, enemies);
 		List<CombatController> e = new ArrayList<CombatController>();
 		e.add(enemy);
-		enterCombat(new CombatOrchestrator(_dt, e, null, null, RandomBattleAI.RANDOM_BATTLE_NUM_UNITS));
+		enterCombat(new RandomBattleOrchestrator(_dt, e, null, null, RandomBattleAI.RANDOM_BATTLE_NUM_UNITS));
 	}
 
 	/**

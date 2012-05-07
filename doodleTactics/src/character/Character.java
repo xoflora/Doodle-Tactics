@@ -48,7 +48,7 @@ public abstract class Character extends Rectangle{
 	public final static int CRITICAL_MULTIPLIER = 2;
 
 	//stat arrays (indexed by type of stat, see above)
-	protected final int[] _BASE_STATS; //initial
+	protected final double[] _BASE_STATS; //initial
 	protected int[] _currentStats; //updated with levelUp()
 	protected int[] _unitPoints; //gained by character
 	protected final int[] YIELD; //given out by character
@@ -86,6 +86,8 @@ public abstract class Character extends Rectangle{
 	
 	private transient PathTimer _pathTimer;
 	private transient MoveTimer _moveTimer;
+	
+	private DoodleTactics _dt;
 
 	public static enum CharacterDirection{
 		LEFT,RIGHT,UP,DOWN
@@ -100,8 +102,9 @@ public abstract class Character extends Rectangle{
 
 		super(container);
 		
+		_dt = dt;
 		_container = container;
-		_BASE_STATS = new int[NUM_STATS];
+		_BASE_STATS = new double[NUM_STATS];
 		_currentStats = new int[NUM_STATS];
 		_unitPoints = new int[NUM_STATS]; 
 		YIELD = new int[NUM_STATS];
@@ -481,7 +484,7 @@ public abstract class Character extends Rectangle{
 		return _level;
 	}
 
-	public int[] getBaseStats(){
+	public double[] getBaseStats(){
 		return _BASE_STATS;
 	}
 
@@ -569,9 +572,12 @@ public abstract class Character extends Rectangle{
 	 */
 	public void initStats(){
 		for(int i=0; i<NUM_STATS; i++){
-			_currentStats[i] = _BASE_STATS[i];
+			_currentStats[i] = (int) (_BASE_STATS[i]*10);
+			if (i== NUM_STATS-1) {
+//				System.out.println(this.getName() + " max HP: " + _currentStats[MAX_HP]);
+			}
 		}
-		_currentHP = _BASE_STATS[MAX_HP];
+		_currentHP = (int) (_BASE_STATS[MAX_HP]*10);
 	}
 
 	/**
@@ -696,7 +702,37 @@ public abstract class Character extends Rectangle{
 
 		//update stats
 		for(int i=0; i<NUM_STATS; i++)
-			_currentStats[i] = 10 * _BASE_STATS[i] + _level*_BASE_STATS[i] + _unitPoints[i]/12;
+			_currentStats[i] = (int) (10 * _BASE_STATS[i] + _level*_BASE_STATS[i] + _unitPoints[i]/12);
+	}
+	
+	public void checkLevelUp() {
+		if (_exp >= 100*(Math.pow(1.2, (_level-1)))) {
+			_exp = (int) (_exp-(100*(Math.pow(1.2, (_level-1)))));
+			try {
+				this.levelUp();
+				System.out.println("Level up!");
+			} catch (InvalidLevelException e) {
+				// TODO Auto-generated catch block
+				_dt.error("You have reached the level cap. Good job for WINNING THE GAME.");
+			}
+		}
+	}
+	
+	public void addExpForAttack(Character enemy) {
+		int yield = (int) Math.max(2*((_level-1)-enemy.getLevel())+((100*Math.pow(1.2, _level-1))/10), 1);
+		_exp+=yield;
+		this.checkLevelUp();
+	}
+	
+	public void addExpForDefeating(Character enemy) {
+		int yield = (int) Math.max(2*((_level-1)-enemy.getLevel())+((100*Math.pow(1.2, (_level-1)))/5), 1);
+		_exp+=yield;
+		this.checkLevelUp();
+	}
+	
+	public int getExpNeededToLevel() {
+		int neededExp = (int) (100*(Math.pow(1.2, (_level-1))));
+		return neededExp;
 	}
 
 	/**
@@ -736,6 +772,10 @@ public abstract class Character extends Rectangle{
 	public double getCriticalChance(Character other) {
 		return _currentStats[LUCK] - other._currentStats[LUCK];
 	}
+	
+	public double getFullResistance() {
+		return _currentStats[RESISTANCE] + (_cuirass == null ? 0:_cuirass.getResistance());
+	}
 
 
 	/**
@@ -748,7 +788,7 @@ public abstract class Character extends Rectangle{
 		int offense, defense, damage;
 		boolean critical;
 
-		if (r.nextInt(100) < getHitChance(opponent.getOccupant())-opponent.getEvasion()) {
+		if (r.nextInt(100) > getHitChance(opponent.getOccupant())-opponent.getEvasion()) {
 			System.out.println("Attack missed!");
 		}
 		else {
@@ -768,13 +808,14 @@ public abstract class Character extends Rectangle{
 					" takes " + damage + " damage!");
 
 			if (opponent.getOccupant()._currentHP <= 0) {
+				this.addExpForDefeating(opponent.getOccupant());
 				System.out.println(opponent.getOccupant().getName() + " defeated.");
 				opponent.getOccupant().setDefeated();
 				return;
 			}
 		}
 		if (opponent.getOccupant().getMaxAttackRange() > range && opponent.getOccupant().getMinAttackRange() < range) {
-			if (r.nextInt(100) < opponent.getOccupant().getFullAttackAccuracy() - _currentStats[SKILL] - attacker.getEvasion()) {
+			if (r.nextInt(100) > opponent.getOccupant().getFullAttackAccuracy() - _currentStats[SKILL] - attacker.getEvasion()) {
 				System.out.println("Attack missed!");
 			}
 			else {

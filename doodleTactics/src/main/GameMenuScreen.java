@@ -901,7 +901,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			level.setSize(200, 50);
 			level.setVisible(true);
 
-			JLabel exp = new JLabel("EXP : " + chrter.getExp());
+			JLabel exp = new JLabel("EXP : " + chrter.getExp() + "/" + chrter.getExpNeededToLevel());
 			exp.setForeground(java.awt.Color.BLACK);
 			level.setSize(200, 50);
 			level.setVisible(true);
