@@ -212,7 +212,6 @@ public class Map implements Serializable {
 						throw new InvalidMapException("(line " + count + ") Main Character must be parsed before images");
 					int xTile = Integer.parseInt(splitLine[2]);
 					int yTile = Integer.parseInt(splitLine[3]);
-					System.out.println(main.getTileX() + ": " + main.getTileY());
 					double xLoc = Tile.TILE_SIZE * xTile; //(xTile  - main.getTileX());
 					double yLoc = Tile.TILE_SIZE * yTile; //(yTile - main.getTileY());
 					tiles[xTile][yTile].setTilePermissions((splitLine[4]).charAt(0));
@@ -283,7 +282,6 @@ public class Map implements Serializable {
 						(splitLine.length == 11 && Integer.parseInt(splitLine[6]) == DIALOGUE) ||
 						(splitLine.length == 11 && Integer.parseInt(splitLine[6]) == COMBAT)
 								|| (splitLine.length == 13 && Integer.parseInt(splitLine[6]) == WARP)) {
-					System.out.println(line);
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
 
@@ -315,7 +313,6 @@ public class Map implements Serializable {
 							+ ") Incorrect amount of data");
 				
 				line = reader.readLine();
-				System.out.println("count: " + count + "line: " + line);
 			}
 
 

@@ -814,7 +814,10 @@ public abstract class Character extends Rectangle{
 				return;
 			}
 		}
-		if (opponent.getOccupant().getMaxAttackRange() > range && opponent.getOccupant().getMinAttackRange() < range) {
+		System.out.println("max opponent range: " + opponent.getOccupant().getMaxAttackRange());
+		System.out.println("min opponent range: " + opponent.getOccupant().getMinAttackRange());
+
+		if (opponent.getOccupant().getMaxAttackRange() >= range && opponent.getOccupant().getMinAttackRange() <= range) {
 			if (r.nextInt(100) > opponent.getOccupant().getFullAttackAccuracy() - _currentStats[SKILL] - attacker.getEvasion()) {
 				System.out.println("Attack missed!");
 			}
@@ -842,6 +845,9 @@ public abstract class Character extends Rectangle{
 					return;
 				}
 			}
+		}
+		else {
+			System.out.println("Opponent couldn't attack you because of your range");
 		}
 	}
 
