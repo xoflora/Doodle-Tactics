@@ -14,7 +14,7 @@ public class Warrior extends Character{
 		super(dt,container, profile, left, right, up, down, name,x,y);
 		
 		//set base stats
-		_BASE_STATS[STRENGTH] = 8;
+		_BASE_STATS[STRENGTH] = 200;
 		_BASE_STATS[DEFENSE] = 6;
 		_BASE_STATS[SPECIAL] = 5;
 		_BASE_STATS[RESISTANCE] = 5;

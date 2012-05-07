@@ -17,4 +17,9 @@ public class QuitMenuButton extends MenuItem {
 	public void activate(int type) {
 		System.exit(0);
 	}
+	
+	@Override
+	public void setDefault() {
+		super.setDefault();
+	}
 }
