@@ -57,7 +57,7 @@ public class PlayerSetup extends GameScreenController implements PoolDependent {
 		super(dt);
 		
 		_validTiles = validTiles;
-		_units = _dt.getParty();
+		_units = Util.clone(_dt.getParty());
 		_units.remove(_gameScreen.getMainChar());
 
 		_toPlace = Util.clone(_units);

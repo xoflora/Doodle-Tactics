@@ -99,7 +99,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	}
 
 	/**
-	 * Parses the Main Character from the given file
+	 * Parses the character party from the given file
 	 */
 	public void parseParty(String filePath){
 		try {
