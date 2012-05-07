@@ -1,8 +1,13 @@
 package controller.combatController;
 
+import java.util.HashMap;
 import java.util.List;
 
+import character.Character;
+
 import main.DoodleTactics;
+import map.Map;
+import map.Tile;
 
 public class RandomBattleOrchestrator extends CombatOrchestrator {
 
@@ -37,12 +42,37 @@ public class RandomBattleOrchestrator extends CombatOrchestrator {
 	 * 		range of all enemies
 	 */
 	public boolean isRun() {
-		return false;
+		Map m = _gameScreen.getMap();
+		for (Character c : _p.getUnits()) {
+			for (CombatController f : _enemies)
+				for (Character e : f.getUnits())
+					if (m.getAttackRange(f.getTile(e), e.getMovementRange(),
+							e.getMinAttackRange(), e.getMaxAttackRange()).contains(_p.getTile(c)))
+						return false;
+		}
+		
+		return true;
 	}
 
 	@Override
+	/**
+	 * performs any tile events that are associated with a combat controller;
+	 * updates within the map the data revolving around 
+	 */
 	public void performTileEvents() {
+		for (CombatController c : getEnemyAffiliations()) {
+			_gameScreen.getMap().updateRandomBattleTiles(c._locations);
+		}
 		
+		HashMap<Character, Tile> toAdd = new HashMap<Character, Tile>();
+		Map m = _gameScreen.getMap();
+		for (CombatController f : getPartnerAffiliations())
+			for (Character c : f.getUnits())
+				if (m.generatesRandomBattle(f.getTile(c)))
+					for (Character e : m.getRandomEnemies(f.getTile(c)))
+						if (!getAllEnemyUnits().contains(e))
+							toAdd.put(e, m.getRandomEnemyTile(e));
+		_enemies.get(0).addUnits(toAdd);
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public abstract class CombatOrchestrator extends GameScreenController {
 	private int _numUnits;
 	private static final int NUM_EXTRA_SETUP_SPACES = 0;
 	
-	private PlayerCombatController _p;
+	protected PlayerCombatController _p;
 	
 	public CombatOrchestrator(DoodleTactics dt, List<CombatController> enemies, List<CombatController> partners,
 				List<CombatController> others, int numUnits) {
@@ -101,9 +101,7 @@ public abstract class CombatOrchestrator extends GameScreenController {
 				_dt.getGameScreen().repaint();
 			}
 			
-			while (!_p.getUnits().isEmpty())
-				//	if (_p.getUnits().get(0) != _gameScreen.getMainChar())
-				_p.removeUnit(_p.getUnits().get(0));
+			cleanUp();
 			
 			_dt.getGameScreen().removeMenuItem(_menu);
 			_gameScreen.popControl();
@@ -114,6 +112,30 @@ public abstract class CombatOrchestrator extends GameScreenController {
 	
 	public List<CombatController> getEnemyAffiliations() {
 		return _enemies;
+	}
+	
+	/**
+	 * @return a list containing all enemy units, from all enemy factions
+	 */
+	public List<Character> getAllEnemyUnits() {
+		List<Character> list = new ArrayList<Character>();
+		for (CombatController f : _enemies)
+			list.addAll(f.getUnits());
+		return list;
+	}
+	
+	public List<CombatController> getPartnerAffiliations() {
+		return _partners;
+	}
+	
+	/**
+	 * @return a list containing all partner units, from all partner factions
+	 */
+	public List<Character> getAllPartnerUnits() {
+		List<Character> list = new ArrayList<Character>();
+		for (CombatController f : _partners)
+			list.addAll(f.getUnits());
+		return list;
 	}
 
 	@Override
@@ -179,15 +201,15 @@ public abstract class CombatOrchestrator extends GameScreenController {
 		
 		if (_state == State.BATTLING) {
 			
-			if (isWin()) {
+			performTileEvents();
+			performTurnUpdate();
+			
+			if (isWin())
 				victory();
-			}
-			else if (isLoss()) {
+			else if (isLoss())
 				defeat();
-			}
-			else if (isRun()) {
-				
-			}
+			else if (isRun())
+				escape();
 			else {
 				if (_factionCycle.hasNext()) {
 					CombatController f = _factionCycle.next();
@@ -261,9 +283,18 @@ public abstract class CombatOrchestrator extends GameScreenController {
 	}
 	
 	/**
+	 * prepares the game screen for overworld control before releasing control
+	 */
+	protected void cleanUp() {
+		while (!_p.getUnits().isEmpty())
+			//	if (_p.getUnits().get(0) != _gameScreen.getMainChar())
+			_p.removeUnit(_p.getUnits().get(0));
+	}
+
+	/**
 	 * ends the combat with the player victorious
 	 */
-	private void victory() {
+	protected void victory() {
 		System.out.println("Player is victorious!");
 		
 	//	while (!_p.getUnits().isEmpty())
@@ -279,9 +310,18 @@ public abstract class CombatOrchestrator extends GameScreenController {
 	}
 	
 	/**
+	 * ends combat with the player running away
+	 */
+	protected void escape() {
+		cleanUp();
+		_gameScreen.popControl();
+		_gameScreen.panToCoordinate(_gameScreen.getMainChar().getX(), _gameScreen.getMainChar().getY());
+	}
+	
+	/**
 	 * ends the combat with the player defeated
 	 */
-	private void defeat() {
+	protected void defeat() {
 		_dt.changeScreens(new GameOverScreen(_dt));
 	}
 

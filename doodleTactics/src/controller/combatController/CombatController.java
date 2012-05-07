@@ -430,4 +430,25 @@ public abstract class CombatController extends GameScreenController {
 	public void setState(State st) {
 		_state = st;
 	}
+	
+	/**
+	 * @param c a character
+	 * @return the tile associated with the given character
+	 */
+	public Tile getTile(Character c) {
+		return _locations.get(c);
+	}
+	
+	/**
+	 * adds units to this combat controller
+	 * @param newUnits the new units to add
+	 */
+	public void addUnits(HashMap<Character, Tile> newUnits) {
+		for (Character c : newUnits.keySet())
+			if (!_units.contains(c)) {
+				_units.add(c);
+				_locations.put(c, newUnits.get(c));
+				c.setAffiliation(this);
+			}
+	}
 }
