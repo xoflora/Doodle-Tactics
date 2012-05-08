@@ -77,6 +77,7 @@ import map.Tile;
 			
 			private int _cnt;
 			private int _numSteps;
+			private double _arrowPeak;
 
 			public AnimationListener() {
 				_cnt = 0;
@@ -92,9 +93,10 @@ import map.Tile;
 				
 				if(_cnt < _numSteps) {
 					_arrow.setLocation(_arrow.getX(), _arrow.getY() - (((DoodleTactics.TILE_ROWS - _srcY)*Tile.TILE_SIZE) + _arrow.getHeight()) / _numSteps);
+					_arrowPeak = _arrow.getY();
 				} else {
 					System.out.println("second case");
-					_arrow.setLocation(_arrow.getX(), _arrow.getY() + (((_destY*Tile.TILE_SIZE) + _arrow.getHeight()) / _numSteps));
+					_arrow.setLocation(_arrow.getX(), _arrow.getY() + (((_destY*Tile.TILE_SIZE) + _height) / _numSteps));
 				}
 				
 				double oldCenterX = _crosshair.getCenterX();
