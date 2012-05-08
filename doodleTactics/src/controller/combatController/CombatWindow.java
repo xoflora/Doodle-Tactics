@@ -2,6 +2,7 @@ package controller.combatController;
 
 import items.Weapon.WeaponType;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -138,7 +139,7 @@ public class CombatWindow extends MenuItem {
 				String str1 = "";
 				String str2 = "";
 				if (_damageDone == null) {
-					str1 = _attackerChar.getName() + " has defeated the enemy!";
+					str1 = _attackerChar.getName() + " has defeated " + _victimChar.getName() + "!";
 				}
 				else {
 					if (_damageDone[0] == -1) {
@@ -157,9 +158,10 @@ public class CombatWindow extends MenuItem {
 				brush.setRenderingHint(
 						RenderingHints.KEY_TEXT_ANTIALIASING,
 						RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
-				brush.setFont(new Font("Verdana", Font.BOLD, 24));
+				brush.setFont(new Font("Verdana", Font.BOLD, 20));
 				brush.setColor(new Color(255,255,255));
-				brush.setBackground(java.awt.Color.BLACK);
+//				brush.setBackground(java.awt.Color.BLACK);
+				brush.setStroke(new BasicStroke());
 				brush.drawString(str1, TEXT_X, _battlersY-140);
 				brush.drawString(str2, TEXT_X, _battlersY-110);
 			}
@@ -223,6 +225,7 @@ public class CombatWindow extends MenuItem {
 						moveUpTimer.this.getAttackTimer().start();
 					}
 					else {
+						CombatWindow.this.setLocation(0, 17*Tile.TILE_SIZE+100);
 						_didAttack = false;
 						_c.done();
 					}

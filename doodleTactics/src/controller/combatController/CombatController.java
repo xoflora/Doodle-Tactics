@@ -372,9 +372,7 @@ public abstract class CombatController extends GameScreenController {
 				src.getOccupant().setDown();
 			}
 		}
-		
-		System.out.println("DOING THE ANIMATION " + _state);
-		
+				
 		_gameScreen.pushControl(new CombatWindowController(_dt, src, dest));
 		
 	/*	src.attack(dest, r);
@@ -392,7 +390,6 @@ public abstract class CombatController extends GameScreenController {
 	 * removes a unit from this combat controller; it can no longer be used in the battle
 	 */
 	public void removeUnit(Character c) {
-		System.out.println("removeing" + c + " from tile " + _locations.get(c));
 		_units.remove(c);
 		_gameScreen.removeCharacter(c);
 		System.out.println(_locations == null);
