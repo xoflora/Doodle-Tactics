@@ -212,7 +212,6 @@ public abstract class Shape implements Serializable{
 		public void paint(java.awt.Graphics2D brush, BufferedImage img) {
 			if (_isVisible) {
 					brush.rotate(_rotationAngle, _shape.getCenterX(), _shape.getCenterY());
-					//brush.draw(_shape);
 					brush.setPaint(new TexturePaint(img, (Rectangle2D) _shape));
 					brush.fill(_shape);
 					brush.rotate(-_rotationAngle, _shape.getCenterX(), _shape.getCenterY());		
