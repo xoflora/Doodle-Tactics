@@ -1,5 +1,7 @@
 package character;
 
+import controller.SpecialAttackController;
+import controller.SplatterTimer;
 import main.DoodleTactics;
 import main.GameScreen;
 
@@ -23,5 +25,27 @@ public class Mage extends Character{
 
 	public CharacterType getCharacterType() {
 		return CharacterType.MAGE;
+	}
+	
+	@Override
+	public boolean hasSpecial() {
+		return true;
+	}
+	
+	@Override
+	public SpecialAttackController getSpecialAttack(int x, int y) {
+		SpecialAttackController toReturn = new SpecialAttackController(_dt);
+		toReturn.setSpecialTimer(new SplatterTimer(toReturn, _dt, x, y));
+		return toReturn;
+	}
+
+	@Override
+	public int getMaxSpecialRange() {
+		return 10;
+	}
+
+	@Override
+	public int getMinSpecialRange() {
+		return 5;
 	}
 }

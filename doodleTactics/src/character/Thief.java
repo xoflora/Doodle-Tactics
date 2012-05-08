@@ -1,5 +1,6 @@
 package character;
 
+import controller.SpecialAttackController;
 import main.DoodleTactics;
 import main.GameScreen;
 
@@ -25,5 +26,27 @@ public class Thief extends Character{
 	public CharacterType getCharacterType() {
 		// TODO Auto-generated method stub
 		return CharacterType.THIEF;
+	}
+	
+	@Override
+	public boolean hasSpecial() {
+		return false;
+	}
+	
+	@Override
+	public SpecialAttackController getSpecialAttack(int x, int y) {
+		return null;
+	}
+
+	@Override
+	public int getMaxSpecialRange() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getMinSpecialRange() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
