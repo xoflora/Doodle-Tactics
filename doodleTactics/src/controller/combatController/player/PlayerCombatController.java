@@ -132,7 +132,9 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	
 	private void clearAdjacentTiles() {
 		for (Tile t : _adjacentTiles)
-			t.setInMovementRange(false);
+			if (t != null) {
+				t.setInMovementRange(false);
+			}
 		_adjacentTiles = new ArrayList<Tile>();
 	}
 	

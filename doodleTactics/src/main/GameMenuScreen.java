@@ -108,8 +108,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		BufferedImage quitH = _dt.importImage("src/graphics/menu/quit_game_menu_hovered.png");
 		BufferedImage titleD = _dt.importImage("src/graphics/menu/overlay.png");
 		BufferedImage infoBoxTitle = _dt.importImage("src/graphics/menu/item_info_label.png");
-		BufferedImage staticMapImg = _dt.importImage("src/graphics/menu/static_map.png");
-		BufferedImage downArrow = _dt.importImage("src/graphics/menu/downarrow.gif");
+		BufferedImage staticMapImg = _dt.importImage("src/graphics/menu/doodle_map.png");
+		BufferedImage downArrow = _dt.importImage("src/graphics/menu/map_arrow.png");
 
 		_charBoxImage = _dt.importImage("src/graphics/menu/units_box.png");
 		_listItem = _dt.importImage("src/graphics/menu/game_menu_option_hovered.png");

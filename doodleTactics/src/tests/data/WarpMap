@@ -1,4 +1,4 @@
-mapCord,615,535
+mapCord,420,575
 DemoMap,src/graphics/tiles/grass.png,src/graphics/tiles/grass_bush.png
 20,20
 0,0,0,src/graphics/tiles/grass.png,1,0,0,0,0,0
@@ -109,7 +109,7 @@ DemoMap,src/graphics/tiles/grass.png,src/graphics/tiles/grass_bush.png
 6,16,F,src/graphics/tiles/grass_bush.png,1,0,0,0,0,4
 7,15,F,src/graphics/tiles/grass_bush.png,1,0,0,0,0,4
 2,17,F,src/graphics/tiles/grass_bush.png,1,1,0,0,0,4
-1,1,F,src/graphics/tiles/grass_bush.png,1,1,0,0,0,4
+1,13,F,src/graphics/tiles/grass_bush.png,1,1,0,0,0,4
 3,14,F,src/graphics/tiles/grass_bush.png,1,1,0,0,0,4
 5,15,F,src/graphics/tiles/grass_bush.png,1,0,0,0,0,4
 4,4,F,src/graphics/tiles/grass_bush.png,1,0,0,0,0,4
@@ -134,5 +134,6 @@ img,src/graphics/terrain/arch.png,4,9,0
 img,src/graphics/terrain/arch.png,8,11,0
 img,src/graphics/terrain/arch.png,12,9,0
 img,src/graphics/terrain/arch.png,16,7,0
+10,4,F,src/graphics/tiles/grass.png,1,0,2,0,0,0,src/tests/data/HouseMap,4,9
 19,14,F,src/graphics/tiles/door.jpg,1,0,2,0,0,0,src/tests/data/testMapDemo,5,13
 char,Mage,Doodle Sage,src/graphics/characters/doodle_sage_portrait.png,src/graphics/characters/doodle_sage_left.png,src/graphics/characters/doodle_sage_right.png,src/graphics/characters/doodle_sage_back.png,src/graphics/characters/doodle_sage_front.png,10,10
