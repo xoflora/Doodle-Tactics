@@ -108,8 +108,8 @@ DemoMap,src/graphics/tiles/grass.png,src/graphics/tiles/grass_bush.png
 6,15,F,src/graphics/tiles/grass_bush.png,1,0,0,0,0,4
 6,16,F,src/graphics/tiles/grass_bush.png,1,0,0,0,0,4
 7,15,F,src/graphics/tiles/grass_bush.png,1,0,0,0,0,4
-2,17,F,src/graphics/tiles/grass_bush.png,1,1,0,0,0,4
-1,13,F,src/graphics/tiles/grass_bush.png,1,1,0,0,0,4
+2,17,F,src/graphics/tiles/grass_bush.png,1,0,0,0,0,4
+1,13,F,src/graphics/tiles/grass_bush.png,1,0,0,0,0,4
 3,14,F,src/graphics/tiles/grass_bush.png,1,1,0,0,0,4
 5,15,F,src/graphics/tiles/grass_bush.png,1,0,0,0,0,4
 4,4,F,src/graphics/tiles/grass_bush.png,1,0,0,0,0,4
