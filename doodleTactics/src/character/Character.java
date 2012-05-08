@@ -9,6 +9,7 @@ import java.util.Random;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import controller.PathListener;
 import controller.SpecialAttackController;
 import controller.combatController.CombatController;
 import main.DoodleTactics;
@@ -349,17 +350,27 @@ public abstract class Character extends Rectangle{
 
 	private class PathTimer extends Timer {
 
+		private PathListener _listener;
 		private List<Tile> _path;
 		private boolean _follow;
 
 		public PathTimer(List<Tile> path, boolean follow) {
 			super(400, null);
+			_listener = _affiliation;
 			_path = path;
 			_follow = follow;
-			this.addActionListener(new PathListener());
+			this.addActionListener(new PathMotionListener());
+		}
+		
+		public PathTimer(PathListener p, List<Tile> path, boolean follow) {
+			super(400, null);
+			_listener = p;
+			_path = path;
+			_follow = follow;
+			this.addActionListener(new PathMotionListener());
 		}
 
-		private class PathListener implements java.awt.event.ActionListener {
+		private class PathMotionListener implements java.awt.event.ActionListener {
 
 			private int _cnt = 0;
 
@@ -374,7 +385,7 @@ public abstract class Character extends Rectangle{
 				if (_cnt == _path.size() - 1) {
 					PathTimer.this.stop();
 					//	System.out.println("=========END FOLLOW PATH=========");
-					_affiliation.moveComplete();
+					_listener.moveComplete();
 				}
 			}
 		}
@@ -384,8 +395,7 @@ public abstract class Character extends Rectangle{
 	 * animates the character along the given path of tiles
 	 * @param tiles a list of tiles to have the character follow, used for combat movement
 	 */
-
-	public void followPath(List<Tile> tiles) {
+	public void followPath(PathListener listener, List<Tile> tiles) {
 		
 	//	System.out.println("=========START FOLLOW PATH=========");
 		//tiles.remove(0);
@@ -394,13 +404,16 @@ public abstract class Character extends Rectangle{
 	//	}
 	//	System.out.println("===================================");
 		if(tiles != null && tiles.size() > 1) {
-			_pathTimer = new PathTimer(tiles, true);
+			_pathTimer = new PathTimer(listener, tiles, true);
 			_pathTimer.start();
 		}
 		else {
-			System.out.println("Crunch");
-			_affiliation.moveComplete();
+			listener.moveComplete();
 		}
+	}
+	
+	public void followPath(List<Tile> tiles) {
+		followPath(_affiliation, tiles);
 	}
 
 	/**
