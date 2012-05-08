@@ -259,6 +259,7 @@ public abstract class Character extends Rectangle{
 
 		_isAnimating = true;
 		_moveTimer.start();
+		
 	}
 
 	private class MoveTimer extends Timer {
@@ -816,6 +817,7 @@ public abstract class Character extends Rectangle{
 		}
 		System.out.println("max opponent range: " + opponent.getOccupant().getMaxAttackRange());
 		System.out.println("min opponent range: " + opponent.getOccupant().getMinAttackRange());
+		System.out.println("range: " + range);
 
 		if (opponent.getOccupant().getMaxAttackRange() >= range && opponent.getOccupant().getMinAttackRange() <= range) {
 			if (r.nextInt(100) > opponent.getOccupant().getFullAttackAccuracy() - _currentStats[SKILL] - attacker.getEvasion()) {
