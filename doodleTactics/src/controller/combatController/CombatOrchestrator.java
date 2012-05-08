@@ -290,6 +290,16 @@ public abstract class CombatOrchestrator extends GameScreenController {
 			_p.removeUnit(_p.getUnits().get(0));
 	}
 
+	
+	private void statusBanner(String s) {
+		BufferedImage img = _dt.importImage(s);
+		MenuItem victory = new MenuItem(_gameScreen,img,img,_dt,0);
+		victory.setLocation(((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - victory.getImage().getWidth())/2, - victory.getHeight());
+		_gameScreen.addMenuItem(victory);
+		victory.setVisible(true);
+		new Thread(new VictoryTimer(victory,0,20)).start();
+	}
+	
 	/**
 	 * ends the combat with the player victorious
 	 */
@@ -300,12 +310,7 @@ public abstract class CombatOrchestrator extends GameScreenController {
 	//			_p.removeUnit(_p.getUnits().get(0));
 	//	_gameScreen.popControl();
 		
-		BufferedImage img = _dt.importImage("src/graphics/menu/combatMenu/victory.png");
-		MenuItem victory = new MenuItem(_gameScreen,img,img,_dt,0);
-		victory.setLocation(((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - victory.getImage().getWidth())/2, - victory.getHeight());
-		_gameScreen.addMenuItem(victory);
-		victory.setVisible(true);
-		new Thread(new VictoryTimer(victory,0,20)).start();
+		statusBanner("src/graphics/menu/combatMenu/victory.png");
 	}
 	
 	/**
@@ -313,8 +318,18 @@ public abstract class CombatOrchestrator extends GameScreenController {
 	 */
 	protected void escape() {
 		cleanUp();
-		_gameScreen.popControl();
-		_gameScreen.panToCoordinate(_gameScreen.getMainChar().getX(), _gameScreen.getMainChar().getY());
+		
+		statusBanner("src/graphics/menu/combatMenu/escaped.png");
+		
+//		BufferedImage img = _dt.importImage("src/graphics/menu/combatMenu/escaped.png");
+//		MenuItem escaped = new MenuItem(_gameScreen,img,img,_dt,0);
+//		escaped.setLocation(((DoodleTactics.TILE_COLS*map.Tile.TILE_SIZE) - escaped.getImage().getWidth())/2, - victory.getHeight());
+//		_gameScreen.addMenuItem(escaped);
+//		escaped.setVisible(true);
+//		new Thread(new VictoryTimer(escaped,0,20)).start();
+		
+//		_gameScreen.popControl();
+//		_gameScreen.panToCoordinate(_gameScreen.getMainChar().getX(), _gameScreen.getMainChar().getY());
 	}
 	
 	/**
