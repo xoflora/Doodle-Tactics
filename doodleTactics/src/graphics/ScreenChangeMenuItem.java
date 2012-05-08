@@ -35,7 +35,8 @@ public class ScreenChangeMenuItem extends MenuItem {
 	}
 
 	@Override
-	public void activate(int type) {		
+	public void activate(int type) {	
+
 		_dt.changeScreens(_nextScreen);
 		_dt.getGameScreen().setMap(DEFAULT_MAP_PATH, DEFAULT_X, DEFAULT_Y);
 		
@@ -97,6 +98,7 @@ public class ScreenChangeMenuItem extends MenuItem {
 		}
 
 		_nextScreen.repaint();
+		_dt.getGameScreen().switchToClassChooserMenu();
 
 	}
 }
