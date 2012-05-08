@@ -13,6 +13,9 @@ public abstract class Weapon extends Equipment{
 	private int _maxAttackRange;
 	private double _accuracy;
 	private int _attackPower;
+	private transient BufferedImage _displayImage;
+	private transient BufferedImage _menuImage;
+
 	
 	public enum WeaponType {
 		AXE, BOW, DAGGER, STAFF;
@@ -23,8 +26,6 @@ public abstract class Weapon extends Equipment{
 		_isWeapon = true;
 	}
 	
-	BufferedImage _displayImage;
-	BufferedImage _menuImage;
 	
 	public void exert(Character c){
 		c.changeWeapon(this);
@@ -60,4 +61,4 @@ public abstract class Weapon extends Equipment{
 	public abstract boolean canBeEquipped(Character character);
 	
 	public abstract WeaponType getWeaponType();
-}
+	}

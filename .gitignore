@@ -3,5 +3,5 @@ bin
 *~
 .metadata
 doodleTactics/src/tests/data/testSave
-doodleTactics/src/tests/data/savedGames
-doodleTactics/src/tests/saves
+doodleTactics/src/tests/saves/savedGames
+doodleTactics/src/tests/saves/*

@@ -444,8 +444,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 			((Graphics2D) g).setFont(new Font("M",Font.BOLD,30));
 			((Graphics2D) g).setColor(new Color(64,224,208));
-			((Graphics2D) g).drawString("Autosaving",200,500);
-			g.drawLine(190, 515, 385, 515);
 
 		}
 
