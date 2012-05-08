@@ -748,7 +748,11 @@ public class GameScreen extends Screen<GameScreenController> {
 
 
 	public void saveGame(String filename){
-		String filepath =  "src/tests/saves/" + filename;
+		String filepath;
+		if(filename.startsWith("Autosave"))
+			filepath = "src/tests/saves/Autosave";
+		else
+			filepath = "src/tests/saves" + filename;
 		System.out.println("Saving game!");
 		FileOutputStream fos;
 		ObjectOutputStream out;
@@ -767,9 +771,9 @@ public class GameScreen extends Screen<GameScreenController> {
 		int overflowX = (_currMap.getMainCharacter().getDownImage().getWidth() - Tile.TILE_SIZE) / 2;
 		int overflowY = (_currMap.getMainCharacter().getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
 		//_currMap.getMainCharacter().setLocation(_currMap.getMainCharacter().getX() - overflowX,_currMap.getMainCharacter().getY() - overflowY);
-
+		
 		if(filename.startsWith("Autosave"))
-			_dt.addSavedGame("Autosave", filepath);
+			_dt.addSavedGame("Autosave", "src/tests/saves" + filename);
 		else
 			_dt.addSavedGame(filename, filepath);
 		writeFilepathsFile();
@@ -822,7 +826,8 @@ public class GameScreen extends Screen<GameScreenController> {
 		System.out.println("Loading game!");
 		FileInputStream fis;
 		ObjectInputStream in;
-
+		if(filepath.contains("Autosave"))
+			filepath = "src/tests/saves/Autosave";
 		try {
 			fis = new FileInputStream(filepath);
 			in = new ObjectInputStream(fis);

@@ -604,7 +604,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_saveMenuItem.setVisible(false);
 			int i=0;
  			for(String title: _dt.getSavedFilePaths().keySet()){
- 				if(title.equals("Autosave"))
+ 				if(title.startsWith("Autosave"))
  					continue;
 				int y = (int) ((this.getHeight()/(DoodleTactics.NUM_SAVE_OPTIONS + 2))*(i + 1.5));
 				BufferedImage 		_buttonUnselectedImage = _dt.importImage("src/graphics/menu/load_radio_button.png");
