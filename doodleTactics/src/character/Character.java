@@ -74,7 +74,7 @@ public abstract class Character extends Rectangle{
 	private transient BufferedImage _down;
 	private String _profileFile,_leftFile,_rightFile,_upFile,_downFile;
 
-	private  CombatController _affiliation; //player/AI etc
+	private transient CombatController _affiliation; //player/AI etc
 
 	private transient FloatTimer _floatTimer; // internal timer used to animate floating
 	private transient GameScreen _container;
@@ -466,6 +466,7 @@ public abstract class Character extends Rectangle{
 			_shield.loadItem(dt);
 		if(_footgear != null)
 			_footgear.loadItem(dt);
+		_cuirass.load(dt);
 
 		new FloatTimer(dt.getGameScreen());
 	}

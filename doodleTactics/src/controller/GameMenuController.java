@@ -58,7 +58,6 @@ public class GameMenuController extends Controller {
 		LoadMenuItem clicked = _gameMenu.checkContainsRadioButtons(e.getPoint());
 		if(clicked != null){
 			System.out.println("Clicked!");
-			clicked.setHovered();
 			_gameMenu.repaint();
 		}
 		_gameMenu.repaint();
