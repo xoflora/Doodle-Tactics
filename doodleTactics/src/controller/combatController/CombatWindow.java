@@ -2,6 +2,8 @@ package controller.combatController;
 
 import items.Weapon.WeaponType;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -24,7 +26,7 @@ import graphics.Rectangle;
 
 public class CombatWindow extends MenuItem {
 
-	private static final int TEXT_X = 112;
+	private static final int TEXT_X = 400;
 	
 	protected animateImage _attackerImg, _victimImg;
 	private Character _attackerChar, _victimChar;
@@ -131,21 +133,35 @@ public class CombatWindow extends MenuItem {
 				_attackerWep.paint(brush, _attackerWep.getImage());
 			}
 			_attackerImg.paint(brush, _attackerImg.getImage());
+			
 			if (_didAttack) {
 				String str1 = "";
+				String str2 = "";
 				if (_damageDone == null) {
-					str1 = _attackerChar.getName() + "  has defeated the enemy!";
+					str1 = _attackerChar.getName() + " has defeated the enemy!";
 				}
 				else {
 					if (_damageDone[0] == -1) {
 						str1 = _attackerChar.getName() + " missed!";
 					}
 					else {
-						str1 = _attackerChar.getName() + " did " + _damageDone[0] + " damage";
+						str1 = _attackerChar.getName() + " did " + _damageDone[0] + " damage.";
 					}
-//					brush.drawString(iterator, x, y)
-//					brush.drawString(str1, TEXT_X, y + BUFFER);
+					if (_damageDone[1] == -1) {
+						str2 = _victimChar.getName() + " missed!";
+					}
+					else {
+						str2 = _victimChar.getName() + " did " + _damageDone[1] + " damage.";
+					}
 				}
+				brush.setRenderingHint(
+						RenderingHints.KEY_TEXT_ANTIALIASING,
+						RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+				brush.setFont(new Font("Verdana", Font.BOLD, 24));
+				brush.setColor(new Color(255,255,255));
+				brush.setBackground(java.awt.Color.BLACK);
+				brush.drawString(str1, TEXT_X, _battlersY-140);
+				brush.drawString(str2, TEXT_X, _battlersY-110);
 			}
 			brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 //			brush.drawImage(_victimImg.getImage(), (int)_victimImg.getX(), (int)_victimImg.getY(), _gs);
@@ -201,14 +217,13 @@ public class CombatWindow extends MenuItem {
 				if (count == 8) {
 					count = 0;
 					_timer.stop();
-//					_c.done();
-					System.out.println("Stopped the timer");
 					_gs.repaint();
 					_attackerX = 700;
 					if (moveOffset == -40) {
 						moveUpTimer.this.getAttackTimer().start();
 					}
 					else {
+						_didAttack = false;
 						_c.done();
 					}
 				}
@@ -254,6 +269,8 @@ public class CombatWindow extends MenuItem {
 						switch(count) {
 							case 0:
 								_attackerImg.setRotation(-10);
+								_didAttack = true;
+								_damageDone = _attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
 								break;
 							case 1:
 								_attackerImg.setRotation(-5);
@@ -277,10 +294,6 @@ public class CombatWindow extends MenuItem {
 						_gs.repaint();
 					}
 					else if (count >=6 && count < 12) {
-						if (count == 6) {
-							_didAttack = true;
-							_damageDone = _attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
-						}
 						if (_attackerChar.getWeapon() != null) {
 							if (_attackerChar.getWeapon().getWeaponType() == WeaponType.AXE) {
 								if (count == 6) {
@@ -349,7 +362,6 @@ public class CombatWindow extends MenuItem {
 						if (_attackerWep != null) {
 							_attackerWep.setLocation(1000, 1000);
 						}
-						_damageDone = _attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
 						_attackerChar.addExpForAttack(_victimChar);
 						_victimChar.addExpForAttack(_attackerChar);
 						_timer.stop();
@@ -364,6 +376,8 @@ public class CombatWindow extends MenuItem {
 						_attackerX = _attackerX-20;
 						switch(count) {
 							case 0:
+								_didAttack = true;
+								_damageDone = _attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
 								_attackerImg.setRotation(-10);
 								break;
 							case 1:
@@ -386,10 +400,6 @@ public class CombatWindow extends MenuItem {
 						_gs.repaint();
 					}
 					else if (count >= 6 && count <12) {
-						if (count == 6) {
-							_didAttack = true;
-							_damageDone = _attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
-						}
 						if (_attackerChar.getWeapon() != null) {
 							if (_attackerChar.getWeapon().getWeaponType() == WeaponType.BOW) {
 								if (count == 6) {
