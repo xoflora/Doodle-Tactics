@@ -150,7 +150,7 @@ DemoMap,src/graphics/tiles/light_blue.png,src/graphics/tiles/grass.png
 0,16,F,src/graphics/tiles/left.png,1,0,0,0,0,0
 0,17,0,src/graphics/tiles/left.png,1,0,0,0,0,0
 11,10,F,src/graphics/tiles/light_blue.png,1,0,0,0,0,0
-4,5,F,src/graphics/tiles/light_blue.png,1,1,0,0,0,0
+4,5,F,src/graphics/tiles/light_blue.png,1,0,0,0,0,0
 14,14,0,src/graphics/tiles/light_blue.png,1,0,1,0,0,0,src/tests/data/DialogueDemo
 13,13,F,src/graphics/tiles/light_blue.png,1,0,4,0,0,0,src/tests/data/testMoverEvent
 16,9,F,src/graphics/tiles/light_blue.png,1,1,0,0,0,0

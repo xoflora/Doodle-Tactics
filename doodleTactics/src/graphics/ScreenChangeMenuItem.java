@@ -42,13 +42,13 @@ public class ScreenChangeMenuItem extends MenuItem {
 		
 		//Modify Character
 		HealthPotion potion = new HealthPotion(_dt,"src/graphics/items/donut.png", "Magical Sprinkle Donut", 10);
-		potion.setDescription("Sup bro");
+		potion.setDescription("A delicious donut. Heals 10 HP.");
 		HealthPotion pot2 = new HealthPotion(_dt, "src/graphics/items/purple_potion.png", "Effervescent Potion", 1000);
 		pot2.setDescription("Poisonous. Do not use.");
 		HealthPotion pot3 = new HealthPotion(_dt, "src/graphics/items/purple_potion.png", "Effervescent Potion", 1000);
-		pot3.setDescription("Use me.");
+		pot3.setDescription("Use me. Heals to full health.");
 		HealthPotion pot4 = new HealthPotion(_dt, "src/graphics/items/purple_potion.png", "Effervescent Potion", 1000);
-		pot4.setDescription("Fun stuff.");
+		pot4.setDescription("Fun stuff. Heals to full health.");
 		HealthPotion pot5 = new HealthPotion(_dt, "src/graphics/items/purple_potion.png", "Effervescent Potion", 1000);
 		pot5.setDescription("A normal healing potion.");
 		Axe axe = new Axe(_dt, "src/graphics/items/axe_icon.png", "Shiny Axe");
@@ -58,7 +58,7 @@ public class ScreenChangeMenuItem extends MenuItem {
 		boots.setDescription("Lots of traction.");
 		boots.setSpeed(2);
 		Bow bow = new Bow(_dt, "src/graphics/items/bow_icon.png", "Doodle Bow");
-		bow.setDescription("derp");
+		bow.setDescription("A decent bow.");
 		bow.setStats(2, 4, 2, 85);
 		Cuirass cuirass = new Cuirass(_dt, "src/graphics/items/cuirass_icon.png", "Doodle Cuirass");
 		cuirass.setDefense(2);
