@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.PriorityQueue;
 
+import controller.combatController.ActionType;
 import controller.combatController.CombatController;
 
 
@@ -47,8 +48,9 @@ public class RandomBattleAI extends CombatController implements Runnable {
 		
 		while (_current != null) {
 			synchronized(_current) {
-				if (_current != null && getState() == State.START) {
+				if (_current != null && getState() == State.START && _act == null) {
 					setState(State.CHARACTER_SELECTED);
+					
 					actions = new PriorityQueue<Action>();
 
 					for (Tile t : _gameScreen.getMap().getMovementRange(_locations.get(_current),
@@ -56,24 +58,29 @@ public class RandomBattleAI extends CombatController implements Runnable {
 						Action[] possible = {new AttackAction(this, _current, t), /*new ItemAction(this, _current, t),*/
 								new WaitAction(this, _current, t)};
 
-					//	actions.add(Collections.max(Arrays.asList(possible)));
-						actions.addAll(Arrays.asList(possible));
+						for (int i = 0; i < possible.length; i++)
+							actions.add(possible[i]);
 					}
 
 					_hasMoved.put(_current, true);
 					_act = actions.poll();
-					if (_act != null) {
-						System.out.println(_act.getValue());
+					System.out.println("ACTION: " + _locations.get(_current) + " to " + _act.getTile() + 
+							", action is " + _act.getType() + ", value is " + _act.getValue());
+					if (_act != null/* && !(_act.getTile() == _locations.get(_current)) && _act.getType() == ActionType.WAIT*/) {
+					//	System.out.println(_act.getValue());
+						try {
+							Thread.sleep(500);
+						} catch (InterruptedException e) { }
+						
 						_gameScreen.panToCoordinate(_current.getX(), _current.getY());
-						System.out.println(_act.getValue());
+						
+					//	System.out.println(_act.getValue());
 						setState(State.CHARACTER_MOVING);
 						move(_current, _locations.get(_current),
 								_gameScreen.getMap().getPath(_locations.get(_current), _act.getTile()));
 					}
-					else {
-						setState(State.START);
-						_current = nextUnit();
-					}
+					else
+						characterWait();
 				}
 			//	System.out.println(getState());
 			}
@@ -110,6 +117,7 @@ public class RandomBattleAI extends CombatController implements Runnable {
 		super.characterWait();
 		
 		System.out.println("Waiting: " + getState() + " " + _current);
+		_act = null;
 	}
 	
 	@Override
@@ -163,6 +171,7 @@ public class RandomBattleAI extends CombatController implements Runnable {
 
 	@Override
 	public void mousePressed(MouseEvent e) { }
+	
 	@Override
 	public void mouseReleased(MouseEvent e) { }
 

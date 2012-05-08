@@ -3,9 +3,11 @@ package graphics;
 import items.Axe;
 import items.Bow;
 import items.Cuirass;
+import items.Dagger;
 import items.Footgear;
 import items.HealthPotion;
 import items.ItemException;
+import items.Staff;
 
 import java.awt.image.BufferedImage;
 
@@ -60,6 +62,12 @@ public class ScreenChangeMenuItem extends MenuItem {
 		cuirass.setDefense(2);
 		cuirass.setResistance(2);
 		cuirass.setDescription("Shields you from the cold.");
+		Dagger dagger = new Dagger(_dt, "src/graphics/items/dagger_icon.png", "Doodle Dagger");
+		dagger.setDescription("Dagger.");
+		dagger.setStats(1, 1, 3, 90);
+		Staff staff = new Staff(_dt, "src/graphics/items/staff_icon.png", "Doodle Staff");
+		staff.setDescription("A staff thing");
+		staff.setStats(1, 2, 1, 80);
 		try {
 			_dt.getParty().get(1).addToInventory(potion);
 			_dt.getParty().get(1).updateHP(-10);
@@ -71,6 +79,8 @@ public class ScreenChangeMenuItem extends MenuItem {
 			_dt.getParty().get(3).addToInventory(boots);
 			_dt.getParty().get(4).addToInventory(bow);
 			_dt.getParty().get(2).changeCuirass(cuirass);
+			_dt.getParty().get(3).addToInventory(dagger);
+			_dt.getParty().get(2).addToInventory(staff);
 
 		} catch (ItemException e) {
 			// TODO Auto-generated catch block

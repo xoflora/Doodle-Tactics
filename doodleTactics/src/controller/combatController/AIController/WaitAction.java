@@ -3,6 +3,7 @@ package controller.combatController.AIController;
 import java.util.ArrayList;
 
 import map.Tile;
+import controller.combatController.ActionType;
 import controller.combatController.CombatController;
 import character.Character;
 
@@ -15,6 +16,7 @@ public class WaitAction extends Action {
 
 	public WaitAction(CombatController src, Character c, Tile t) {
 		super(src, c, t);
+		_type = ActionType.WAIT;
 	}
 
 	@Override
@@ -24,7 +26,7 @@ public class WaitAction extends Action {
 
 	@Override
 	/**
-	 * evaluates what happens if the character moves to the given tile
+	 * evaluates what happens if the character moves to the given tile and waits
 	 */
 	public double evaluateMove() {
 		return defensiveEval(new ArrayList<Character>());

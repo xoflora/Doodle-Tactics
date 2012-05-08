@@ -16,12 +16,12 @@ public class CombatWindowController extends GameScreenController {
 	private Tile _dest;
 	private int _range;
 
-	public CombatWindowController(DoodleTactics dt, Tile src, Tile dest, int range) {
+	public CombatWindowController(DoodleTactics dt, Tile src, Tile dest) {
 		super(dt);
 		
 		_src = src;
 		_dest = dest;
-		_range = range;
+		_range = 0;
 	}
 
 	@Override

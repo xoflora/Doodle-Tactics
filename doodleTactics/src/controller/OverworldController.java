@@ -14,6 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import util.Util;
+
 import controller.combatController.AIController.RandomBattleAI;
 import character.Character;
 import character.Character.CharacterDirection;
@@ -26,14 +28,45 @@ import map.Tile;
 public class OverworldController extends GameScreenController {
 
 	private RandomMoveTimer _randomMoveTimer;
-
-	private OverworldMover _moveThread;
+	
+	private List<Tile> _randomEnemyAttackRange;
+	private List<Tile> _randomEnemyMovementRange;
 
 	public OverworldController(DoodleTactics dt, GameScreen game) {
 		super(dt);
-		_gameScreen = game;
 		_randomMoveTimer = new RandomMoveTimer();
-		_moveThread = null;
+		_randomEnemyAttackRange = new ArrayList<Tile>();
+		_randomEnemyMovementRange = new ArrayList<Tile>();
+	}
+	
+	/**
+	 * adds to the highlighted enemy attack range the range from the enemy contained within the given tile
+	 * @param t the source tile (assumed to have an occupant that is a randomly-generated enemy)
+	 */
+	private void addRandomEnemyRange(Tile t) {
+		Character c = t.getOccupant();
+		_randomEnemyAttackRange = Util.union(_randomEnemyAttackRange,
+				_gameScreen.getMap().getAttackRange(t, c.getMovementRange(),
+						c.getMinAttackRange(), c.getMaxAttackRange()));
+		_randomEnemyMovementRange = Util.union(_randomEnemyMovementRange,
+				_gameScreen.getMap().getMovementRange(t, c.getMovementRange()));
+		
+		for (Tile toPaint : _randomEnemyAttackRange)
+			toPaint.setInEnemyAttackRange(true);
+		for (Tile toPaint : _randomEnemyMovementRange)
+			toPaint.setInMovementRange(true);
+	}
+	
+	/**
+	 * clears the highlighted random enemy attack range
+	 */
+	private void clearRandomEnemyRange() {
+		for (Tile t : _randomEnemyAttackRange)
+			t.setInEnemyAttackRange(false);
+		for (Tile t : _randomEnemyMovementRange)
+			t.setInMovementRange(false);
+		_randomEnemyAttackRange = new ArrayList<Tile>();
+		_randomEnemyMovementRange = new ArrayList<Tile>();
 	}
 
 	private class RandomMoveTimer extends Timer {
@@ -136,8 +169,7 @@ public class OverworldController extends GameScreenController {
 	@Override
 	public void release() {
 		super.release();
-		// TODO Auto-generated method stub
-		//_randomMoveTimer.stop();
+		clearRandomEnemyRange();
 	}
 
 	@Override
@@ -300,10 +332,21 @@ public class OverworldController extends GameScreenController {
 		}
 		_gameScreen.repaint();
 	}
-
+	
 	@Override
-	public void mouseMoved(MouseEvent e) {
-		super.mouseMoved(e);
+	public void mouseClicked(MouseEvent e) {
+		super.mouseClicked(e);
+		
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			Tile t = _gameScreen.getTile(e.getX(), e.getY());
+			if (t != null) {
+				if (_gameScreen.getMap().getRandomBattleEnemies().contains(t.getOccupant())) {
+					addRandomEnemyRange(t);
+				}
+			}
+		}
+		else if (e.getButton() == MouseEvent.BUTTON3)
+			clearRandomEnemyRange();
 	}
 	
 	@Override
