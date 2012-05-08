@@ -150,6 +150,7 @@ public class Map implements Serializable {
 	 * 	NOTE: ALL Tiles must be defined before characters
 	 * @author czchapma
 	 */
+	
 	public static Map map(DoodleTactics dt, GameScreen container, String path)
 			throws InvalidMapException {
 		int count = 4;

@@ -140,7 +140,12 @@ public class CombatWindow extends MenuItem {
 				String str1 = "";
 				String str2 = "";
 				if (_damageDone == null) {
-					str1 = _attackerChar.getName() + " has defeated " + _victimChar.getName() + "!";
+					if (_victimChar.getHP() == 0) {
+						str1 = _attackerChar.getName() + " has defeated " + _victimChar.getName() + "!";
+					}
+					else {
+						str1 = _victimChar.getName() + " has defeated " + _attackerChar.getName() + "!";
+					}
 				}
 				else {
 					if (_damageDone[0] == -1) {
@@ -369,6 +374,12 @@ public class CombatWindow extends MenuItem {
 						_attackerChar.addExpForAttack(_victimChar);
 						_victimChar.addExpForAttack(_attackerChar);
 						_timer.stop();
+						try {
+							Thread.sleep(1500);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							_dt.error("threading issue in the combat window");
+						}
 						_window.getMoveUpTimer().getListener().setMoveOffset(40);
 						_window.getMoveUpTimer().start();
 					}
@@ -482,6 +493,12 @@ public class CombatWindow extends MenuItem {
 						}
 						_attackerChar.addExpForAttack(_victimChar);
 						_victimChar.addExpForAttack(_attackerChar);
+						try {
+							Thread.sleep(1500);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							_dt.error("threading issue in the combat window");
+						}
 						_timer.stop();
 						_window.getMoveUpTimer().getListener().setMoveOffset(40);
 						_window.getMoveUpTimer().start();
