@@ -46,9 +46,6 @@ public class GameMenuController extends Controller {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		MenuItem _clickedButton = _gameMenu.checkContains(e.getPoint());
-		if (_clickedButton != null) {
-			System.out.println("click");
-		}
 
 		LoadMenuItem clicked = _gameMenu
 				.checkContainsRadioButtons(e.getPoint());

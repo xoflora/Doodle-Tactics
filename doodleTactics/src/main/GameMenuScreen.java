@@ -263,6 +263,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_title = title;
 			_filepath = filename;
 			_menuPanel = dt.importImage("src/graphics/menu/load_menu_item.png");
+			_selectable = true;
 			this.setLocation(150,_y);
 			this.setSize(defltPath.getWidth(), defltPath.getHeight());
 		}	
@@ -561,7 +562,9 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		
 
 		//Save as Normal
-		if(_dt.getSavedFilePaths().size() < DoodleTactics.NUM_SAVE_OPTIONS){
+		System.out.println("# in HashMap: " + _dt.getSavedFilePaths().size());
+		System.out.println(_dt.getSavedFilePaths());
+		if(_tabSelected == _save && _dt.getSavedFilePaths().size() < DoodleTactics.NUM_SAVE_OPTIONS){
 			System.out.println("Saving as normal");
 			_typeText.setVisible(true);
 			this.add(_typeText);
@@ -577,31 +580,32 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				_savedGames[i] = new LoadMenuItem(this,_buttonUnselectedImage, _buttonSelectedImage,title,_dt.getSavedFilePaths().get(title),y,_dt);
 				i++;
 			}
-			if(_saveMenuItem.contains(point))
-				System.out.println("Contains point");
-			
-			if(_saveMenuItem.containsText())
-				System.out.println("Contains Text");
-			
 			
 			
 			if(_saveMenuItem.contains(point) && _saveMenuItem.containsText()){
 				String filepath = _typeText.getText();
 				_dt.getGameScreen().saveGame(filepath);
 				_saveMessage = "Game saved!";
-			}
+				this.setDefault();
+				this.removeAll();
+				_typeText.setText("");
+				_typeText.setFocusable(false);
+				_dt.getGameScreen().grabFocus();
+				this.switchToGameScreen();
 
+			}
+			
+
+			
 			//Overwrite a File
 		} else if (_tabSelected == _save){
 			System.out.println("Overwrite A file");
 			_typeText.setVisible(false);
 			_saveMenuItem.setVisible(false);
-			_currSelected = null;
 			int i=0;
-			Set<String> loopOver = _dt.getSavedFilePaths().keySet();
-			if(loopOver.contains("Autosave"))
-				loopOver.remove("Autosave");
- 			for(String title: loopOver){
+ 			for(String title: _dt.getSavedFilePaths().keySet()){
+ 				if(title.equals("Autosave"))
+ 					continue;
 				int y = (int) ((this.getHeight()/(DoodleTactics.NUM_SAVE_OPTIONS + 2))*(i + 1.5));
 				BufferedImage 		_buttonUnselectedImage = _dt.importImage("src/graphics/menu/load_radio_button.png");
 				BufferedImage _buttonSelectedImage = _dt.importImage("src/graphics/menu/load_radio_button_selected.png");
@@ -609,8 +613,13 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				i++;
 			}
  			
+ 			
+ 			if(_saveMenuItem.contains(point))
+ 				System.out.println("contains point");
+ 			if(_currSelected != null)
+ 				System.out.println("selected");
 
-			if(_saveMenuItem.contains(point) && _currSelected != null && _dt.getSavedFilePaths().size() >= DoodleTactics.NUM_SAVE_OPTIONS - 1){
+			if(_saveMenuItem.contains(point) && _currSelected != null){
 				System.out.println("Overwriting");
 				_dt.getSavedFilePaths().remove(_currSelected._title);
 				System.out.println(_dt.getSavedFilePaths().size());
@@ -919,7 +928,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	}
 
 	public LoadMenuItem checkContainsRadioButtons(java.awt.Point point) {
-		for(int i=0; i<_dt.NUM_SAVE_OPTIONS - 1; i++){
+		for(int i=0; i< DoodleTactics.NUM_SAVE_OPTIONS - 1; i++){
 			if(_savedGames[i] == null)
 				break;
 			if(_savedGames[i].contains(point)){

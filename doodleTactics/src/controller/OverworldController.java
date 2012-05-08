@@ -184,62 +184,26 @@ public class OverworldController extends GameScreenController {
 					(int)main.getY());
 			Tile newTile = null;
 
-	/*		if(e.getKeyChar() == 'w') {
-
-				newTile = _gameScreen.getMap().getNorth(oldTile);
-
-				if (newTile != null){			
-					main.setUp();
-					if (newTile.canMove(Map.SOUTH))
-						_gameScreen.moveMainCharacter(oldTile, newTile);
-				}
-			}
-
-			else if(e.getKeyChar() == 'a'){
-				newTile = _gameScreen.getMap().getWest(oldTile);
-				if (newTile != null) {
-					main.setLeft();
-					if (newTile.canMove(Map.EAST))
-						_gameScreen.moveMainCharacter(oldTile, newTile);
-				}
-			}
-			else if(e.getKeyChar() == 's'){
-				newTile = _gameScreen.getMap().getSouth(oldTile);
-				if (newTile != null){			
-					main.setDown();
-
-					if (newTile.canMove(Map.NORTH))
-						_gameScreen.moveMainCharacter(oldTile, newTile);
-				}
-			}
-			else if(e.getKeyChar() == 'd'){
-				newTile = _gameScreen.getMap().getEast(oldTile);
-				if (newTile != null){
-					main.setRight();
-					if (newTile.canMove(Map.WEST))
-						_gameScreen.moveMainCharacter(oldTile, newTile);
-				}
-			}*/
-			if(e.getKeyChar() == 'f'){
-
-				try {
-					Runtime.getRuntime().exec("google-chrome www.foodler.com");
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-			else if(e.getKeyChar() == 'g'){
-				_gameScreen.switchToClassChooserMenu();
-			} else if(e.getKeyChar() == 'l') {
-				SpecialAttackController specialAttack = new SpecialAttackController(_dt);
-				specialAttack.setSpecialTimer(new SplatterTimer(specialAttack, _dt, 500, 500));
-				_gameScreen.pushControl(specialAttack);
-			}  else if(e.getKeyChar() == 'o') {
-				SpecialAttackController specialAttack = new SpecialAttackController(_dt);
-				Random r = new Random();
-				specialAttack.setSpecialTimer(new ArrowTimer(specialAttack, _dt, r.nextInt(15), r.nextInt(15), r.nextInt(15), r.nextInt(15)));
-				_gameScreen.pushControl(specialAttack);
-			}
+//			if(e.getKeyChar() == 'f'){
+//
+//				try {
+//					Runtime.getRuntime().exec("google-chrome www.foodler.com");
+//				} catch (IOException e1) {
+//					e1.printStackTrace();
+//				}
+//			}
+//			else if(e.getKeyChar() == 'g'){
+//				_gameScreen.switchToClassChooserMenu();
+//			} else if(e.getKeyChar() == 'l') {
+//				SpecialAttackController specialAttack = new SpecialAttackController(_dt);
+//				specialAttack.setSpecialTimer(new SplatterTimer(specialAttack, _dt, 500, 500));
+//				_gameScreen.pushControl(specialAttack);
+//			}  else if(e.getKeyChar() == 'o') {
+//				SpecialAttackController specialAttack = new SpecialAttackController(_dt);
+//				Random r = new Random();
+//				specialAttack.setSpecialTimer(new ArrowTimer(specialAttack, _dt, r.nextInt(15), r.nextInt(15), r.nextInt(15), r.nextInt(15)));
+//				_gameScreen.pushControl(specialAttack);
+//			}
 		}
 		_gameScreen.repaint();
 	}
