@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 
 import main.DoodleTactics;
 import main.GameMenuScreen;
+import main.GameMenuScreen.LoadMenuItem;
 
 /** 
  * PauseControllers handle all interactions with the pause menu
@@ -53,6 +54,14 @@ public class GameMenuController extends Controller {
 			System.out.println("click");
 			//			_clickedButton.activate();
 		}
+		
+		LoadMenuItem clicked = _gameMenu.checkContainsRadioButtons(e.getPoint());
+		if(clicked != null){
+			System.out.println("Clicked!");
+			clicked.setHovered();
+			_gameMenu.repaint();
+		}
+		_gameMenu.repaint();
 	}
 
 	@Override

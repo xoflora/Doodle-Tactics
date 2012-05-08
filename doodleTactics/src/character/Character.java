@@ -87,7 +87,7 @@ public abstract class Character extends Rectangle{
 	private transient PathTimer _pathTimer;
 	private transient MoveTimer _moveTimer;
 	
-	private DoodleTactics _dt;
+	private transient DoodleTactics _dt;
 
 	public static enum CharacterDirection{
 		LEFT,RIGHT,UP,DOWN
