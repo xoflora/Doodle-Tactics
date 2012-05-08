@@ -143,7 +143,8 @@ public class CombatWindow extends MenuItem {
 					else {
 						str1 = _attackerChar.getName() + " did " + _damageDone[0] + " damage";
 					}
-					brush.drawString(str1, TEXT_X, y + BUFFER);
+//					brush.drawString(iterator, x, y)
+//					brush.drawString(str1, TEXT_X, y + BUFFER);
 				}
 			}
 			brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
