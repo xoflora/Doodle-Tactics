@@ -1,5 +1,7 @@
 package character;
 
+import controller.SpecialAttackController;
+import controller.SplatterTimer;
 import main.DoodleTactics;
 import main.GameOverScreen;
 import main.GameScreen;
@@ -71,5 +73,29 @@ public class MainCharacter extends Character {
 	public void load(DoodleTactics dt) {
 		super.load(dt);
 		_dt = dt;
+	}
+	
+	@Override
+	public boolean hasSpecial() {
+		return true;
+	}
+
+	@Override
+	public SpecialAttackController getSpecialAttack(int x, int y) {
+		SpecialAttackController toReturn = new SpecialAttackController(_dt);
+		toReturn.setSpecialTimer(new SplatterTimer(toReturn, _dt, x, y));
+		return toReturn;
+	}
+
+	@Override
+	public int getMaxSpecialRange() {
+		// TODO Auto-generated method stub
+		return 6;
+	}
+
+	@Override
+	public int getMinSpecialRange() {
+		// TODO Auto-generated method stub
+		return 5;
 	}
 }

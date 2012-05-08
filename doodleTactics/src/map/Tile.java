@@ -495,11 +495,6 @@ public class Tile extends graphics.Rectangle {
 	 */
 	public void setOccupant(Character c) {
 		_character = c;
-		if (_character != null) {
-			_character.addDefense(this.getDefense());
-			_character.addResistance(this.getResistance());
-			_character.addSkill(this.getEvasion());
-		}
 	}
 	
 	/**
@@ -507,11 +502,6 @@ public class Tile extends graphics.Rectangle {
 	 * (called when the character moves out of the tile) 
 	 */
 	public void removeOccupant(){
-		if (_character != null) {
-			_character.addDefense(-this.getDefense());
-			_character.addResistance(-this.getResistance());
-			_character.addSkill(-this.getEvasion());
-		}
 		_character = null;
 	}
 	

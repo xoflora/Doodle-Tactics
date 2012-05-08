@@ -32,9 +32,11 @@ public abstract class CombatController extends GameScreenController {
 		ITEM_SELECTED,
 		ATTACKING,
 		EVENT_OCCURRING,
-		CHARACTER_OPTION_MENU_POST_EVENT;
+		CHARACTER_OPTION_MENU_POST_EVENT,
+		SELECTING_SPECIAL_TARGET,
+		USING_SPECIAL;
 		
-		public String toString() {
+	/*	public String toString() {
 			switch (this) {
 			case START:
 				return "START";
@@ -55,7 +57,7 @@ public abstract class CombatController extends GameScreenController {
 			default:
 				return "";
 			}
-		}
+		}	*/
 	}
 	
 	protected List<Character> _units;
@@ -211,7 +213,7 @@ public abstract class CombatController extends GameScreenController {
 	public void take() {
 		super.take();
 		
-		if (_state != State.ATTACKING && _state != State.EVENT_OCCURRING) {
+		if (_state != State.ATTACKING && _state != State.EVENT_OCCURRING && _state != State.USING_SPECIAL) {
 			_hasMoved.clear();
 			_unitCycle = _units.listIterator();
 			_cycledLeft = false;
