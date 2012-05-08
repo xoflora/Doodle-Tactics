@@ -699,11 +699,10 @@ public abstract class Character extends Rectangle{
 		_level++;
 		//_level cannot exceed imposed levelCap
 		if(_level == LEVELCAP) throw new InvalidLevelException();
-
-
 		//update stats
 		for(int i=0; i<NUM_STATS; i++)
 			_currentStats[i] = (int) (10 * _BASE_STATS[i] + _level*_BASE_STATS[i] + _unitPoints[i]/12);
+		_currentHP = _currentStats[MAX_HP];
 	}
 	
 	public void checkLevelUp() {

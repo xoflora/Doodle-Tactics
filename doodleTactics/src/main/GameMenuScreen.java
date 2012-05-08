@@ -927,7 +927,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			constraint.gridy = 0;
 			this.add(col2, constraint);
 
-			JLabel HP = new JLabel("HP : " + chrter.getHP() + "/" + chrter.getBaseStats()[7]);
+			JLabel HP = new JLabel("HP : " + chrter.getHP() + "/" + chrter.getCurrStats()[7]);
 			//			HP.setFont(new Font("Arial", Font.BOLD, 12));
 			//			HP.setForeground(java.awt.Color.WHITE);
 			HP.setForeground(java.awt.Color.BLACK);
