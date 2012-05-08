@@ -770,8 +770,10 @@ public class GameScreen extends Screen<GameScreenController> {
 		int overflowY = (_currMap.getMainCharacter().getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
 		//_currMap.getMainCharacter().setLocation(_currMap.getMainCharacter().getX() - overflowX,_currMap.getMainCharacter().getY() - overflowY);
 
-		
-		_dt.addSavedGame(filename, filepath);
+		if(filename.startsWith("Autosave"))
+			_dt.addSavedGame("Autosave", filepath);
+		else
+			_dt.addSavedGame(filename, filepath);
 		writeFilepathsFile();
 		try {
 			fos = new FileOutputStream(filepath);

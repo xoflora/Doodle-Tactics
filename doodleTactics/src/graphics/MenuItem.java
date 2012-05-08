@@ -33,7 +33,7 @@ public class MenuItem extends Rectangle {
 		_default = defltPath;
 		_hovered = hoveredPath;
 		_current = _default;
-		_highQuality = true;
+		_highQuality = false;
 		this.setDefault();
 		this.setSize(_current.getWidth(), _current.getHeight());
 	}

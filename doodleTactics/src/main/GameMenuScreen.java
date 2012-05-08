@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -560,7 +561,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		
 
 		//Save as Normal
-		if(_dt.getSavedFilePaths().size() < DoodleTactics.NUM_SAVE_OPTIONS - 1){
+		if(_dt.getSavedFilePaths().size() < DoodleTactics.NUM_SAVE_OPTIONS){
 			System.out.println("Saving as normal");
 			_typeText.setVisible(true);
 			this.add(_typeText);
@@ -597,14 +598,17 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_saveMenuItem.setVisible(false);
 			_currSelected = null;
 			int i=0;
-			for(String title: _dt.getSavedFilePaths().keySet()){
+			Set<String> loopOver = _dt.getSavedFilePaths().keySet();
+			if(loopOver.contains("Autosave"))
+				loopOver.remove("Autosave");
+ 			for(String title: loopOver){
 				int y = (int) ((this.getHeight()/(DoodleTactics.NUM_SAVE_OPTIONS + 2))*(i + 1.5));
 				BufferedImage 		_buttonUnselectedImage = _dt.importImage("src/graphics/menu/load_radio_button.png");
 				BufferedImage _buttonSelectedImage = _dt.importImage("src/graphics/menu/load_radio_button_selected.png");
 				_savedGames[i] = new LoadMenuItem(this,_buttonUnselectedImage, _buttonSelectedImage,title,_dt.getSavedFilePaths().get(title),y,_dt);
 				i++;
 			}
-
+ 			
 
 			if(_saveMenuItem.contains(point) && _currSelected != null && _dt.getSavedFilePaths().size() >= DoodleTactics.NUM_SAVE_OPTIONS - 1){
 				System.out.println("Overwriting");
