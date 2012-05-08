@@ -349,7 +349,7 @@ public class GameScreen extends Screen<GameScreenController> {
 					_isAnimating = false;
 					_timer.stop();
 					
-					if(_dest.hasEnterEvent())
+					if (_dest.hasEnterEvent())
 						pushControl(_dest.getEvent());
 					else if(_currMap.generatesRandomBattle(_dest)){
 						_currMap.startBattle(_dest);

@@ -180,8 +180,9 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		if (!_menus.isEmpty() && _menus.peek() != null)
 			_menus.peek().removeFromDrawingQueue();
 		_menus.push(menu);
-		menu.setLocation(x, y);
+		
 		menu.addToDrawingQueue();
+		menu.setLocation(x, y);
 	}
 	
 	/**
@@ -290,7 +291,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	@Override
 	public void moveComplete() {
 		super.moveComplete();
-		addMenu(new CombatOptionWindow(_dt, _gameScreen, false, false,
+		addMenu(new CombatOptionWindow(_dt, _gameScreen, false, _selectedCharacter.ownsEquipment(),
 					!_selectedCharacter.getInventory().isEmpty(), this),
 				defaultMenuX(),
 				defaultMenuY());
@@ -349,7 +350,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 					Character other = t.getOccupant();
 					
 					if (other == _selectedCharacter && getState() == State.CHARACTER_OPTION_MENU_POST_EVENT) {
-						addMenu(new CombatOptionWindow(_dt, _gameScreen, false, false,
+						removeAllMenus();
+						addMenu(new CombatOptionWindow(_dt, _gameScreen, false, _selectedCharacter.ownsEquipment(),
 								!_selectedCharacter.getInventory().isEmpty(), this),
 							defaultMenuX(),
 							defaultMenuY());
@@ -372,13 +374,15 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 							
 						}
 						else if (!attack && !trade && talk) {
+							removeAllMenus();
 							setState(State.EVENT_OCCURRING);
 							_gameScreen.pushControl(_orch.getDialogue(_selectedCharacter, _interactTile.getOccupant()));
 						}
 						else {
+							CombatMenu m = removeMenu();
+							removeAllMenus();
 							addMenu(new CharacterSelectedOptionMenu(_gameScreen, _dt, this,
-									attack, trade, talk),
-									_menus.peek().getX(), _menus.peek().getY());
+									attack, trade, talk), m.getX(), m.getY());
 						}
 					}
 				}
@@ -695,12 +699,15 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		else if (action == ActionType.SPECIAL) {
 			
 		}
+		else if (action == ActionType.EQUIP) {
+			
+		}
 	}
 	
 	public void returnToOptionMenu() {
 		removeAllMenus();
-		addMenu(new CombatOptionWindow(_dt, _gameScreen, false, false,
-				_selectedCharacter.getInventory().size() != 0, this),
+		addMenu(new CombatOptionWindow(_dt, _gameScreen, false, _selectedCharacter.ownsEquipment(),
+				!_selectedCharacter.getInventory().isEmpty(), this),
 				defaultMenuX(),
 				defaultMenuY());
 		refreshPlayerAttackRange(false, false);
@@ -732,7 +739,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			
 		}
 		else if (action == ActionType.TALK) {
-			removeMenu();
+			removeAllMenus();
 			setState(State.EVENT_OCCURRING);
 			_gameScreen.pushControl(_orch.getDialogue(_selectedCharacter, _interactTile.getOccupant()));
 		}
