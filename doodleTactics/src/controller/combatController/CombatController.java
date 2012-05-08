@@ -30,7 +30,8 @@ public abstract class CombatController extends GameScreenController {
 		CHARACTER_OPTION_MENU,
 		SELECTING_ITEM,
 		ITEM_SELECTED,
-		ATTACKING;
+		ATTACKING,
+		EVENT_OCCURRING;
 		
 		public String toString() {
 			switch (this) {
@@ -207,7 +208,7 @@ public abstract class CombatController extends GameScreenController {
 	public void take() {
 		super.take();
 		
-		if (_state != State.ATTACKING) {
+		if (_state != State.ATTACKING && _state != State.EVENT_OCCURRING) {
 			_hasMoved.clear();
 			_unitCycle = _units.listIterator();
 			_cycledLeft = false;

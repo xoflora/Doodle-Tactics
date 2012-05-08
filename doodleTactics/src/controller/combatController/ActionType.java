@@ -4,8 +4,10 @@ public enum ActionType {
 	
 	SPECIAL,
 	ATTACK,
+	EQUIP,
 	ITEM,
 	TALK,
+	TRADE,
 	WAIT;
 	
 	public String toString() {
@@ -18,6 +20,8 @@ public enum ActionType {
 				return "TALK";
 			case SPECIAL:
 				return "SPECIAL";
+			case TRADE:
+				return "TRADE";
 			case WAIT:
 				return "WAIT";
 			default:

@@ -444,54 +444,16 @@ public class Tile extends graphics.Rectangle {
 	private void updateOverlay() {
 		_opacity = INTERSECTION_OPACITY;
 		if (_inPlayerAttackRange && !_inAttackRange) {
-			_overlay = PLAYER_ATTACK_RANGE_COLOR;
+			if (_inMovementRange)
+				_overlay = INTERSECTION_COLOR;
+			else
+				_overlay = PLAYER_ATTACK_RANGE_COLOR;
 			_opacity = OVERLAY_OPACITY;
 		}
 		else if (_inMovementPath) {
 			_overlay = MOVEMENT_PATH_COLOR;
 			_opacity = OVERLAY_OPACITY;
 		}
-	/*	if (_inAttackRange) {
-			_opacity = INTERSECTION_OPACITY;
-			if (_inMovementRange) {
-				if (_hovered) {
-					_overlay = INTERSECTION_COLOR;
-				}
-				else {
-					_overlay = MOVEMENT_ATTACK_INTERSECTION_COLOR;
-				}
-			}
-			else {
-				if (_hovered)
-					_overlay = ATTACK_MOUSE_INTERSECTION_COLOR;
-				else {
-					_overlay = ATTACK_RANGE_COLOR;
-					_opacity = OVERLAY_OPACITY;
-				}
-			}
-		}
-		else {
-			if (_inMovementRange) {
-				if (_hovered) {
-					_overlay = MOVEMENT_MOUSE_INTERSECTION_COLOR;
-					_opacity = INTERSECTION_OPACITY;
-				}
-				else {
-					_overlay = MOVEMENT_RANGE_COLOR;
-					_opacity = OVERLAY_OPACITY;
-				}
-			}
-			else {
-				if (_hovered) {
-					_overlay = MOUSEOVER_COLOR;
-					_opacity = OVERLAY_OPACITY;
-				}
-				else {
-					_overlay = DEFAULT_COLOR;
-					_opacity = DEFAULT_OPACITY;
-				}
-			}
-		}	*/
 		else if (_inPlayerAttackRange && _inAttackRange)
 			_overlay = ATTACK_INTERSECTION_COLOR;
 		else if (_hovered && _inMovementRange && _inAttackRange)
