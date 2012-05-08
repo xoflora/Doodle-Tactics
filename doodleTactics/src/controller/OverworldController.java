@@ -81,7 +81,6 @@ public class OverworldController extends GameScreenController {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
 		if(e.getKeyCode() == _dt.getMenuKey()){
 			//do stuff
 			_gameScreen.switchToGameMenu();

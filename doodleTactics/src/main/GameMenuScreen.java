@@ -589,10 +589,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				this.setDefault();
 				this.removeAll();
 				_typeText.setText("");
-				_typeText.setFocusable(false);
 				_dt.getGameScreen().grabFocus();
 				this.switchToGameScreen();
-
+				_dt.getGameScreen().repaint();
+				_dt.getGameScreen().revalidate();
 			}
 			
 
