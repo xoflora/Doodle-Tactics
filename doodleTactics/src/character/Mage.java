@@ -58,7 +58,7 @@ public class Mage extends Character{
 
 	@Override
 	public int getMaxSpecialRange() {
-		return 10;
+		return 6;
 	}
 
 	@Override
