@@ -820,8 +820,8 @@ public abstract class Character extends Rectangle{
 				return null;
 			}
 		}
-		System.out.println("max opponent range: " + opponent.getOccupant().getMaxAttackRange());
-		System.out.println("min opponent range: " + opponent.getOccupant().getMinAttackRange());
+		System.out.println(opponent.getOccupant().getName() + " max range: " + opponent.getOccupant().getMaxAttackRange());
+		System.out.println(opponent.getOccupant().getName() + "min range: " + opponent.getOccupant().getMinAttackRange());
 		System.out.println("range: " + range);
 
 		if (opponent.getOccupant().getMaxAttackRange() >= range && opponent.getOccupant().getMinAttackRange() <= range) {
