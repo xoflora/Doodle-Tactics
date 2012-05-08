@@ -155,7 +155,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	 * @param mainCharacterY the y-position IN THE MAP, NOT ON SCREEN of the main character
 	 */
 	public void setMap(String mapPath, int mainCharacterX, int mainCharacterY) {
-
+		
 		Map map = null;
 
 		try {
@@ -225,6 +225,11 @@ public class GameScreen extends Screen<GameScreenController> {
 			e.printMessage();
 			System.exit(0);
 		}
+		
+		//Autosave!
+		 Calendar cal = Calendar.getInstance();
+		this.saveGame("Autosave at " + cal.getTime());
+
 	}
 
 	@Override
@@ -763,8 +768,10 @@ public class GameScreen extends Screen<GameScreenController> {
 		int overflowY = (_currMap.getMainCharacter().getDownImage().getHeight() - Tile.TILE_SIZE) / 2;
 		//_currMap.getMainCharacter().setLocation(_currMap.getMainCharacter().getX() - overflowX,_currMap.getMainCharacter().getY() - overflowY);
 
-		
-		_dt.addSavedGame(filename, filepath);
+		if(filename.startsWith("Autosave"))
+			_dt.addSavedGame("Autosave", filepath);
+		else
+			_dt.addSavedGame(filename, filepath);
 		writeFilepathsFile();
 		try {
 			fos = new FileOutputStream(filepath);

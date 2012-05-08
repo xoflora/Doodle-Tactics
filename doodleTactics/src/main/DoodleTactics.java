@@ -85,7 +85,7 @@ public class DoodleTactics extends JFrame {
 		this.setFocusable(false);
 		this.setResizable(false);
 		this.setVisible(true);
-		
+
 	//	_game.readFilepathsFile();
 		
 		

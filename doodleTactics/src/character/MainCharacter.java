@@ -32,7 +32,7 @@ public class MainCharacter extends Character {
 		_BASE_STATS[SKILL] = .4;
 		_BASE_STATS[LUCK] = .4;
 		_BASE_STATS[MAX_HP] = 1;
-		initStats();
+		initStats(1);
 	}
 	
 	public int getTileX(){

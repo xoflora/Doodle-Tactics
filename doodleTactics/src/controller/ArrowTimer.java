@@ -16,9 +16,10 @@ import map.Tile;
 
 		private AnimationListener _listener;
 		private LinkedList<MenuItem> _effects;
-		private int _width;
-		private int _height;
-		private int _rotationStep;
+		private int _crossWidth;
+		private int _crossHeight;
+		private int _arrowWidth;
+		private int _arrowHeight;
 		private int _spawnStep;
 		private boolean _reverse;
 		private GameScreen _gameScreen;
@@ -34,6 +35,12 @@ import map.Tile;
 
 		public ArrowTimer(SpecialAttackController specialControl, DoodleTactics dt, int srcX, int srcY, int destX, int destY) {
 			super(40, null);
+			
+			System.out.println("srcX: " + srcX);
+			System.out.println("srcY: " + srcY);
+			System.out.println("destX: " + destX);
+			System.out.println("destY" + destY);
+			
 			_srcX = srcX;
 			_srcY = srcY;
 			_dt = dt;
@@ -49,12 +56,13 @@ import map.Tile;
 			_arrow.setHighQuality(true);
 			_crosshair.setVisible(true);
 			_crosshair.setHighQuality(true);
-			_width = (int) _crosshair.getWidth();
-			_height = (int) _crosshair.getHeight();
+			_crossWidth = (int) _crosshair.getWidth();
+			_crossHeight = (int) _crosshair.getHeight();
 			_crosshair.setSize(0, 0);
 			_crosshair.setLocation(destX * Tile.TILE_SIZE, destY * Tile.TILE_SIZE);
 			_effects = new LinkedList<MenuItem>();
-			_rotationStep = 5;
+			_arrowWidth = (int) _arrow.getWidth();
+			_arrowHeight = (int) _arrow.getHeight();
 			_spawnStep = 5;
 			_destX = destX;
 			_destY = destY;
@@ -77,76 +85,65 @@ import map.Tile;
 			
 			private int _cnt;
 			private int _numSteps;
+			private double _arrowPeak;
 
 			public AnimationListener() {
 				_cnt = 0;
 				_numSteps = 20;
-
 				//_crosshair.setSize(0, 0);
 				_gameScreen.addMenuItem(_arrow);
 				_gameScreen.addMenuItem(_crosshair);
 				_reverse = false;
 			}
 			
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				
-				if(_cnt < _numSteps) {
-					_arrow.setLocation(_arrow.getX(), _arrow.getY() - (((DoodleTactics.TILE_ROWS - _srcY)*Tile.TILE_SIZE) + _arrow.getHeight()) / _numSteps);
-				} else {
-					System.out.println("second case");
-					_arrow.setLocation(_arrow.getX(), _arrow.getY() + (((_destY*Tile.TILE_SIZE) + _arrow.getHeight()) / _numSteps));
-				}
+			public void scale(boolean grow) {
 				
 				double oldCenterX = _crosshair.getCenterX();
 				double oldCenterY = _crosshair.getCenterY();
-				_crosshair.setSize(_crosshair.getWidth() + (_width / (_numSteps*2)), _crosshair.getHeight() + (_height / (_numSteps*2)));
-				_crosshair.setLocation(_crosshair.getX() - (_crosshair.getCenterX() - oldCenterX), _crosshair.getY() - (_crosshair.getCenterY() - oldCenterY));
 				
+				if(grow) {
+					_crosshair.setSize(_crosshair.getWidth() + (_crossWidth / (_numSteps*2)), _crosshair.getHeight() + (_crossHeight / (_numSteps*2)));
+				} else {
+					_crosshair.setSize(_crosshair.getWidth() - (_crossWidth / (_numSteps)), _crosshair.getHeight() - (_crossHeight / (_numSteps)));
+					_arrow.setSize(_arrow.getWidth(), _arrow.getHeight() - (_arrowHeight / _numSteps));
+				}
+				
+				_crosshair.setLocation(_crosshair.getX() - (_crosshair.getCenterX() - oldCenterX), _crosshair.getY() - (_crosshair.getCenterY() - oldCenterY));
+			}
+				
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				
+				if(_cnt < _numSteps) {
+					System.out.println("First case: " + ((_srcY*Tile.TILE_SIZE) / _numSteps));
+					_arrow.setLocation(_arrow.getX(), _arrow.getY() - ((DoodleTactics.TILE_ROWS*Tile.TILE_SIZE) / _numSteps));
+					_arrowPeak = _arrow.getY();
+				} else if(_cnt < _numSteps * 2){
+					System.out.println("Second case: " + ((_destY*Tile.TILE_SIZE) + _crossHeight - _arrowPeak));
+					_arrow.setLocation(_arrow.getX(), _arrow.getY() + (((_destY*Tile.TILE_SIZE) - _arrowPeak) / _numSteps));
+				} else {
+					scale(false);
+				}
+				
+				if(!_reverse) {
+					scale(true);
+				}
+			
 				_cnt++;
 				
 				if(_cnt == _numSteps) {
 					_arrow.setLocation((_destX*Tile.TILE_SIZE)-(_arrow.getWidth()/2), _arrow.getY());
 					_arrow.setHovered();
-				} else if(_cnt == (_numSteps * 2)) {
-					ArrowTimer.this.stop();
-					_gameScreen.removeMenuItem(_arrow);
-					_gameScreen.removeMenuItem(_crosshair);
-					_gameScreen.popControl();
+				} else if(_cnt == (_numSteps * 2) || _cnt == (_numSteps * 3)) {
+					if(_reverse) {
+						ArrowTimer.this.stop();
+						_gameScreen.removeMenuItem(_arrow);
+						_gameScreen.removeMenuItem(_crosshair);
+						_gameScreen.popControl();
+					} else {
+						_reverse = true;
+					}
 				}
-			}
-				
-//				if(_cnt >= _numSteps) {
-//					
-//					if(_cnt % _spawnStep == 0) {
-//						ArrowTimer.this.addExplosion(_cnt);
-//						_gameScreen.repaint();
-//					}
-//					
-//					for(MenuItem m : _effects) {
-//						double oldCenterX = m.getCenterX();
-//						double oldCenterY = m.getCenterY();
-//						m.setSize(m.getWidth(), m.getHeight() + _height / _numSteps);
-//						m.setLocation(m.getX() - (m.getCenterX() - oldCenterX), m.getY() - (m.getCenterY() - oldCenterY));
-//					}
-//				}
-//			
-//				_cnt++;
-//				
-//				if(_cnt == _numSteps) {
-//					if(_reverse) {
-//						for(MenuItem m : _effects) { 
-//							_gameScreen.removeMenuItem(m);
-//						}
-//						ArrowTimer.this.stop();
-//						_gameScreen.popControl();
-//					} else {
-//						//_cnt = 0;
-//						_rotationStep = -_rotationStep;
-//						_width = -_width;
-//						_height = -_height;
-//						_reverse = true;
-//					}
-//				}
+				}
 			}
 		
 		@Override
