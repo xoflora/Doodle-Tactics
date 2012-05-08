@@ -124,7 +124,7 @@ public class RandomBattleAI extends CombatController implements Runnable {
 	public void release() {
 		super.release();
 
-		if (getState() != State.ATTACKING) {
+		if (getState() != State.ATTACKING && getState() != State.EVENT_OCCURRING) {
 			//Temporary, while AI Phase does nothing
 			try {
 				Thread.sleep(500);
@@ -138,7 +138,7 @@ public class RandomBattleAI extends CombatController implements Runnable {
 	public void take() {
 		super.take();
 		
-		if (getState() != State.ATTACKING) {
+		if (getState() != State.ATTACKING && getState() != State.EVENT_OCCURRING) {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {}

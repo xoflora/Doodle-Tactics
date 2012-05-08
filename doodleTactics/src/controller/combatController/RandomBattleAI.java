@@ -90,5 +90,4 @@ public class RandomBattleAI extends CombatController implements Runnable {
 
 	@Override
 	public void mouseMoved(MouseEvent e) { }
-
 }

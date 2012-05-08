@@ -36,8 +36,8 @@ import main.DoodleTactics;
 public class Dialogue extends Event {
 
 	private String _filename;
-	private List<String> _phrases;
-	private List<Character> _characters;
+	protected List<String> _phrases;
+	protected List<Character> _characters;
 	private MenuItem _background;
 	private DialogueBox _db;
 	private MenuItem _profile;
@@ -70,7 +70,45 @@ public class Dialogue extends Event {
 		}
 	}
 
-
+	private static final int CHARS_PER_LINE = 25;
+	private static final int STRING_X = 450;
+	private static final int STRING_Y = 665;
+	private static final int LINE_OFFSET = 28;
+	
+	public static String formatString(String phrase) {
+	
+	/*	char[] chars = phrase.toCharArray();
+		
+		int j = 0;
+		int best = 0;
+		for (int i = 0; i < chars.length; i++) {
+			if (chars[i] == ' ') {
+				best = i;
+			}
+			if (j == 24) {
+				chars[best] = '\n';
+				i = best;
+				j = 0;
+			}
+			
+			j++;
+		}	*/
+		String acc = "";
+		String[] words = phrase.split(" ");
+		int lineLength = 0;
+		for (int i = 0; i < words.length; i++) {
+			if (lineLength + words[i].length() < CHARS_PER_LINE) {
+				acc += words[i] + " ";
+				lineLength += words[i].length() + 1;
+			}
+			else {
+				acc += "\n" + words[i] + " ";
+				lineLength = words[i].length() + 1;
+			}
+		}
+		return acc;
+	//	return new String(chars);
+	}
 
 	/**
 	 * Creates a DialogueBox by parsing a dialogue csv file in the following format
@@ -87,10 +125,12 @@ public class Dialogue extends Event {
 	 * Default Constructor (new game)
 	 */
 	public Dialogue(DoodleTactics dt,  String filename)
-	throws InvalidEventException, IOException, FileNotFoundException{
+			throws InvalidEventException, IOException, FileNotFoundException{
 		super(dt,false);
 		_filename = filename;
+
 	}
+	
 	/**
 	 * Load game constructor
 	 */
@@ -156,7 +196,15 @@ public class Dialogue extends Event {
 				RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 		brush.setFont(new Font("M",Font.BOLD,25));
 		brush.setColor(new Color(0,0,1));
-		brush.drawString(_phrases.get(_currIndex), 450,665);
+		
+		String[] lines = _phrases.get(_currIndex).split("\n");
+		for (int i = 0; i < lines.length; i++)
+			brush.drawString(lines[i], STRING_X, STRING_Y + i*LINE_OFFSET);
+		
+		
+	//	brush.drawString(_phrases.get(_currIndex), 450,665);
+		
+		
 
 	}
 
@@ -191,6 +239,7 @@ public class Dialogue extends Event {
 	}
 
 	public void parseMap() throws InvalidEventException,IOException{
+		
 		_phrases = new LinkedList<String>();
 		_characters = new LinkedList<Character>();
 
@@ -215,9 +264,20 @@ public class Dialogue extends Event {
 			_characters.add(c);
 
 			_phrases.add(split[1].trim());
+			
+		//	addPhrase(c, split[1].trim());
+			
 			line = br.readLine();
 		}
-
-
+	}
+	
+	/**
+	 * adds a phrase to this dialogue
+	 * @param c the character who speaks the phrase
+	 * @param phrase the message spoken
+	 */
+	public void addPhrase(Character c, String phrase) {
+		_characters.add(c);
+		_phrases.add(formatString(phrase));
 	}
 }

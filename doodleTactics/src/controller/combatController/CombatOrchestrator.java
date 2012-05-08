@@ -1,5 +1,6 @@
 package controller.combatController;
 
+import event.Dialogue;
 import graphics.MenuItem;
 
 import java.awt.image.BufferedImage;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import util.Util;
+import util.Hashpairing;
 import controller.GameScreenController;
 import controller.combatController.player.PlayerCombatController;
 import controller.combatController.player.PlayerSetup;
@@ -34,6 +36,8 @@ public abstract class CombatOrchestrator extends GameScreenController {
 	protected List<CombatController> _others;
 	protected List<CombatController> _defeated;
 	
+	private Hashpairing<Character, Character, Dialogue> _dialogues;
+	
 	private int _numUnits;
 	private static final int NUM_EXTRA_SETUP_SPACES = 0;
 	
@@ -52,6 +56,8 @@ public abstract class CombatOrchestrator extends GameScreenController {
 		_partners = partners;
 		_others = others;
 		_defeated = new ArrayList<CombatController>();
+		
+		_dialogues = new Hashpairing<Character, Character, Dialogue>();
 		
 		_p = null;
 	}
@@ -148,6 +154,25 @@ public abstract class CombatOrchestrator extends GameScreenController {
 		//	if combat is a loss, swap screens for the "game over" screen
 		super.release();
 	}
+	
+	/**
+	 * @return whether or not this combat may include a conversation between the two characters
+	 */
+	public boolean canTalk(Character a, Character b) {
+		return _dialogues.get(a, b) != null;
+	}
+	
+	/**
+	 * @param a the first character
+	 * @param b the second character
+	 * @return the dialogue between the two characters
+	 */
+	public Dialogue getDialogue(Character a, Character b) {
+		return _dialogues.get(a, b);
+	}
+	
+	
+	
 	
 	/**
 	 * performs any tile events that are associated with a combat controller

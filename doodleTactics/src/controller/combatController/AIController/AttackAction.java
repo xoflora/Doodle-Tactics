@@ -60,9 +60,6 @@ public class AttackAction extends Action {
 				Character other = t.getOccupant();
 				double damage = power - other.getFullDefense();
 				
-				System.out.println("DAMAGE " + damage);
-				System.out.println("RATIO " + (double)damage/(double)other.getHP());
-				
 				if (other.getHP() == 0) {
 					bestAttack = DEFEAT_VALUE;
 					_toAttack = t;
@@ -70,7 +67,6 @@ public class AttackAction extends Action {
 				else if (damage/(double)other.getHP() > bestAttack) {
 					bestAttack = damage/(double)other.getHP();
 					_toAttack = t;
-					System.out.println("BEST ATTACK: " + bestAttack + " " + _toAttack);
 				}
 			}
 		
