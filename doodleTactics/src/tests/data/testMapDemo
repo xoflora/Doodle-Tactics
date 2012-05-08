@@ -97,7 +97,7 @@ DemoMap,src/graphics/tiles/light_blue.png,src/graphics/tiles/grass.png
 11,17,0,src/graphics/tiles/right.png,1,0,0,0,0,0
 11,16,0,src/graphics/tiles/right.png,1,0,0,0,0,0
 10,16,F,src/graphics/tiles/stairs.png,1,0,0,0,0,0
-5,13,F,src/graphics/tiles/door.jpg,1,0,2,0,0,0,src/tests/data/WarpMap,19,14
+5,13,F,src/graphics/tiles/teleport_tile.png,1,0,2,0,0,0,src/tests/data/WarpMap,19,14
 9,16,0,src/graphics/tiles/left.png,1,0,0,0,0,0
 9,17,0,src/graphics/tiles/left.png,1,0,0,0,0,0
 9,18,0,src/graphics/tiles/top_upper_left.png,1,0,0,0,0,0
@@ -172,6 +172,6 @@ img,src/graphics/terrain/pen_pillar.png,16,0,A
 img,src/graphics/terrain/pen_pillar.png,17,0,A
 img,src/graphics/terrain/pen_pillar.png,18,0,A
 img,src/graphics/terrain/pen_pillar.png,19,0,A
-char,Thief,Thighs,src/graphics/characters/thief_portrait.png,src/graphics/characters/thief_left.png,src/graphics/characters/thief_right.png,src/graphics/characters/thief_back.png,src/graphics/characters/thief_front.png,14,14
+char,Warrior,Alec,src/graphics/characters/doodle_knight_portrait.png,src/graphics/characters/knight_left.png,src/graphics/characters/knight_right.png,src/graphics/characters/knight_back.png,src/graphics/characters/knight_front.png,14,14
 char,Warrior,Warrior,src/graphics/characters/warrior_portrait.png,src/graphics/characters/warrior_left_color.png,src/graphics/characters/warrior_right_color.png,src/graphics/characters/warrior_back_color.png,src/graphics/characters/warrior_front_color.png,11,5
 char,Mage,Renoir,src/graphics/characters/mage_portrait.png,src/graphics/characters/mage_left.png,src/graphics/characters/mage_right.png,src/graphics/characters/mage_back.png,src/graphics/characters/mage_front.png,5,16
