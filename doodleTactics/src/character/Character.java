@@ -231,16 +231,16 @@ public abstract class Character extends Rectangle{
 	 */
 	public void moveToTile(Tile src, Tile dest, boolean follow) {
 
-		System.out.println("---MOVE TO TILE---");
+	//	System.out.println("---MOVE TO TILE---");
 
-		System.out.println("xDiff before: " + (dest.getX() - src.getX()));
-		System.out.println("yDiff before: " + (dest.getY() - src.getY()));
+	//	System.out.println("xDiff before: " + (dest.getX() - src.getX()));
+	//	System.out.println("yDiff before: " + (dest.getY() - src.getY()));
 
 		int xDiff = ((int)dest.getX() - (int) src.getX()) / Tile.TILE_SIZE;
 		int yDiff = ((int) dest.getY() - (int) src.getY()) / Tile.TILE_SIZE;
 
-		System.out.println("xDiff: " + xDiff);
-		System.out.println("yDiff: " + yDiff);
+	//	System.out.println("xDiff: " + xDiff);
+	//	System.out.println("yDiff: " + yDiff);
 
 		_moveTimer = new MoveTimer(_container, xDiff, yDiff, follow);
 
@@ -330,7 +330,7 @@ public abstract class Character extends Rectangle{
 				if (_cnt == _numSteps) {
 					_timer.stop();
 					Character.this._isAnimating = false;
-					System.out.println("---END MOVE TO TILE---");
+				//	System.out.println("---END MOVE TO TILE---");
 				}
 
 				_container.repaint();
@@ -591,9 +591,9 @@ public abstract class Character extends Rectangle{
 		//check if capacity has been exceeded
 		if(_inventory.size() == _capacity)
 			throw new ItemException("Capacity reached");
-		System.out.println("The ID of the added inventory item is: " + i._id);
+	//	System.out.println("The ID of the added inventory item is: " + i._id);
 		_inventory.put(i._id, i);
-		System.out.println(_inventory.size());
+	//	System.out.println(_inventory.size());
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package controller.combatController.player;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -41,7 +42,7 @@ public class CombatOptionWindow extends MenuItem implements CombatMenu {
 	private static final int HORZ_BUFFER = 4;
 	private static final int VERT_BUFFER = 3;
 	
-	private class CombatOption extends MenuItem {
+	public class CombatOption extends MenuItem {
 		
 		private PlayerCombatController _source;
 		private ActionType _action;
@@ -102,6 +103,7 @@ public class CombatOptionWindow extends MenuItem implements CombatMenu {
 		
 		double y = getY() + VERT_BUFFER;
 		for (MenuItem m : _options) {
+			System.out.println("ADDING " + m);
 			_gameScreen.addMenuItem(m);
 			y += m.getImage().getHeight() + VERT_BUFFER;
 			m.setVisible(true);
@@ -132,5 +134,6 @@ public class CombatOptionWindow extends MenuItem implements CombatMenu {
 			menuY += m.getImage().getHeight() + VERT_BUFFER;
 		}
 		setSize(getWidth(), Math.max(menuY - y, _options.get(0).getHeight() + 2*VERT_BUFFER));
+		System.out.println("COMBAT OPTION MENU SIZE: " + Math.max(menuY - y, _options.get(0).getHeight() + 2*VERT_BUFFER));
 	}
 }

@@ -97,7 +97,7 @@ DemoMap,src/graphics/tiles/light_blue.png,src/graphics/tiles/grass.png
 11,17,0,src/graphics/tiles/right.png,1,0,0,0,0,0
 11,16,0,src/graphics/tiles/right.png,1,0,0,0,0,0
 10,16,F,src/graphics/tiles/stairs.png,1,0,0,0,0,0
-5,13,F,src/graphics/tiles/door.jpg,1,0,2,0,0,0,src/tests/data/WarpMap,14,14
+5,13,F,src/graphics/tiles/door.jpg,1,0,2,0,0,0,src/tests/data/WarpMap,19,14
 9,16,0,src/graphics/tiles/left.png,1,0,0,0,0,0
 9,17,0,src/graphics/tiles/left.png,1,0,0,0,0,0
 9,18,0,src/graphics/tiles/top_upper_left.png,1,0,0,0,0,0
@@ -134,7 +134,7 @@ DemoMap,src/graphics/tiles/light_blue.png,src/graphics/tiles/grass.png
 19,18,F,src/graphics/tiles/dark_blue.png,1,0,0,0,0,0
 10,17,F,src/graphics/tiles/dark_blue.png,1,0,0,0,0,0
 10,18,F,src/graphics/tiles/dark_blue.png,1,0,0,0,0,0
-15,10,F,src/graphics/tiles/light_blue_rock.png,1,0,0,0,0,0
+15,10,F,src/graphics/tiles/light_blue_rock.png,1,0,0,5,0,0
 1,17,0,src/graphics/tiles/blue.png,1,0,0,0,0,0
 1,16,0,src/graphics/tiles/blue.png,1,0,0,0,0,0
 1,15,0,src/graphics/tiles/blue.png,1,0,0,0,0,0
@@ -152,7 +152,6 @@ DemoMap,src/graphics/tiles/light_blue.png,src/graphics/tiles/grass.png
 11,10,F,src/graphics/tiles/light_blue.png,1,0,0,0,0,0
 4,5,F,src/graphics/tiles/light_blue.png,1,1,0,0,0,0
 14,14,0,src/graphics/tiles/light_blue.png,1,0,1,0,0,0,src/tests/data/DialogueDemo
-2,12,F,src/graphics/tiles/light_blue.png,1,0,3,0,0,0,src/tests/data/combatDemo
 16,9,F,src/graphics/tiles/light_blue.png,1,1,0,0,0,0
 17,4,F,src/graphics/tiles/light_blue.png,1,1,0,0,0,0
 img,src/graphics/terrain/pen_pillar.png,0,0,A

@@ -5,7 +5,6 @@ import items.Weapon.WeaponType;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
@@ -17,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import character.Character;
-import character.Character.CharacterType;
 
 import main.DoodleTactics;
 import main.GameScreen;
@@ -92,6 +90,9 @@ public class CombatWindow extends MenuItem {
 			}
 			else if (w == WeaponType.STAFF) {
 				_attackerWep.setImage(_dt.importImage("src/graphics/items/staff.png"));
+				_attackerSecondWep = new animateImage(_gs, 100);
+				_attackerSecondWep.setImage(_dt.importImage("src/graphics/items/orb.png"));
+				_attackerSecondWep.setSize(_attackerSecondWep.getImage().getWidth(), _attackerSecondWep.getImage().getHeight());
 			}
 			else if (w == WeaponType.DAGGER) {
 				_attackerWep.setImage(_dt.importImage("src/graphics/items/dagger.png"));
@@ -435,25 +436,32 @@ public class CombatWindow extends MenuItem {
 							if (_attackerChar.getWeapon().getWeaponType() == WeaponType.STAFF) {
 								if (count == 6) {
 									_attackerWep.setLocation(_attackerX-12, _attackerImg.getY());
+									_attackerSecondWep.setLocation(_attackerX-30, _attackerImg.getY()+20);
 								}
 								switch(count) {
 								case 6:
 									_attackerWep.setRotation(-10);
+									_attackerSecondWep.setLocation(_attackerSecondWep.getX()-20, _attackerSecondWep.getY());
 									break;
 								case 7:
 									_attackerWep.setRotation(-20);
+									_attackerSecondWep.setLocation(_attackerSecondWep.getX()-20, _attackerSecondWep.getY());
 									break;
 								case 8:
 									_attackerWep.setRotation(-10);
+									_attackerSecondWep.setLocation(_attackerSecondWep.getX()-20, _attackerSecondWep.getY());
 									break;
 								case 9:
 									_attackerWep.setRotation(0);
+									_attackerSecondWep.setLocation(_attackerSecondWep.getX()-20, _attackerSecondWep.getY());
 									break;
 								case 10:
 									_attackerWep.setRotation(-10);
+									_attackerSecondWep.setLocation(_attackerSecondWep.getX()-20, _attackerSecondWep.getY());
 									break;
 								case 11:
 									_attackerWep.setRotation(-20);
+									_attackerSecondWep.setLocation(_attackerSecondWep.getX()-20, _attackerSecondWep.getY());
 									break;
 								}
 								count++;

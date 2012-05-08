@@ -24,5 +24,4 @@ public class EquipmentMenu extends MenuItem implements CombatMenu {
 	public void removeFromDrawingQueue() {
 		
 	}
-
 }
