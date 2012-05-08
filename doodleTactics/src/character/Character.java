@@ -395,16 +395,7 @@ public abstract class Character extends Rectangle{
 	 * animates the character along the given path of tiles
 	 * @param tiles a list of tiles to have the character follow, used for combat movement
 	 */
-<<<<<<< HEAD
 	public void followPath(PathListener listener, List<Tile> tiles) {
-		
-	//	System.out.println("=========START FOLLOW PATH=========");
-=======
-
-	public void followPath(List<Tile> tiles) {
-
-		//	System.out.println("=========START FOLLOW PATH=========");
->>>>>>> 1af5038624680703bed8322562aba9bdc9b0beef
 		//tiles.remove(0);
 		//	for(Tile t : tiles) {
 		//		System.out.println("tile: " + t.getX() + "," + t.getY());
