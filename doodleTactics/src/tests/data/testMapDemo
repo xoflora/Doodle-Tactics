@@ -1,4 +1,4 @@
-mapCord,685,460
+mapCord,715,480
 DemoMap,src/graphics/tiles/light_blue.png,src/graphics/tiles/grass.png
 20,20
 0,1,F,src/graphics/tiles/left_l.png,1,0,0,0,0,0

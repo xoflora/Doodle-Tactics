@@ -1,0 +1,15 @@
+mapCord,615,535
+DemoMap,src/graphics/tiles/floor.png,src/graphics/tiles/upstairs.png
+10,10
+8,0,0,src/graphics/tiles/floor.png,1,0,0,0,0,0
+9,0,0,src/graphics/tiles/floor.png,1,0,0,0,0,0
+5,4,F,src/graphics/tiles/floor.png,1,1,0,0,0,0
+6,3,F,src/graphics/tiles/floor.png,1,1,0,0,0,0
+2,8,F,src/graphics/tiles/floor.png,1,1,0,0,0,0
+1,5,F,src/graphics/tiles/floor.png,1,1,0,0,0,0
+2,4,F,src/graphics/tiles/floor.png,1,1,0,0,0,0
+7,9,F,src/graphics/tiles/floor.png,1,1,0,0,0,0
+3,2,F,src/graphics/tiles/floor.png,1,1,0,0,0,0
+1,2,F,src/graphics/tiles/floor.png,1,1,0,0,0,0
+img,src/graphics/terrain/couch.png,7,0,0
+4,9,F,src/graphics/tiles/upstairs.png,1,0,2,0,0,0,src/tests/data/HouseMap,9,0

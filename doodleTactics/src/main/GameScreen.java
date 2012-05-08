@@ -58,7 +58,6 @@ public class GameScreen extends Screen<GameScreenController> {
 
 	private static final int MAP_CACHE_SIZE = 5;
 
-	private static int MAP_WIDTH, MAP_HEIGHT;
 	private MainCharacter _currentCharacter;
 	private Map _currMap;
 	private int _xRef;
@@ -78,8 +77,6 @@ public class GameScreen extends Screen<GameScreenController> {
 	public GameScreen(DoodleTactics dt) {
 		super(dt);
 		this.setBackground(java.awt.Color.BLACK);
-		MAP_WIDTH = 20;
-		MAP_HEIGHT = 20;
 
 		parseParty("src/tests/data/PartyDemo");
 
@@ -208,6 +205,7 @@ public class GameScreen extends Screen<GameScreenController> {
 				
 			}
 			// set all of the locations of the tiles relative to xref and yref
+			
 			for (int i = 0; i < map.getWidth(); i++) {
 				for (int j = 0; j < map.getHeight(); j++) {
 				//	map.getTile(i, j).setLocation((i - _xRef)*Tile.TILE_SIZE, (j - _yRef)*Tile.TILE_SIZE);
@@ -448,8 +446,8 @@ public class GameScreen extends Screen<GameScreenController> {
 		}
 		
 		//update map locations
-		for(int i = 0; i < MAP_WIDTH; i++)
-			for(int j = 0; j < MAP_HEIGHT; j++)
+		for(int i = 0; i < _currMap.getWidth(); i++)
+			for(int j = 0; j < _currMap.getHeight(); j++)
 				_currMap.getTile(i, j).updateLocation(x, y);
 		
 
@@ -581,8 +579,8 @@ public class GameScreen extends Screen<GameScreenController> {
 		if(_currMap != null) {
 
 			// paint all of the tiles first
-			for(int i = 0; i < MAP_WIDTH; i++) {
-				for(int j = 0; j < MAP_HEIGHT; j++) {
+			for(int i = 0; i < _currMap.getWidth(); i++) {
+				for(int j = 0; j < _currMap.getHeight(); j++) {
 					// check that the given tile is within the bounds before painting it 
 					//if((i < _xRef + 22 && i >= _xRef - 1) && (j < (_yRef + 18) && j >= (_yRef - 1))) {
 		//			Tile t = _currMap.getTile(i, j);
