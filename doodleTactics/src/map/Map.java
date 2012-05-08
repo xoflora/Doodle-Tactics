@@ -133,8 +133,6 @@ public class Map implements Serializable {
 		_prevYWindowOffset = new Stack<Integer>();
 		_prevXWindowOffset.push(DEFAULT_X_WINDOW_OFFSET);
 		_prevYWindowOffset.push(DEFAULT_Y_WINDOW_OFFSET);
-		
-		System.out.println("Tile 14, 14: X-" +_map[0][0].getX() + " Y- " + _map[14][14].getY());
 
 	}
 
@@ -154,6 +152,7 @@ public class Map implements Serializable {
 	 * 	NOTE: ALL Tiles must be defined before characters
 	 * @author czchapma
 	 */
+	
 	public static Map map(DoodleTactics dt, GameScreen container, String path)
 			throws InvalidMapException {
 		int count = 4;
@@ -194,6 +193,8 @@ public class Map implements Serializable {
 			int numX = Integer.parseInt(splitLine[0]);
 			int numY = Integer.parseInt(splitLine[1]);
 
+			System.out.println("numX: " + numX + "numY: " + numY);
+			
 			Tile[][] tiles = new Tile[numY][numX];
 			// Set all currently null tiles to default
 			for (int x = 0; x < numX; x++) {

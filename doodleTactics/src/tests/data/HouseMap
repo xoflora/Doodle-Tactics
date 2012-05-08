@@ -1,0 +1,9 @@
+mapCord,615,535
+DemoMap,src/graphics/tiles/floor.png,src/graphics/tiles/upstairs.png
+10,10
+4,0,0,src/graphics/tiles/floor.png,1,0,0,0,0,0
+5,0,0,src/graphics/tiles/floor.png,1,0,0,0,0,0
+img,src/graphics/terrain/couch.png,3,0,0
+4,9,F,src/graphics/tiles/door.jpg,1,0,2,0,0,0,src/tests/data/testMapDemo,5,13
+9,0,F,src/graphics/tiles/upstairs.png,1,0,2,0,0,0,src/tests/data/HouseUpstairs,4,9
+char,Mage,Doodle Sage,src/graphics/characters/doodle_sage_portrait.png,src/graphics/characters/doodle_sage_left.png,src/graphics/characters/doodle_sage_right.png,src/graphics/characters/doodle_sage_back.png,src/graphics/characters/doodle_sage_front.png,5,5

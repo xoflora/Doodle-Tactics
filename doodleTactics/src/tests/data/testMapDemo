@@ -1,4 +1,4 @@
-mapCord,685,460
+mapCord,715,480
 DemoMap,src/graphics/tiles/light_blue.png,src/graphics/tiles/grass.png
 20,20
 0,1,F,src/graphics/tiles/left_l.png,1,0,0,0,0,0
@@ -134,7 +134,7 @@ DemoMap,src/graphics/tiles/light_blue.png,src/graphics/tiles/grass.png
 19,18,F,src/graphics/tiles/dark_blue.png,1,0,0,0,0,0
 10,17,F,src/graphics/tiles/dark_blue.png,1,0,0,0,0,0
 10,18,F,src/graphics/tiles/dark_blue.png,1,0,0,0,0,0
-15,10,F,src/graphics/tiles/light_blue_rock.png,1,0,0,5,0,0
+15,10,F,src/graphics/tiles/light_blue_rock.png,2,0,0,5,0,0
 1,17,0,src/graphics/tiles/blue.png,1,0,0,0,0,0
 1,16,0,src/graphics/tiles/blue.png,1,0,0,0,0,0
 1,15,0,src/graphics/tiles/blue.png,1,0,0,0,0,0

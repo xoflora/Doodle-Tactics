@@ -2,19 +2,16 @@ package controller;
 
 import graphics.MenuItem;
 
-import items.Item;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-
-import javax.swing.JLabel;
 
 import main.DoodleTactics;
 import main.GameMenuScreen;
 import main.GameMenuScreen.LoadMenuItem;
 
-/** 
+/**
  * PauseControllers handle all interactions with the pause menu
+ * 
  * @author jeshapir
  */
 
@@ -22,15 +19,15 @@ public class GameMenuController extends Controller {
 
 	private GameMenuScreen _gameMenu;
 	private State _mode;
+
 	public GameMenuController(DoodleTactics dt, GameMenuScreen gameMenu) {
 		super(dt);
 		_gameMenu = gameMenu;
 		_mode = State.LISTEN;
 	}
 
-	public enum State{
-		RECORD,
-		LISTEN
+	public enum State {
+		RECORD, LISTEN
 	}
 
 	@Override
@@ -44,20 +41,15 @@ public class GameMenuController extends Controller {
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		MenuItem _clickedButton = _gameMenu.checkContains(e.getPoint());
-		if (_clickedButton != null) {
-			System.out.println("click");
-			//			_clickedButton.activate();
-		}
-		
-		LoadMenuItem clicked = _gameMenu.checkContainsRadioButtons(e.getPoint());
-		if(clicked != null){
-			System.out.println("Clicked!");
+
+		LoadMenuItem clicked = _gameMenu
+				.checkContainsRadioButtons(e.getPoint());
+		if (clicked != null) {
 			_gameMenu.repaint();
 		}
 		_gameMenu.repaint();
@@ -65,46 +57,38 @@ public class GameMenuController extends Controller {
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(_mode == State.LISTEN){
+		if (_mode == State.LISTEN) {
 			if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
-				//do stuff
+				// do stuff
 				_gameMenu.setDefault();
 				_gameMenu.removeAll();
 				_gameMenu.switchToGameScreen();
-			} else if(e.getKeyCode() == KeyEvent.VK_DOWN){
+			} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 				_gameMenu.increaseCurrOption();
 				_gameMenu.repaint();
-			} else if(e.getKeyCode() == KeyEvent.VK_UP){
+			} else if (e.getKeyCode() == KeyEvent.VK_UP) {
 				_gameMenu.decreaseCurrOption();
 				_gameMenu.repaint();
-			} else if(e.getKeyCode() == KeyEvent.VK_ENTER){
+			} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				_mode = State.RECORD;
 			}
-		} else if(_mode == State.RECORD){
+		} else if (_mode == State.RECORD) {
 			_gameMenu.assignKey(e);
 			_mode = State.LISTEN;
 		}
@@ -112,27 +96,24 @@ public class GameMenuController extends Controller {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if(_gameMenu.getSaveMenuItem().contains(e.getPoint()) && _gameMenu.getSaveMenuItem().containsText()){
+		if (_gameMenu.getSaveMenuItem().contains(e.getPoint())
+				&& (_gameMenu.getSaveMenuItem().containsText() || (!_gameMenu
+						.getSaveMenuItem().getVisible()) && _gameMenu.getCurrSelected() != null)) {
 			_gameMenu.getSaveMenuItem().setHovered();
 
-		} else{
+		} else {
 			_gameMenu.getSaveMenuItem().setDefault();
 		}
 

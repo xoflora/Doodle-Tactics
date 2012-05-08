@@ -86,16 +86,16 @@ public abstract class Character extends Rectangle{
 	private int _currDirection = 1; //1 = front, 2 = back, 3 = left, 4 = right 
 
 	private int _hoverOffset;
-	
+
 	private transient PathTimer _pathTimer;
 	private transient MoveTimer _moveTimer;
-	
+
 	protected transient DoodleTactics _dt;
 
 	public static enum CharacterDirection{
 		LEFT,RIGHT,UP,DOWN
 	}
-	
+
 	public enum CharacterType {
 		ARCHER, MAGE, THIEF, WARRIOR, GENERAL;
 	}
@@ -104,7 +104,7 @@ public abstract class Character extends Rectangle{
 			String up, String down, String name,double x, double y) {
 
 		super(container);
-		
+
 		_dt = dt;
 		_container = container;
 		_BASE_STATS = new double[NUM_STATS];
@@ -143,11 +143,11 @@ public abstract class Character extends Rectangle{
 		_moveTimer = null;
 
 	}
-	
+
 	public abstract SpecialAttackController getSpecialAttack(int x, int y);
-	
+
 	public abstract boolean hasSpecial();
-	
+
 	public abstract int getMinSpecialRange();
 	public abstract int getMaxSpecialRange();
 
@@ -241,16 +241,16 @@ public abstract class Character extends Rectangle{
 	 */
 	public void moveToTile(Tile src, Tile dest, boolean follow) {
 
-	//	System.out.println("---MOVE TO TILE---");
+		//	System.out.println("---MOVE TO TILE---");
 
-	//	System.out.println("xDiff before: " + (dest.getX() - src.getX()));
-	//	System.out.println("yDiff before: " + (dest.getY() - src.getY()));
+		//	System.out.println("xDiff before: " + (dest.getX() - src.getX()));
+		//	System.out.println("yDiff before: " + (dest.getY() - src.getY()));
 
 		int xDiff = ((int)dest.getX() - (int) src.getX()) / Tile.TILE_SIZE;
 		int yDiff = ((int) dest.getY() - (int) src.getY()) / Tile.TILE_SIZE;
 
-	//	System.out.println("xDiff: " + xDiff);
-	//	System.out.println("yDiff: " + yDiff);
+		//	System.out.println("xDiff: " + xDiff);
+		//	System.out.println("yDiff: " + yDiff);
 
 		_moveTimer = new MoveTimer(_container, xDiff, yDiff, follow);
 
@@ -269,7 +269,7 @@ public abstract class Character extends Rectangle{
 
 		_isAnimating = true;
 		_moveTimer.start();
-		
+
 	}
 
 	private class MoveTimer extends Timer {
@@ -307,8 +307,8 @@ public abstract class Character extends Rectangle{
 				double dy = _deltaY*Tile.TILE_SIZE / _numSteps;
 				Character.this.updateLocation(dx, dy);
 				_screen.pan(-dx, -dy);
-			//	Character.this.setLocation((Character.this.getX() + (_deltaX*Tile.TILE_SIZE / _numSteps)),
-			//			Character.this.getY() + (_deltaY*Tile.TILE_SIZE / _numSteps));
+				//	Character.this.setLocation((Character.this.getX() + (_deltaX*Tile.TILE_SIZE / _numSteps)),
+				//			Character.this.getY() + (_deltaY*Tile.TILE_SIZE / _numSteps));
 
 				switch(_cnt) {
 				case 0:
@@ -340,7 +340,7 @@ public abstract class Character extends Rectangle{
 				if (_cnt == _numSteps) {
 					_timer.stop();
 					Character.this._isAnimating = false;
-				//	System.out.println("---END MOVE TO TILE---");
+					//	System.out.println("---END MOVE TO TILE---");
 				}
 
 				_container.repaint();
@@ -395,14 +395,21 @@ public abstract class Character extends Rectangle{
 	 * animates the character along the given path of tiles
 	 * @param tiles a list of tiles to have the character follow, used for combat movement
 	 */
+<<<<<<< HEAD
 	public void followPath(PathListener listener, List<Tile> tiles) {
 		
 	//	System.out.println("=========START FOLLOW PATH=========");
+=======
+
+	public void followPath(List<Tile> tiles) {
+
+		//	System.out.println("=========START FOLLOW PATH=========");
+>>>>>>> 1af5038624680703bed8322562aba9bdc9b0beef
 		//tiles.remove(0);
-	//	for(Tile t : tiles) {
-	//		System.out.println("tile: " + t.getX() + "," + t.getY());
-	//	}
-	//	System.out.println("===================================");
+		//	for(Tile t : tiles) {
+		//		System.out.println("tile: " + t.getX() + "," + t.getY());
+		//	}
+		//	System.out.println("===================================");
 		if(tiles != null && tiles.size() > 1) {
 			_pathTimer = new PathTimer(listener, tiles, true);
 			_pathTimer.start();
@@ -445,13 +452,13 @@ public abstract class Character extends Rectangle{
 		String begin = "src/graphics/characters/";
 		switch(r.nextInt(4)){
 		case 0:
-			return new Archer(dt,gs, begin + "doodle_knight_portrait.png",begin + "knight_left.png",begin + "knight_right.png",begin + "knight_back.png",begin + "knight_front.png","RandomEnemy",tileX,tileY);
+			return new Archer(dt,gs, begin + "doodle_knight_portrait.png",begin + "knight_left.png",begin + "knight_right.png",begin + "knight_back.png",begin + "knight_front.png","RandomEnemy",tileX,tileY,r.nextInt(3) + 1);
 		case 1:
-			return new Warrior(dt,gs, begin + "warrior_portrait.png",begin + "warrior_left_color.png",begin + "warrior_right_color.png",begin + "warrior_back_color.png",begin + "warrior_front_color.png","RandomEnemy",tileX,tileY);
+			return new Warrior(dt,gs, begin + "warrior_portrait.png",begin + "warrior_left_color.png",begin + "warrior_right_color.png",begin + "warrior_back_color.png",begin + "warrior_front_color.png","RandomEnemy",tileX,tileY,r.nextInt(3) + 1);
 		case 2:
-			return new Mage(dt,gs, begin + "mage_portrait.png",begin + "mage_left.png",begin + "mage_right.png",begin + "mage_back.png",begin + "mage_front.png","RandomEnemy",tileX,tileY);
+			return new Mage(dt,gs, begin + "mage_portrait.png",begin + "mage_left.png",begin + "mage_right.png",begin + "mage_back.png",begin + "mage_front.png","RandomEnemy",tileX,tileY,r.nextInt(3) + 1);
 		case 3:
-			return new Thief(dt,gs, begin + "thief_portrait.png",begin + "thief_left.png",begin + "thief_right.png",begin + "thief_back.png",begin + "thief_front.png","RandomEnemy",tileX,tileY);
+			return new Thief(dt,gs, begin + "thief_portrait.png",begin + "thief_left.png",begin + "thief_right.png",begin + "thief_back.png",begin + "thief_front.png","RandomEnemy",tileX,tileY,r.nextInt(3) + 1);
 		default:
 			System.out.println("Character Generator failed!");
 			return null;
@@ -482,13 +489,14 @@ public abstract class Character extends Rectangle{
 
 		if(_equipped != null)
 			_equipped.loadItem(dt);
-		if(_cuirass != null)
+		if(_cuirass != null){
 			_cuirass.loadItem(dt);
+			_cuirass.load(dt);
+		}
 		if(_shield != null)
 			_shield.loadItem(dt);
 		if(_footgear != null)
 			_footgear.loadItem(dt);
-		_cuirass.load(dt);
 
 		new FloatTimer(dt.getGameScreen());
 	}
@@ -594,14 +602,25 @@ public abstract class Character extends Rectangle{
 	/**
 	 * Initializes Current Stats to Base Stats
 	 */
-	public void initStats(){
+	public void initStats(int toLevel){
 		for(int i=0; i<NUM_STATS; i++){
 			_currentStats[i] = (int) (_BASE_STATS[i]*10);
 			if (i== NUM_STATS-1) {
-//				System.out.println(this.getName() + " max HP: " + _currentStats[MAX_HP]);
+				//				System.out.println(this.getName() + " max HP: " + _currentStats[MAX_HP]);
 			}
 		}
 		_currentHP = (int) (_BASE_STATS[MAX_HP]*10);
+		
+		//level up, if necessary
+		while(toLevel > _level){
+			System.out.println("leveling up");
+			try {
+				levelUp();
+			} catch (InvalidLevelException e) {
+				_dt.error("Character exceeded maximum level (99)");
+			}
+			toLevel--;
+		}
 	}
 
 	/**
@@ -613,9 +632,9 @@ public abstract class Character extends Rectangle{
 		//check if capacity has been exceeded
 		if(_inventory.size() == _capacity)
 			throw new ItemException("Capacity reached");
-	//	System.out.println("The ID of the added inventory item is: " + i._id);
+		//	System.out.println("The ID of the added inventory item is: " + i._id);
 		_inventory.put(i._id, i);
-	//	System.out.println(_inventory.size());
+		//	System.out.println(_inventory.size());
 	}
 
 	/**
@@ -727,7 +746,7 @@ public abstract class Character extends Rectangle{
 			_currentStats[i] = (int) (10 * _BASE_STATS[i] + _level*_BASE_STATS[i] + _unitPoints[i]/12);
 		_currentHP = _currentStats[MAX_HP];
 	}
-	
+
 	public void checkLevelUp() {
 		if (_exp >= 100*(Math.pow(1.2, (_level-1)))) {
 			_exp = (int) (_exp-(100*(Math.pow(1.2, (_level-1)))));
@@ -740,19 +759,19 @@ public abstract class Character extends Rectangle{
 			}
 		}
 	}
-	
+
 	public void addExpForAttack(Character enemy) {
 		int yield = (int) Math.max(2*((_level-1)-enemy.getLevel())+((100*Math.pow(1.2, _level-1))/10), 1);
 		_exp+=yield;
 		this.checkLevelUp();
 	}
-	
+
 	public void addExpForDefeating(Character enemy) {
 		int yield = (int) Math.max(2*((_level-1)-enemy.getLevel())+((100*Math.pow(1.2, (_level-1)))/5), 1);
 		_exp+=yield;
 		this.checkLevelUp();
 	}
-	
+
 	public int getExpNeededToLevel() {
 		int neededExp = (int) (100*(Math.pow(1.2, (_level-1))));
 		return neededExp;
@@ -795,7 +814,7 @@ public abstract class Character extends Rectangle{
 	public double getCriticalChance(Character other) {
 		return _currentStats[LUCK] - other._currentStats[LUCK];
 	}
-	
+
 	public double getFullResistance() {
 		return _currentStats[RESISTANCE] + (_cuirass == null ? 0:_cuirass.getResistance());
 	}
@@ -810,7 +829,7 @@ public abstract class Character extends Rectangle{
 	public int[] attack(Tile attacker, Tile opponent, Random r, int range){
 		int offense, defense, damage;
 		boolean critical;
-		
+
 		int[] damageDone = new int[2];
 
 		if (r.nextInt(100) > getHitChance(opponent.getOccupant())-opponent.getEvasion()) {
@@ -834,7 +853,7 @@ public abstract class Character extends Rectangle{
 					" takes " + damage + " damage!");
 
 			damageDone[0] = damage;
-			
+
 			if (opponent.getOccupant()._currentHP <= 0) {
 				this.addExpForDefeating(opponent.getOccupant());
 				System.out.println(opponent.getOccupant().getName() + " defeated.");
@@ -856,21 +875,21 @@ public abstract class Character extends Rectangle{
 				defense = _currentStats[DEFENSE] + (_cuirass == null ? 0:_cuirass.getDefense())
 				+ (_shield == null ? 0:_shield.getDefense())+attacker.getDefense();
 				critical = (r.nextInt(100) <= (opponent.getOccupant()._currentStats[LUCK] - _currentStats[LUCK]));
-	
+
 				damage = Math.max(offense - defense + r.nextInt(Math.max((offense - defense)/4, 1)), 0);
-	
+
 				if (critical) {
 					damage *= CRITICAL_MULTIPLIER;
 					System.out.println("Critical hit!");
 				}
-	
+
 				updateHP(-damage);
-	
+
 				System.out.println(opponent.getOccupant()._name + " attacks " + _name + "!  " + _name +
 						" takes " + damage + " damage!");
-				
+
 				damageDone[1] = damage;
-	
+
 				if (_currentHP <= 0) {
 					System.out.println(getName() + " defeated.");
 					setDefeated();
@@ -1024,9 +1043,7 @@ public abstract class Character extends Rectangle{
 			out = new ObjectOutputStream(fos);
 			out.writeObject(this);
 			out.close();
-		} catch(IOException e){
-			e.printStackTrace();
-		}
+		} catch(IOException e){}
 	}
 
 	/**
@@ -1043,11 +1060,8 @@ public abstract class Character extends Rectangle{
 			in = new ObjectInputStream(fis);
 			in.readObject();
 			in.close();
-		} catch(IOException e){
-			e.printStackTrace();
-		} catch(ClassNotFoundException e){
-			e.printStackTrace();
-		}
+		} catch(IOException e){} 
+		catch(ClassNotFoundException e){}
 		return c;
 	}
 
@@ -1142,35 +1156,35 @@ public abstract class Character extends Rectangle{
 	public int getMAX_HP() {
 		return _currentStats[MAX_HP];
 	}
-	
+
 	public void addDefense(int defense) {
 		_currentStats[DEFENSE] += defense;
 	}
-	
+
 	public void addStrength(int str) {
 		_currentStats[STRENGTH] += str;
 	}
-	
+
 	public void addSpecial(int special) {
 		_currentStats[SPECIAL] += special;
 	}
-	
+
 	public void addResistance(int resistance) {
 		_currentStats[RESISTANCE] += resistance;
 	}
-	
+
 	public void addSpeed(int speed) {
 		_currentStats[SPEED] += speed;
 	}
-	
+
 	public void addSkill(int skill) {
 		_currentStats[SKILL] += skill;
 	}
-	
+
 	public void addLuck(int luck) {
 		_currentStats[LUCK] += luck;
 	}
-	
+
 	public void addMax_HP(int hp) {
 		_currentStats[MAX_HP] += hp;
 	}
@@ -1211,7 +1225,7 @@ public abstract class Character extends Rectangle{
 		_BASE_STATS[6] = j;
 		_BASE_STATS[7] = k;
 	}
-	
+
 	public int[] getCurrStats() {
 		return _currentStats;
 	}
@@ -1271,178 +1285,25 @@ public abstract class Character extends Rectangle{
 	public void setDefeated() {
 		_affiliation.removeUnit(this);
 	}
-	
-//	public abstract boolean canEquip(Weapon weapon);
-	
+
+	//	public abstract boolean canEquip(Weapon weapon);
+
 	public abstract CharacterType getCharacterType();
 
-	/*	public static void testPreSerialize(){
-		try{
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			System.out.println("Character Demo:");
-			System.out.println("Creating Characters...");
-			Archer katniss = new Archer(null, "","","","","", "",  "Katniss");
 
-			//Show Characters
-			katniss.printStats();
-
-			//Level Up
-			br.readLine();
-
-			System.out.println("leveling up");
-			try {
-				katniss.levelUp();
-			} catch (InvalidLevelException e) {
-				e.printStackTrace();
-			}
-			br.readLine();
-			katniss.printStats();
-
-			System.out.println("Level up 99 times");
-			try{
-				while(true)
-					katniss.levelUp();
-			} catch(InvalidLevelException e){
-				System.out.println("Cannot level up after level : " + katniss._level);
-			}
-			br.readLine();
-			katniss.printStats();
-
-			//Battles
-			System.out.println("Battle Simulation");
-			br.readLine();
-			Warrior jace = new Warrior(null, "","","","","", "", "Jace");
-			Mage sebastian = new Mage(null, "","","","","", "", "Sebastian");
-			jace.printStats(); 
-			sebastian.printStats();
-			br.readLine();
-
-			jace.attack(sebastian);
-			br.readLine();
-			System.out.println("Suppose Sebastian takes 10 damage");
-			sebastian.updateHP(-10);
-			br.readLine();
-			sebastian.printStats();
-			sebastian.attack(jace);
-			System.out.println("Now Jace loses 5");
-			br.readLine();
-			jace.updateHP(-5);
-			jace.printStats();
-			br.readLine();
-
-			//Items
-			System.out.println("Items--Equipment");
-			Footgear f = new Footgear();
-			System.out.println("Footgear " + f._id + " added to Sebastian");
-			br.read();
-			f.exert(sebastian);
-			sebastian.printStats();
-
-			Shield s = new Shield();
-			System.out.println("Shield " + s._id + "  added to Jace");
-			br.read();
-			s.exert(jace);
-			jace.printStats();
-
-			Cuirass c = new Cuirass();
-			System.out.println("Cuirass " + c._id + " added to Jace");
-			br.read();
-			c.exert(jace);
-			jace.printStats();
-			br.readLine();
-
-			Axe a = new Axe();
-			System.out.println("Sebastian takes an Axe " + a._id);
-			a.exert(sebastian);
-			br.readLine();
-			sebastian.printStats();
-			br.readLine();
-
-			Bow b = new Bow();
-			System.out.println("Sebastian decides he prefers a Bow " + b._id);
-			br.readLine();
-			b.exert(sebastian);
-			sebastian.printStats();
-			br.readLine();
-
-			Staff staff = new Staff();
-			System.out.println("Jace takes a Staff " + staff._id);
-			br.readLine();
-			staff.exert(jace);
-			jace.printStats();
-			br.readLine();
-
-			System.out.println("\n\nItems-- non-Equipment");
-			HealthPotion hp = new HealthPotion();
-			System.out.println("Sebastian's Health is pretty low, luckily he found a Health Potion " + hp._id);
-			sebastian.addToInventory(hp);
-			sebastian.printStats();
-			br.readLine();
-			hp.exert(sebastian);
-			sebastian.printStats();
-			br.readLine();
-
-			System.out.println("Now we want to save the game...");
-			br.readLine();
-			jace.serialize("src/character/" + jace._name + jace._id);
-			sebastian.serialize("src/character/" + sebastian._name + sebastian._id);
-
-		} catch(IOException e){
-			e.printStackTrace();
-		} catch (ItemException e) {
-			e.printStackTrace();
-		}	
-	}
-	public static void testPostSerialize(){
-		System.out.println("Restore:");
-		Warrior jace = (Warrior)restore("src/character/Jace1");
-		Mage sebastian =  (Mage) restore("src/character/Sebastian2");
-		jace.printStats();
-		sebastian.printStats();
-
-
-		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			br.readLine();
-			System.out.println("Dialogue");
-			Thief margo = new Thief(null, "","","","","", "","Margo");
-			HashMap<String, Character> h = new HashMap<String,Character>();
-			h.put("Sebastian", sebastian);
-			h.put("Jace", jace);
-			h.put("Margo", margo);
-
-			Dialogue d = new Dialogue(null, "src/tests/data/testDemo",h);
-			d.print();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidEventException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}	*/
-
-	/*	public static void main(String[] args){
-		testPreSerialize();
-		testPostSerialize();
-	}	*/
-	
 	/**
 	 * @return whether or not this character owns any equipment
 	 */
 	public boolean ownsEquipment() {
 		if (_equipped != null || _cuirass != null || _shield != null || _footgear != null)
 			return true;
-		
+
 		for (Integer i : _inventory.keySet())
 			if (_inventory.get(i).isEquip())
 				return true;
 		return false;
 	}
-	
+
 	/**
 	 * equips a piece of equipment to this character
 	 * @return whether or not the equip was successful
