@@ -26,15 +26,12 @@ import map.Map;
 import map.Tile;
 
 public class OverworldController extends GameScreenController {
-
-	private RandomMoveTimer _randomMoveTimer;
 	
 	private List<Tile> _randomEnemyAttackRange;
 	private List<Tile> _randomEnemyMovementRange;
 
 	public OverworldController(DoodleTactics dt, GameScreen game) {
 		super(dt);
-		_randomMoveTimer = new RandomMoveTimer();
 		_randomEnemyAttackRange = new ArrayList<Tile>();
 		_randomEnemyMovementRange = new ArrayList<Tile>();
 	}
@@ -67,96 +64,6 @@ public class OverworldController extends GameScreenController {
 			t.setInMovementRange(false);
 		_randomEnemyAttackRange = new ArrayList<Tile>();
 		_randomEnemyMovementRange = new ArrayList<Tile>();
-	}
-
-	private class RandomMoveTimer extends Timer {
-
-		public RandomMoveTimer() {
-			super(1000, null);
-			this.addActionListener(new RandomMoveListener());
-		}
-
-		private class RandomMoveListener implements java.awt.event.ActionListener {
-
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-
-				if(_gameScreen.getMap() != null) {
-
-					for(Character c : _gameScreen.getMap().getCharactersToDisplay()) {
-
-						// provided this character is not the main character
-						if(! c.equals(_gameScreen.getMainChar())) {
-
-							//generate a random direction to move in
-							Random r = new Random();
-							int direction = r.nextInt(4);
-							// retrieve the tile that corresponds to the given character
-							Tile src = _gameScreen.getTile((int) c.getX(), (int) c.getY());
-							System.out.println("src, x: " + src.x() + ", y:" + src.y());
-
-							if(src != null) {
-
-								System.out.println("character moving: " + c.getName() + " in direction " + direction + 
-										" from " + src.getX() + "," + src.getY() + " to... ");
-
-								try {
-
-									Tile dest = null;
-
-									switch(direction) {
-									case 0:
-										dest = _gameScreen.getMap().getNorth(src);
-										if(dest != null && dest.canMove(Map.NORTH) && !dest.isOccupied()) {
-											System.out.println("MOVE NORTH");
-											System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
-											src.removeOccupant();
-											c.moveToTile(src, dest, false);
-											dest.setOccupant(c);
-										}
-										break;
-									case 1:
-										dest = _gameScreen.getMap().getSouth(src);
-										if(dest != null && dest.canMove(Map.SOUTH) && !dest.isOccupied()) {
-											System.out.println("MOVE SOUTH");
-											System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
-											src.removeOccupant();
-											c.moveToTile(src, dest, false);
-											dest.setOccupant(c);
-										}
-										break;
-									case 2:
-										dest = _gameScreen.getMap().getEast(src);
-										if(dest != null && dest.canMove(Map.EAST) && !dest.isOccupied()) {
-											System.out.println("MOVE EAST");
-											System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
-											src.removeOccupant();
-											c.moveToTile(src, dest, false);
-											dest.setOccupant(c);
-										}
-										break;
-									case 3:
-										dest = _gameScreen.getMap().getWest(src);
-										if(dest != null && dest.canMove(Map.WEST) && !dest.isOccupied()) {
-											System.out.println("MOVE WEST");
-											System.out.println(dest.getX() / Tile.TILE_SIZE + "," + dest.getY() / Tile.TILE_SIZE);
-											src.removeOccupant();
-											c.moveToTile(src, dest, false);
-											dest.setOccupant(c);
-										}
-										break;
-									}
-
-									System.out.println("-------");
-
-								} catch (ArrayIndexOutOfBoundsException ex) {
-
-								}
-							}
-						}	
-					}
-				}
-			}
-		}
 	}
 
 	@Override
@@ -264,7 +171,6 @@ public class OverworldController extends GameScreenController {
 		}
 	}
 
-
 	@Override
 	public void keyTyped(KeyEvent e) { 
 
@@ -327,6 +233,11 @@ public class OverworldController extends GameScreenController {
 			} else if(e.getKeyChar() == 'l') {
 				SpecialAttackController specialAttack = new SpecialAttackController(_dt);
 				specialAttack.setSpecialTimer(new SplatterTimer(specialAttack, _dt, 500, 500));
+				_gameScreen.pushControl(specialAttack);
+			}  else if(e.getKeyChar() == 'o') {
+				SpecialAttackController specialAttack = new SpecialAttackController(_dt);
+				Random r = new Random();
+				specialAttack.setSpecialTimer(new ArrowTimer(specialAttack, _dt, r.nextInt(15), r.nextInt(15), r.nextInt(15), r.nextInt(15)));
 				_gameScreen.pushControl(specialAttack);
 			}
 		}

@@ -58,7 +58,6 @@ public class RandomBattleAI extends CombatController implements Runnable {
 	@Override
 	public void removeUnit(Character c) {
 		super.removeUnit(c);
-		System.out.println("CRUCNH");
 		_gameScreen.getMap().removeRandomBattle(c);
 	}
 

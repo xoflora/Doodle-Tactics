@@ -2,6 +2,9 @@ package controller.combatController;
 
 import items.Weapon.WeaponType;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -24,6 +27,8 @@ import graphics.Rectangle;
 
 public class CombatWindow extends MenuItem {
 
+	private static final int TEXT_X = 400;
+	
 	protected animateImage _attackerImg, _victimImg;
 	private Character _attackerChar, _victimChar;
 	
@@ -35,9 +40,10 @@ public class CombatWindow extends MenuItem {
 	private moveUpTimer _moveUpTimer;
 	private attackTimer _attackTimer;
 	private GameScreen _gs;
-	private boolean _isAnimating;
+	private boolean _isAnimating, _didAttack;
 	private int _attackerX, _battlersY = 0, _victimX, _victimY, _range;
 	private animateImage _attackerWep, _victimWep, _attackerSecondWep, _victimSecondWep;
+	private int[] _damageDone;
 	
 	public CombatWindow(JPanel container, BufferedImage defaultPic, BufferedImage hoverPic, DoodleTactics dt, int priority) {
 		super(container, defaultPic, hoverPic, dt, priority);
@@ -57,6 +63,8 @@ public class CombatWindow extends MenuItem {
 		_victimSecondWep = null;
 		
 		_c = null;
+		
+		_damageDone = new int[2];
 	}
 
 	public void animate(Tile src, Tile dest, CombatWindowController c, int range) {
@@ -106,6 +114,7 @@ public class CombatWindow extends MenuItem {
 		this.setVisible(true);
 		_attackerX = 700;
 		_moveUpTimer.getListener().setMoveOffset(-40);
+		_didAttack = false;
 		_moveUpTimer.start();
 	}
 	
@@ -125,6 +134,37 @@ public class CombatWindow extends MenuItem {
 				_attackerWep.paint(brush, _attackerWep.getImage());
 			}
 			_attackerImg.paint(brush, _attackerImg.getImage());
+			
+			if (_didAttack) {
+				String str1 = "";
+				String str2 = "";
+				if (_damageDone == null) {
+					str1 = _attackerChar.getName() + " has defeated " + _victimChar.getName() + "!";
+				}
+				else {
+					if (_damageDone[0] == -1) {
+						str1 = _attackerChar.getName() + " missed!";
+					}
+					else {
+						str1 = _attackerChar.getName() + " did " + _damageDone[0] + " damage.";
+					}
+					if (_damageDone[1] == -1) {
+						str2 = _victimChar.getName() + " missed!";
+					}
+					else {
+						str2 = _victimChar.getName() + " did " + _damageDone[1] + " damage.";
+					}
+				}
+				brush.setRenderingHint(
+						RenderingHints.KEY_TEXT_ANTIALIASING,
+						RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+				brush.setFont(new Font("Verdana", Font.BOLD, 20));
+				brush.setColor(new Color(255,255,255));
+//				brush.setBackground(java.awt.Color.BLACK);
+				brush.setStroke(new BasicStroke());
+				brush.drawString(str1, TEXT_X, _battlersY-140);
+				brush.drawString(str2, TEXT_X, _battlersY-110);
+			}
 			brush.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 //			brush.drawImage(_victimImg.getImage(), (int)_victimImg.getX(), (int)_victimImg.getY(), _gs);
 //			brush.drawImage(_attackerWep.getImage(), (int)_attackerWep.getX(), (int)_attackerWep.getY(), _gs);
@@ -179,14 +219,14 @@ public class CombatWindow extends MenuItem {
 				if (count == 8) {
 					count = 0;
 					_timer.stop();
-//					_c.done();
-					System.out.println("Stopped the timer");
 					_gs.repaint();
 					_attackerX = 700;
 					if (moveOffset == -40) {
 						moveUpTimer.this.getAttackTimer().start();
 					}
 					else {
+						CombatWindow.this.setLocation(0, 17*Tile.TILE_SIZE+100);
+						_didAttack = false;
 						_c.done();
 					}
 				}
@@ -232,6 +272,8 @@ public class CombatWindow extends MenuItem {
 						switch(count) {
 							case 0:
 								_attackerImg.setRotation(-10);
+								_didAttack = true;
+								_damageDone = _attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
 								break;
 							case 1:
 								_attackerImg.setRotation(-5);
@@ -323,7 +365,6 @@ public class CombatWindow extends MenuItem {
 						if (_attackerWep != null) {
 							_attackerWep.setLocation(1000, 1000);
 						}
-						_attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
 						_attackerChar.addExpForAttack(_victimChar);
 						_victimChar.addExpForAttack(_attackerChar);
 						_timer.stop();
@@ -338,6 +379,8 @@ public class CombatWindow extends MenuItem {
 						_attackerX = _attackerX-20;
 						switch(count) {
 							case 0:
+								_didAttack = true;
+								_damageDone = _attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
 								_attackerImg.setRotation(-10);
 								break;
 							case 1:
@@ -429,7 +472,6 @@ public class CombatWindow extends MenuItem {
 						if (_attackerSecondWep != null) {
 							_attackerSecondWep.setLocation(1000, 1000);
 						}
-						_attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
 						_attackerChar.addExpForAttack(_victimChar);
 						_victimChar.addExpForAttack(_attackerChar);
 						_timer.stop();

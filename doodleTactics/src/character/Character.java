@@ -231,16 +231,16 @@ public abstract class Character extends Rectangle{
 	 */
 	public void moveToTile(Tile src, Tile dest, boolean follow) {
 
-		System.out.println("---MOVE TO TILE---");
+	//	System.out.println("---MOVE TO TILE---");
 
-		System.out.println("xDiff before: " + (dest.getX() - src.getX()));
-		System.out.println("yDiff before: " + (dest.getY() - src.getY()));
+	//	System.out.println("xDiff before: " + (dest.getX() - src.getX()));
+	//	System.out.println("yDiff before: " + (dest.getY() - src.getY()));
 
 		int xDiff = ((int)dest.getX() - (int) src.getX()) / Tile.TILE_SIZE;
 		int yDiff = ((int) dest.getY() - (int) src.getY()) / Tile.TILE_SIZE;
 
-		System.out.println("xDiff: " + xDiff);
-		System.out.println("yDiff: " + yDiff);
+	//	System.out.println("xDiff: " + xDiff);
+	//	System.out.println("yDiff: " + yDiff);
 
 		_moveTimer = new MoveTimer(_container, xDiff, yDiff, follow);
 
@@ -330,7 +330,7 @@ public abstract class Character extends Rectangle{
 				if (_cnt == _numSteps) {
 					_timer.stop();
 					Character.this._isAnimating = false;
-					System.out.println("---END MOVE TO TILE---");
+				//	System.out.println("---END MOVE TO TILE---");
 				}
 
 				_container.repaint();
@@ -592,9 +592,9 @@ public abstract class Character extends Rectangle{
 		//check if capacity has been exceeded
 		if(_inventory.size() == _capacity)
 			throw new ItemException("Capacity reached");
-		System.out.println("The ID of the added inventory item is: " + i._id);
+	//	System.out.println("The ID of the added inventory item is: " + i._id);
 		_inventory.put(i._id, i);
-		System.out.println(_inventory.size());
+	//	System.out.println(_inventory.size());
 	}
 
 	/**
@@ -786,11 +786,14 @@ public abstract class Character extends Rectangle{
 	 *  @param r a random number generator
 	 *  @author rroelke
 	 */
-	public void attack(Tile attacker, Tile opponent, Random r, int range){
+	public int[] attack(Tile attacker, Tile opponent, Random r, int range){
 		int offense, defense, damage;
 		boolean critical;
+		
+		int[] damageDone = new int[2];
 
 		if (r.nextInt(100) > getHitChance(opponent.getOccupant())-opponent.getEvasion()) {
+			damageDone[0] = -1;
 			System.out.println("Attack missed!");
 		}
 		else {
@@ -809,19 +812,22 @@ public abstract class Character extends Rectangle{
 			System.out.println(_name + " attacks " + opponent.getOccupant()._name + "!  " + opponent.getOccupant()._name +
 					" takes " + damage + " damage!");
 
+			damageDone[0] = damage;
+			
 			if (opponent.getOccupant()._currentHP <= 0) {
 				this.addExpForDefeating(opponent.getOccupant());
 				System.out.println(opponent.getOccupant().getName() + " defeated.");
 				opponent.getOccupant().setDefeated();
-				return;
+				return null;
 			}
 		}
-		System.out.println("max opponent range: " + opponent.getOccupant().getMaxAttackRange());
-		System.out.println("min opponent range: " + opponent.getOccupant().getMinAttackRange());
+		System.out.println(opponent.getOccupant().getName() + " max range: " + opponent.getOccupant().getMaxAttackRange());
+		System.out.println(opponent.getOccupant().getName() + "min range: " + opponent.getOccupant().getMinAttackRange());
 		System.out.println("range: " + range);
 
 		if (opponent.getOccupant().getMaxAttackRange() >= range && opponent.getOccupant().getMinAttackRange() <= range) {
 			if (r.nextInt(100) > opponent.getOccupant().getFullAttackAccuracy() - _currentStats[SKILL] - attacker.getEvasion()) {
+				damageDone[1] = -1;
 				System.out.println("Attack missed!");
 			}
 			else {
@@ -841,17 +847,20 @@ public abstract class Character extends Rectangle{
 	
 				System.out.println(opponent.getOccupant()._name + " attacks " + _name + "!  " + _name +
 						" takes " + damage + " damage!");
+				
+				damageDone[1] = damage;
 	
 				if (_currentHP <= 0) {
 					System.out.println(getName() + " defeated.");
 					setDefeated();
-					return;
+					return null;
 				}
 			}
 		}
 		else {
 			System.out.println("Opponent couldn't attack you because of your range");
 		}
+		return damageDone;
 	}
 
 	/**
@@ -1399,6 +1408,19 @@ public abstract class Character extends Rectangle{
 		testPreSerialize();
 		testPostSerialize();
 	}	*/
+	
+	/**
+	 * @return whether or not this character owns any equipment
+	 */
+	public boolean ownsEquipment() {
+		if (_equipped != null || _cuirass != null || _shield != null || _footgear != null)
+			return true;
+		
+		for (Integer i : _inventory.keySet())
+			if (_inventory.get(i).isEquip())
+				return true;
+		return false;
+	}
 	
 	/**
 	 * equips a piece of equipment to this character

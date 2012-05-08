@@ -79,8 +79,8 @@ public class Map implements Serializable {
 	private LinkedList<Terrain> _terrain;
 	private LinkedList<Character> _activeCharacters;
 	private MainCharacter _mainChar;
-	private  Stack<Integer> _prevXRef;
-	private  Stack<Integer> _prevYRef;
+	private Stack<Integer> _prevXRef;
+	private Stack<Integer> _prevYRef;
 	
 	private Stack<Integer> _prevXWindowOffset;
 	private Stack<Integer> _prevYWindowOffset;
@@ -151,12 +151,13 @@ public class Map implements Serializable {
 	 * @author czchapma
 	 */
 	public static Map map(DoodleTactics dt, GameScreen container, String path)
-	throws InvalidMapException {
-		int count =4;
+			throws InvalidMapException {
+		int count = 4;
 		LinkedList<Terrain> terrainList = new LinkedList<Terrain>();
 		LinkedList<Character> chars = new LinkedList<Character>();
 		LinkedList<Tile> randBattles = new LinkedList<Tile>();
 		MainCharacter main = dt.getGameScreen().getMainChar();
+		
 		try {
 			// Parse initial data
 			BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
@@ -199,6 +200,7 @@ public class Map implements Serializable {
 				}
 			}
 
+			HashMap<Tile, String> combatEvents = new HashMap<Tile, String>();
 			// Read and parse tiles from file
 			String line = reader.readLine();
 			int x, y;
@@ -287,7 +289,8 @@ public class Map implements Serializable {
 
 					tiles[x][y] = Tile.tile(dt,container, splitLine[3],
 							splitLine[2].charAt(0), x, y, Integer
-							.parseInt(splitLine[4]), Integer.parseInt(splitLine[7]), Integer.parseInt(splitLine[8]), Integer.parseInt(splitLine[9]));
+							.parseInt(splitLine[4]), Integer.parseInt(splitLine[7]), Integer.parseInt(splitLine[8]),
+							Integer.parseInt(splitLine[9]));
 
 					//Handle Events
 					if(Integer.parseInt(splitLine[6]) == DIALOGUE){
@@ -298,6 +301,7 @@ public class Map implements Serializable {
 								Integer.parseInt(splitLine[11]), Integer.parseInt(splitLine[12])));
 						tiles[x][y].setEnterEvent();
 					} else if((Integer.parseInt(splitLine[6])) == COMBAT){
+						combatEvents.put(tiles[x][y], splitLine[10]);
 						tiles[x][y].setEvent(CombatEvent.parseEvent(dt, splitLine[10]));
 						tiles[x][y].setEnterEvent();
 					}
@@ -314,7 +318,10 @@ public class Map implements Serializable {
 				
 				line = reader.readLine();
 			}
-
+		/*	for (Tile t : combatEvents.keySet()) {
+				t.setEvent(CombatEvent.parseCombat(dt, combatEvents.get(t)));
+				t.setEnterEvent();
+			}	*/
 
 			// Create Map
 			if (main == null)

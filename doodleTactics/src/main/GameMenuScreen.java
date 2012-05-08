@@ -752,7 +752,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	}
 
 	public void displayItemOptions(JLabel label) {
-
+		
 		/**
 		 * number of options is set by the #of people in the party -1, plus 3 options for each item
 		 */

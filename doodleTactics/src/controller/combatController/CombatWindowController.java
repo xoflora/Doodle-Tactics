@@ -21,7 +21,7 @@ public class CombatWindowController extends GameScreenController {
 		
 		_src = src;
 		_dest = dest;
-		_range = 0;
+		_range = src.gridDistanceToTile(dest);
 	}
 
 	@Override

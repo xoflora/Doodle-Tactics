@@ -1,5 +1,6 @@
 package controller.combatController.player;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -41,7 +42,7 @@ public class CombatOptionWindow extends MenuItem implements CombatMenu {
 	private static final int HORZ_BUFFER = 4;
 	private static final int VERT_BUFFER = 3;
 	
-	private class CombatOption extends MenuItem {
+	public class CombatOption extends MenuItem {
 		
 		private PlayerCombatController _source;
 		private ActionType _action;
@@ -87,7 +88,11 @@ public class CombatOptionWindow extends MenuItem implements CombatMenu {
 		_options.add(new CombatOption(container, dt.importImage(WAIT_IMAGE),
 				dt.importImage(WAIT_HOVER), dt, source, ActionType.WAIT));
 		
+		System.out.println("COMBAT OPTION MENU " + _options.size());
+		
 		_gameScreen = container;
+		
+	//	setSize(getWidth(), _options.get(0).getHeight() + 2*VERT_BUFFER);
 	}
 	
 	/**
@@ -98,20 +103,20 @@ public class CombatOptionWindow extends MenuItem implements CombatMenu {
 		
 		double y = getY() + VERT_BUFFER;
 		for (MenuItem m : _options) {
+			System.out.println("ADDING " + m);
 			_gameScreen.addMenuItem(m);
-	//		m.setLocation(getX() + HORZ_BUFFER, y);
 			y += m.getImage().getHeight() + VERT_BUFFER;
 			m.setVisible(true);
 		}
 		
 		setVisible(true);
-		setSize(getImage().getWidth(), y - getY());
 	}
 	
 	/**
 	 * removes the option window and its components from the game screen drawing queue
 	 */
 	public void removeFromDrawingQueue() {
+		setVisible(false);
 		for (MenuItem m : _options) {
 			_gameScreen.removeMenuItem(m);
 			m.setVisible(false);
@@ -123,10 +128,12 @@ public class CombatOptionWindow extends MenuItem implements CombatMenu {
 	public void setLocation(double x, double y) {
 		super.setLocation(x, y);
 		
-		double menuY = getY() + VERT_BUFFER;
+		double menuY = y + VERT_BUFFER;
 		for (MenuItem m : _options) {
 			m.setLocation(x + HORZ_BUFFER, menuY);
 			menuY += m.getImage().getHeight() + VERT_BUFFER;
 		}
+		setSize(getWidth(), Math.max(menuY - y, _options.get(0).getHeight() + 2*VERT_BUFFER));
+		System.out.println("COMBAT OPTION MENU SIZE: " + Math.max(menuY - y, _options.get(0).getHeight() + 2*VERT_BUFFER));
 	}
 }
