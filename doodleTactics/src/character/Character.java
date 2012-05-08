@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Random;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
+import controller.SpecialAttackController;
 import controller.combatController.CombatController;
 import main.DoodleTactics;
 import main.GameScreen;
@@ -87,7 +89,7 @@ public abstract class Character extends Rectangle{
 	private transient PathTimer _pathTimer;
 	private transient MoveTimer _moveTimer;
 	
-	private transient DoodleTactics _dt;
+	protected transient DoodleTactics _dt;
 
 	public static enum CharacterDirection{
 		LEFT,RIGHT,UP,DOWN
@@ -140,6 +142,13 @@ public abstract class Character extends Rectangle{
 		_moveTimer = null;
 
 	}
+	
+	public abstract SpecialAttackController getSpecialAttack(int x, int y);
+	
+	public abstract boolean hasSpecial();
+	
+	public abstract int getMinSpecialRange();
+	public abstract int getMaxSpecialRange();
 
 	private class FloatTimer extends Timer {
 
