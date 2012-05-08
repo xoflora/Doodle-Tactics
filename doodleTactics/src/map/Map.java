@@ -97,7 +97,7 @@ public class Map implements Serializable {
 	private HashMap<Tile,List<Character>> _tileToEnemies;
 	private LinkedList<Tile> _randBattles;
 	
-	String _name;
+	private String _name;
 	
 	private Point _mapCords;
 

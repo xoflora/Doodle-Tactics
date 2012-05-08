@@ -58,19 +58,19 @@ public class RandomBattleAI extends CombatController implements Runnable {
 						Action[] possible = {new AttackAction(this, _current, t), /*new ItemAction(this, _current, t),*/
 								new WaitAction(this, _current, t)};
 
-					//	actions.add(Collections.max(Arrays.asList(possible)));
-						actions.addAll(Arrays.asList(possible));
+						for (int i = 0; i < possible.length; i++)
+							actions.add(possible[i]);
 					}
 
 					_hasMoved.put(_current, true);
 					_act = actions.poll();
-					if (_act != null && !(_act.getTile() == _locations.get(_current)) && _act.getType() == ActionType.WAIT) {
+					System.out.println("ACTION: " + _locations.get(_current) + " to " + _act.getTile() + 
+							", action is " + _act.getType() + ", value is " + _act.getValue());
+					if (_act != null/* && !(_act.getTile() == _locations.get(_current)) && _act.getType() == ActionType.WAIT*/) {
 					//	System.out.println(_act.getValue());
 						try {
 							Thread.sleep(500);
-						} catch (InterruptedException e) {
-							System.out.println("mehhhhh");
-						}
+						} catch (InterruptedException e) { }
 						
 						_gameScreen.panToCoordinate(_current.getX(), _current.getY());
 						
@@ -124,7 +124,7 @@ public class RandomBattleAI extends CombatController implements Runnable {
 	public void release() {
 		super.release();
 
-		if (getState() != State.ATTACKING) {
+		if (getState() != State.ATTACKING && getState() != State.EVENT_OCCURRING) {
 			//Temporary, while AI Phase does nothing
 			try {
 				Thread.sleep(500);
@@ -138,7 +138,7 @@ public class RandomBattleAI extends CombatController implements Runnable {
 	public void take() {
 		super.take();
 		
-		if (getState() != State.ATTACKING) {
+		if (getState() != State.ATTACKING && getState() != State.EVENT_OCCURRING) {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {}

@@ -23,6 +23,8 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
+import main.LoadGameScreen.LoadMenuItem;
+
 
 import character.Character;
 
@@ -62,7 +64,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private HashMap<optionButton, Character> _buttonToChar;
 	private ArrayList<optionButton> _buttonList;
 	private BufferedImage _charBoxImage, _listItem, _listItemHovered;
-
+	private KeyListener _typeListener;
 	//options vars
 	private String[] _optionsText = {"Overworld Move Left","Overworld Move Right", "Overworld Move Up","Overworld Move Down", "Interact"};
 	private int _currOption;
@@ -74,7 +76,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private BufferedImage _saveBg;
 	private SaveMenuItem _saveMenuItem;
 	private JTextField _typeText;
-
+	private LoadMenuItem[] _savedGames;
+	private LoadMenuItem _currSelected;
 	private JLayeredPane _layers;
 	private buttonPanel _buttons;
 
@@ -219,7 +222,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_typeText.setFocusable(true);
 		//		_typeText.grabFocus();
 		_typeText.setDocument(new MaxLengthDoc());
-		_typeText.addKeyListener(new KeyListener(){
+		_typeListener = new KeyListener(){
 
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -246,32 +249,94 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				GameMenuScreen.this.repaint();
 
 			}
-		});
+		};
+		_typeText.addKeyListener(_typeListener);
 
 		_saveMessage = "";
 		_saveMenuItem = new SaveMenuItem(saveImg,hoveredSaveImg,_dt);
+		_savedGames = new LoadMenuItem[DoodleTactics.NUM_SAVE_OPTIONS - 1];
+		int i=0;
 	}
 
+	public class LoadMenuItem extends MenuItem{
+		private boolean _selectable;
+		private int _y;
+		private String _title;
+		private String _filepath;
+		private BufferedImage _menuPanel;
+		public LoadMenuItem(JPanel container, BufferedImage defltPath,
+				BufferedImage hoveredPath, String title, String filename,
+				int y,DoodleTactics dt) {
+			super(container, defltPath, hoveredPath, dt);
+			_selectable = (filename != null);
+			_y = y;
+			_title = title;
+			_filepath = filename;
+			_menuPanel = dt.importImage("src/graphics/menu/load_menu_item.png");
+			this.setLocation(150,_y);
+			this.setSize(defltPath.getWidth(), defltPath.getHeight());
+		}	
+
+		@Override
+		public void setHovered(){
+			if(_selectable)
+				super.setHovered();
+			else
+				_currSelected = null;
+		}
+
+		public String getFilePath(){
+			return _filepath;
+		}
+
+		@Override
+		public void paint(Graphics2D g){
+			g.drawImage(getImage(),null,150,_y);
+			g.drawImage(_menuPanel, null, 300,_y + 40);
+			g.setFont(new Font("Arial",Font.BOLD,50));
+			g.setColor(new Color(0,0,1));
+			g.setRenderingHint(
+					RenderingHints.KEY_TEXT_ANTIALIASING,
+					RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+
+			g.drawString(_title, 320,_y + 90);
+		}
+	}
+
+	
 	public class SaveMenuItem extends MenuItem{
 
 		public SaveMenuItem(BufferedImage defltPath, BufferedImage hoveredPath, DoodleTactics dt) {
 			super(dt.getGameScreen(), defltPath,hoveredPath,dt);
-			this.setLocation(440,550);
 			this.setSize(defltPath.getWidth(), defltPath.getHeight());
 		}
 		@Override
 		public void paint(Graphics2D brush){
-			brush.drawImage(_saveBg, null,187,119);
-			brush.drawImage(_current,null,440,550);
 			brush.setRenderingHint(
 					RenderingHints.KEY_TEXT_ANTIALIASING,
 					RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 			brush.setFont(new Font("M",Font.BOLD,25));
 			brush.setColor(new Color(0,0,1));
-			if(_saveMessage.length() < 30)
-				brush.drawString(_saveMessage,500,530);
-			else
-				brush.drawString(_saveMessage,250,530);
+			if(this.getVisible()){
+				brush.drawImage(_saveBg, null,187,119);
+				this.setLocation(440,550);
+				brush.drawImage(_current,null,440,550);
+			
+				if(_saveMessage.length() < 30)
+					brush.drawString(_saveMessage,500,530);
+				else
+					brush.drawString(_saveMessage,250,530);
+			} else{
+				brush.drawString("Select File to Overwrite:",200,175);
+				for(int count = 0; count<DoodleTactics.NUM_SAVE_OPTIONS - 1; count++){
+					_savedGames[count].setVisible(true);
+					_savedGames[count].paint(brush);
+				}
+				this.setLocation(440,650);
+				brush.drawImage(getImage(),null,440,650);
+
+			}
+
 		}
 
 		public boolean containsText(){
@@ -283,7 +348,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		public void insertString(int offset, String text, AttributeSet attributes) {
 			if (text != null && !text.equals(" ") && this.getLength() + text.length() <= 15) {
-				System.out.println(_typeText.getText() + text);
 				GameMenuScreen.this.repaint();
 				try {
 					super.insertString(offset, text, attributes);
@@ -347,27 +411,9 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_itemInfoBox.revalidate();
 			_scrollBar.setLocation(new Point(SCROLLBOX_X, SCROLLBOX_Y));
 		}
-		_title.paint((Graphics2D) g, _title.getImage());
-		_units.paint((Graphics2D) g, _units.getImage());
-		_save.paint((Graphics2D) g, _save.getImage());
-		_quit.paint((Graphics2D) g, _quit.getImage());
-		_options.paint((Graphics2D) g, _options.getImage());
-		_map.paint((Graphics2D) g, _map.getImage());
-		_staticMap.paint((Graphics2D) g, _staticMap.getImage());
-		_downArrow.setLocation(_dt.getGameScreen().getMap().getMapCords().getX(), _dt.getGameScreen().getMap().getMapCords().getY());
-		_downArrow.paint((Graphics2D) g, _downArrow.getImage());
-		_infoBoxTitle.paint((Graphics2D) g, _infoBoxTitle.getImage());
-
-		//Save!
-		if(_currClicked == 5){
-			_typeText.grabFocus();
-			_typeText.setFocusable(true);
-			_saveMenuItem.setVisible(true);
-			_saveMenuItem.paint((Graphics2D) g);
-		}
-
-
-		if(_currClicked == 4){
+		
+		
+		else if(_currClicked == 4){
 			//Options
 			this.grabFocus();
 			_typeText.setFocusable(false);
@@ -398,10 +444,41 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 			((Graphics2D) g).setFont(new Font("M",Font.BOLD,30));
 			((Graphics2D) g).setColor(new Color(64,224,208));
-			((Graphics2D) g).drawString("Autosaving",200,500);
-			g.drawLine(190, 515, 385, 515);
 
 		}
+
+		//Save!
+		else if(_currClicked == 5){
+			if(_typeText.isVisible()){
+				_typeText.grabFocus();
+				_typeText.setFocusable(true);
+			}
+			int i=0;
+			for(String title: _dt.getSavedFilePaths().keySet()){
+				int y = (int) ((this.getHeight()/(DoodleTactics.NUM_SAVE_OPTIONS + 2))*(i + 1.5));
+				BufferedImage 		_buttonUnselectedImage = _dt.importImage("src/graphics/menu/load_radio_button.png");
+				BufferedImage _buttonSelectedImage = _dt.importImage("src/graphics/menu/load_radio_button_selected.png");
+				_savedGames[i] = new LoadMenuItem(this,_buttonUnselectedImage, _buttonSelectedImage,title,_dt.getSavedFilePaths().get(title),y,_dt);
+				i++;
+			}
+
+			_saveMenuItem.paint((Graphics2D) g);
+		}
+
+		_title.paint((Graphics2D) g, _title.getImage());
+
+		_units.paint((Graphics2D) g, _units.getImage());
+		_save.paint((Graphics2D) g, _save.getImage());
+		_quit.paint((Graphics2D) g, _quit.getImage());
+		_options.paint((Graphics2D) g, _options.getImage());
+		_map.paint((Graphics2D) g, _map.getImage());
+		_staticMap.paint((Graphics2D) g, _staticMap.getImage());
+		_downArrow.setLocation(_dt.getGameScreen().getMap().getMapCords().getX(), _dt.getGameScreen().getMap().getMapCords().getY());
+		_downArrow.paint((Graphics2D) g, _downArrow.getImage());
+		_infoBoxTitle.paint((Graphics2D) g, _infoBoxTitle.getImage());
+
+
+
 
 	}
 
@@ -425,7 +502,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		/* check if the point is in any of the buttons */
 		MenuItem clicked = null;
 
-		System.out.println("curr clicked: " + _currClicked);
 
 		if(_units.contains(point)) {
 			_staticMap.setVisible(false);
@@ -496,17 +572,28 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			this.removeAll();
 			this.setDefault();
 			_save.setHovered();
-			_typeText.setVisible(true);
-			this.add(_typeText);
 
+			System.out.println("NUM SAVED FILE PATHS: " + _dt.getSavedFilePaths().size());
+			if(_dt.getSavedFilePaths().size() < DoodleTactics.NUM_SAVE_OPTIONS - 1){
+				_typeText.setVisible(true);
+				this.add(_typeText);
+				_typeText.grabFocus();
+				_typeText.setFocusable(true);
+				_saveMenuItem.setVisible(true);
+			} else{
+				_typeText.setVisible(false);
+				_saveMenuItem.setVisible(false);
+			}
 			clicked = _save;
 			_currClicked = 5;
 		}
 
-		if(_saveMenuItem.contains(point) && _saveMenuItem.containsText()){
+		if(_saveMenuItem.contains(point) && _saveMenuItem.containsText() && _saveMenuItem.getVisible()){
 			String filepath = _typeText.getText();
 			_dt.getGameScreen().saveGame(filepath);
 			_saveMessage = "Game saved!";
+		} else{
+			//Overwriting
 		}
 
 		this.repaint();
@@ -517,9 +604,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_itemInfoBox.removeAll();
 		this.remove(_itemInfoBox);
 		_itemInfoBox.setVisible(false);
-		//			System.out.println("Point X: " + point.getX() + "; Y: " + point.getY());
-		//			System.out.println("Label X: " + label.getLocationOnScreen().getX() + "; Y: " + label.getLocationOnScreen().getY());
-
 		if (_label.contains(point)) {
 			this.showItemInfo(_labelToItem.get(_label));
 			_itemInfoBox.revalidate();
@@ -685,7 +769,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	}
 
 	public void displayItemOptions(JLabel label) {
-
+		
 		/**
 		 * number of options is set by the #of people in the party -1, plus 3 options for each item
 		 */
@@ -702,8 +786,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		_buttonToChar = new HashMap<optionButton, Character>();
 		_buttonList = new ArrayList<optionButton>();
-
-		System.out.println("Label Location on Screen X: " + label.getLocationOnScreen().getX() + "; Y: " + label.getLocationOnScreen().getY());
 
 		_itemOptBoxX = (int) label.getLocationOnScreen().getX();
 		_itemOptBoxY = (int) label.getLocationOnScreen().getY();
@@ -858,6 +940,25 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		//		_unitsBox.grabFocus();
 	}
 
+	public LoadMenuItem checkContainsRadioButtons(java.awt.Point point) {
+		for(int i=0; i<_dt.NUM_SAVE_OPTIONS - 1; i++){
+			if(_savedGames[i] == null)
+				break;
+			if(_savedGames[i].contains(point)){
+				//Reset current to default
+				if(_currSelected != null)
+					_currSelected.setDefault();
+				//Set current to hovered
+				_currSelected = _savedGames[i];
+				_savedGames[i].setHovered();
+				this.repaint();
+				return _savedGames[i];
+			}
+		}
+		return null;
+	}
+
+	
 	public void switchToGameScreen() {
 		_dt.changeScreens(_dt.getGameScreen());
 	}
@@ -927,7 +1028,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			constraint.gridy = 0;
 			this.add(col2, constraint);
 
-			JLabel HP = new JLabel("HP : " + chrter.getHP() + "/" + chrter.getBaseStats()[7]);
+			JLabel HP = new JLabel("HP : " + chrter.getHP() + "/" + chrter.getCurrStats()[7]);
 			//			HP.setFont(new Font("Arial", Font.BOLD, 12));
 			//			HP.setForeground(java.awt.Color.WHITE);
 			HP.setForeground(java.awt.Color.BLACK);

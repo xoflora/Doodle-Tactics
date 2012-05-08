@@ -49,13 +49,14 @@ public abstract class Action implements Comparable<Action> {
 	 * 		a negative number if the other action is better
 	 */
 	public int compareTo(Action other) {
-	//	System.out.println("comparing " + _value + " to " + other._value);
-		if (_value < other._value)
-			return 1;
-		else if (_value == other._value)
-			return 0;
-		else
+		System.out.println("Comparing " + this + " to " + other);
+		if (_value > other._value)
 			return -1;
+		else if (_value < other._value) {
+			return 1;
+		}
+		else
+			return _type.compareTo(other._type);
 	}
 	
 	/**
@@ -68,21 +69,20 @@ public abstract class Action implements Comparable<Action> {
 	 * @return a defensive evaluation of the destination tile
 	 */
 	public double defensiveEval(List<Character> filter) {
-		double eval = 0;
+		int defense = _c.getFullDefense() + _destTile.getDefense();
+		double eval = defense;
 		for (CombatController aff : _src.getEnemyAffiliations())
 			for (Character c : aff.getUnits()) {				
 				if (_src.isEnemy(c) && !filter.contains(c) &&
 						_src.getScreen().getMap().getAttackRange(aff.getTileMappings().get(c),
 						c.getMovementRange(), c.getMinAttackRange(),
 						c.getMaxAttackRange()).contains(_destTile)) {
-					int defense = _c.getFullDefense() + _destTile.getDefense();
 					if (c.getHitChance(_c) > 30 && c.getFullAttackStrength() > defense)
 						if (c.getCriticalChance(_c) > 30)
 							eval -= Character.CRITICAL_MULTIPLIER*
 								(c.getFullAttackStrength() - defense);
 						else
 							eval -= c.getFullAttackStrength() - defense;
-					eval += defense;
 				}
 			}
 		return eval;
@@ -90,5 +90,10 @@ public abstract class Action implements Comparable<Action> {
 
 	public ActionType getType() {
 		return _type;
+	}
+	
+	@Override
+	public String toString() {
+		return "[Action: " + _destTile + " " + _type + " " + _value + "]";
 	}
 }

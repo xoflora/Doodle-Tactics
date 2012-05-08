@@ -2,7 +2,6 @@ package controller.combatController;
 
 import graphics.MenuItem;
 
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +30,9 @@ public abstract class CombatController extends GameScreenController {
 		CHARACTER_OPTION_MENU,
 		SELECTING_ITEM,
 		ITEM_SELECTED,
-		ATTACKING;
+		ATTACKING,
+		EVENT_OCCURRING,
+		CHARACTER_OPTION_MENU_POST_EVENT;
 		
 		public String toString() {
 			switch (this) {
@@ -49,6 +50,8 @@ public abstract class CombatController extends GameScreenController {
 				return "ITEM_SELECTED";
 			case ATTACKING:
 				return "ATTACKING";
+			case CHARACTER_OPTION_MENU_POST_EVENT:
+				return "CHARACTER_OPTION_MENU_POST_EVENT";
 			default:
 				return "";
 			}
@@ -208,7 +211,7 @@ public abstract class CombatController extends GameScreenController {
 	public void take() {
 		super.take();
 		
-		if (_state != State.ATTACKING) {
+		if (_state != State.ATTACKING && _state != State.EVENT_OCCURRING) {
 			_hasMoved.clear();
 			_unitCycle = _units.listIterator();
 			_cycledLeft = false;
@@ -347,7 +350,7 @@ public abstract class CombatController extends GameScreenController {
 	 * @param src offense
 	 * @param dest defense
 	 */
-	public void attack(Tile src, Tile dest, int range) {
+	public void attack(Tile src, Tile dest) {
 		_state = State.ATTACKING;
 		
 		int xDiff = src.x()-dest.x();
@@ -369,10 +372,8 @@ public abstract class CombatController extends GameScreenController {
 				src.getOccupant().setDown();
 			}
 		}
-		
-		System.out.println("DOING THE ANIMATION " + _state);
-		
-		_gameScreen.pushControl(new CombatWindowController(_dt, src, dest, range));
+				
+		_gameScreen.pushControl(new CombatWindowController(_dt, src, dest));
 		
 	/*	src.attack(dest, r);
 		System.out.println(src.getName() + " has " + src.getHP() + " HP remaining.");
@@ -389,7 +390,6 @@ public abstract class CombatController extends GameScreenController {
 	 * removes a unit from this combat controller; it can no longer be used in the battle
 	 */
 	public void removeUnit(Character c) {
-		System.out.println("removeing" + c + " from tile " + _locations.get(c));
 		_units.remove(c);
 		_gameScreen.removeCharacter(c);
 		System.out.println(_locations == null);

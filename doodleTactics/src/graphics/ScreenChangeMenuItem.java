@@ -3,9 +3,12 @@ package graphics;
 import items.Axe;
 import items.Bow;
 import items.Cuirass;
+import items.Dagger;
 import items.Footgear;
 import items.HealthPotion;
 import items.ItemException;
+import items.Shield;
+import items.Staff;
 
 import java.awt.image.BufferedImage;
 
@@ -60,6 +63,18 @@ public class ScreenChangeMenuItem extends MenuItem {
 		cuirass.setDefense(2);
 		cuirass.setResistance(2);
 		cuirass.setDescription("Shields you from the cold.");
+		Dagger dagger = new Dagger(_dt, "src/graphics/items/dagger_icon.png", "Doodle Dagger");
+		dagger.setDescription("Dagger.");
+		dagger.setStats(1, 1, 3, 90);
+		Staff staff = new Staff(_dt, "src/graphics/items/staff_icon.png", "Doodle Staff");
+		staff.setDescription("A staff thing");
+		staff.setStats(1, 2, 1, 80);
+		Shield shield = new Shield(_dt, "src/graphics/items/shield_icon.png", "Shield thing");
+		shield.setDescription("thing");
+		shield.setDefense(5);
+		Shield shield2 = new Shield(_dt, "src/graphics/items/shield_icon.png", "Shiny shield");
+		shield2.setDefense(10);
+		shield2.setDescription("Better shield.");
 		try {
 			_dt.getParty().get(1).addToInventory(potion);
 			_dt.getParty().get(1).updateHP(-10);
@@ -71,6 +86,10 @@ public class ScreenChangeMenuItem extends MenuItem {
 			_dt.getParty().get(3).addToInventory(boots);
 			_dt.getParty().get(4).addToInventory(bow);
 			_dt.getParty().get(2).changeCuirass(cuirass);
+			_dt.getParty().get(3).addToInventory(dagger);
+			_dt.getParty().get(2).addToInventory(staff);
+			_dt.getParty().get(2).changeShield(shield);
+			_dt.getParty().get(2).addToInventory(shield2);
 
 		} catch (ItemException e) {
 			// TODO Auto-generated catch block

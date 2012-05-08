@@ -161,7 +161,7 @@ public class LoadGameScreen extends Screen<LoadGameController>{
 
 
 
-		for(int i=0; i<_dt.NUM_SAVE_OPTIONS; i++){
+		for(int i=0; i<DoodleTactics.NUM_SAVE_OPTIONS; i++){
 			if(_savedGames[i].contains(point)){
 				//Reset current to default
 				if(_currSelected != null)

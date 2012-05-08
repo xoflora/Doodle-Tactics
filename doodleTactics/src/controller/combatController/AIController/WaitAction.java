@@ -26,7 +26,7 @@ public class WaitAction extends Action {
 
 	@Override
 	/**
-	 * evaluates what happens if the character moves to the given tile
+	 * evaluates what happens if the character moves to the given tile and waits
 	 */
 	public double evaluateMove() {
 		return defensiveEval(new ArrayList<Character>());

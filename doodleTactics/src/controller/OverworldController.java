@@ -249,8 +249,10 @@ public class OverworldController extends GameScreenController {
 		
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			Tile t = _gameScreen.getTile(e.getX(), e.getY());
-			if (_gameScreen.getMap().getRandomBattleEnemies().contains(t.getOccupant())) {
-				addRandomEnemyRange(t);
+			if (t != null) {
+				if (_gameScreen.getMap().getRandomBattleEnemies().contains(t.getOccupant())) {
+					addRandomEnemyRange(t);
+				}
 			}
 		}
 		else if (e.getButton() == MouseEvent.BUTTON3)

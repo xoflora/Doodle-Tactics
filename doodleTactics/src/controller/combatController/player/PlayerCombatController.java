@@ -32,11 +32,13 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	
 	private Tile _destTile;
 	private Tile _selectedTile;
+	private Tile _interactTile;
 	private Character _selectedCharacter;
 	
 	private List<Tile> _selectedMovementRange;
 	private List<Tile> _enemyAttackRange;
 	private List<Tile> _characterAttackRange;
+	private List<Tile> _adjacentTiles;
 	
 	private List<Tile> _cacheMovementRange;
 	private List<Tile> _cacheAttackRange;
@@ -46,6 +48,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	private List<Tile> _cachePath;
 	private int _cacheCost;
 	private Tile _cacheDestTile;
+	private boolean _equipChanged;
 	
 	private int _menuDraggedx;
 	private int _menuDraggedy;
@@ -61,17 +64,20 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 
 		_destTile = null;
 		_selectedTile = null;
+		_interactTile = null;
 		_selectedCharacter = null;
 		
 		_selectedMovementRange = new ArrayList<Tile>();
 		_enemyAttackRange = new ArrayList<Tile>();
 		_characterAttackRange = new ArrayList<Tile>();
+		_adjacentTiles = new ArrayList<Tile>();
 		
 		_path = new ArrayList<Tile>();
 		_pathCost = 0;
 		_cachePath = null;
 		_cacheCost = 0;
 		_cacheDestTile = null;
+		_equipChanged = false;
 		
 		_cacheMovementRange = null;
 		_cacheAttackRange = null;
@@ -108,6 +114,27 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	}
 	
 	/**
+	 * paints all tiles adjacent to the given tile
+	 * @param source the adjacent tile
+	 */
+	private void paintAdjacentTiles(Tile source) {
+		Map m = _gameScreen.getMap();
+		_adjacentTiles.add(m.getNorth(source));
+		_adjacentTiles.add(m.getEast(source));
+		_adjacentTiles.add(m.getSouth(source));
+		_adjacentTiles.add(m.getWest(source));
+		
+		for (Tile t : _adjacentTiles)
+			t.setInMovementRange(true);
+	}
+	
+	private void clearAdjacentTiles() {
+		for (Tile t : _adjacentTiles)
+			t.setInMovementRange(false);
+		_adjacentTiles = new ArrayList<Tile>();
+	}
+	
+	/**
 	 * sets the player attack range
 	 * @param source the source tile
 	 * @param c the character
@@ -133,19 +160,14 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		
 		for (Tile toPaint : _characterAttackRange)
 			toPaint.setInPlayerAttackRange(true);
-		
-	/*	List<Tile> mv = _gameScreen.getMap().getMovementRange(t, c.getMovementRange());
-		List<Tile> atk = _gameScreen.getMap().getAttackRange(t, c.getMovementRange(),
-							c.getMinAttackRange(), c.getMaxAttackRange());
-		
-		_selectedMovementRange = mv;
-		_characterAttackRange = Util.difference(atk, mv);
-		
-		for (Tile toPaint : _selectedMovementRange)
-			toPaint.setInMovementRange(true);
-		for (Tile toPaint : _characterAttackRange) {
-			toPaint.setInPlayerAttackRange(true);
-		}	*/
+	}
+	
+	/**
+	 * refreshes the player's attack (and possibly also movement range) based on an equipment update
+	 * @param useMove whether or not to include the movement range
+	 */
+	public void refreshPlayerAttackRange(boolean tile, boolean useMove) {
+		setPlayerAttackRange((tile ? _selectedTile:_destTile), _selectedCharacter, useMove);
 	}
 	
 	/**
@@ -166,7 +188,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * removes the highest layer of combat menu, drawing the previous layer (if it exists)
 	 * @return
 	 */
-	CombatMenu removeMenu() {
+	private CombatMenu removeMenu() {
 		CombatMenu toReturn = _menus.pop();
 		toReturn.removeFromDrawingQueue();
 
@@ -177,6 +199,14 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		}
 		
 		return toReturn;
+	}
+	
+	private void hideMenu() {
+		_menus.peek().removeFromDrawingQueue();
+	}
+	
+	private void showMenu() {
+		_menus.peek().addToDrawingQueue();
 	}
 	
 	/**
@@ -197,11 +227,13 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		
 		_selectedTile = null;
 		_selectedCharacter = null;
+		_interactTile = null;
 		_destTile = null;
 		_enemyAttackRange = new ArrayList<Tile>();
 
 		clearMovementRange();
 		clearPlayerAttackRange();
+		clearAdjacentTiles();
 		clearPath();
 		
 		_cacheMovementRange = null;
@@ -234,6 +266,20 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		_pathCost = 0;
 	}
 	
+	/**
+	 * @return the default x-position for a menu
+	 */
+	private double defaultMenuX() {
+		return _destTile.getX() + Tile.TILE_SIZE;
+	}
+	
+	/**
+	 * @return the default y-position for a menu
+	 */
+	private double defaultMenuY() {
+		return _destTile.getY() - Tile.TILE_SIZE;
+	}
+	
 	
 	
 	@Override
@@ -244,10 +290,10 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	@Override
 	public void moveComplete() {
 		super.moveComplete();
-		addMenu(new CombatOptionWindow(_dt, _gameScreen, false,
-					_selectedCharacter.getInventory().size() != 0, false, this),
-				_destTile.getX() + Tile.TILE_SIZE,
-				_destTile.getY() - Tile.TILE_SIZE);
+		addMenu(new CombatOptionWindow(_dt, _gameScreen, false, false,
+					!_selectedCharacter.getInventory().isEmpty(), this),
+				defaultMenuX(),
+				defaultMenuY());
 	}
 
 	@Override
@@ -290,6 +336,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						
 						_cacheAttackRange = _characterAttackRange;
 						setPlayerAttackRange(_destTile, _selectedCharacter, false);
+						paintAdjacentTiles(_destTile);
 						
 						_cachePath = _path;
 						_cacheCost = _pathCost;
@@ -297,15 +344,42 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						clearPath();
 					}
 				}
-				else if (getState() == State.CHARACTER_OPTION_MENU) {
-					if (_characterAttackRange.contains(t) && isEnemy(t.getOccupant())) {
-						clearPath();
-						clearMovementRange();
-						clearPlayerAttackRange();
-						_pool.removeCharacter(_selectedCharacter);
-						_hasMoved.put(_selectedCharacter, true);
-						attack(_destTile, t, _selectedTile.gridDistanceToTile(t));
-						System.out.println(getState());
+				else if (getState() == State.CHARACTER_OPTION_MENU ||
+						getState() == State.CHARACTER_OPTION_MENU_POST_EVENT) {
+					Character other = t.getOccupant();
+					
+					if (other == _selectedCharacter && getState() == State.CHARACTER_OPTION_MENU_POST_EVENT) {
+						addMenu(new CombatOptionWindow(_dt, _gameScreen, false, false,
+								!_selectedCharacter.getInventory().isEmpty(), this),
+							defaultMenuX(),
+							defaultMenuY());
+					}
+					if (other != null) {
+						boolean attack = _characterAttackRange.contains(t) && isEnemy(t.getOccupant());
+						boolean trade = _adjacentTiles.contains(t) &&
+							other.getAffiliation() == _selectedCharacter.getAffiliation();
+						boolean talk = _adjacentTiles.contains(t) && _orch.canTalk(_selectedCharacter, other);
+						
+						_interactTile = t;
+						
+						if (attack && !trade && !talk) {
+							removeAllMenus();
+							_pool.removeCharacter(_selectedCharacter);
+							_hasMoved.put(_selectedCharacter, true);
+							attack(_destTile, _interactTile);
+						}
+						else if (!attack && trade && !talk) {
+							
+						}
+						else if (!attack && !trade && talk) {
+							setState(State.EVENT_OCCURRING);
+							_gameScreen.pushControl(_orch.getDialogue(_selectedCharacter, _interactTile.getOccupant()));
+						}
+						else {
+							addMenu(new CharacterSelectedOptionMenu(_gameScreen, _dt, this,
+									attack, trade, talk),
+									_menus.peek().getX(), _menus.peek().getY());
+						}
 					}
 				}
 			}
@@ -322,6 +396,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				_selectedCharacter.setLocation(_selectedTile.getX(), _selectedTile.getY());
 				clearPath();
 				clearPlayerAttackRange();
+				clearAdjacentTiles();
 				
 				_selectedMovementRange = _cacheMovementRange;
 				for (Tile toPaint : _selectedMovementRange)
@@ -342,10 +417,17 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				_cacheCost = 0;
 				_cacheDestTile = null;
 				
+				_interactTile = null;
+				
 				_hasMoved.put(_selectedCharacter, false);
 				_locations.put(_selectedCharacter, _selectedTile);
 				
 				removeAllMenus();
+				
+				if (_equipChanged) {
+					refreshPlayerAttackRange(true, true);
+					_equipChanged = false;
+				}
 				
 				setState(State.CHARACTER_SELECTED);
 				_gameScreen.panToCoordinate(_selectedTile.getX(), _selectedTile.getY());
@@ -414,7 +496,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void mousePressed(MouseEvent e) {
 		super.mousePressed(e);
 		if (!_menus.isEmpty() && _menus.peek().contains(e.getPoint())) {
-			System.out.println("HLO");
 			_menuDraggedx = e.getX();
 			_menuDraggedy = e.getY();
 			_draggingMenu = true;
@@ -426,7 +507,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * 
 	 */
 	public void mouseDragged(MouseEvent e) {
-		System.out.println(_draggingMenu);
 		if (!_draggingMenu)
 			super.mouseDragged(e);
 		else {
@@ -448,7 +528,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				if (_cycledRight)
 					previousUnit();
 				Character c = previousUnit();
-				System.out.println(c);
 				_gameScreen.panToCoordinate(c.getX(), c.getY());
 				
 				_cycledLeft = true;
@@ -458,7 +537,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				if (_cycledLeft)
 					nextUnit();
 				Character c = nextUnit();
-				System.out.println(c);
 				_gameScreen.panToCoordinate(c.getX(), c.getY());
 				
 				_cycledLeft = false;
@@ -483,8 +561,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void release() {
 		super.release();
 		
-		System.out.println(getState());
-		if (getState() != State.ATTACKING) {
+		if (getState() != State.ATTACKING && getState() != State.EVENT_OCCURRING) {
 			new Thread(new SlideTimer(_playerPhase,-1050)).start();
 			clear();
 		}
@@ -497,15 +574,16 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void take() {
 		super.take();
 		
-		if (getState() != State.ATTACKING) {
+		if (getState() != State.ATTACKING && getState() != State.EVENT_OCCURRING) {
 			_gameScreen.panToCoordinate(_gameScreen.getMainChar().getX(),
 					_gameScreen.getMainChar().getY());
 			_playerPhase.setLocation(1050,_playerPhase.getY());
 			new Thread(new SlideTimer(_playerPhase,250)).start();
 			
+			_equipChanged = false;
 			initialize();
 		}
-		else {
+		else if (getState() == State.ATTACKING) {
 			clear();
 			
 			if (_pool.isEmpty()) {
@@ -513,6 +591,9 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				_pool = null;
 				_gameScreen.popControl();
 			}
+		}
+		else {
+			setState(State.CHARACTER_OPTION_MENU_POST_EVENT);
 		}
 	}
 
@@ -602,17 +683,10 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * sends an action to the controller
 	 * @param action the action to send
 	 */
-	public void pushAction(ActionType action) {
-		assert(getState() == State.CHARACTER_OPTION_MENU);
-		
+	public void pushAction(ActionType action) {		
 		if (action == ActionType.WAIT)
 			characterWait();
 		else if (action == ActionType.ITEM) {
-		/*	_itemWindow = new ItemWindow(_gameScreen, _dt, _selectedCharacter, this);
-			_itemWindow.setLocation(_optionWindow.getX(), _optionWindow.getY());
-			
-			_optionWindow.removeFromDrawingQueue();
-			_itemWindow.addToDrawingQueue();	*/
 			addMenu(new ItemWindow(_gameScreen, _dt, _selectedCharacter, this),
 					_menus.peek().getX(), _menus.peek().getY());
 			
@@ -625,10 +699,11 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	
 	public void returnToOptionMenu() {
 		removeAllMenus();
-		addMenu(new CombatOptionWindow(_dt, _gameScreen, false,
-				_selectedCharacter.getInventory().size() != 0, false, this),
-				_destTile.getX() + Tile.TILE_SIZE,
-				_destTile.getY() - Tile.TILE_SIZE);
+		addMenu(new CombatOptionWindow(_dt, _gameScreen, false, false,
+				_selectedCharacter.getInventory().size() != 0, this),
+				defaultMenuX(),
+				defaultMenuY());
+		refreshPlayerAttackRange(false, false);
 		setState(State.CHARACTER_OPTION_MENU);
 	}
 
@@ -637,9 +712,29 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * @param i the item whose menu should be opened
 	 */
 	public void openItemMenu(Item i) {
-		System.out.println(i);
 		addMenu(new ItemActionWindow(i, _selectedCharacter, _gameScreen, _dt, this),
 				_menus.peek().getX(), _menus.peek().getY());
 		setState(State.ITEM_SELECTED);
+	}
+	
+	public void notifyOfEquipChange() {
+		_equipChanged = true;
+	}
+	
+	public void pushCharacterSelectAction(ActionType action) {
+		if (action == ActionType.ATTACK) {
+			removeAllMenus();
+			_pool.removeCharacter(_selectedCharacter);
+			_hasMoved.put(_selectedCharacter, true);
+			attack(_destTile, _interactTile);
+		}
+		else if (action == ActionType.TRADE) {
+			
+		}
+		else if (action == ActionType.TALK) {
+			removeMenu();
+			setState(State.EVENT_OCCURRING);
+			_gameScreen.pushControl(_orch.getDialogue(_selectedCharacter, _interactTile.getOccupant()));
+		}
 	}
 }

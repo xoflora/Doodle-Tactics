@@ -8,15 +8,17 @@ import character.Character;
 
 public class Cuirass extends Equipment{
 	
+	private int _defense;
+	private int _resistance;
+	private transient BufferedImage _menuImage;
+	private String _imgPath;
+	
 	public Cuirass(DoodleTactics dt, String imagePath, String name) {
 		super(dt,imagePath, name);
 		_isCuirass = true;
 	}
 
 
-	int _defense;
-	int _resistance;
-	BufferedImage _menuImage;
 	
 	
 	@Override
@@ -38,5 +40,9 @@ public class Cuirass extends Equipment{
 	
 	public int getResistance() {
 		return _resistance;
+	}
+	
+	public void load(DoodleTactics dt){
+		_menuImage = dt.importImage(_imgPath);
 	}
 }
