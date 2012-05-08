@@ -38,6 +38,7 @@ public class CombatWindow extends MenuItem {
 	private boolean _isAnimating;
 	private int _attackerX, _battlersY = 0, _victimX, _victimY, _range;
 	private animateImage _attackerWep, _victimWep, _attackerSecondWep, _victimSecondWep;
+	private int[] _damageDone;
 	
 	public CombatWindow(JPanel container, BufferedImage defaultPic, BufferedImage hoverPic, DoodleTactics dt, int priority) {
 		super(container, defaultPic, hoverPic, dt, priority);
@@ -57,6 +58,8 @@ public class CombatWindow extends MenuItem {
 		_victimSecondWep = null;
 		
 		_c = null;
+		
+		_damageDone = new int[2];
 	}
 
 	public void animate(Tile src, Tile dest, CombatWindowController c, int range) {
@@ -255,6 +258,9 @@ public class CombatWindow extends MenuItem {
 						_gs.repaint();
 					}
 					else if (count >=6 && count < 12) {
+						if (count == 6) {
+							_damageDone = _attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
+						}
 						if (_attackerChar.getWeapon() != null) {
 							if (_attackerChar.getWeapon().getWeaponType() == WeaponType.AXE) {
 								if (count == 6) {
@@ -323,7 +329,7 @@ public class CombatWindow extends MenuItem {
 						if (_attackerWep != null) {
 							_attackerWep.setLocation(1000, 1000);
 						}
-						_attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
+						_damageDone = _attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
 						_attackerChar.addExpForAttack(_victimChar);
 						_victimChar.addExpForAttack(_attackerChar);
 						_timer.stop();
@@ -360,6 +366,9 @@ public class CombatWindow extends MenuItem {
 						_gs.repaint();
 					}
 					else if (count >= 6 && count <12) {
+						if (count == 6) {
+							_damageDone = _attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
+						}
 						if (_attackerChar.getWeapon() != null) {
 							if (_attackerChar.getWeapon().getWeaponType() == WeaponType.BOW) {
 								if (count == 6) {
@@ -429,7 +438,6 @@ public class CombatWindow extends MenuItem {
 						if (_attackerSecondWep != null) {
 							_attackerSecondWep.setLocation(1000, 1000);
 						}
-						_attackerChar.attack(_attackerTile, _victimTile, new Random(), _range);
 						_attackerChar.addExpForAttack(_victimChar);
 						_victimChar.addExpForAttack(_attackerChar);
 						_timer.stop();

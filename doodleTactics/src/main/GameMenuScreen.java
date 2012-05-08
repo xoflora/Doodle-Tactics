@@ -771,7 +771,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	}
 
 	public void displayItemOptions(JLabel label) {
-
+		
 		/**
 		 * number of options is set by the #of people in the party -1, plus 3 options for each item
 		 */
@@ -788,8 +788,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		_buttonToChar = new HashMap<optionButton, Character>();
 		_buttonList = new ArrayList<optionButton>();
-
-		System.out.println("Label Location on Screen X: " + label.getLocationOnScreen().getX() + "; Y: " + label.getLocationOnScreen().getY());
 
 		_itemOptBoxX = (int) label.getLocationOnScreen().getX();
 		_itemOptBoxY = (int) label.getLocationOnScreen().getY();

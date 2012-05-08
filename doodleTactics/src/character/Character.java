@@ -784,11 +784,14 @@ public abstract class Character extends Rectangle{
 	 *  @param r a random number generator
 	 *  @author rroelke
 	 */
-	public void attack(Tile attacker, Tile opponent, Random r, int range){
+	public int[] attack(Tile attacker, Tile opponent, Random r, int range){
 		int offense, defense, damage;
 		boolean critical;
+		
+		int[] damageDone = new int[2];
 
 		if (r.nextInt(100) > getHitChance(opponent.getOccupant())-opponent.getEvasion()) {
+			damageDone[0] = -1;
 			System.out.println("Attack missed!");
 		}
 		else {
@@ -807,11 +810,13 @@ public abstract class Character extends Rectangle{
 			System.out.println(_name + " attacks " + opponent.getOccupant()._name + "!  " + opponent.getOccupant()._name +
 					" takes " + damage + " damage!");
 
+			damageDone[0] = damage;
+			
 			if (opponent.getOccupant()._currentHP <= 0) {
 				this.addExpForDefeating(opponent.getOccupant());
 				System.out.println(opponent.getOccupant().getName() + " defeated.");
 				opponent.getOccupant().setDefeated();
-				return;
+				return null;
 			}
 		}
 		System.out.println("max opponent range: " + opponent.getOccupant().getMaxAttackRange());
@@ -820,6 +825,7 @@ public abstract class Character extends Rectangle{
 
 		if (opponent.getOccupant().getMaxAttackRange() >= range && opponent.getOccupant().getMinAttackRange() <= range) {
 			if (r.nextInt(100) > opponent.getOccupant().getFullAttackAccuracy() - _currentStats[SKILL] - attacker.getEvasion()) {
+				damageDone[1] = -1;
 				System.out.println("Attack missed!");
 			}
 			else {
@@ -839,17 +845,20 @@ public abstract class Character extends Rectangle{
 	
 				System.out.println(opponent.getOccupant()._name + " attacks " + _name + "!  " + _name +
 						" takes " + damage + " damage!");
+				
+				damageDone[1] = damage;
 	
 				if (_currentHP <= 0) {
 					System.out.println(getName() + " defeated.");
 					setDefeated();
-					return;
+					return null;
 				}
 			}
 		}
 		else {
 			System.out.println("Opponent couldn't attack you because of your range");
 		}
+		return damageDone;
 	}
 
 	/**
