@@ -413,9 +413,8 @@ public class GameScreen extends Screen<GameScreenController> {
 	public void moveMainCharacter(Tile src, Tile dest) {
 		_isAnimating = true;
 		
-		src.setOccupant(null);
+		src.removeOccupant();
 		dest.setOccupant(_currentCharacter);
-		
 		
 		new MapMoveTimer(src, dest).start();
 	}

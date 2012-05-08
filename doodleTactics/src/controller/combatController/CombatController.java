@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
 
-import util.Util;
-
 import controller.GameScreenController;
+import controller.PathListener;
 
 import main.DoodleTactics;
 import character.Character;
@@ -21,7 +20,7 @@ import map.*;
  * @author rroelke
  * abstract interface for regulating combat
  */
-public abstract class CombatController extends GameScreenController {
+public abstract class CombatController extends GameScreenController implements PathListener {
 	
 	protected enum State {
 		START,

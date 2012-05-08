@@ -59,7 +59,7 @@ public class ScreenChangeMenuItem extends MenuItem {
 		boots.setSpeed(2);
 		Bow bow = new Bow(_dt, "src/graphics/items/bow_icon.png", "Doodle Bow");
 		bow.setDescription("derp");
-		bow.setStats(2, 4, 2, 4);
+		bow.setStats(2, 4, 2, 85);
 		Cuirass cuirass = new Cuirass(_dt, "src/graphics/items/cuirass_icon.png", "Doodle Cuirass");
 		cuirass.setDefense(2);
 		cuirass.setResistance(2);

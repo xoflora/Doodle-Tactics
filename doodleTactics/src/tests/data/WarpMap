@@ -135,5 +135,5 @@ img,src/graphics/terrain/arch.png,8,11,0
 img,src/graphics/terrain/arch.png,12,9,0
 img,src/graphics/terrain/arch.png,16,7,0
 10,4,F,src/graphics/tiles/grass.png,1,0,2,0,0,0,src/tests/data/HouseMap,4,9
-19,14,F,src/graphics/tiles/door.jpg,1,0,2,0,0,0,src/tests/data/testMapDemo,5,13
+19,14,F,src/graphics/tiles/teleport_tile.png,1,0,2,0,0,0,src/tests/data/testMapDemo,5,13
 char,Mage,Doodle Sage,src/graphics/characters/doodle_sage_portrait.png,src/graphics/characters/doodle_sage_left.png,src/graphics/characters/doodle_sage_right.png,src/graphics/characters/doodle_sage_back.png,src/graphics/characters/doodle_sage_front.png,10,10

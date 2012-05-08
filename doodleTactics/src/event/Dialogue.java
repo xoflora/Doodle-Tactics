@@ -70,7 +70,7 @@ public class Dialogue extends Event {
 		}
 	}
 
-	private static final int CHARS_PER_LINE = 25;
+	private static final int CHARS_PER_LINE = 23;
 	private static final int STRING_X = 450;
 	private static final int STRING_Y = 665;
 	private static final int LINE_OFFSET = 28;
@@ -261,11 +261,11 @@ public class Dialogue extends Event {
 				//throw error if Character not found
 				throw new InvalidEventException(split[0], line);
 			}
-			_characters.add(c);
+//			_characters.add(c);
 
-			_phrases.add(split[1].trim());
+//			_phrases.add(split[1].trim());
 			
-		//	addPhrase(c, split[1].trim());
+			addPhrase(c, split[1].trim());
 			
 			line = br.readLine();
 		}

@@ -3,6 +3,8 @@ package map;
 import event.CombatEvent;
 import event.Dialogue;
 import event.InvalidEventException;
+import event.MoverEvent;
+import event.TriggeredMoverEvent;
 import event.Warp;
 import graphics.Rectangle;
 import graphics.Terrain;
@@ -62,6 +64,8 @@ public class Map implements Serializable {
 	public static final int DIALOGUE = 1;
 	public static final int WARP = 2;
 	public static final int COMBAT = 3;
+	public static final int MOVER = 4;
+	public static final int TRIGGERED_MOVER = 5;
 	// ...
 
 	private static final int DEFAULT_XREF = 5;
@@ -283,7 +287,9 @@ public class Map implements Serializable {
 				// 7 if no event specified, 8 otherwise
 				else if (((splitLine.length == 10) && Integer.parseInt(splitLine[6]) == NO_EVENT) ||
 						(splitLine.length == 11 && Integer.parseInt(splitLine[6]) == DIALOGUE) ||
-						(splitLine.length == 11 && Integer.parseInt(splitLine[6]) == COMBAT)
+						(splitLine.length == 11 && Integer.parseInt(splitLine[6]) == COMBAT) ||
+						(splitLine.length == 11 && Integer.parseInt(splitLine[6]) == MOVER) ||
+						(splitLine.length == 11 && Integer.parseInt(splitLine[6]) == TRIGGERED_MOVER)
 								|| (splitLine.length == 13 && Integer.parseInt(splitLine[6]) == WARP)) {
 					x = Integer.parseInt(splitLine[0]);
 					y = Integer.parseInt(splitLine[1]);
@@ -294,16 +300,22 @@ public class Map implements Serializable {
 							Integer.parseInt(splitLine[9]));
 
 					//Handle Events
-					if(Integer.parseInt(splitLine[6]) == DIALOGUE){
+					if(Integer.parseInt(splitLine[6]) == DIALOGUE) {
 						tiles[x][y].setEvent(new Dialogue(dt,splitLine[10]));
 						tiles[x][y].setInteractible();
-					} else if(Integer.parseInt(splitLine[6]) == WARP){
+					} else if(Integer.parseInt(splitLine[6]) == WARP){ 
 						tiles[x][y].setEvent(new Warp(dt,tiles[x][y],splitLine[10],
 								Integer.parseInt(splitLine[11]), Integer.parseInt(splitLine[12])));
 						tiles[x][y].setEnterEvent();
-					} else if((Integer.parseInt(splitLine[6])) == COMBAT){
-						combatEvents.put(tiles[x][y], splitLine[10]);
+					} else if((Integer.parseInt(splitLine[6])) == COMBAT) {
+					//	combatEvents.put(tiles[x][y], splitLine[10]);
 						tiles[x][y].setEvent(CombatEvent.parseEvent(dt, splitLine[10]));
+						tiles[x][y].setEnterEvent();
+					} else if ((Integer.parseInt(splitLine[6])) == MOVER) {
+						tiles[x][y].setEvent(MoverEvent.parseMoverEvent(dt, splitLine[10]));
+						tiles[x][y].setEnterEvent();
+					} else if ((Integer.parseInt(splitLine[6])) == TRIGGERED_MOVER) {
+						tiles[x][y].setEvent(TriggeredMoverEvent.parseTriggeredMoverEvent(dt, splitLine[10]));
 						tiles[x][y].setEnterEvent();
 					}
 					//add others in the future perhaps

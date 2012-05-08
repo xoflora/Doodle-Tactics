@@ -903,16 +903,16 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 
 		if (!canPutRight) {
-			_itemOptBoxX = _itemOptBoxX-labelWidth-SCROLLBOX_X;
+			_itemOptBoxX = (int) (_itemOptBoxX-labelWidth-SCROLLBOX_X-_dt.getLocationOnScreen().getX());
 		}
 		if (canPutRight) {
-			_itemOptBoxX = _itemOptBoxX-SCROLLBOX_X;
+			_itemOptBoxX = (int) (_itemOptBoxX-SCROLLBOX_X-_dt.getLocationOnScreen().getX());
 		}
 		if (!canPutDown) {
-			_itemOptBoxY = (_itemOptBoxY-labelHeight*_buttonList.size()-SCROLLBOX_Y)+_scrollBar.getVerticalScrollBar().getValue();
+			_itemOptBoxY = (int) ((_itemOptBoxY-labelHeight*_buttonList.size()-SCROLLBOX_Y)+_scrollBar.getVerticalScrollBar().getValue()-_dt.getLocationOnScreen().getY());
 		}
 		if (canPutDown) {
-			_itemOptBoxY = _itemOptBoxY-SCROLLBOX_Y+_scrollBar.getVerticalScrollBar().getValue();
+			_itemOptBoxY = (int) (_itemOptBoxY-SCROLLBOX_Y+_scrollBar.getVerticalScrollBar().getValue()-_dt.getLocationOnScreen().getY());
 		}
 
 		for (int i=0; i<_buttonList.size(); i++) {

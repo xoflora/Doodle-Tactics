@@ -11,5 +11,6 @@ DemoMap,src/graphics/tiles/floor.png,src/graphics/tiles/upstairs.png
 7,9,F,src/graphics/tiles/floor.png,1,1,0,0,0,0
 3,2,F,src/graphics/tiles/floor.png,1,1,0,0,0,0
 1,2,F,src/graphics/tiles/floor.png,1,1,0,0,0,0
+9,6,F,src/graphics/tiles/floor.png,1,1,0,0,0,0
 img,src/graphics/terrain/couch.png,7,0,0
 4,9,F,src/graphics/tiles/upstairs.png,1,0,2,0,0,0,src/tests/data/HouseMap,9,0
