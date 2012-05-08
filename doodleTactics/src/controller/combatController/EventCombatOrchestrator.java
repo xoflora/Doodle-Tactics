@@ -2,6 +2,8 @@ package controller.combatController;
 
 import java.util.List;
 
+import character.Character;
+
 import main.DoodleTactics;
 
 public class EventCombatOrchestrator extends CombatOrchestrator {
@@ -42,5 +44,8 @@ public class EventCombatOrchestrator extends CombatOrchestrator {
 		
 	}
 
-	
+	@Override
+	public boolean canTalk(Character a, Character b) {
+		return false;
+	}
 }

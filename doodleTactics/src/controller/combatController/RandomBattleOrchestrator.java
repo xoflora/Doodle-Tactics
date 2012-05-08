@@ -1,9 +1,14 @@
 package controller.combatController;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
 import character.Character;
+import event.Dialogue;
+import event.FortuneDialogue;
+import event.InvalidEventException;
 
 import main.DoodleTactics;
 import map.Map;
@@ -78,5 +83,24 @@ public class RandomBattleOrchestrator extends CombatOrchestrator {
 	@Override
 	public void performTurnUpdate() {
 
+	}
+	
+	@Override
+	public boolean canTalk(Character a, Character b) {
+		return true;
+	}
+	
+	@Override
+	public Dialogue getDialogue(Character a, Character b) {
+		Dialogue def = super.getDialogue(a, b);
+		if (def == null) {
+			try {
+				return new FortuneDialogue(_dt, a, b);
+			} catch (Exception e) {
+				return null;
+			}
+		}
+		else
+			return def;
 	}
 }

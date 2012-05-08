@@ -36,6 +36,8 @@ import character.Warrior;
  */
 public class DoodleTactics extends JFrame {
 	
+	public static final String IMAGE_SOURCE_PATH = "src/graphics/";
+	
 	public static final int TILE_ROWS = 17;
 	public static final int TILE_COLS = 21;
 	public static final int NUM_SAVE_OPTIONS = 4;

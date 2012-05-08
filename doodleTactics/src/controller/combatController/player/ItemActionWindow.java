@@ -6,31 +6,24 @@ import items.Equipment;
 import items.Item;
 import items.ItemException;
 
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JPanel;
-
-import controller.combatController.CombatController;
 
 import main.DoodleTactics;
 import main.GameScreen;
 import graphics.MenuItem;
-import graphics.Rectangle;
 
 public class ItemActionWindow extends MenuItem implements CombatMenu {
 	
-	private static final String WINDOW_IMAGE = "src/graphics/menu/combatMenu/combat_menu_background.png";
-	private static final String EQUIP_IMAGE = "src/graphics/menu/combatMenu/equip.png";
-	private static final String EQUIP_HOVERED = "src/graphics/menu/combatMenu/equip_hovered.png";
-	private static final String USE_IMAGE = "src/graphics/menu/combatMenu/use.png";
-	private static final String USE_HOVERED = "src/graphics/menu/combatMenu/use_hovered.png";
-	private static final String DISCARD_IMAGE = "src/graphics/menu/combatMenu/discard.png";
-	private static final String DISCARD_HOVERED = "src/graphics/menu/combatMenu/discard_hovered.png";
+	private static final String WINDOW_IMAGE = DoodleTactics.IMAGE_SOURCE_PATH + "menu/combatMenu/combat_menu_background.png";
+	private static final String EQUIP_IMAGE = DoodleTactics.IMAGE_SOURCE_PATH + "menu/combatMenu/equip.png";
+	private static final String EQUIP_HOVERED = DoodleTactics.IMAGE_SOURCE_PATH + "menu/combatMenu/equip_hovered.png";
+	private static final String USE_IMAGE = DoodleTactics.IMAGE_SOURCE_PATH + "menu/combatMenu/use.png";
+	private static final String USE_HOVERED = DoodleTactics.IMAGE_SOURCE_PATH + "menu/combatMenu/use_hovered.png";
+	private static final String DISCARD_IMAGE = DoodleTactics.IMAGE_SOURCE_PATH + "menu/combatMenu/discard.png";
+	private static final String DISCARD_HOVERED = DoodleTactics.IMAGE_SOURCE_PATH + "menu/combatMenu/discard_hovered.png";
 	
 	private static final double VERT_BUFFER = 3;
 	private static final double HORZ_BUFFER = 4;
@@ -38,7 +31,6 @@ public class ItemActionWindow extends MenuItem implements CombatMenu {
 	private static final int OPTION_PRIORITY = 5;
 	private static final int MENU_PRIORITY = 3;
 	
-	private boolean _isEquip;
 	private Item _item;
 	private Equipment _equip;
 	private List<MenuItem> _options;
@@ -57,7 +49,6 @@ public class ItemActionWindow extends MenuItem implements CombatMenu {
 		
 		_options = new ArrayList<MenuItem>();
 		if (_item.isEquip()) {
-			_isEquip = true;
 			_equip = (Equipment) item;
 			_item = null;
 			_options.add(new MenuItem(container, dt.importImage(EQUIP_IMAGE),
@@ -70,11 +61,11 @@ public class ItemActionWindow extends MenuItem implements CombatMenu {
 						dt.error("That item cannot be equipped.");
 					
 					source.returnToOptionMenu();
+					source.notifyOfEquipChange();
 				}
 			});
 		}
 		else {
-			_isEquip = false;
 			_item = item;
 			_equip = null;
 			_options.add(new MenuItem(container, dt.importImage(USE_IMAGE),
@@ -110,7 +101,6 @@ public class ItemActionWindow extends MenuItem implements CombatMenu {
 	public boolean contains(Point p) {
 		return super.contains(p) || _itemImage.contains(p);
 	}
-
 	
 	public void addToDrawingQueue() {
 		_gameScreen.addMenuItem(this);
@@ -148,5 +138,7 @@ public class ItemActionWindow extends MenuItem implements CombatMenu {
 			m.setLocation(x + HORZ_BUFFER - _itemImage.getWidth(), optionY);
 			optionY += m.getImage().getHeight() + VERT_BUFFER;
 		}
+		
+		setSize(getImage().getWidth(), optionY - y);
 	}
 }
