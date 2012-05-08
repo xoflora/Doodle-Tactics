@@ -77,20 +77,20 @@ public class ScreenChangeMenuItem extends MenuItem {
 		shield2.setDefense(10);
 		shield2.setDescription("Better shield.");
 		try {
-			_dt.getParty().get(1).addToInventory(potion);
+			_dt.getParty().get(0).addToInventory(potion);
 			_dt.getParty().get(1).updateHP(-10);
 			_dt.getParty().get(1).addToInventory(pot2);
-			_dt.getParty().get(1).addToInventory(pot3);
-			_dt.getParty().get(1).addToInventory(pot4);
-			_dt.getParty().get(1).addToInventory(pot5);
+			_dt.getParty().get(2).addToInventory(pot3);
+			_dt.getParty().get(3).addToInventory(pot4);
+			_dt.getParty().get(4).addToInventory(pot5);
 			_dt.getParty().get(2).changeWeapon(axe);
-			_dt.getParty().get(3).addToInventory(boots);
+			_dt.getParty().get(3).changeFootgear(boots);
 			_dt.getParty().get(4).addToInventory(bow);
 			_dt.getParty().get(2).changeCuirass(cuirass);
-			_dt.getParty().get(3).addToInventory(dagger);
-			_dt.getParty().get(2).addToInventory(staff);
+			_dt.getParty().get(1).changeWeapon(dagger);
+			_dt.getParty().get(3).changeWeapon(staff);
 			_dt.getParty().get(2).changeShield(shield);
-			_dt.getParty().get(2).addToInventory(shield2);
+			_dt.getParty().get(0).changeShield(shield2);
 
 		} catch (ItemException e) {
 			// TODO Auto-generated catch block
