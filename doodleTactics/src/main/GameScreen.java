@@ -158,7 +158,7 @@ public class GameScreen extends Screen<GameScreenController> {
 	 * @param mainCharacterY the y-position IN THE MAP, NOT ON SCREEN of the main character
 	 */
 	public void setMap(String mapPath, int mainCharacterX, int mainCharacterY) {
-
+		
 		Map map = null;
 
 		try {
@@ -227,6 +227,11 @@ public class GameScreen extends Screen<GameScreenController> {
 			e.printMessage();
 			System.exit(0);
 		}
+		
+		//Autosave!
+		 Calendar cal = Calendar.getInstance();
+		this.saveGame("Autosave at " + cal.getTime());
+
 	}
 
 	@Override

@@ -142,7 +142,7 @@ public class LoadGameScreen extends Screen<LoadGameController>{
 		public void paint(Graphics2D g){
 			g.drawImage(getImage(),null,20,_y);
 			g.drawImage(_menuPanel, null, 200,_y + 40);
-			g.setFont(new Font("Arial",Font.BOLD,50));
+			g.setFont(new Font("Arial",Font.BOLD,25));
 			g.setColor(new Color(0,0,1));
 			g.setRenderingHint(
 					RenderingHints.KEY_TEXT_ANTIALIASING,

@@ -460,13 +460,14 @@ public abstract class Character extends Rectangle{
 
 		if(_equipped != null)
 			_equipped.loadItem(dt);
-		if(_cuirass != null)
+		if(_cuirass != null){
 			_cuirass.loadItem(dt);
+			_cuirass.load(dt);
+		}
 		if(_shield != null)
 			_shield.loadItem(dt);
 		if(_footgear != null)
 			_footgear.loadItem(dt);
-		_cuirass.load(dt);
 
 		new FloatTimer(dt.getGameScreen());
 	}

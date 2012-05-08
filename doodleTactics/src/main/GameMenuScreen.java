@@ -1,11 +1,8 @@
 package main;
 
-import items.Cuirass;
 import items.Equipment;
-import items.Footgear;
 import items.Item;
 import items.ItemException;
-import items.Shield;
 import items.Weapon;
 
 import java.awt.*;
@@ -22,8 +19,6 @@ import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-
-import main.LoadGameScreen.LoadMenuItem;
 
 
 import character.Character;
@@ -81,6 +76,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private JLayeredPane _layers;
 	private buttonPanel _buttons;
 
+	private MenuItem _tabSelected;
+
 	private int SCROLLBOX_X, SCROLLBOX_Y;
 
 	private String _saveMessage;
@@ -92,7 +89,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_dt = dt;
 		_labelToCharacter = new HashMap<JLabel, Character>();
 		_labelToItem = new HashMap<JLabel, Item>();
-		//		System.out.println("set to false");
 		_showingItemOptions = false;
 		_buttonList = new ArrayList<optionButton>();
 		_buttonToChar = new HashMap<optionButton, Character>();
@@ -149,15 +145,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_unitsBox = new JPanel();
 		_unitsBox.setBackground(java.awt.Color.DARK_GRAY);
 		_unitsBox.setLocation(0,0);
-		//		_unitsBox.setSize(760, 1000);
-		//		_unitsBox.setOpaque(false);
-		//		_unitsBox.setBounds(0,0,760,1000);
 
 		_layers = new JLayeredPane();
 		_layers.setBackground(java.awt.Color.DARK_GRAY);
 		_layers.setLayout(null);
-		//		_layers.setOpaque(false);
-		//		_layers.setBounds(0, 0, 0, 0);
 		_layers.add(_unitsBox, new Integer(0), 0);
 
 		_buttons = new buttonPanel(new ArrayList<optionButton>());
@@ -195,8 +186,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		//options
 		_currOption = 0;
-		//_optionsText = new String[NUM_OPTIONS];
-
 		_keyCodes  = new int[NUM_OPTIONS];
 		_keyCodes[0] = dt.getLeftKey();
 		_keyCodes[1] = _dt.getRightKey();
@@ -218,7 +207,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		_typeText.setBorder(null);
 		_typeText.setCaretColor(java.awt.Color.CYAN);
 		_typeText.getCaret().setBlinkRate(0);
-		_typeText.setLocation(420,420);
+		_typeText.setLocation(365,420);
 		_typeText.setFocusable(true);
 		//		_typeText.grabFocus();
 		_typeText.setDocument(new MaxLengthDoc());
@@ -303,7 +292,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 	}
 
-	
+
 	public class SaveMenuItem extends MenuItem{
 
 		public SaveMenuItem(BufferedImage defltPath, BufferedImage hoveredPath, DoodleTactics dt) {
@@ -321,7 +310,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				brush.drawImage(_saveBg, null,187,119);
 				this.setLocation(440,550);
 				brush.drawImage(_current,null,440,550);
-			
+
 				if(_saveMessage.length() < 30)
 					brush.drawString(_saveMessage,500,530);
 				else
@@ -347,7 +336,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	private class MaxLengthDoc extends PlainDocument {
 
 		public void insertString(int offset, String text, AttributeSet attributes) {
-			if (text != null && !text.equals(" ") && this.getLength() + text.length() <= 15) {
+			if (text != null && !text.equals(" ") && this.getLength() + text.length() <= 25) {
 				GameMenuScreen.this.repaint();
 				try {
 					super.insertString(offset, text, attributes);
@@ -411,8 +400,8 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_itemInfoBox.revalidate();
 			_scrollBar.setLocation(new Point(SCROLLBOX_X, SCROLLBOX_Y));
 		}
-		
-		
+
+
 		else if(_currClicked == 4){
 			//Options
 			this.grabFocus();
@@ -453,14 +442,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				_typeText.grabFocus();
 				_typeText.setFocusable(true);
 			}
-			int i=0;
-			for(String title: _dt.getSavedFilePaths().keySet()){
-				int y = (int) ((this.getHeight()/(DoodleTactics.NUM_SAVE_OPTIONS + 2))*(i + 1.5));
-				BufferedImage 		_buttonUnselectedImage = _dt.importImage("src/graphics/menu/load_radio_button.png");
-				BufferedImage _buttonSelectedImage = _dt.importImage("src/graphics/menu/load_radio_button_selected.png");
-				_savedGames[i] = new LoadMenuItem(this,_buttonUnselectedImage, _buttonSelectedImage,title,_dt.getSavedFilePaths().get(title),y,_dt);
-				i++;
-			}
 
 			_saveMenuItem.paint((Graphics2D) g);
 		}
@@ -500,7 +481,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		/* set all of the buttons to default */
 
 		/* check if the point is in any of the buttons */
-		MenuItem clicked = null;
 
 
 		if(_units.contains(point)) {
@@ -509,7 +489,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			this.removeAll();
 			this.setDefault();
 			_units.setHovered();
-			clicked = _units;
+			_tabSelected = _units;
 			_currClicked = 1;
 			_unitsBox.removeAll();
 			_unitsBox.addMouseMotionListener(_unitsBoxListener);
@@ -546,7 +526,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			this.removeAll();
 			this.setDefault();
 			_map.setHovered();
-			clicked = _map;
+			_tabSelected = _map;
 			_staticMap.setVisible(true);
 			_downArrow.setVisible(true);
 			_currClicked = 2;
@@ -562,7 +542,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			this.removeAll();
 			this.setDefault();
 			_options.setHovered();
-			clicked = _options;
+			_tabSelected = _options;
 			_currClicked = 4;
 		}
 
@@ -572,32 +552,72 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			this.removeAll();
 			this.setDefault();
 			_save.setHovered();
+			_saveMessage = "";
 
-			System.out.println("NUM SAVED FILE PATHS: " + _dt.getSavedFilePaths().size());
-			if(_dt.getSavedFilePaths().size() < DoodleTactics.NUM_SAVE_OPTIONS - 1){
-				_typeText.setVisible(true);
-				this.add(_typeText);
-				_typeText.grabFocus();
-				_typeText.setFocusable(true);
-				_saveMenuItem.setVisible(true);
-			} else{
-				_typeText.setVisible(false);
-				_saveMenuItem.setVisible(false);
-			}
-			clicked = _save;
+			_tabSelected = _save;
 			_currClicked = 5;
 		}
+		
 
-		if(_saveMenuItem.contains(point) && _saveMenuItem.containsText() && _saveMenuItem.getVisible()){
-			String filepath = _typeText.getText();
-			_dt.getGameScreen().saveGame(filepath);
-			_saveMessage = "Game saved!";
-		} else{
-			//Overwriting
+		//Save as Normal
+		if(_dt.getSavedFilePaths().size() < DoodleTactics.NUM_SAVE_OPTIONS - 1){
+			System.out.println("Saving as normal");
+			_typeText.setVisible(true);
+			this.add(_typeText);
+			_saveMenuItem.setVisible(true);
+			_typeText.grabFocus();
+			_typeText.setFocusable(true);
+
+			int i=0;
+			for(String title: _dt.getSavedFilePaths().keySet()){
+				int y = (int) ((this.getHeight()/(DoodleTactics.NUM_SAVE_OPTIONS + 2))*(i + 1.5));
+				BufferedImage 		_buttonUnselectedImage = _dt.importImage("src/graphics/menu/load_radio_button.png");
+				BufferedImage _buttonSelectedImage = _dt.importImage("src/graphics/menu/load_radio_button_selected.png");
+				_savedGames[i] = new LoadMenuItem(this,_buttonUnselectedImage, _buttonSelectedImage,title,_dt.getSavedFilePaths().get(title),y,_dt);
+				i++;
+			}
+			if(_saveMenuItem.contains(point))
+				System.out.println("Contains point");
+			
+			if(_saveMenuItem.containsText())
+				System.out.println("Contains Text");
+			
+			
+			
+			if(_saveMenuItem.contains(point) && _saveMenuItem.containsText()){
+				String filepath = _typeText.getText();
+				_dt.getGameScreen().saveGame(filepath);
+				_saveMessage = "Game saved!";
+			}
+
+			//Overwrite a File
+		} else if (_tabSelected == _save){
+			System.out.println("Overwrite A file");
+			_typeText.setVisible(false);
+			_saveMenuItem.setVisible(false);
+			_currSelected = null;
+			int i=0;
+			for(String title: _dt.getSavedFilePaths().keySet()){
+				int y = (int) ((this.getHeight()/(DoodleTactics.NUM_SAVE_OPTIONS + 2))*(i + 1.5));
+				BufferedImage 		_buttonUnselectedImage = _dt.importImage("src/graphics/menu/load_radio_button.png");
+				BufferedImage _buttonSelectedImage = _dt.importImage("src/graphics/menu/load_radio_button_selected.png");
+				_savedGames[i] = new LoadMenuItem(this,_buttonUnselectedImage, _buttonSelectedImage,title,_dt.getSavedFilePaths().get(title),y,_dt);
+				i++;
+			}
+
+
+			if(_saveMenuItem.contains(point) && _currSelected != null && _dt.getSavedFilePaths().size() >= DoodleTactics.NUM_SAVE_OPTIONS - 1){
+				System.out.println("Overwriting");
+				_dt.getSavedFilePaths().remove(_currSelected._title);
+				System.out.println(_dt.getSavedFilePaths().size());
+				checkContains(point);
+			}
+
+
 		}
 
 		this.repaint();
-		return clicked;
+		return _tabSelected;
 	}
 
 	public void checkItemContains(java.awt.Point point, JLabel _label) {
@@ -625,21 +645,16 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 	public void checkStopShowingOptionsBox(java.awt.Point point) {
 		this.grabFocus();
-		//		System.out.println("check stop showing point x: " + point.getX() + "; y: " + point.getY());
-		//		System.out.println("_buttons location on screen x: " + _buttons.getLocationOnScreen().getX() + "; y: " + _buttons.getLocationOnScreen().getY());
 		if (_showingItemOptions) {
 			/**
 			 * point.getX() and point.getY() get the X and Y coordinates only relative to the units box, 
 			 * so these values get the location of the units box added to them before checking
 			 */
 
-			//			System.out.println("_buttons width: " + _buttons.getWidth() + "height: " + _buttons.getHeight());
-
 
 			if (_buttons.getLocationOnScreen().getX() < point.getX() && _buttons.getLocationOnScreen().getY() < point.getY() && _buttons.getLocationOnScreen().getX()+_buttons.getWidth()>point.getX() && (_buttons.getLocationOnScreen().getY()+_buttons.getHeight())>point.getY()) {
 
 				int buttonNum = (int)((point.getY()-_buttons.getLocationOnScreen().getY())/27);
-				//					System.out.println("button y: " + button.getY());
 				_buttonList.get(buttonNum).activate(_buttonList.get(buttonNum));
 				_buttons.removeAll();
 				_layers.remove(_buttons);
@@ -652,27 +667,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				_showingItemOptions = false;
 				this.repaint();
 			}
-			//			else {
-			//				Point np = new Point();
-			//				np.setLocation(point.getX()+200, point.getY()+120);
-			////				System.out.println();
-			//				for (int i=0; i<_buttonList.size(); i++) {
-			////					System.out.println("--------------");
-			////					System.out.println("X: " + np.getX() + "; Y: " + np.getY());
-			////					System.out.println("HERE X: " + _buttonList.get(i).getX() + "; Y: " + _buttonList.get(i).getY());
-			////					System.out.println(_buttonList.get(i).getSize());
-			//					if (np.getX() > _buttonList.get(i).getX() && np.getY() > _buttonList.get(i).getY()+_scrollBar.getVerticalScrollBar().getValue() && np.getX() < _buttonList.get(i).getX()+200 && np.getY() < _buttonList.get(i).getY()+15+_scrollBar.getVerticalScrollBar().getValue()) {
-			//						System.out.println("HERE X: " + _buttonList.get(i).getX() + "; Y: " + _buttonList.get(i).getY());
-			//						_buttonList.get(i).activate(_buttonList.get(i));
-			//						for (int j=0; j<_buttonList.size(); j++) {
-			//							_buttonList.get(i).setVisible(false);
-			//						}
-			//						_showingItemOptions = false;
-			//						this.repaint();
-			//						break;
-			//					}
-			//				}
-			//			}
 		}
 	}
 
@@ -680,8 +674,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		Point point = e.getLocationOnScreen();
 		if (_buttons.getLocationOnScreen().getX() < point.getX() && _buttons.getLocationOnScreen().getY() < point.getY() && _buttons.getLocationOnScreen().getX()+_buttons.getWidth()>point.getX() && (_buttons.getLocationOnScreen().getY()+_buttons.getHeight())>point.getY()) {
 			int buttonNum = (int)((point.getY()-_buttons.getLocationOnScreen().getY())/27);
-			//				System.out.println("button y: " + button.getY());
-			//			System.out.println("whee");
 			for (int i=0; i<_buttonList.size(); i++) {
 				if (i==buttonNum) {
 					_buttonList.get(buttonNum).setHovered();
@@ -744,15 +736,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 	}
 
 	public void checkItemClicked(java.awt.Point point, JLabel label) {
-		System.out.println("point x: " + point.getX() + "; y: " + point.getY());
 		if (label.contains(point)) {
-			//			ImageIcon img;
-			//			try {
-			//				img = new ImageIcon(ImageIO.read(new File("src/graphics/characters/thief_front.png")));
-			//				label.setIcon(img);
-			//			} catch (IOException e) {
-			//				e.printStackTrace();
-			//			}
 			_showingItemOptions = true;
 			this.displayItemOptions(label);
 			return;
@@ -760,7 +744,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		/**
 		 * Might not ever get here...
 		 */
-		System.out.println("should not get here in checkItemClicked. set to false");
 		_showingItemOptions = false;
 		for (int i=0; i<_buttonList.size(); i++) {
 			_buttonList.get(i).setVisible(false);
@@ -786,8 +769,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		_buttonToChar = new HashMap<optionButton, Character>();
 		_buttonList = new ArrayList<optionButton>();
-
-		System.out.println("Label Location on Screen X: " + label.getLocationOnScreen().getX() + "; Y: " + label.getLocationOnScreen().getY());
 
 		_itemOptBoxX = (int) label.getLocationOnScreen().getX();
 		_itemOptBoxY = (int) label.getLocationOnScreen().getY();
@@ -869,7 +850,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		if (!isEquipped) {
 			if (_dt.getParty().size() > 0) {
 				for (int i=0; i<_dt.getParty().size(); i++) {
-					System.out.println("Party member: " + _dt.getParty().get(i) + "; label to char: " + _labelToCharacter.get(label));
 					if (_dt.getParty().get(i) != (_labelToCharacter.get(label))) {
 						if (_dt.getParty().get(i).getInventory().size() != _dt.getParty().get(i).getCapacity()) {
 							giveToCharButton _giveToChar = new giveToCharButton(this, _listItem, _listItemHovered, _dt);
@@ -895,7 +875,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		boolean canPutRight;
 		boolean canPutDown;
-		System.out.println("ScrollBar value: " + _scrollBar.getVerticalScrollBar().getValue());
 
 		if (label.getLocationOnScreen().getX()+labelWidth < 800) {
 			canPutRight = true;
@@ -917,7 +896,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			_itemOptBoxX = _itemOptBoxX-SCROLLBOX_X;
 		}
 		if (!canPutDown) {
-			System.out.println("can't put down");
 			_itemOptBoxY = (_itemOptBoxY-labelHeight*_buttonList.size()-SCROLLBOX_Y)+_scrollBar.getVerticalScrollBar().getValue();
 		}
 		if (canPutDown) {
@@ -929,17 +907,11 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		}
 
 		_showingItemOptions = true;
-		//		System.out.println("_buttons location x: " + (int)label.getLocationOnScreen().getX() + "; y: " + (int)label.getLocationOnScreen().getY());
-		//		_buttons.setLocation((int)label.getLocationOnScreen().getX(), (int)label.getLocationOnScreen().getY());
 		_buttons.setButtonList(_buttonList);
-		//		System.out.println("Size: " + _buttonList.size());
-
-		//		System.out.println("option box location x: " + _itemOptBoxX + "; y: " + _itemOptBoxY);
 		_buttons.setBounds(_itemOptBoxX,_itemOptBoxY,labelWidth, labelHeight*_buttonList.size());
 		_buttons.grabFocus();
 		_layers.add(_buttons, new Integer(1), 0);
 		this.repaint();
-		//		_unitsBox.grabFocus();
 	}
 
 	public LoadMenuItem checkContainsRadioButtons(java.awt.Point point) {
@@ -960,7 +932,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 		return null;
 	}
 
-	
+
 	public void switchToGameScreen() {
 		_dt.changeScreens(_dt.getGameScreen());
 	}
@@ -1120,7 +1092,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 			try {
 				inventoryPic = ImageIO.read(new File("src/graphics/menu/inventory.png"));
-				//				System.out.println("inventory pic size: w: " + inventoryPic.getWidth() + "y: " + inventoryPic.getHeight());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -1173,8 +1144,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 
 			equippedPic = _dt.importImage("src/graphics/menu/equipped.png");
-			//			System.out.println("inventory pic size: w: " + inventoryPic.getWidth() + "y: " + inventoryPic.getHeight());
-
 
 			JLabel equipped = new JLabel(new ImageIcon(equippedPic));
 			constraint.fill = GridBagConstraints.BOTH;
@@ -1435,12 +1404,11 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 					//						_buttonList.get(i).setVisible(false);
 					//					}
 					GameMenuScreen.this.setDefaultTabToUnits();
-					System.out.println("set to false");
 					_showingItemOptions = false;
 					GameMenuScreen.this.repaint();
 				}
 			} catch (ItemException e1) {
-				System.out.println("Something bad happened in the Game Menu Screen");
+				_dt.error("Something bad happened in the Game Menu Screen");
 			}
 		}
 	}
@@ -1458,11 +1426,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				//					_buttonList.get(i).setVisible(false);
 				//				}
 				GameMenuScreen.this.setDefaultTabToUnits();
-				System.out.println("set to false");
 				_showingItemOptions = false;
 				GameMenuScreen.this.repaint();
 			} catch (ItemException e1) {
-				System.out.println("Something bad happened in the Game Menu Screen");
+				_dt.error("Something bad happened in the Game Menu Screen");
 			}
 		}
 	}
@@ -1501,7 +1468,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 					}
 				}
 				GameMenuScreen.this.setDefaultTabToUnits();
-				System.out.println("set to false");
 				_showingItemOptions = false;
 				GameMenuScreen.this.repaint();
 			} catch (ItemException e) {
@@ -1527,7 +1493,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 				}
 
 				GameMenuScreen.this.setDefaultTabToUnits();
-				//	System.out.println("set to false");
 				_showingItemOptions = false;
 				GameMenuScreen.this.repaint();
 			} catch (ClassCastException e) {
@@ -1544,11 +1509,7 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 		public void activate(optionButton button) {
 			_selectedItem.exert(_selectedChar);
-			//			for (int i=0; i<_buttonList.size(); i++) {
-			//				_buttonList.get(i).setVisible(false);
-			//			}
 			GameMenuScreen.this.setDefaultTabToUnits();
-			System.out.println("set to false");
 			_showingItemOptions = false;
 			GameMenuScreen.this.repaint();
 		}
@@ -1577,7 +1538,6 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 			if (_visible) {
 				for (int i=0; i<_list.size(); i++) {
 					if (_list.get(i) != null) {
-						//						System.out.println("X: " + x.getX() + "; Y: " + x.getY());
 						_list.get(i).setLocation(0,i*27);
 						_list.get(i).setVisible(true);
 						_list.get(i).paint((Graphics2D) g, _list.get(i).getImage());
@@ -1654,6 +1614,10 @@ public class GameMenuScreen extends Screen<GameMenuController> {
 
 	public void setSaveMsg(String msg){
 		_saveMessage = msg;
+	}
+	
+	public LoadMenuItem getCurrSelected(){
+		return _currSelected;
 	}
 
 	/*public char getKey(int key){
