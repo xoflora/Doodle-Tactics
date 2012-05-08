@@ -88,10 +88,10 @@ public class LoadGameScreen extends Screen<LoadGameController>{
 		for(String title: titleToFilepath.keySet()){
 			String filepath = titleToFilepath.get(title);
 			int y = (_bg.getHeight()/(DoodleTactics.NUM_SAVE_OPTIONS + 2))*(count + 1);
-			if(title.equals("Autosave")){
-				String[] split = filepath.split("/");
-				title = split[split.length - 1];
-			}
+//			if(title.equals("Autosave")){
+//				String[] split = filepath.split("/");
+//				title = split[split.length - 1];
+//			}
 			_savedGames[count] = new LoadMenuItem(this,_buttonUnselectedImage,_buttonSelectedImage,
 					title,filepath,y,_dt);
 			_savedGames[count].setVisible(true);
