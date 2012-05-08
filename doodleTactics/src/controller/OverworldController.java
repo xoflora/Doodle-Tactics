@@ -236,7 +236,8 @@ public class OverworldController extends GameScreenController {
 				_gameScreen.pushControl(specialAttack);
 			}  else if(e.getKeyChar() == 'o') {
 				SpecialAttackController specialAttack = new SpecialAttackController(_dt);
-				specialAttack.setSpecialTimer(new ArrowTimer(specialAttack, _dt, 9, 8, 4, 4));
+				Random r = new Random();
+				specialAttack.setSpecialTimer(new ArrowTimer(specialAttack, _dt, r.nextInt(15), r.nextInt(15), r.nextInt(15), r.nextInt(15)));
 				_gameScreen.pushControl(specialAttack);
 			}
 		}
