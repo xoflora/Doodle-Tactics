@@ -31,7 +31,8 @@ public abstract class CombatController extends GameScreenController {
 		SELECTING_ITEM,
 		ITEM_SELECTED,
 		ATTACKING,
-		EVENT_OCCURRING;
+		EVENT_OCCURRING,
+		CHARACTER_OPTION_MENU_POST_EVENT;
 		
 		public String toString() {
 			switch (this) {
@@ -49,6 +50,8 @@ public abstract class CombatController extends GameScreenController {
 				return "ITEM_SELECTED";
 			case ATTACKING:
 				return "ATTACKING";
+			case CHARACTER_OPTION_MENU_POST_EVENT:
+				return "CHARACTER_OPTION_MENU_POST_EVENT";
 			default:
 				return "";
 			}

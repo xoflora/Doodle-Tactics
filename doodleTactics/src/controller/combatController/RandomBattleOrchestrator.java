@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import util.Hashpairing;
+
 import character.Character;
 import event.Dialogue;
 import event.FortuneDialogue;
@@ -15,11 +17,14 @@ import map.Map;
 import map.Tile;
 
 public class RandomBattleOrchestrator extends CombatOrchestrator {
+	
+	private Hashpairing<Character, Character, Boolean> _alreadyTalked;
 
 	public RandomBattleOrchestrator(DoodleTactics dt,
 			List<CombatController> enemies, List<CombatController> partners,
 			List<CombatController> others, int numUnits) {
 		super(dt, enemies, partners, others, numUnits);
+		_alreadyTalked = new Hashpairing<Character, Character, Boolean>();
 	}
 
 	@Override
@@ -85,9 +90,13 @@ public class RandomBattleOrchestrator extends CombatOrchestrator {
 
 	}
 	
+	private boolean alreadyTalked(Character a, Character b) {
+		return _alreadyTalked.get(a, b) != null && _alreadyTalked.get(a, b);
+	}
+	
 	@Override
 	public boolean canTalk(Character a, Character b) {
-		return true;
+		return super.canTalk(a, b) || !alreadyTalked(a, b);
 	}
 	
 	@Override
@@ -95,6 +104,7 @@ public class RandomBattleOrchestrator extends CombatOrchestrator {
 		Dialogue def = super.getDialogue(a, b);
 		if (def == null) {
 			try {
+				_alreadyTalked.put(a, b, true);
 				return new FortuneDialogue(_dt, a, b);
 			} catch (Exception e) {
 				return null;

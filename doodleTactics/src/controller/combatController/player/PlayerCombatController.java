@@ -201,6 +201,14 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		return toReturn;
 	}
 	
+	private void hideMenu() {
+		_menus.peek().removeFromDrawingQueue();
+	}
+	
+	private void showMenu() {
+		_menus.peek().addToDrawingQueue();
+	}
+	
 	/**
 	 * removes and un-draws all menu items
 	 */
@@ -283,7 +291,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void moveComplete() {
 		super.moveComplete();
 		addMenu(new CombatOptionWindow(_dt, _gameScreen, false, false,
-					_selectedCharacter.getInventory().isEmpty(), this),
+					!_selectedCharacter.getInventory().isEmpty(), this),
 				defaultMenuX(),
 				defaultMenuY());
 	}
@@ -336,21 +344,16 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						clearPath();
 					}
 				}
-				else if (getState() == State.CHARACTER_OPTION_MENU) {
+				else if (getState() == State.CHARACTER_OPTION_MENU ||
+						getState() == State.CHARACTER_OPTION_MENU_POST_EVENT) {
 					Character other = t.getOccupant();
 					
-				/*	if (_characterAttackRange.contains(t) && isEnemy(t.getOccupant())) {
-						clearPath();
-						clearMovementRange();
-						clearPlayerAttackRange();
-						_pool.removeCharacter(_selectedCharacter);
-						_hasMoved.put(_selectedCharacter, true);
-						attack(_destTile, t);
-					//	boolean trade =  
+					if (other == _selectedCharacter && getState() == State.CHARACTER_OPTION_MENU_POST_EVENT) {
+						addMenu(new CombatOptionWindow(_dt, _gameScreen, false, false,
+								!_selectedCharacter.getInventory().isEmpty(), this),
+							defaultMenuX(),
+							defaultMenuY());
 					}
-					if (_adjacentTiles.contains(t)) {
-						
-					}	*/
 					if (other != null) {
 						boolean attack = _characterAttackRange.contains(t) && isEnemy(t.getOccupant());
 						boolean trade = _adjacentTiles.contains(t) &&
@@ -360,6 +363,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 						_interactTile = t;
 						
 						if (attack && !trade && !talk) {
+							removeAllMenus();
 							_pool.removeCharacter(_selectedCharacter);
 							_hasMoved.put(_selectedCharacter, true);
 							attack(_destTile, _interactTile);
@@ -368,7 +372,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 							
 						}
 						else if (!attack && !trade && talk) {
-							
+							setState(State.EVENT_OCCURRING);
+							_gameScreen.pushControl(_orch.getDialogue(_selectedCharacter, _interactTile.getOccupant()));
 						}
 						else {
 							addMenu(new CharacterSelectedOptionMenu(_gameScreen, _dt, this,
@@ -491,7 +496,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void mousePressed(MouseEvent e) {
 		super.mousePressed(e);
 		if (!_menus.isEmpty() && _menus.peek().contains(e.getPoint())) {
-			System.out.println("HLO");
 			_menuDraggedx = e.getX();
 			_menuDraggedy = e.getY();
 			_draggingMenu = true;
@@ -503,7 +507,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * 
 	 */
 	public void mouseDragged(MouseEvent e) {
-		System.out.println(_draggingMenu);
 		if (!_draggingMenu)
 			super.mouseDragged(e);
 		else {
@@ -525,7 +528,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				if (_cycledRight)
 					previousUnit();
 				Character c = previousUnit();
-				System.out.println(c);
 				_gameScreen.panToCoordinate(c.getX(), c.getY());
 				
 				_cycledLeft = true;
@@ -535,7 +537,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				if (_cycledLeft)
 					nextUnit();
 				Character c = nextUnit();
-				System.out.println(c);
 				_gameScreen.panToCoordinate(c.getX(), c.getY());
 				
 				_cycledLeft = false;
@@ -560,7 +561,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	public void release() {
 		super.release();
 		
-		System.out.println(getState());
 		if (getState() != State.ATTACKING && getState() != State.EVENT_OCCURRING) {
 			new Thread(new SlideTimer(_playerPhase,-1050)).start();
 			clear();
@@ -583,7 +583,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			_equipChanged = false;
 			initialize();
 		}
-		else {
+		else if (getState() == State.ATTACKING) {
 			clear();
 			
 			if (_pool.isEmpty()) {
@@ -591,6 +591,9 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 				_pool = null;
 				_gameScreen.popControl();
 			}
+		}
+		else {
+			setState(State.CHARACTER_OPTION_MENU_POST_EVENT);
 		}
 	}
 
@@ -680,9 +683,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * sends an action to the controller
 	 * @param action the action to send
 	 */
-	public void pushAction(ActionType action) {
-		assert(getState() == State.CHARACTER_OPTION_MENU);
-		
+	public void pushAction(ActionType action) {		
 		if (action == ActionType.WAIT)
 			characterWait();
 		else if (action == ActionType.ITEM) {
@@ -711,7 +712,6 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	 * @param i the item whose menu should be opened
 	 */
 	public void openItemMenu(Item i) {
-		System.out.println(i);
 		addMenu(new ItemActionWindow(i, _selectedCharacter, _gameScreen, _dt, this),
 				_menus.peek().getX(), _menus.peek().getY());
 		setState(State.ITEM_SELECTED);
@@ -723,6 +723,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 	
 	public void pushCharacterSelectAction(ActionType action) {
 		if (action == ActionType.ATTACK) {
+			removeAllMenus();
 			_pool.removeCharacter(_selectedCharacter);
 			_hasMoved.put(_selectedCharacter, true);
 			attack(_destTile, _interactTile);
@@ -731,6 +732,7 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			
 		}
 		else if (action == ActionType.TALK) {
+			removeMenu();
 			setState(State.EVENT_OCCURRING);
 			_gameScreen.pushControl(_orch.getDialogue(_selectedCharacter, _interactTile.getOccupant()));
 		}

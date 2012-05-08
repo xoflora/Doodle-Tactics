@@ -1409,6 +1409,19 @@ public abstract class Character extends Rectangle{
 	}	*/
 	
 	/**
+	 * @return whether or not this character owns any equipment
+	 */
+	public boolean ownsEquipment() {
+		if (_equipped != null || _cuirass != null || _shield != null || _footgear != null)
+			return true;
+		
+		for (Integer i : _inventory.keySet())
+			if (_inventory.get(i).isEquip())
+				return true;
+		return false;
+	}
+	
+	/**
 	 * equips a piece of equipment to this character
 	 * @return whether or not the equip was successful
 	 */
