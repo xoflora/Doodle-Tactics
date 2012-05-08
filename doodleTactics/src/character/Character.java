@@ -87,7 +87,7 @@ public abstract class Character extends Rectangle{
 	private transient PathTimer _pathTimer;
 	private transient MoveTimer _moveTimer;
 	
-	private DoodleTactics _dt;
+	private transient DoodleTactics _dt;
 
 	public static enum CharacterDirection{
 		LEFT,RIGHT,UP,DOWN
@@ -259,6 +259,7 @@ public abstract class Character extends Rectangle{
 
 		_isAnimating = true;
 		_moveTimer.start();
+		
 	}
 
 	private class MoveTimer extends Timer {
@@ -698,11 +699,10 @@ public abstract class Character extends Rectangle{
 		_level++;
 		//_level cannot exceed imposed levelCap
 		if(_level == LEVELCAP) throw new InvalidLevelException();
-
-
 		//update stats
 		for(int i=0; i<NUM_STATS; i++)
 			_currentStats[i] = (int) (10 * _BASE_STATS[i] + _level*_BASE_STATS[i] + _unitPoints[i]/12);
+		_currentHP = _currentStats[MAX_HP];
 	}
 	
 	public void checkLevelUp() {
@@ -816,6 +816,7 @@ public abstract class Character extends Rectangle{
 		}
 		System.out.println("max opponent range: " + opponent.getOccupant().getMaxAttackRange());
 		System.out.println("min opponent range: " + opponent.getOccupant().getMinAttackRange());
+		System.out.println("range: " + range);
 
 		if (opponent.getOccupant().getMaxAttackRange() >= range && opponent.getOccupant().getMinAttackRange() <= range) {
 			if (r.nextInt(100) > opponent.getOccupant().getFullAttackAccuracy() - _currentStats[SKILL] - attacker.getEvasion()) {
