@@ -603,7 +603,8 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 			_equipChanged = false;
 			initialize();
 		}
-		else if (getState() == State.ATTACKING || getState() == State.USING_SPECIAL) {
+		else if (getState() == State.ATTACKING || getState() == State.USING_SPECIAL
+				|| getState() == State.EVENT_OCCURRING) {
 			clear();
 			
 			if (_pool.isEmpty()) {
@@ -768,6 +769,11 @@ public class PlayerCombatController extends CombatController implements PoolDepe
 		else if (action == ActionType.TALK) {
 			removeAllMenus();
 			setState(State.EVENT_OCCURRING);
+		//	_gameScreen.pushControl(_orch.getDialogue(_selectedCharacter, _interactTile.getOccupant()));
+			
+		//	removeAllMenus();
+			_pool.removeCharacter(_selectedCharacter);
+			_hasMoved.put(_selectedCharacter, true);
 			_gameScreen.pushControl(_orch.getDialogue(_selectedCharacter, _interactTile.getOccupant()));
 		}
 	}

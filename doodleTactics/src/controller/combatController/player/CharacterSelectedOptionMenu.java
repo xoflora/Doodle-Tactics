@@ -21,8 +21,8 @@ public class CharacterSelectedOptionMenu extends MenuItem implements CombatMenu 
 	private static final String ATTACK_HOVERED = DoodleTactics.IMAGE_SOURCE_PATH + "menu/combatMenu/attack_hovered.png";
 	private static final String TRADE_IMAGE = DoodleTactics.IMAGE_SOURCE_PATH + "menu/combatMenu/trade.png";
 	private static final String TRADE_HOVERED = DoodleTactics.IMAGE_SOURCE_PATH + "menu/combatMenu/trade_hovered.png";
-	private static final String TALK_IMAGE = DoodleTactics.IMAGE_SOURCE_PATH + "menu/combatMenu/equip.png";
-	private static final String TALK_HOVERED = DoodleTactics.IMAGE_SOURCE_PATH + "menu/combatMenu/equip_hovered.png";
+	private static final String TALK_IMAGE = DoodleTactics.IMAGE_SOURCE_PATH + "menu/combatMenu/talk.png";
+	private static final String TALK_HOVERED = DoodleTactics.IMAGE_SOURCE_PATH + "menu/combatMenu/talk_hovered.png";
 	
 	private static final int MENU_PRIORITY = 3;
 	private static final int OPTION_PRIORITY = 5;
