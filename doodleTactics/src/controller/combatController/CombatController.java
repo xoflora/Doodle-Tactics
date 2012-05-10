@@ -398,6 +398,8 @@ public abstract class CombatController extends GameScreenController implements P
 		System.out.println(_locations.get(c) == null);
 		_locations.get(c).setOccupant(null);
 		_locations.remove(c);
+		
+		_unitCycle = _units.listIterator();
 	///	if (t.occupant() == c)
 	//		t.setOccupant(null);
 	}
