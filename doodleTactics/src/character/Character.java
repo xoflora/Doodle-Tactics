@@ -467,7 +467,7 @@ public abstract class Character extends Rectangle{
 		_down = dt.importImage(_downFile);
 		_currentImage = _down;
 		_container = dt.getGameScreen();
-
+		this.setSize(_down.getWidth(), _down.getHeight());
 		int overflow = 0;
 		if(_down.getWidth() - Tile.TILE_SIZE <= 25.0)
 			overflow = (_down.getWidth() - Tile.TILE_SIZE) / 2;
@@ -482,8 +482,7 @@ public abstract class Character extends Rectangle{
 			_equipped.loadItem(dt);
 		if(_cuirass != null){
 			_cuirass.loadItem(dt);
-			_cuirass.load(dt);
-		}
+			}
 		if(_shield != null)
 			_shield.loadItem(dt);
 		if(_footgear != null)
